@@ -1,0 +1,10 @@
+{
+	"lines": 10000,
+	"interchange stations": 9,
+	"population": 3000,
+	"seed": 1209493194,
+	"stations": 10000,
+	"trains per line": 0,
+	"capacity per train": 100,
+	"time between stations": 180
+}
