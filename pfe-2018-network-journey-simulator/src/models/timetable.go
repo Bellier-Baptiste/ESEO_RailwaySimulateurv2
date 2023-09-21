@@ -3,8 +3,8 @@ package models
 import (
 	"fmt"
 	"log"
-	"configs"
-	"tools"
+	"pfe-2018-network-journey-simulator/src/configs"
+	"pfe-2018-network-journey-simulator/src/tools"
 	"strconv"
 	"time"
 )
@@ -21,7 +21,7 @@ func (timetable *Timetable) addEventsTrain(event *EventTimetableTrain) {
 	timetable.eventsTrain = append(timetable.eventsTrain, event)
 }
 
-//--- Constructor
+// --- Constructor
 func NewTimetable(m *Map, trains []*MetroTrain) Timetable {
 	timetable := Timetable{}
 	timetable.GenerateTimetable(m, trains, m.GraphTimeBetweenStation(), m.GraphDelay()) //TODO pass this function directly here
@@ -136,7 +136,7 @@ func getNextStation(direction string, stationList []*MetroStation, actualStation
 	return indexStationList, direction
 }
 
-//return the time between 2 trains in a station, note that is time between 2 trains going in the same direction
+// return the time between 2 trains in a station, note that is time between 2 trains going in the same direction
 func timeBetweenTrain(lineTotalTime int, trainsPerLine int) int {
 	if trainsPerLine == 0 {
 		log.Println("timetableStation / timeBetweenTrain : 0 trains on line (divide by 0 dodged ! that was close)")
@@ -145,7 +145,7 @@ func timeBetweenTrain(lineTotalTime int, trainsPerLine int) int {
 	return lineTotalTime / trainsPerLine
 }
 
-//get all trains of a given line
+// get all trains of a given line
 func getTrainsPerLine(line *MetroLine, trains []*MetroTrain) []*MetroTrain {
 	var listTrains []*MetroTrain
 	for i := 0; i < len(trains); i++ {
@@ -156,7 +156,7 @@ func getTrainsPerLine(line *MetroLine, trains []*MetroTrain) []*MetroTrain {
 	return listTrains
 }
 
-//from a list of trains, return all the lines linked with trains
+// from a list of trains, return all the lines linked with trains
 func linesWithTrains(trains []*MetroTrain) []*MetroLine {
 	var linesWithTrains []*MetroLine
 	for i := 0; i < len(trains); i++ {
@@ -167,7 +167,7 @@ func linesWithTrains(trains []*MetroTrain) []*MetroLine {
 	return linesWithTrains
 }
 
-//search by id if the given line is present in a list of lines
+// search by id if the given line is present in a list of lines
 func (line *MetroLine) isInLineList(lineList []*MetroLine) bool {
 	sol := false
 	for i := 0; i < len(lineList); i++ {
@@ -178,8 +178,8 @@ func (line *MetroLine) isInLineList(lineList []*MetroLine) bool {
 	return sol
 }
 
-//return the duration of the going and coming for a train, waiting time in the station for passengers to climb in is taken in account
-//numberStation must be >1 for a real total time of the line
+// return the duration of the going and coming for a train, waiting time in the station for passengers to climb in is taken in account
+// numberStation must be >1 for a real total time of the line
 func LineTimeLength(line *MetroLine, graph [][]int, graphDelay [][]int, numberStation int, timeInStation int) int {
 	var totalTime int
 	if numberStation < 1 {
@@ -190,8 +190,8 @@ func LineTimeLength(line *MetroLine, graph [][]int, graphDelay [][]int, numberSt
 	return totalTime
 }
 
-//generate CSV file
-func (timetable Timetable) ToCSV() {//TODO check time (>17s for
+// generate CSV file
+func (timetable Timetable) ToCSV() { //TODO check time (>17s for
 	var aux string
 
 	var row = make([]string, 16)

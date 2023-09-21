@@ -3,7 +3,7 @@ package models
 import (
 	"log"
 	"math/rand"
-	"configs"
+	"pfe-2018-network-journey-simulator/src/configs"
 	"time"
 )
 
@@ -22,26 +22,24 @@ func NewTrip(departure time.Time, path pathStation) Trip {
 	return aTrip
 }
 
-
-
-//Generate a random hour and minute in the given day
+// Generate a random hour and minute in the given day
 // within the boundaries defined by Business day start and end
 func RandomTime(currentDay time.Time) time.Time {
-	var currentDayMidnight = time.Date(currentDay.Year(),currentDay.Month(),currentDay.Day(),0,0,0,0,currentDay.Location())
+	var currentDayMidnight = time.Date(currentDay.Year(), currentDay.Month(), currentDay.Day(), 0, 0, 0, 0, currentDay.Location())
 	pickedTime := currentDayMidnight
 
 	bDayStart, error := time.ParseDuration(configs.GetInstance().BusinessDayStart())
-	if error != nil{
+	if error != nil {
 		log.Fatal(error, "BusinessDayStart - couldn't parse duration")
 	}
 
 	aDay, error := time.ParseDuration("24h")
-	if error != nil{
+	if error != nil {
 		log.Fatal(error, "a Day- couldn't parse duration")
 	}
 
 	bDayEnd, error := time.ParseDuration(configs.GetInstance().BusinessDayEnd())
-	if error != nil{
+	if error != nil {
 		log.Fatal(error, "BusinessDayEnd - couldn't parse duration")
 	}
 
@@ -50,38 +48,37 @@ func RandomTime(currentDay time.Time) time.Time {
 	minute := rand.Intn(int(minutesSpan))
 	pickedTime = pickedTime.Add(time.Duration(minute) * time.Minute)
 
-	if pickedTime.After(currentDayMidnight.Add(aDay)){
+	if pickedTime.After(currentDayMidnight.Add(aDay)) {
 		pickedTime = pickedTime.Add(-aDay)
 	}
 
 	return pickedTime
 }
 
-//Generate a normal distributed time with expected time as mean
-//and duration as standard deviation (in seconds)
-//return the time limited to the boundaries defined by business day start/end
+// Generate a normal distributed time with expected time as mean
+// and duration as standard deviation (in seconds)
+// return the time limited to the boundaries defined by business day start/end
 func normalDistributedTime(duration int64, expectedTime time.Time) time.Time {
 	config := configs.GetInstance()
 	bDayStart, error := time.ParseDuration(config.BusinessDayStart())
-	if error != nil{
+	if error != nil {
 		log.Fatal(error, "BusinessDayStart - couldn't parse duration")
 	}
 
 	aDay, error := time.ParseDuration("24h")
-	if error != nil{
+	if error != nil {
 		log.Fatal(error, "a Day- couldn't parse duration")
 	}
 
 	bDayEnd, error := time.ParseDuration(config.BusinessDayEnd())
-	if error != nil{
+	if error != nil {
 		log.Fatal(error, "BusinessDayEnd - couldn't parse duration")
 	}
 
 	maxWait := config.GetMaxTimeInStationPassenger()
 
-
 	unixTime := expectedTime.Unix()
-	var currentDayMidnight = time.Date(expectedTime.Year(),expectedTime.Month(),expectedTime.Day(),0,0,0,0,expectedTime.Location())
+	var currentDayMidnight = time.Date(expectedTime.Year(), expectedTime.Month(), expectedTime.Day(), 0, 0, 0, 0, expectedTime.Location())
 	unixBuissnesDayStart := currentDayMidnight.Add(bDayStart).Unix()
 	unixBuissnesDayEnd := currentDayMidnight.Add(aDay).Add(bDayEnd).Unix()
 
@@ -98,8 +95,8 @@ func normalDistributedTime(duration int64, expectedTime time.Time) time.Time {
 	return aTime.UTC()
 }
 
-//Generate a random path in a map
-//return the path.
+// Generate a random path in a map
+// return the path.
 func randomPath(aMap Map) pathStation {
 	stations := aMap.Stations()
 	//generating an index to pick a random station
@@ -115,8 +112,8 @@ func randomPath(aMap Map) pathStation {
 	return path
 }
 
-//generate a random trip with a random time and a random path
-//return the trip
+// generate a random trip with a random time and a random path
+// return the trip
 func RandomTrip(currentDay time.Time, aMap Map) Trip {
 	departure := RandomTime(currentDay)
 	path := randomPath(aMap)

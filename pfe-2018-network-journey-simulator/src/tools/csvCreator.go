@@ -4,7 +4,7 @@ import (
 	"go/build"
 	"os"
 	"path/filepath"
-	"configs"
+	"pfe-2018-network-journey-simulator/src/configs"
 	"strings"
 )
 

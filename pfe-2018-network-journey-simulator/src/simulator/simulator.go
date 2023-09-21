@@ -3,8 +3,8 @@ package simulator
 import (
 	"fmt"
 	"math/rand"
-	"configs"
-	"models"
+	"pfe-2018-network-journey-simulator/src/configs"
+	"pfe-2018-network-journey-simulator/src/models"
 	"strconv"
 	"sync"
 	"time"
@@ -32,7 +32,7 @@ type Simulator struct {
 	eventsLineDelay []models.EventLineDelay
 
 	eventsLineClosed []models.EventLineClosed
-	
+
 	eventsAttendancePeak []models.EventAttendancePeak
 
 	tripNumberCounter int
@@ -90,7 +90,7 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 
 		s.eventsStationClosed[i] = models.NewEventStationClosed(ev.IdStation, start, end)
 	}
-	
+
 	s.eventsLineDelay = make([]models.EventLineDelay, len(s.adConfig.MapC.EventsLineDelay))
 	for i, ev := range s.adConfig.MapC.EventsLineDelay {
 		start, err := time.Parse(time.RFC3339, ev.StartString)
@@ -107,7 +107,7 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 		s.eventsLineDelay[i] = models.NewEventLineDelay(ev.StationIdStart, ev.StationIdEnd, ev.Delay, start, end)
 		fmt.Println("EventLineDelay : ", s.eventsLineDelay[i])
 	}
-	
+
 	s.eventsLineClosed = make([]models.EventLineClosed, len(s.adConfig.MapC.EventsLineClosed))
 	for i, ev := range s.adConfig.MapC.EventsLineClosed {
 		start, err := time.Parse(time.RFC3339, ev.StartString)
@@ -120,10 +120,10 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 			fmt.Print("EventLineClosed : couldn't parse date : ", ev.EndString, " error : ", err)
 			continue
 		}
-		
+
 		s.eventsLineClosed[i] = models.NewEventLineClosed(ev.StationIdStart, ev.StationIdEnd, start, end)
 	}
-	
+
 	s.eventsAttendancePeak = make([]models.EventAttendancePeak, len(s.adConfig.MapC.EventsAttendancePeak))
 	for i, ev := range s.adConfig.MapC.EventsAttendancePeak {
 		timeev, err := time.Parse(time.RFC3339, ev.TimeString)
@@ -236,7 +236,7 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 
 // -------- FUNCTIONS & METHODS
 
-//run n loops (one loop == one event). put n < 0 in order to run until the end of the period defined in config.json
+// run n loops (one loop == one event). put n < 0 in order to run until the end of the period defined in config.json
 func (s *Simulator) Run(n int) {
 	var conf = configs.GetInstance()
 
@@ -279,18 +279,18 @@ func (s *Simulator) RunOnce() {
 	var eventsLineDelay = s.getEventsLineDelay(oldTime, newCurrentTime)
 	fmt.Println()
 	fmt.Println("BEGIN")
-	fmt.Println("eventsLineDelay test : ",oldTime)
-	fmt.Println("eventsLineDelay test : ",newCurrentTime)
-	fmt.Println("eventsLineDelay test : ",len(eventsLineDelay))
-	fmt.Println("eventsLineDelay test : ",eventsLineDelay)
+	fmt.Println("eventsLineDelay test : ", oldTime)
+	fmt.Println("eventsLineDelay test : ", newCurrentTime)
+	fmt.Println("eventsLineDelay test : ", len(eventsLineDelay))
+	fmt.Println("eventsLineDelay test : ", eventsLineDelay)
 	s.executeEventsLineDelay(eventsLineDelay, oldTime, newCurrentTime)
 
 	var eventsLineClosed = s.getEventsLineClosed(oldTime, newCurrentTime)
 	s.executeEventsLineClosed(eventsLineClosed, oldTime, newCurrentTime)
-	
+
 	var eventsAttendancePeak = s.getEventsAttendancePeak(oldTime, newCurrentTime)
 	s.executeEventsAttendancePeak(eventsAttendancePeak, oldTime, newCurrentTime)
-	
+
 	//var lastTime = s.currentTime
 	s.currentTime = newCurrentTime
 
@@ -896,16 +896,15 @@ func (s *Simulator) executeEventsAttendancePeak(events []*models.EventAttendance
 				arrivalStation := s.mapObject.FindStationById(rand.Intn(len(s.mapObject.Stations())))
 				ps, _ := s.mapObject.GetPathStation(*departureStation, *arrivalStation)
 				trip := models.NewTrip(event.Time(), ps)
-				
-				passenger := models.NewPassenger(strconv.Itoa(totalpopulation + i), 0)
+
+				passenger := models.NewPassenger(strconv.Itoa(totalpopulation+i), 0)
 				passenger.SetCurrentTrip(&trip)
-				
+
 				s.Population().InStation()[event.IdStation()][passenger.Id()] = &passenger
 			}
 		}
 	}
 }
-
 
 func (s *Simulator) getEventsStationClosed(start time.Time, end time.Time) []*models.EventStationClosed {
 	var output = make([]*models.EventStationClosed, 0)
@@ -948,16 +947,16 @@ func (s *Simulator) getEventsLineClosed(start time.Time, end time.Time) []*model
 
 func (s *Simulator) getEventsAttendancePeak(start time.Time, end time.Time) []*models.EventAttendancePeak {
 	var output []*models.EventAttendancePeak
-	
-	for i,_ := range s.eventsAttendancePeak {
-		if(s.eventsAttendancePeak[i].Time().Before(end) && s.eventsAttendancePeak[i].Time().After(start)) {
-			output = append(output, &s.eventsAttendancePeak[i]);
+
+	for i, _ := range s.eventsAttendancePeak {
+		if s.eventsAttendancePeak[i].Time().Before(end) && s.eventsAttendancePeak[i].Time().After(start) {
+			output = append(output, &s.eventsAttendancePeak[i])
 		}
 	}
 	return output
 }
 
-//call the next events.
+// call the next events.
 func (s *Simulator) NextEventsTrain() ([]*models.MetroTrain, time.Time) {
 	var output []*models.MetroTrain
 
@@ -1002,7 +1001,7 @@ func (s *Simulator) WriteInTimetableReal(train *models.MetroTrain, timeArrival t
 	s.timetableReal.AddEventsTrain(event)
 }
 
-//get all trains of a given line
+// get all trains of a given line
 func (sim Simulator) GetTrainsPerLine(line models.MetroLine) []*models.MetroTrain {
 	var listTrains []*models.MetroTrain
 	for i := 0; i < len(sim.GetTrains()); i++ {

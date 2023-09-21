@@ -1,7 +1,7 @@
 package models
 
 import (
-	"tools"
+	"pfe-2018-network-journey-simulator/src/tools"
 	"strconv"
 )
 
@@ -17,12 +17,12 @@ func (timetableReal *TimetableReal) AddEventsTrain(event *EventTimetableTrain) {
 	timetableReal.eventsTrain = append(timetableReal.eventsTrain, event)
 }
 
-//--- Constructor
+// --- Constructor
 func NewTimetableReal() TimetableReal {
 	return TimetableReal{}
 }
 
-//generate CSV file
+// generate CSV file
 func (timetableReal TimetableReal) ToCSV() {
 	var aux string
 

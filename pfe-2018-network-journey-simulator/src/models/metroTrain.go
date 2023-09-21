@@ -1,10 +1,10 @@
 package models
 
 import (
-	"log"
-	"configs"
-	"time"
 	"fmt"
+	"log"
+	"pfe-2018-network-journey-simulator/src/configs"
+	"time"
 )
 
 type MetroTrain struct {
@@ -22,7 +22,7 @@ type MetroTrain struct {
 	timeArrivalNextStation    time.Time //used to show when there are delays
 }
 
-//getter
+// getter
 func (train *MetroTrain) GetLine() *MetroLine {
 	return train.line
 }
@@ -156,8 +156,8 @@ func (train *MetroTrain) SetTimeArrivalNextStation(timeArrivalNextStation time.T
 
 //--- Functions & Methods
 
-//should be executed everytime the train arrive in a station. alter its current/next attribute, but don't touch to passengers.
-//idealy, station == train.nextStation. But i know we're prone to errors :P
+// should be executed everytime the train arrive in a station. alter its current/next attribute, but don't touch to passengers.
+// idealy, station == train.nextStation. But i know we're prone to errors :P
 func (train *MetroTrain) arriveInStation(station *MetroStation, aTime time.Time) {
 	train.currentStation = station
 	train.timeArrivalCurrentStation = aTime
@@ -194,7 +194,7 @@ func intToDuration(value int) time.Duration {
 	return time.Duration(value) * time.Second
 }
 
-//before a delay, calculate the new time to the next station
+// before a delay, calculate the new time to the next station
 func UpdateBeforeTimeArrivalNextStation(train *MetroTrain, currentTime time.Time, delay int, timeBetweenStation int) {
 	if delay < 0 {
 		log.Fatal("bad entry in MetroTrain.UpdateBeforeTimeArrivalNextStation : delay can't be negativ ", delay)
@@ -213,7 +213,7 @@ func UpdateBeforeTimeArrivalNextStation(train *MetroTrain, currentTime time.Time
 	train.SetTimeArrivalNextStation(currentTime.Add(newTimeLeftDuration))
 }
 
-//after a delay, calculate the new time to the next station
+// after a delay, calculate the new time to the next station
 func UpdateAfterTimeArrivalNextStation(train *MetroTrain, currentTime time.Time, delay int, timeBetweenStation int) {
 	if delay < 0 {
 		log.Fatal("bad entry in MetroTrain.UpdateAfterTimeArrivalNextStation : delay can't be negativ ", delay)
@@ -229,12 +229,12 @@ func UpdateAfterTimeArrivalNextStation(train *MetroTrain, currentTime time.Time,
 	if newTimeLeftDuration.Seconds() < 0 {
 		log.Fatal("bad duration in MetroTrain.UpdateAfterTimeArrivalNextStation : nextTimeArrival can't be before current time of simulation ", newTimeLeftDuration.Seconds())
 	}
-	log.Fatal("newTimeLeftDuration : ",newTimeLeftDuration)
-	fmt.Println("newTimeLeftDuration : ",newTimeLeftDuration)
+	log.Fatal("newTimeLeftDuration : ", newTimeLeftDuration)
+	fmt.Println("newTimeLeftDuration : ", newTimeLeftDuration)
 	train.SetTimeArrivalNextStation(currentTime.Add(newTimeLeftDuration))
 }
 
-//return a list containing all stations between the train and the end of the line
+// return a list containing all stations between the train and the end of the line
 func (train *MetroTrain) StationsBeforeReturn() []*MetroStation {
 	var output []*MetroStation
 	output = append(output, train.nextStation)

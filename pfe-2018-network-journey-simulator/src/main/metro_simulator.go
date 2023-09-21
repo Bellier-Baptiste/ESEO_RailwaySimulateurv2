@@ -9,9 +9,9 @@ import (
 	"math"
 	"os"
 	"path/filepath"
-	"configs"
-	"models"
-	"simulator"
+	"pfe-2018-network-journey-simulator/src/configs"
+	"pfe-2018-network-journey-simulator/src/models"
+	"pfe-2018-network-journey-simulator/src/simulator"
 	"strings"
 	"time"
 )
@@ -99,7 +99,7 @@ func main() {
 			fmt.Println("Wrong answer, default value has been attribued")
 			dayType = "working day"
 		}
-	}else {
+	} else {
 		fmt.Println("Wrong answer, default value has been attribued")
 		dayType = "working day"
 	}
