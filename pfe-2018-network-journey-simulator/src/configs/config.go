@@ -3,16 +3,18 @@ package configs
 import (
 	"encoding/json"
 	"errors"
-	"go/build"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 )
 
-var basePath = os.Getenv("GOPATH")
+// var basePath = os.Getenv("GOPATH")
+var currentPath, _ = os.Getwd()
+var basePath = strings.Replace(currentPath, "src\\main", "", -1)
 var projectPath string = "src"
 
 var configPath string
@@ -49,11 +51,11 @@ func (c ConfigurationObject) Population() int {
 	return c.getAsInt("population")
 }
 
-func (c ConfigurationObject) AccelerationTrain() int{
+func (c ConfigurationObject) AccelerationTrain() int {
 	return c.getAsInt("acceleration train")
 }
 
-func (c ConfigurationObject) MaxSpeedTrain() int{
+func (c ConfigurationObject) MaxSpeedTrain() int {
 	return c.getAsInt("max speed train")
 }
 
@@ -84,7 +86,7 @@ func (c ConfigurationObject) PrintDebug() bool {
 	return false
 }
 
-func (c ConfigurationObject) PreTimetable() bool{
+func (c ConfigurationObject) PreTimetable() bool {
 	if val, ok := c["pre timetable"]; ok {
 		return val.(bool)
 	}
@@ -126,7 +128,6 @@ func (c ConfigurationObject) PopulationStudentProportion() float64 {
 func (c ConfigurationObject) PopulationChildrenProportion() float64 {
 	return config["population children proportion"].(float64)
 }
-
 
 func (c ConfigurationObject) MorningCommuteTime() time.Duration {
 	duration, error := time.ParseDuration(string(config["morning commute time"].(string)))
@@ -195,12 +196,7 @@ func (c *ConfigurationObject) getAsTime(paramName string) time.Time {
 func GetInstance() ConfigurationObject {
 	if config == nil {
 		var mutex = &sync.Mutex{}
-
 		mutex.Lock()
-
-		if basePath == "" {
-			basePath = build.Default.GOPATH
-		}
 
 		configPath = filepath.Join(basePath, projectPath, "configs/config.json")
 		stationsPath = filepath.Join(basePath, projectPath, "configs/nameStationList.json")
@@ -282,7 +278,7 @@ func (c ConfigurationObject) Check() (bool, error) {
 		isCorrect = false
 	}
 
-	if (config.PopulationRandomProportion() + config.PopulationCommutersProportion() ) != 1 {
+	if (config.PopulationRandomProportion() + config.PopulationCommutersProportion()) != 1 {
 		errMsg = errMsg + "The population proportions should be equal to one"
 		isCorrect = false
 	}

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<map>
+    <stations>
+        <station>
+            <id>0</id>
+            <name>Pervince</name>
+            <position>
+                <latitude>22.33927931468311</latitude>
+                <longitude>114.09782409667969</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>1</id>
+            <name>Jasmin</name>
+            <position>
+                <latitude>22.345471522338478</latitude>
+                <longitude>114.10606384277344</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>2</id>
+            <name>Diwood</name>
+            <position>
+                <latitude>22.35166345491861</latitude>
+                <longitude>114.12288665771484</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>3</id>
+            <name>Cronetia</name>
+            <position>
+                <latitude>22.343089936559487</latitude>
+                <longitude>114.13043975830078</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>4</id>
+            <name>Hellebore</name>
+            <position>
+                <latitude>22.34007320282973</latitude>
+                <longitude>114.14159774780273</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>5</id>
+            <name>Evrargond</name>
+            <position>
+                <latitude>22.336103716894907</latitude>
+                <longitude>114.14588928222656</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>6</id>
+            <name>Eongorn</name>
+            <position>
+                <latitude>22.33213411796522</latitude>
+                <longitude>114.15018081665039</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>7</id>
+            <name>Ochenelmas</name>
+            <position>
+                <latitude>22.328164406056533</latitude>
+                <longitude>114.15447235107422</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>8</id>
+            <name>Monippyle</name>
+            <position>
+                <latitude>22.324194581184656</latitude>
+                <longitude>114.15876388549805</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>9</id>
+            <name>Heabluff</name>
+            <position>
+                <latitude>22.320224643365446</latitude>
+                <longitude>114.16305541992188</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>10</id>
+            <name>Ricio</name>
+            <position>
+                <latitude>22.316254592614747</latitude>
+                <longitude>114.1673469543457</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>11</id>
+            <name>Natacia</name>
+            <position>
+                <latitude>22.312284428948406</latitude>
+                <longitude>114.17163848876953</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>12</id>
+            <name>Cyclamen</name>
+            <position>
+                <latitude>22.30783771160823</latitude>
+                <longitude>114.17987823486328</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+                <line id="1" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>13</id>
+            <name>Veronique</name>
+            <position>
+                <latitude>22.278295210101668</latitude>
+                <longitude>114.15721893310547</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+            <destination/>
+            <areaDistribution businessmann="0" child="0" retired="0" student="0" tourist="0" unemployed="0" worker="0"/>
+        </station>
+        <station>
+            <id>14</id>
+            <name>Kharakinb</name>
+            <position>
+                <latitude>22.280360211554797</latitude>
+                <longitude>114.16271209716797</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>15</id>
+            <name>Mariathon</name>
+            <position>
+                <latitude>22.2808367460213</latitude>
+                <longitude>114.169921875</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>16</id>
+            <name>Nargunarg</name>
+            <position>
+                <latitude>22.281630966523352</latitude>
+                <longitude>114.17901992797852</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>17</id>
+            <name>Mahyar</name>
+            <position>
+                <latitude>22.286078517966256</latitude>
+                <longitude>114.18434143066406</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>18</id>
+            <name>Petunia</name>
+            <position>
+                <latitude>22.294179051660386</latitude>
+                <longitude>114.18193817138672</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>19</id>
+            <name>Undar</name>
+            <position>
+                <latitude>22.302755575548254</latitude>
+                <longitude>114.180908203125</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>21</id>
+            <name>Enorlon</name>
+            <position>
+                <latitude>22.319113040538067</latitude>
+                <longitude>114.17919158935547</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>22</id>
+            <name>Gashagr</name>
+            <position>
+                <latitude>22.327529241667754</latitude>
+                <longitude>114.17936325073242</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>23</id>
+            <name>Abet</name>
+            <position>
+                <latitude>22.335309806148057</latitude>
+                <longitude>114.17901992797852</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+            <destination/>
+            <areaDistribution businessmann="0" child="0" retired="0" student="0" tourist="0" unemployed="0" worker="0"/>
+        </station>
+        <station>
+            <id>24</id>
+            <name>Ziri</name>
+            <position>
+                <latitude>22.343089936559487</latitude>
+                <longitude>114.17919158935547</longitude>
+            </position>
+            <lines>
+                <line id="1" platform=""/>
+            </lines>
+        </station>
+    </stations>
+    <lines>
+        <line>
+            <id>0</id>
+            <name>A</name>
+            <numberOfTrain>30</numberOfTrain>
+            <stations>
+                <station id="0" order="0"/>
+                <station id="1" order="1"/>
+                <station id="2" order="2"/>
+                <station id="3" order="3"/>
+                <station id="4" order="4"/>
+                <station id="5" order="5"/>
+                <station id="6" order="6"/>
+                <station id="7" order="7"/>
+                <station id="8" order="8"/>
+                <station id="9" order="9"/>
+                <station id="10" order="10"/>
+                <station id="11" order="11"/>
+                <station id="12" order="12"/>
+            </stations>
+        </line>
+        <line>
+            <id>1</id>
+            <name>B</name>
+            <numberOfTrain>30</numberOfTrain>
+            <stations>
+                <station id="13" order="0"/>
+                <station id="14" order="1"/>
+                <station id="15" order="2"/>
+                <station id="16" order="3"/>
+                <station id="17" order="4"/>
+                <station id="18" order="5"/>
+                <station id="19" order="6"/>
+                <station id="12" order="7"/>
+                <station id="21" order="8"/>
+                <station id="22" order="9"/>
+                <station id="23" order="10"/>
+                <station id="24" order="11"/>
+            </stations>
+        </line>
+    </lines>
+    <areas>
+        <area>
+            <id>0</id>
+            <position posX="496" posY="341"/>
+            <size height="75" width="75"/>
+            <type/>
+            <distribution Businessman="0" Child="0" Retired="0" Student="0" Tourist="0" Unemployed="0" Worker="0"/>
+        </area>
+        <area>
+            <id>0</id>
+            <position posX="590" posY="307"/>
+            <size height="75" width="75"/>
+            <type/>
+            <distribution Businessman="0" Child="0" Retired="0" Student="0" Tourist="0" Unemployed="0" Worker="0"/>
+        </area>
+        <area>
+            <id>0</id>
+            <position posX="494" posY="149"/>
+            <size height="75" width="75"/>
+            <type/>
+            <distribution Businessman="0" Child="0" Retired="0" Student="0" Tourist="0" Unemployed="0" Worker="0"/>
+        </area>
+        <area>
+            <id>0</id>
+            <position posX="377" posY="479"/>
+            <size height="75" width="75"/>
+            <type/>
+            <distribution Businessman="0" Child="0" Retired="0" Student="0" Tourist="0" Unemployed="0" Worker="0"/>
+        </area>
+    </areas>
+    <events/>
+</map>
