@@ -161,7 +161,7 @@ public class Station {
 	public void moveStation(int dx,int dy) {
 		this.setPosX(this.posX+=dx);
 		this.setPosY(this.posY+=dy);
-		Coordinate latLon = MainWindow.getInstance().getMainPanel().getPosition(this.posX, this.posY);
+		Coordinate latLon = (Coordinate) MainWindow.getInstance().getMainPanel().getPosition(this.posX, this.posY);
 		this.setLatitude(latLon.getLat());
 		this.setLongitude(latLon.getLon());
 

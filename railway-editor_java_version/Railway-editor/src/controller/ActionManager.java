@@ -150,7 +150,7 @@ public class ActionManager {
 		String stationName = Data.getInstance().getAvailableStationNames().get(randomIndex);
 		Data.getInstance().getAvailableStationNames().remove(randomIndex);
 		Station station = new Station(stationid, stationX, stationY, stationName);// create station (model)
-		Coordinate latLon = MainWindow.getInstance().getMainPanel().getPosition(station.getPosX(), station.getPosY());
+		Coordinate latLon = (Coordinate) MainWindow.getInstance().getMainPanel().getPosition(station.getPosX(), station.getPosY());
 		station.setLatitude(latLon.getLat());
 		station.setLongitude(latLon.getLon());
 
@@ -171,11 +171,11 @@ public class ActionManager {
 		Area area = new Area(Data.getInstance().getNewAreaId(), AREA_POSX_DEFAULT, AREA_POSY_DEFAULT,
 				AREA_WIDTH_DEFAULT, AREA_HEIGHT_DEFAULT);
 		
-		Coordinate latLonTop = MainWindow.getInstance().getMainPanel().getPosition(area.getPosX(), area.getPosY());
+		Coordinate latLonTop = (Coordinate) MainWindow.getInstance().getMainPanel().getPosition(area.getPosX(), area.getPosY());
 		area.setLatitudeTop(latLonTop.getLat());
 		area.setLongitudeTop(latLonTop.getLon());
 		
-		Coordinate latLonBot = MainWindow.getInstance().getMainPanel().getPosition(area.getPosX()+area.getWidth(), area.getPosY()+area.getHeight());
+		Coordinate latLonBot = (Coordinate) MainWindow.getInstance().getMainPanel().getPosition(area.getPosX()+area.getWidth(), area.getPosY()+area.getHeight());
 		area.setLatitudeBot(latLonBot.getLat());
 		area.setLongitudeBot(latLonBot.getLon());
 

@@ -320,11 +320,11 @@ public class Area {
 		this.setPosX(this.posX+=dx);
 		this.setPosY(this.posY+=dy);
 		
-		Coordinate latLonTop = MainWindow.getInstance().getMainPanel().getPosition(this.posX, this.posY);
+		Coordinate latLonTop = (Coordinate) MainWindow.getInstance().getMainPanel().getPosition(this.posX, this.posY);
 		this.setLatitudeTop(latLonTop.getLat());
 		this.setLongitudeTop(latLonTop.getLon());
 		
-		Coordinate latLonBot = MainWindow.getInstance().getMainPanel().getPosition(this.posX+this.width, this.posY+this.height);
+		Coordinate latLonBot = (Coordinate) MainWindow.getInstance().getMainPanel().getPosition(this.posX+this.width, this.posY+this.height);
 		this.setLatitudeBot(latLonBot.getLat());
 		this.setLongitudeBot(latLonBot.getLon());
 

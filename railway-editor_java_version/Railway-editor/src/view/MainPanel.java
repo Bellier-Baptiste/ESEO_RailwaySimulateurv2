@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
 import controller.MovingAdapter;
@@ -56,8 +57,8 @@ public class MainPanel extends JMapViewer {
 //		this.zoomFactor = 1;
 		mainPanelHUD = new MainPanelHUD(0, 650);
 		this.hideHud = false;
-		this.setDisplayPositionByLatLon(47.46667, -0.55, 14);
-		//this.setDisplayPositionByLatLon(31.23, 121.47, 14);
+    Coordinate point = new Coordinate(47.46667, -0.55);
+    this.setDisplayPosition(point, 0);		//this.setDisplayPositionByLatLon(31.23, 121.47, 14);
 
 
 	}
