@@ -40,12 +40,12 @@ public class AreaSetDistribution {
 	private static void display(Area area) {
 		LookAndFeel previousLF = UIManager.getLookAndFeel();
 		destinationList.setSelectedItem(area.getDestination());
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+//				| UnsupportedLookAndFeelException e) {
+//			e.printStackTrace();
+//		}
 
 		JLabel title = new JLabel("choose Area distribution (%)");
 		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));

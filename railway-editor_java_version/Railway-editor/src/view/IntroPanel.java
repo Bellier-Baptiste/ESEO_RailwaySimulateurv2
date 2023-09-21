@@ -95,8 +95,8 @@ public class IntroPanel extends JPanel {
 				MainWindow.getInstance().remove(MainWindow.getInstance().getIntroPanel());
 				MainWindow.getInstance().getContentPane().add(MainWindow.getInstance().getMainPanel(),
 						BorderLayout.CENTER);
-				MainWindow.getInstance().getContentPane().add(MainWindow.getInstance().getToolBarPanel(),
-						BorderLayout.EAST);
+				MainWindow.getInstance().getContentPane().add(MainWindow.getInstance().getToolBarPanelIdea2(),
+						BorderLayout.NORTH);
 				MainWindow.getInstance().getContentPane().add(MainWindow.getInstance().getEventRecapPanel(),BorderLayout.WEST);
 				MainWindow.getInstance().revalidate();
 			}

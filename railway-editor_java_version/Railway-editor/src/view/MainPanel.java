@@ -1,53 +1,46 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.util.ArrayList;
-import java.util.List;
-
+import controller.MovingAdapter;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
-import controller.MovingAdapter;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 
 /**Main Panel which cntains all the views
  * @author Arthur Lagarce
  *
  */
 public class MainPanel extends JMapViewer {
-	/**
-	 * 
-	 */
+  //constants
 	private static final long serialVersionUID = 1L;
-	//constants
-	public static final int PANEL_WIDTH_DEFAULT = 1100;
-	public static final int PANEL_HEIGHT_DEFAULT = 750;
-	public static final Color BACKGROUND_COLOR_DEFAULT = Color.WHITE;
-	
-	//attributes
-	//private LineView lineView;
+	public static final int PANEL_WIDTH_DEFAULT = 1000;
+	public static final int PANEL_HEIGHT_DEFAULT = 600;
+//	public static final Color BACKGROUND_COLOR_DEFAULT = Color.WHITE;
+
 	private List<LineView> lineViews;
-	//private StationView stationView;
-	//private List<StationView> stationViews;
+
 	private List<AreaView> areaViews;
-//	private double zoomFactor;
-//	private boolean zoomer;
+
 	private MainPanelHUD mainPanelHUD;
+
+  private String file = null;
+
+  private BufferedImage image = null;
+
 	private boolean hideHud;
 	
 	/**Constructor
 	 * @param width panel width
 	 * @param height panel height
-	 * @param color panel color
 	 */
-	public MainPanel(int width, int height, Color color) {
+	public MainPanel(int width, int height) {
 		MovingAdapter ma = new MovingAdapter();
 		Dimension dim = new Dimension(width, height);
 		this.setPreferredSize(dim);
-		this.setBackground(color);
+//		this.setBackground(color);
 		this.lineViews = new ArrayList<>();
 		this.areaViews = new ArrayList<>();
 		addMouseMotionListener(ma);
@@ -58,8 +51,9 @@ public class MainPanel extends JMapViewer {
 		mainPanelHUD = new MainPanelHUD(0, 650);
 		this.hideHud = false;
     Coordinate point = new Coordinate(47.46667, -0.55);
-    this.setDisplayPosition(point, 0);		//this.setDisplayPositionByLatLon(31.23, 121.47, 14);
-
+		this.setDisplayPosition(point, 0);
+		//this.setDisplayPositionByLatLon(31.23, 121.47, 14);
+    //this.setLayout(new FlowLayout(FlowLayout.LEFT));
 
 	}
 	
@@ -227,5 +221,6 @@ public class MainPanel extends JMapViewer {
 		
 
 	}
+
 
 }

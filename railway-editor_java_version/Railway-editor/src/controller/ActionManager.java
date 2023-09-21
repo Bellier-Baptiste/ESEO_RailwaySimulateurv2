@@ -105,7 +105,7 @@ public class ActionManager {
 		LineView lineview = new LineView(line, stationsViews);
 		@SuppressWarnings("unused")
 		LineController lineController = new LineController(line, lineview);
-		MainWindow.getInstance().getToolBarPanel().getLineId().setText(Integer.toString(lineIndex));// change line id
+		MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(Integer.toString(lineIndex));// change line id
 																									// displayed in the
 																									// toolBar Panel
 		MainWindow.getInstance().getMainPanel().repaint();
@@ -130,12 +130,17 @@ public class ActionManager {
 		// adjust size relative to the zoom level
 		int stationSize = 18;
 		int centerStationSize = 14;
-
-		List<StationView> stationViews = MainWindow.getInstance().getMainPanel().getLineViews().get(lineToUpdateIndex)
-				.getStationViews();
+    List<StationView> stationViews = null;
+		try {
+      stationViews = MainWindow.getInstance().getMainPanel().getLineViews().get(lineToUpdateIndex)
+          .getStationViews();
+    } catch (IndexOutOfBoundsException e) {
+      e.printStackTrace();
+      System.out.println("No existing line");
+    }
 		int stationX = 0;
 		int stationY = 0;
-		if (stationViews.size() > 0) {// if there are already stations on this line
+		if (!stationViews.isEmpty()) {// if there are already stations on this line
 			stationX = stationViews.get(stationViews.size() - 1).getStation().getPosX() + 25;
 			stationY = stationViews.get(stationViews.size() - 1).getStation().getPosY() + 25;
 		} else {// if is the first station for the line
@@ -419,7 +424,7 @@ public class ActionManager {
 	 * iterate over all stations and area to find which stations are in which area,
 	 * then assign areas to stations.
 	 */
-	private void assignAreaToStations() {
+	public void assignAreaToStations() {
 		for (LineView lineview : MainWindow.getInstance().getMainPanel().getLineViews()) {
 			for (StationView stationView : lineview.getStationViews()) {
 				for (AreaView areaView : MainWindow.getInstance().getMainPanel().getAreaViews()) {
@@ -453,7 +458,7 @@ public class ActionManager {
 	 * 
 	 */
 	public void incrementLine() {
-		JLabel lineId = MainWindow.getInstance().getToolBarPanel().getLineId();
+		JLabel lineId = MainWindow.getInstance().getToolBarPanelIdea2().getLineId();
 
 		if (!lineId.getText().equals("none")) { // if a line exists
 			int currentLineId = Integer.valueOf(lineId.getText());
@@ -461,7 +466,7 @@ public class ActionManager {
 																									// the last line
 																									// created
 				System.out.println("increment");
-				MainWindow.getInstance().getToolBarPanel().getLineId().setText(Integer.toString(currentLineId + 1));
+				MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(Integer.toString(currentLineId + 1));
 				this.setLineToUpdateIndex(currentLineId + 1);
 			}
 		}
@@ -472,13 +477,13 @@ public class ActionManager {
 	 * 
 	 */
 	public void decrementLine() {
-		JLabel lineId = MainWindow.getInstance().getToolBarPanel().getLineId();
+		JLabel lineId = MainWindow.getInstance().getToolBarPanelIdea2().getLineId();
 
 		if (!lineId.getText().equals("none")) {// if a line exists
 			int currentLineId = Integer.valueOf(lineId.getText());
 			if (currentLineId > 0) {// if this is not the first line created
 				System.out.println("decrement");
-				MainWindow.getInstance().getToolBarPanel().getLineId().setText(Integer.toString(currentLineId - 1));
+				MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(Integer.toString(currentLineId - 1));
 				this.setLineToUpdateIndex(currentLineId - 1);
 			}
 		}
@@ -748,7 +753,7 @@ public class ActionManager {
 			}
 
 			// Events
-			Element events = document.createElement("events");
+			Element events = document.createElement("org/openstreetmap/gui/jmapviewer/events");
 			root.appendChild(events);
 			for (Event event : Data.getInstance().getEventList()) {
 				// Name of the event
@@ -1037,7 +1042,7 @@ public class ActionManager {
 			}
 
 			// reading event section
-			NodeList eventList = doc.getElementsByTagName("events");
+			NodeList eventList = doc.getElementsByTagName("org/openstreetmap/gui/jmapviewer/events");
 			NodeList childList = eventList.item(0).getChildNodes();
 			for (int j = 0; j < childList.getLength(); j++) {
 				Node childNode = childList.item(j);
@@ -1130,4 +1135,7 @@ public class ActionManager {
 	        return toAlphabetic(quot-1) + letter;
 	    }
 	}
+
+  public void runSimulation() {
+  }
 }
