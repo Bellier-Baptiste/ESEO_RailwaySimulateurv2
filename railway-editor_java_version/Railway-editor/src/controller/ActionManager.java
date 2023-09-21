@@ -753,7 +753,7 @@ public class ActionManager {
 			}
 
 			// Events
-			Element events = document.createElement("org/openstreetmap/gui/jmapviewer/events");
+			Element events = document.createElement("events");
 			root.appendChild(events);
 			for (Event event : Data.getInstance().getEventList()) {
 				// Name of the event

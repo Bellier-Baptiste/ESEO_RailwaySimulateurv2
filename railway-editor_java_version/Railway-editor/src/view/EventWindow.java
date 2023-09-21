@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+import com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme;
 import controller.ActionManager;
 
 /**
