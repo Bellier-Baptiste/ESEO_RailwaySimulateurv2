@@ -35,11 +35,7 @@ public ActionExport(MainPanel mainPanel, ActionManager actionManager) {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    LookAndFeel previousLF = UIManager.getLookAndFeel();
-    try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
       JFileChooser fileChooser = new JFileChooser();
-      UIManager.setLookAndFeel(previousLF);
 
       fileChooser.setDialogTitle("Specify a file to save");
 
@@ -51,10 +47,7 @@ public ActionExport(MainPanel mainPanel, ActionManager actionManager) {
         System.out.println("Save as file: " + fileToSave.getAbsolutePath());
         actionManager.export(fileToSave);
       }
-    } catch (IllegalAccessException | UnsupportedLookAndFeelException | InstantiationException
-             | ClassNotFoundException e1) {
-      e1.printStackTrace();
-    }
+
 
   }
 
