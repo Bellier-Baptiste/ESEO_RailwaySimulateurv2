@@ -3,8 +3,10 @@ package controller;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -1137,5 +1139,32 @@ public class ActionManager {
 	}
 
   public void runSimulation() {
+    try {
+      File newFile = new File("C:/Users/Aurélie/Documents/main/ESEO/I3/PFE/pfe_railway_simulator_2023_2024/eseo_railwaysimulateurv2/pfe-2018-network-journey-simulator/metro_simulator.exe");
+      System.out.println(newFile.canExecute());
+
+      // create a new list of arguments for our process
+      String[] commands = {"metro_simulator.exe"};
+
+      // create the process builder
+      ProcessBuilder pb = new ProcessBuilder(commands);
+
+      // set the working directory of the process
+      pb.directory(new File("C:/Users/Aurélie/Documents/main/ESEO/I3/PFE/pfe_railway_simulator_2023_2024/eseo_railwaysimulateurv2/pfe-2018-network-journey-simulator/"));
+      System.out.println("" + pb.directory());
+      Process process = pb.start();
+
+      // Attendez que le processus se termine
+      int exitCode = process.waitFor();
+
+      // Vérifiez le code de sortie
+      if (exitCode == 0) {
+        System.out.println("Le fichier Go a été exécuté avec succès !");
+      } else {
+        System.err.println("Erreur lors de l'exécution du fichier Go. Code de sortie : " + exitCode);
+      }
+    } catch (IOException | InterruptedException e) {
+      e.printStackTrace();
+    }
   }
 }

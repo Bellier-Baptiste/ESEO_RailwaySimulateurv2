@@ -227,7 +227,7 @@ public class ActionOpen extends AbstractAction {
       }
 
       // reading event section
-      NodeList eventList = doc.getElementsByTagName("org/openstreetmap/gui/jmapviewer/events");
+      NodeList eventList = doc.getElementsByTagName("events");
       NodeList childList = eventList.item(0).getChildNodes();
       for (int j = 0; j < childList.getLength(); j++) {
         Node childNode = childList.item(j);
