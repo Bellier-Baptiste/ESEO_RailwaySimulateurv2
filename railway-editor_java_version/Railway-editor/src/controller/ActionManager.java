@@ -1140,24 +1140,24 @@ public class ActionManager {
 
   public void runSimulation() {
     try {
-      File newFile = new File("C:/Users/Aurélie/Documents/main/ESEO/I3/PFE/pfe_railway_simulator_2023_2024/eseo_railwaysimulateurv2/pfe-2018-network-journey-simulator/metro_simulator.exe");
-      System.out.println(newFile.canExecute());
+			System.out.println(System.getProperty("user.dir"));
+			String rootJavaProjectPath = System.getProperty("user.dir");
+			String rootGoProjectPath = rootJavaProjectPath.replace("railway-editor_java_version", "pfe-2018-network-journey-simulator");
+			//File runThisSimulation = new File("C:\\Users\\odial\\Documents\\Aurelie\\ESEO\\I3\\PFE\\pfe_railway_editor_2023_2024\\eseo_railwaysimulateurv2\\pfe-2018-network-journey-simulator\\src\\configs\\runThisSimulation.xml");
+			File runThisSimulation = new File(rootGoProjectPath + "\\src\\configs\\runThisSimulation.xml");
+			this.export(runThisSimulation);
 
-      // create a new list of arguments for our process
-      String[] commands = {"metro_simulator.exe"};
-
+			// create a new list of arguments for our process
+      String[] commands = {"cmd", "/C", "start metro_simulator.exe -configname runThisSimulation.xml"};
+      //String[] commands = {"cmd", "/C", "start metro_simulator.exe"};
       // create the process builder
       ProcessBuilder pb = new ProcessBuilder(commands);
-
       // set the working directory of the process
-      pb.directory(new File("C:/Users/Aurélie/Documents/main/ESEO/I3/PFE/pfe_railway_simulator_2023_2024/eseo_railwaysimulateurv2/pfe-2018-network-journey-simulator/"));
-      System.out.println("" + pb.directory());
+      pb.directory(new File(rootGoProjectPath));
       Process process = pb.start();
-
-      // Attendez que le processus se termine
+      // wait that the process finish
       int exitCode = process.waitFor();
-
-      // Vérifiez le code de sortie
+      // verify the exit code
       if (exitCode == 0) {
         System.out.println("Le fichier Go a été exécuté avec succès !");
       } else {
@@ -1167,4 +1167,32 @@ public class ActionManager {
       e.printStackTrace();
     }
   }
+//  public void runSimulation() {
+//    try {
+//			System.out.println(System.getProperty("user.dir"));
+//			String rootJavaProjectPath = System.getProperty("user.dir");
+//			String rootGoProjectPath = rootJavaProjectPath.replace("railway-editor_java_version", "pfe-2018-network-journey-simulator");
+//			//File runThisSimulation = new File("C:\\Users\\odial\\Documents\\Aurelie\\ESEO\\I3\\PFE\\pfe_railway_editor_2023_2024\\eseo_railwaysimulateurv2\\pfe-2018-network-journey-simulator\\src\\configs\\runThisSimulation.xml");
+//			File runThisSimulation = new File(rootGoProjectPath + "\\src\\configs\\runThisSimulation.xml");
+//			this.export(runThisSimulation);
+//
+//			// create a new list of arguments for our process
+//      String[] commands = {"cmd", "/C", "start metro_simulator.exe -configname runThisSimulation.xml"};
+//      // create the process builder
+//      ProcessBuilder pb = new ProcessBuilder(commands);
+//      // set the working directory of the process
+//      pb.directory(new File(rootGoProjectPath));
+//      Process process = pb.start();
+//      // wait that the process finish
+//      int exitCode = process.waitFor();
+//      // verify the exit code
+//      if (exitCode == 0) {
+//        System.out.println("Le fichier Go a été exécuté avec succès !");
+//      } else {
+//        System.err.println("Erreur lors de l'exécution du fichier Go. Code de sortie : " + exitCode);
+//      }
+//    } catch (IOException | InterruptedException e) {
+//      e.printStackTrace();
+//    }
+//  }
 }
