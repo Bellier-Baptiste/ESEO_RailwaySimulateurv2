@@ -3,28 +3,21 @@ package main;
 import com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme;
 import view.MainWindow;
 
+import javax.swing.*;
+
 /**Main class which runs the program.
  * @author arthu
  *
  */
 public class RailwayEditor {
 
- // public static final String accentColor = "#ff007aff";
-//  public static final String lightAccentColor = "#007aff";
-//  public static final String darkAccentColor = "#0a84ff";
- // public static final String accentColor = "#f00";
-
-//  public void setAccentColor(String accentColor) {
-//    this.accentColor = accentColor;
-//  }
-//
-//  public String getAccentColor() {
-//    return accentColor;
-//  }
-
 	public static void main(String[] args) {
     try {
       FlatArcDarkIJTheme.setup();
+      UIManager.put("JXTaskPaneUI", new com.formdev.flatlaf.swingx.ui.FlatTaskPaneUI());
+      UIManager.put("JXMonthView", new com.formdev.flatlaf.swingx.ui.FlatMonthViewUI());
+      UIManager.put("JXDatePicker", new com.formdev.flatlaf.swingx.ui.FlatDatePickerUI());
+
     } catch (Exception e) {
       e.printStackTrace();
     }

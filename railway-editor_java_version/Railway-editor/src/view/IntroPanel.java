@@ -125,7 +125,7 @@ public class IntroPanel extends JPanel {
 								BorderLayout.EAST);
 						MainWindow.getInstance().getContentPane().add(MainWindow.getInstance().getEventRecapPanel(),BorderLayout.WEST);
 						MainWindow.getInstance().revalidate();
-						actionManager.importMap(fileToLoad);
+//						actionManager.importMap(fileToLoad);
 							
 					}
 				} catch (IllegalAccessException | UnsupportedLookAndFeelException | InstantiationException

@@ -1,5 +1,7 @@
 package view;
 
+import com.formdev.flatlaf.FlatLaf;
+import com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme;
 import data.Data;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXTaskPane;
@@ -23,45 +25,13 @@ public class EventRecap extends JPanel {
 	// constants
 	public static final int LARGEUR_PAR_DEFAUT = 200;
 	public static final int HAUTEUR_PAR_DEFAUT = 750;
-	public static final Color BACKGROUND_COLOR = new Color(54, 61, 194);
-	public static final Color BACKGROUND_LABEL_COLOR = new Color(30, 62, 191);
 
 	/**
 	 * constructor
 	 */
 	public EventRecap() {
 		this.setPreferredSize(new Dimension(LARGEUR_PAR_DEFAUT, HAUTEUR_PAR_DEFAUT));
-		this.setBackground(BACKGROUND_COLOR);
 		this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-
-	}
-
-//	/** this painter draws a gradient fill */
-//	public Painter getPainter() {
-//		int width = 100;
-//		int height = 100;
-//		Color color1 = Color.WHITE;
-//		Color color2 = Color.GRAY;
-//		LinearGradientPaint gradientPaint = new LinearGradientPaint(0.0f, 0.0f, width, height,
-//				new float[] { 0.0f, 1.0f }, new Color[] { color1, color2 });
-//		MattePainter mattePainter = new MattePainter(gradientPaint);
-//		return mattePainter;
-//	}
-
-	private void changeUIdefaults() {
-		// JXTaskPaneContainer settings (developer defaults)
-		/*
-		 * These are all the properties that can be set (may change with new version of
-		 * SwingX) "TaskPaneContainer.useGradient", "TaskPaneContainer.background",
-		 * "TaskPaneContainer.backgroundGradientStart",
-		 * "TaskPaneContainer.backgroundGradientEnd", etc.
-		 */
-		// setting taskpanecontainer defaults
-		UIManager.put("TaskPaneContainer.useGradient", Boolean.FALSE);
-		UIManager.put("TaskPaneContainer.background", BACKGROUND_COLOR);
-		// setting taskpane defaults
-		UIManager.put("TaskPane.font", new FontUIResource(new Font("Verdana", Font.BOLD, 16)));
-		UIManager.put("TaskPane.titleBackgroundGradientStart", Color.WHITE);
 	}
 
 	/**Create a recap for event line delay.
@@ -74,7 +44,6 @@ public class EventRecap extends JPanel {
 	 */
 	public void createEventLineDelayed(int id,String startDateStr, String endDateStr, String LocationsStr, String delayStr,
 			String lineStr) {
-		changeUIdefaults();
 		JXTaskPane taskpane = new JXTaskPane();
 		// create a taskpanecontainer
 		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
@@ -140,7 +109,6 @@ public class EventRecap extends JPanel {
 	 */
 	public void createEventLineClosed(int id,String startDateStr, String endDateStr, String LocationsStr,
 			String lineStr) {
-		changeUIdefaults();
 		JXTaskPane taskpane = new JXTaskPane();
 		// create a taskpanecontainer
 		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
@@ -202,7 +170,6 @@ public class EventRecap extends JPanel {
 	 * @param peakStr peak amount
 	 */
 	public void createEventAttendancePeak(int id, String startDateStr, String endDateStr, String stationStr, String peakStr) {
-		changeUIdefaults();
 		JXTaskPane taskpane = new JXTaskPane();
 		// create a taskpanecontainer
 		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
@@ -262,7 +229,6 @@ public class EventRecap extends JPanel {
 // * @param peakStr peak amount
  */
 public void createEventStationClosed(int id, String startDateStr, String endDateStr, String stationStr) {
-	changeUIdefaults();
 	JXTaskPane taskpane = new JXTaskPane();
 	// create a taskpanecontainer
 	JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
@@ -303,10 +269,7 @@ public void createEventStationClosed(int id, String startDateStr, String endDate
 			Data.getInstance().getEventList().remove(id);
 		}
 	});
-
-	// add the task pane to the taskpanecontainer
-	taskpanecontainer.add(taskpane);
-	this.add(taskpanecontainer, BorderLayout.CENTER);
+  this.add(taskpane, BorderLayout.CENTER);
 }
 
 	/** create a recap for event hour.
@@ -317,7 +280,6 @@ public void createEventStationClosed(int id, String startDateStr, String endDate
 	 * @param trainNbStr trainNumber amount
 	 */
 	public void createEventHour(int id,String startTimeStr, String endTimeStr, String lineStr, String trainNbStr) {
-		changeUIdefaults();
 		JXTaskPane taskpane = new JXTaskPane();
 		// create a taskpanecontainer
 		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();

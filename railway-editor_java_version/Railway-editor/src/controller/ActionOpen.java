@@ -257,7 +257,7 @@ public class ActionOpen extends AbstractAction {
 
             String eventString = dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
                 + stationStartId + "," + stationEndId + "," + delay;
-            this.actionManager.addEventDelay(eventString);
+            ActionMetroEvent.getInstance().new ActionAddEventLineDelay().addEventDelay(eventString);
           }
 
           if (eventElement.getTagName().equals("lineClose")) {
@@ -268,7 +268,7 @@ public class ActionOpen extends AbstractAction {
 
             String eventString = dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
                 + stationStartId + "," + stationEndId;
-            this.actionManager.addEventClosed(eventString);
+            ActionMetroEvent.getInstance().new ActionAddEventLineClosed().addLineClosed(eventString);
           }
 
           if (eventElement.getTagName().equals("attendancePeak")) {
@@ -277,7 +277,7 @@ public class ActionOpen extends AbstractAction {
 
             String eventString = dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
                 + stationId + "," + size;
-            this.actionManager.addEventAttendancePeak(eventString);
+            ActionMetroEvent.getInstance().new ActionAddEventAttendancePeak().addAttendancePeak(eventString);
           }
 
           if (eventElement.getTagName().equals("stationClosed")) {
@@ -285,14 +285,14 @@ public class ActionOpen extends AbstractAction {
 
             String eventString = dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
                 + stationId;
-            this.actionManager.addEventStationClosed(eventString);
+            ActionMetroEvent.getInstance().new ActionAddEventStationClosed().addStationClosed(eventString);
           }
           if (eventElement.getTagName().equals("hour")) {
             String lineId = eventElement.getElementsByTagName("idLine").item(0).getTextContent();
             String trainNumber = eventElement.getElementsByTagName("trainNumber").item(0).getTextContent();
 
             String eventString = startTime + "," + endTime + "," + lineId + "," + trainNumber;
-            this.actionManager.addEventTrainHour(eventString);
+            ActionMetroEvent.getInstance().new ActionAddEventTrainHour().addTrainHour(eventString);
           }
         }
       }

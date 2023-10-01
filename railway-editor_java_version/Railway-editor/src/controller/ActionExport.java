@@ -45,7 +45,7 @@ public ActionExport(MainPanel mainPanel, ActionManager actionManager) {
         File fileToSave = fileChooser.getSelectedFile();
 
         System.out.println("Save as file: " + fileToSave.getAbsolutePath());
-        actionManager.export(fileToSave);
+        this.export(fileToSave);
       }
 
 
@@ -311,7 +311,7 @@ public ActionExport(MainPanel mainPanel, ActionManager actionManager) {
       }
 
       // Events
-      Element events = document.createElement("org/openstreetmap/gui/jmapviewer/events");
+      Element events = document.createElement("events");
       root.appendChild(events);
       for (Event event : Data.getInstance().getEventList()) {
         // Name of the event

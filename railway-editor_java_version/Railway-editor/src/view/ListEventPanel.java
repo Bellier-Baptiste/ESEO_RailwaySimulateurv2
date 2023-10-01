@@ -37,6 +37,9 @@ import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 
+import controller.ActionLine;
+import controller.ActionMetroEvent;
+import controller.EventName;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -68,12 +71,10 @@ public class ListEventPanel extends JPanel implements Observer {
 			{ "LineClosed", "Line", "close an entire line of the map" },
 			{ "AttendancePeak", "Station", "configure a big raise of population on a defined station" },
 			{ "TrainHour", "Line", "configure a new train flow on a line" } };
+  private static ListEventPanel instance;
 
-	private enum EventName {
-		LINE_DELAYED, LINE_CLOSED, ATTENDANCE_PEAK, TRAIN_HOUR,STATION_CLOSED
-	}
 
-	private ActionManager actionManager;
+  private ActionManager actionManager;
 	private JPanel view;
 	private JScrollPane eventConfig;
 
@@ -106,9 +107,9 @@ public class ListEventPanel extends JPanel implements Observer {
 	 * 
 	 * @param width panel width
 	 * @param height panel heigth
-	 * @param actionManager ActionManager
+//	 * @param actionManager ActionManager
 	 */
-	public ListEventPanel(int width, int height, ActionManager actionManager) {
+	private ListEventPanel(int width, int height) {
 		Data.getInstance().addObserver(this);
 		Dimension dim = new Dimension(width, height);
 		view = new JPanel(new GridBagLayout());
@@ -130,7 +131,14 @@ public class ListEventPanel extends JPanel implements Observer {
 
 	}
 
-	/**
+  public static ListEventPanel getInstance() {
+    if (instance == null) {
+      instance = new ListEventPanel(MainPanel.PANEL_WIDTH_DEFAULT,MainPanel.PANEL_HEIGHT_DEFAULT);
+    }
+    return instance;
+  }
+
+  /**
 	 * init available table elements.
 	 */
 	public void initComponent() {
@@ -152,49 +160,68 @@ public class ListEventPanel extends JPanel implements Observer {
 				JTable table = (JTable) mouseEvent.getSource();
 				if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
 					String eventSelected = (String) table.getValueAt(table.getSelectedRow(), 0);
-					if (eventSelected.equals("LineDelayed")) {
-						initLineDelayed(c);
-						eventName = EventName.LINE_DELAYED;
-					} else if (eventSelected.equals("LineClosed")) {
-						initLineClosed(c);
-						eventName = EventName.LINE_CLOSED;
-					} else if (eventSelected.equals("AttendancePeak")) {
-						initAttendancePeak(c);
-						eventName = EventName.ATTENDANCE_PEAK;
-					} else if (eventSelected.equals("TrainHour")) {
-						initTrainHour(c);
-						eventName = EventName.TRAIN_HOUR;
-					}else if (eventSelected.equals("StationClosed")) {
-						initStationClosed(c);
-						eventName = EventName.STATION_CLOSED;
-					}
-					JButton confirmEvent = new JButton("Done");
-					confirmEvent.addActionListener(new ActionListener() {
-
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							MainWindow.getInstance().toFront();
-							if (eventName == EventName.LINE_DELAYED) {
-								actionManager.addEventDelay(eventLineDelayToString());
-							} else if (eventName == EventName.LINE_CLOSED) {
-								actionManager.addEventClosed(eventLineClosedToString());
-							} else if (eventName ==  EventName.ATTENDANCE_PEAK) {
-								actionManager.addEventAttendancePeak(eventAttendancePeakToString());
-							} else if (eventName ==  EventName.TRAIN_HOUR) {
-								actionManager.addEventTrainHour(eventTrainHourToString());
-							}else if (eventName ==  EventName.STATION_CLOSED) {
-								actionManager.addEventStationClosed(eventStationClosedToString());
-							}
-						}
-					});
-					c.fill = GridBagConstraints.HORIZONTAL;
-					c.gridwidth = 2;
-					c.gridx = 0;
-					c.gridy = 10;
-					c.weighty = 0.1;
-					view.add(confirmEvent, c);
+          JButton confirmEventBtn = new JButton("Done");
+          switch (eventSelected) {
+            case "LineDelayed":
+              initLineDelayed(c);
+              eventName = EventName.LINE_DELAYED;
+              c.fill = GridBagConstraints.HORIZONTAL;
+              c.gridwidth = 2;
+              c.gridx = 0;
+              c.gridy = 10;
+              c.weighty = 0.1;
+              confirmEventBtn.addActionListener(ActionMetroEvent.getInstance().new ActionAddEventLineDelay());
+              view.add(confirmEventBtn, c);
+              break;
+            case "LineClosed":
+              initLineClosed(c);
+              eventName = EventName.LINE_CLOSED;
+              c.fill = GridBagConstraints.HORIZONTAL;
+              c.gridwidth = 2;
+              c.gridx = 0;
+              c.gridy = 10;
+              c.weighty = 0.1;
+              confirmEventBtn.addActionListener(ActionMetroEvent.getInstance().new ActionAddEventLineClosed());
+              view.add(confirmEventBtn, c);
+              break;
+            case "AttendancePeak":
+              initAttendancePeak(c);
+              eventName = EventName.ATTENDANCE_PEAK;
+              c.fill = GridBagConstraints.HORIZONTAL;
+              c.gridwidth = 2;
+              c.gridx = 0;
+              c.gridy = 10;
+              c.weighty = 0.1;
+              confirmEventBtn.addActionListener(ActionMetroEvent.getInstance().new ActionAddEventAttendancePeak());
+              view.add(confirmEventBtn, c);
+              break;
+            case "TrainHour":
+              initTrainHour(c);
+              eventName = EventName.TRAIN_HOUR;
+              c.fill = GridBagConstraints.HORIZONTAL;
+              c.gridwidth = 2;
+              c.gridx = 0;
+              c.gridy = 10;
+              c.weighty = 0.1;
+              confirmEventBtn.addActionListener(ActionMetroEvent.getInstance().new ActionAddEventTrainHour());
+              view.add(confirmEventBtn, c);
+              break;
+            case "StationClosed":
+              initStationClosed(c);
+              eventName = EventName.STATION_CLOSED;
+              c.fill = GridBagConstraints.HORIZONTAL;
+              c.gridwidth = 2;
+              c.gridx = 0;
+              c.gridy = 10;
+              c.weighty = 0.1;
+              confirmEventBtn.addActionListener(ActionMetroEvent.getInstance().new ActionAddEventStationClosed());
+              view.add(confirmEventBtn, c);
+              break;
+            default:
+              break;
+          }
+          confirmEventBtn.setVisible(true);
 				}
-
 			}
 		});
 	}
@@ -245,7 +272,7 @@ public class ListEventPanel extends JPanel implements Observer {
 			stationStartPicker.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					actionManager.hideEventWindow();
+          EventWindow.getInstance().setVisible(false);
 					Data.getInstance().setSelectType(Data.STATION_START);
 				}
 
@@ -259,7 +286,7 @@ public class ListEventPanel extends JPanel implements Observer {
 			stationEndPicker.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					actionManager.hideEventWindow();
+          EventWindow.getInstance().setVisible(false);
 					Data.getInstance().setSelectType(Data.STATION_END);
 				}
 
@@ -411,7 +438,7 @@ public class ListEventPanel extends JPanel implements Observer {
 			stationStartPicker.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					actionManager.hideEventWindow();
+          EventWindow.getInstance().setVisible(false);
 					Data.getInstance().setSelectType(Data.STATION_START);
 				}
 
@@ -425,7 +452,7 @@ public class ListEventPanel extends JPanel implements Observer {
 			stationEndPicker.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					actionManager.hideEventWindow();
+          EventWindow.getInstance().setVisible(false);
 					Data.getInstance().setSelectType(Data.STATION_END);
 				}
 
@@ -559,7 +586,7 @@ public class ListEventPanel extends JPanel implements Observer {
 			stationConcernedPicker.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					actionManager.hideEventWindow();
+          EventWindow.getInstance().setVisible(false);
 					Data.getInstance().setSelectType(Data.STATION_CONCERNED);
 				}
 
@@ -694,7 +721,7 @@ public class ListEventPanel extends JPanel implements Observer {
 			stationConcernedPicker.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					actionManager.hideEventWindow();
+          EventWindow.getInstance().hide();
 					Data.getInstance().setSelectType(Data.STATION_CONCERNED);
 				}
 
@@ -790,7 +817,7 @@ public class ListEventPanel extends JPanel implements Observer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				editLineSelected.setText(Integer.toString(actionManager.getLineToUpdateIndex()));
+				editLineSelected.setText(Integer.toString(ActionLine.getInstance().getLineToUpdateIndex()));
 			}
 		});
 		JLabel trainNumber = new JLabel("trainNumber ");
@@ -883,7 +910,7 @@ public class ListEventPanel extends JPanel implements Observer {
 	/**get the info of the edition fields recap as a String for eventLineDelay.
 	 * @return String 
 	 */
-	private String eventLineDelayToString() {
+	public String eventLineDelayToString() {
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 		DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
@@ -903,7 +930,7 @@ public class ListEventPanel extends JPanel implements Observer {
 	/**get the info of the edition fields recap as a String for eventLineClosed.
 	 * @return String 
 	 */
-	private String eventLineClosedToString() {
+	public String eventLineClosedToString() {
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 		DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
@@ -920,7 +947,7 @@ public class ListEventPanel extends JPanel implements Observer {
 	/**get the info of the edition fields recap as a String for eventAttendancePeak.
 	 * @return String 
 	 */
-	private String eventAttendancePeakToString() {
+	public String eventAttendancePeakToString() {
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
 		DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
@@ -939,24 +966,25 @@ public class ListEventPanel extends JPanel implements Observer {
 	/**get the info of the edition fields recap as a String for eventStationClosed.
 	 * @return String 
 	 */
-	private String eventStationClosedToString() {
-		DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-		DateFormat dfTime = new SimpleDateFormat("HH:mm");
+	public String eventStationClosedToString() {
+    DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+    DateFormat dfTime = new SimpleDateFormat("HH:mm");
+    System.out.println(datePickerStart.getModel().getValue());
+    String dateStart = df.format((Date) datePickerStart.getModel().getValue());
+    String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String timeStart = dfTime.format(clockPanelStart.getTimeSpinner().getValue()).toString();
+    String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue()).toString();
+    String stationConcerned = editStationConcerned.getText();
 
-		String dateStart = df.format((Date) datePickerStart.getModel().getValue());
-		String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
-		String timeStart = dfTime.format(clockPanelStart.getTimeSpinner().getValue()).toString();
-		String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue()).toString();
-		String stationConcerned = editStationConcerned.getText();
+    String eventString = dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + "," + stationConcerned;
 
-		String eventString = dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + "," + stationConcerned;
+    return eventString;
 
-		return eventString;
 	}
 	/**get the info of the edition fields recap as a String for event train hour.
 	 * @return String 
 	 */
-	private String eventTrainHourToString() {
+	public String eventTrainHourToString() {
 		DateFormat dfTime = new SimpleDateFormat("HH:mm");
 		String timeStart = dfTime.format(clockPanelStart.getTimeSpinner().getValue()).toString();
 		String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue()).toString();
@@ -973,7 +1001,7 @@ public class ListEventPanel extends JPanel implements Observer {
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		actionManager.displayEventWindow();
+    EventWindow.getInstance().setVisible(true);
 		if (arg.equals("start")) {
 			editStationStart.setText(Integer.toString(Data.getInstance().getStationStartId()));
 		} else if (arg.equals("end")) {

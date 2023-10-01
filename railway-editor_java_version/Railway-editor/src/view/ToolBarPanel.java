@@ -130,14 +130,14 @@ public class ToolBarPanel extends JPanel {
 			btnStation.setBackground(BACKGROUND_COLOR);
 			btnStation.setFocusPainted(false);
 
-			btnStation.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					actionManager.addStation();
-				}
-
-			});
+//			btnStation.addActionListener(new ActionListener() {
+//
+//				@Override
+//				public void actionPerformed(ActionEvent arg0) {
+//					actionManager.addStation();
+//				}
+//
+//			});
 			this.add(btnStation, c);
 		} catch (Exception ex) {
 			System.out.println(ex);
@@ -167,14 +167,14 @@ public class ToolBarPanel extends JPanel {
 		btnIncrement.setFont(btnIncrement.getFont().deriveFont(16.0f));
 		btnIncrement.setForeground(TEXT_COLOR);
 		btnIncrement.setFocusPainted(false);
-		btnIncrement.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				actionManager.incrementLine();
-			}
-
-		});
+//		btnIncrement.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				actionManager.incrementLine();
+//			}
+//
+//		});
 		c.ipady = 0;
 		c.gridwidth = 1;
 		c.gridheight = 1;
@@ -193,14 +193,14 @@ public class ToolBarPanel extends JPanel {
 		btnDecrement.setBorder(new LineBorder(BACKGROUND_LABEL_COLOR));
 
 		btnDecrement.setFocusPainted(false);
-		btnDecrement.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				actionManager.decrementLine();
-			}
-
-		});
+//		btnDecrement.addActionListener(new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent arg0) {
+//				actionManager.decrementLine();
+//			}
+//
+//		});
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.gridx = 2;
@@ -239,14 +239,14 @@ public class ToolBarPanel extends JPanel {
 
 			c.gridy = 3;
 
-			btnLine.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					actionManager.addLine();
-				}
-
-			});
+//			btnLine.addActionListener(new ActionListener() {
+//
+//				@Override
+//				public void actionPerformed(ActionEvent arg0) {
+//					actionManager.addLine();
+//				}
+//
+//			});
 			this.add(btnLine, c);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -284,14 +284,14 @@ public class ToolBarPanel extends JPanel {
 
 			c.gridy = 4;
 
-			btnArea.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					actionManager.addArea();
-				}
-
-			});
+//			btnArea.addActionListener(new ActionListener() {
+//
+//				@Override
+//				public void actionPerformed(ActionEvent arg0) {
+//					actionManager.addArea();
+//				}
+//
+//			});
 			this.add(btnArea, c);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -327,14 +327,14 @@ public class ToolBarPanel extends JPanel {
 			c.gridx = 0;
 			c.weighty = 0.5;
 			c.gridy = 5;
-			btnEvent.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					actionManager.addEvent();
-				}
-
-			});
+//			btnEvent.addActionListener(new ActionListener() {
+//
+//				@Override
+//				public void actionPerformed(ActionEvent arg0) {
+//					actionManager.addEvent();
+//				}
+//
+//			});
 			this.add(btnEvent, c);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -370,33 +370,33 @@ public class ToolBarPanel extends JPanel {
 			c.weighty = 0.5;
 			c.gridy = 6;
 
-			btnExport.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					LookAndFeel previousLF = UIManager.getLookAndFeel();
-					try {
-						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-						JFileChooser fileChooser = new JFileChooser();
-						UIManager.setLookAndFeel(previousLF);
-
-						fileChooser.setDialogTitle("Specify a file to save");
-
-						int userSelection = fileChooser.showSaveDialog(MainWindow.getInstance());
-
-						if (userSelection == JFileChooser.APPROVE_OPTION) {
-							File fileToSave = fileChooser.getSelectedFile();
-
-							System.out.println("Save as file: " + fileToSave.getAbsolutePath());
-							actionManager.export(fileToSave);
-						}
-					} catch (IllegalAccessException | UnsupportedLookAndFeelException | InstantiationException
-							| ClassNotFoundException e1) {
-					}
-
-				}
-
-			});
+//			btnExport.addActionListener(new ActionListener() {
+//
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					LookAndFeel previousLF = UIManager.getLookAndFeel();
+//					try {
+//						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//						JFileChooser fileChooser = new JFileChooser();
+//						UIManager.setLookAndFeel(previousLF);
+//
+//						fileChooser.setDialogTitle("Specify a file to save");
+//
+//						int userSelection = fileChooser.showSaveDialog(MainWindow.getInstance());
+//
+//						if (userSelection == JFileChooser.APPROVE_OPTION) {
+//							File fileToSave = fileChooser.getSelectedFile();
+//
+//							System.out.println("Save as file: " + fileToSave.getAbsolutePath());
+//							actionManager.export(fileToSave);
+//						}
+//					} catch (IllegalAccessException | UnsupportedLookAndFeelException | InstantiationException
+//							| ClassNotFoundException e1) {
+//					}
+//
+//				}
+//
+//			});
 			this.add(btnExport, c);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

@@ -1,5 +1,6 @@
 package view;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -8,6 +9,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme;
+import controller.ActionLine;
 import controller.ActionManager;
 
 /**
@@ -20,7 +22,8 @@ public class EventWindow extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	// constantes
+  private static EventWindow instance;
+  // constantes
 	private final int WINDOW_WIDTH = 800;
 	private final int WINDOW_HEIGHT = 270;
 	private final String TITLE = "Event-editor";
@@ -29,10 +32,9 @@ public class EventWindow extends JFrame {
 
 	
 	/**Constructor.
-	 * @param actionManager ActionManager
 	 */
-	public EventWindow(ActionManager actionManager) {
-    this.listEventPanel = new ListEventPanel(MainPanel.PANEL_WIDTH_DEFAULT,MainPanel.PANEL_HEIGHT_DEFAULT,actionManager);
+	public EventWindow() {
+    this.listEventPanel = ListEventPanel.getInstance();
 		this.getContentPane().add(listEventPanel);
 		this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 		this.setTitle(TITLE);
@@ -49,8 +51,15 @@ public class EventWindow extends JFrame {
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 	}
 
+  public static EventWindow getInstance() {
+    if (instance == null) {
+      instance = new EventWindow();
+    }
+    return instance;
+  }
 
-	/**get the panel of the available elements.
+
+  /**get the panel of the available elements.
 	 * @return JPanel ListEventPanel
 	 */
 	public ListEventPanel getListEventPanel() {

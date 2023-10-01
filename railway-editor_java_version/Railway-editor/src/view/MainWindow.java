@@ -70,7 +70,7 @@ public class MainWindow extends JFrame {
 // Ajoute en haut
 //		this.toolBarPanel = new ToolBarPanel();
 //		this.toolBarPanel.setVisible(true);
-//		this.eventRecapPanel = new EventRecap();
+		this.eventRecapPanel = new EventRecap();
 		this.setResizable(true);
     this.setLocationRelativeTo(null);
     KeyboardTool  kbt  =new KeyboardTool(this.getMainPanel());
@@ -81,7 +81,7 @@ public class MainWindow extends JFrame {
     //this.getContentPane().add(this.toolBarPanelIdea2,
       //  BorderLayout.NORTH);
 //		this.getContentPane().add(this.toolBarPanel, BorderLayout.EAST);
-//    this.getContentPane().add(this.eventRecapPanel,BorderLayout.WEST);
+    this.getContentPane().add(this.eventRecapPanel,BorderLayout.WEST);
     //this.revalidate();
 		this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 		this.setTitle(TITLE);

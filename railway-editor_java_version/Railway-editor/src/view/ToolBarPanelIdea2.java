@@ -1,23 +1,12 @@
 package view;
 
-import controller.ActionExport;
-import controller.ActionManager;
-import controller.ActionOpen;
-import controller.ActionThemeMode;
+import controller.*;
 import data.Data;
-import main.RailwayEditor;
-import org.jdesktop.swingx.JXRadioGroup;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+
 
 /**
  * ToolBar panel which contains all the action buttons
@@ -27,35 +16,22 @@ import java.io.IOException;
  */
 public class ToolBarPanelIdea2 extends JToolBar {
 
-  private static final Dimension DIMENSIONS_BUTTON = new Dimension(180, 25);
-
   private static final long serialVersionUID = 1L;
-  // constants
-  public static final int DEFAULT_WIDTH = 1920;
-  public static final int DEFAULT_HEIGHT = 35;
-  final static boolean shouldFill = true;
-  final static boolean shouldWeightX = true;
-  final static boolean RIGHT_TO_LEFT = false;
-
-  public static final Color BACKGROUND_COLOR = new Color(224, 224, 224);
-
 
   // attributes
-  private ActionManager actionManager;
+  private final ActionManager actionManager;
   private JLabel lineId;
   private FilterComboBox filterComboBox;
   private MainPanel mainPanel;
-  private MainWindow mainWindow;
+  private EventWindow eventWindow;
+
 
   /**
    * constructor
    */
   public ToolBarPanelIdea2(MainPanel mainPanel, MainWindow mainWindow, ActionManager actionManager) {
     this.mainPanel = mainPanel;
-    this.mainWindow = mainWindow;
     this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-
-    //this.setPreferredSize(new Dimension(MainWindow.WINDOW_WIDTH, 50));
     this.actionManager = mainWindow.getActionManager();
     this.filterComboBox = new FilterComboBox(FilterComboBox.populateArray());
     this.initComponents();
@@ -107,26 +83,15 @@ public class ToolBarPanelIdea2 extends JToolBar {
 
     // Station panel components
     NoneSelectedButtonGroup actionButtonGroup = new NoneSelectedButtonGroup();
-    JButton addStationBtn = new JButton("ADD");
-    try {
-      addStationBtn.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent arg0) {
-          actionManager.addStation();
-        }
-      });
-    }
-    catch (Exception ex) {
-      System.out.println(ex);
-    }
+    JButton addStationBtn = new JButton(new ActionStation(this.mainPanel, ActionLine.getInstance()));
+    addStationBtn.setName(ActionStation.ACTION_NAME);
+    addStationBtn.setText("ADD");
     addStationBtn.setFocusable(false);
+
     JButton deleteStationBtn = new JButton("DELETE");
     deleteStationBtn.setFocusable(false);
     JButton mergeStationsBtn = new JButton("MERGE");
     mergeStationsBtn.setFocusable(false);
-//    actionButtonGroup.add(addStationBtn);
-//    actionButtonGroup.add(deleteStationBtn);
-//    actionButtonGroup.add(mergeStationsBtn);
     firstStationRowPanel.add(addStationBtn);
     firstStationRowPanel.add(deleteStationBtn);
     firstStationRowPanel.add(mergeStationsBtn);
@@ -158,23 +123,12 @@ public class ToolBarPanelIdea2 extends JToolBar {
     JPanel firstLineRowPanel = new JPanel();
     firstLineRowPanel.setLayout(new BoxLayout(firstLineRowPanel, BoxLayout.X_AXIS));
     firstLineRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    JButton addLineBtn = new JButton("ADD");
+    JButton addLineBtn = new JButton(ActionLine.getInstance().new ActionAddLine());
+    addLineBtn.setText("ADD");
     addLineBtn.setFocusable(false);
-    try {
-      addLineBtn.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent arg0) {
-          actionManager.addLine();
-        }
-      });
-    }
-    catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+
     JToggleButton deleteLineBtn = new JToggleButton("DELETE");
     deleteLineBtn.setFocusable(false);
-    //actionButtonGroup.add(addLineBtn);
     actionButtonGroup.add(deleteLineBtn);
     firstLineRowPanel.add(addLineBtn);
     firstLineRowPanel.add(deleteLineBtn);
@@ -184,24 +138,14 @@ public class ToolBarPanelIdea2 extends JToolBar {
     secondLineRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
     JLabel lineIdLabel = new JLabel(" Selected line id : ");
     this.lineId = new JLabel("None");
-    JButton btnIncrement = new JButton();
+    JButton btnIncrement = new JButton(ActionLine.getInstance().new ActionIncrementLine());
     btnIncrement.setText("↑");
     btnIncrement.setFocusable(false);
-    btnIncrement.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        actionManager.incrementLine();
-      }
-    });
-    JButton btnDecrement = new JButton();
+
+    JButton btnDecrement = new JButton(ActionLine.getInstance().new ActionDecrementLine());
     btnDecrement.setText("↓");
     btnDecrement.setFocusable(false);
-    btnDecrement.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        actionManager.decrementLine();
-      }
-    });
+
     JLabel whiteSpace = new JLabel("    ");
     secondLineRowPanel.add(lineIdLabel);
     secondLineRowPanel.add(this.lineId);
@@ -225,23 +169,13 @@ public class ToolBarPanelIdea2 extends JToolBar {
     firstAreaRowPanel.setLayout(new BoxLayout(firstAreaRowPanel, BoxLayout.Y_AXIS));
     firstAreaRowPanel.setAlignmentY(Component.TOP_ALIGNMENT);
     firstAreaRowPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    JButton addAreaBtn = new JButton("ADD");
+    JButton addAreaBtn = new JButton(new ActionArea());
+    addAreaBtn.setName(ActionArea.ACTION_NAME);
+    addAreaBtn.setText("ADD");
     addAreaBtn.setFocusable(false);
-    try {
-      addAreaBtn.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent arg0) {
-          actionManager.addArea();
-        }
-      });
-    }
-    catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+
     JToggleButton deleteAreaBtn = new JToggleButton("DELETE");
     deleteAreaBtn.setFocusable(false);
-    //actionButtonGroup.add(addAreaBtn);
     actionButtonGroup.add(deleteAreaBtn);
     firstAreaRowPanel.add(addAreaBtn);
     firstAreaRowPanel.add(deleteAreaBtn);
@@ -262,20 +196,9 @@ public class ToolBarPanelIdea2 extends JToolBar {
     firstEventRowPanel.setLayout(new BoxLayout(firstEventRowPanel, BoxLayout.Y_AXIS));
     firstEventRowPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
     firstEventRowPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-    JButton addEventBtn = new JButton("ADD");
+    JButton addEventBtn = new JButton(ActionMetroEvent.getInstance(). new ActionAddEvent());
+    addEventBtn.setText("ADD");
     addEventBtn.setFocusable(false);
-    try {
-      addEventBtn.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent arg0) {
-          actionManager.addEvent();
-        }
-      });
-    }
-    catch (Exception e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
     JButton showEventsBtn = new JButton("SHOW LIST");
     showEventsBtn.setFocusable(false);
 
@@ -293,13 +216,7 @@ public class ToolBarPanelIdea2 extends JToolBar {
     TitledBorder destinationPanelBorder = new TitledBorder("Destination");
     destinationPanel.setBorder(destinationPanelBorder);
     filterComboBox.setPreferredSize(new Dimension(140, 30));
-    filterComboBox.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-
-        Data.getInstance().setCurrentCity(filterComboBox.getSelectedItem().toString());
-      }
-
-    });
+    filterComboBox.addActionListener(e -> Data.getInstance().setCurrentCity(filterComboBox.getSelectedItem().toString()));
     destinationPanel.add(this.filterComboBox);
     destinationPanel.add(Box.createVerticalGlue());
 
@@ -308,19 +225,14 @@ public class ToolBarPanelIdea2 extends JToolBar {
     runSimulationPanel.setPreferredSize(new Dimension(100, 60));
     runSimulationPanel.setMaximumSize(new Dimension(100, 90));
     runSimulationPanel.setAlignmentY(Component.TOP_ALIGNMENT);
-    //runSimulationPanel.setLayout(new BoxLayout(runSimulationPanel, BoxLayout.Y_AXIS));
     TitledBorder runSimulationPanelBorder = new TitledBorder("Run Simulation");
     runSimulationPanel.setBorder(runSimulationPanelBorder);
-    JButton runSimulationBtn = new JButton("RUN");
+    JButton runSimulationBtn = new JButton(new ActionRunSimulation(this.mainPanel, this.actionManager));
+    runSimulationBtn.setName(ActionRunSimulation.ACTION_NAME);
+    runSimulationBtn.setText("RUN");
     runSimulationBtn.setFocusable(false);
     runSimulationBtn.setPreferredSize(new Dimension(80, 30));
 
-    runSimulationBtn.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        actionManager.runSimulation();
-      }
-    });
     runSimulationPanel.add(runSimulationBtn, BorderLayout.CENTER);
     runSimulationPanel.add(Box.createVerticalGlue());
 
@@ -333,29 +245,7 @@ public class ToolBarPanelIdea2 extends JToolBar {
     this.add(runSimulationPanel);
   }
 
-  private Image getCroppedImage(String address) throws IOException {
-    BufferedImage source = ImageIO.read(getClass().getResource(address));
-
-    boolean flag = false;
-    int upperBorder = -1;
-    do {
-      upperBorder++;
-      for (int c1 = 0; c1 < source.getWidth(); c1++) {
-        if (source.getRGB(c1, upperBorder) != Color.white.getRGB()) {
-          flag = true;
-          break;
-        }
-      }
-
-      if (upperBorder >= source.getHeight())
-        flag = true;
-    } while (!flag);
-
-    BufferedImage destination = new BufferedImage(source.getWidth(), source.getHeight() - upperBorder,
-        BufferedImage.TYPE_INT_ARGB);
-    destination.getGraphics().drawImage(source, 0, upperBorder * -1, null);
-
-    return destination;
+  public void hideEventWindow() {
+    eventWindow.setVisible(false);
   }
-
 }
