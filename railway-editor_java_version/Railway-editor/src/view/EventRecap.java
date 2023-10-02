@@ -1,15 +1,12 @@
 package view;
 
-import com.formdev.flatlaf.FlatLaf;
-import com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme;
 import data.Data;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.plaf.FontUIResource;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
@@ -24,14 +21,16 @@ public class EventRecap extends JPanel {
 	private static final long serialVersionUID = 1L;
 	// constants
 	public static final int LARGEUR_PAR_DEFAUT = 200;
-	public static final int HAUTEUR_PAR_DEFAUT = 750;
+	public static final int HAUTEUR_PAR_DEFAUT = 600;
+
 
 	/**
 	 * constructor
 	 */
 	public EventRecap() {
 		this.setPreferredSize(new Dimension(LARGEUR_PAR_DEFAUT, HAUTEUR_PAR_DEFAUT));
-		this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		TitledBorder eventRecapBorder = new TitledBorder("Events List");
+		this.setBorder(eventRecapBorder);
 	}
 
 	/**Create a recap for event line delay.

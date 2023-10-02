@@ -46,7 +46,6 @@ import org.jdatepicker.impl.UtilDateModel;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXTable;
 
-import controller.ActionManager;
 import data.Data;
 
 /**
@@ -73,8 +72,6 @@ public class ListEventPanel extends JPanel implements Observer {
 			{ "TrainHour", "Line", "configure a new train flow on a line" } };
   private static ListEventPanel instance;
 
-
-  private ActionManager actionManager;
 	private JPanel view;
 	private JScrollPane eventConfig;
 
@@ -116,7 +113,6 @@ public class ListEventPanel extends JPanel implements Observer {
 		//view.setBackground(Color.WHITE);
 		eventConfig = new JScrollPane(view);
 		eventConfig.setPreferredSize(new Dimension(500, 500));
-		this.actionManager = actionManager;
 		this.setPreferredSize(dim);
 //		this.setBackground(color);
 		this.setLayout(new GridLayout(0, 2));

@@ -25,12 +25,10 @@ import java.util.List;
 public class ActionExport extends AbstractAction {
   public static final String ACTION_NAME = "Export";
   private MainPanel mainPanel;
-  private ActionManager actionManager;
 
-public ActionExport(MainPanel mainPanel, ActionManager actionManager) {
+public ActionExport(MainPanel mainPanel) {
     super(ACTION_NAME);
     this.mainPanel = mainPanel;
-    this.actionManager = actionManager;
   }
 
   @Override
@@ -53,7 +51,7 @@ public ActionExport(MainPanel mainPanel, ActionManager actionManager) {
 
 
   public void export(File fileToSave) {
-    this.actionManager.assignAreaToStations();
+    this.assignAreaToStations();
     try {
 
       DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
@@ -202,7 +200,7 @@ public ActionExport(MainPanel mainPanel, ActionManager actionManager) {
 
         // line name element
         Element name = document.createElement("name");
-        name.appendChild(document.createTextNode(this.actionManager.toAlphabetic(lineView.getLine().getId())));
+        name.appendChild(document.createTextNode(this.toAlphabetic(lineView.getLine().getId())));
         line.appendChild(name);
 
         // line number of train element
@@ -421,5 +419,56 @@ public ActionExport(MainPanel mainPanel, ActionManager actionManager) {
     }
   }
 
+  /**
+   * iterate over all stations and area to find which stations are in which area,
+   * then assign areas to stations.
+   */
+  public void assignAreaToStations() {
+    for (LineView lineview : MainWindow.getInstance().getMainPanel().getLineViews()) {
+      for (StationView stationView : lineview.getStationViews()) {
+        for (AreaView areaView : MainWindow.getInstance().getMainPanel().getAreaViews()) {
+          if (isInArea(stationView, areaView)) {
+            stationView.getStation().setAreas(areaView.getArea());
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * check if a station is in an Area.
+   *
+   * @param stationView
+   * @param areaView
+   * @return
+   */
+  private boolean isInArea(StationView stationView, AreaView areaView) {
+    int x = stationView.getStation().getPosX();
+    int ax = areaView.getArea().getPosX();
+    int y = stationView.getStation().getPosY();
+    int ay = areaView.getArea().getPosY();
+    int aWidth = areaView.getArea().getWidth();
+    int aHeight = areaView.getArea().getHeight();
+    return ((x > ax) && (x < ax + aWidth) && (y > ay) && (y < ay + aHeight));
+  }
+
+  /**map number in letters from their index in alphabet.
+   * @param i index
+   * @return String letter
+   */
+  public static String toAlphabetic(int i) {
+    if( i<0 ) {
+      return "-"+toAlphabetic(-i-1);
+    }
+
+    int quot = i/26;
+    int rem = i%26;
+    char letter = (char)((int)'A' + rem);
+    if( quot == 0 ) {
+      return ""+letter;
+    } else {
+      return toAlphabetic(quot-1) + letter;
+    }
+  }
 
 }

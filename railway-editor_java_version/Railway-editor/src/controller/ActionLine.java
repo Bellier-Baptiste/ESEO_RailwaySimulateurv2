@@ -20,7 +20,7 @@ public class ActionLine {
   private int lineToUpdateIndex;
 
 
-  public ActionLine() {
+  private ActionLine() {
     lineToUpdateIndex = 0;
   }
 

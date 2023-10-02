@@ -26,12 +26,10 @@ import java.util.List;
 public class ActionOpen extends AbstractAction {
   public static final String ACTION_NAME = "Open";
   private MainPanel mainPanel;
-  private ActionManager actionManager;
 
-  public ActionOpen(MainPanel mainPanel, ActionManager actionManager) {
+  public ActionOpen(MainPanel mainPanel) {
     super(ACTION_NAME);
     this.mainPanel = mainPanel;
-    this.actionManager = actionManager;
   }
 
   @Override

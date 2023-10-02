@@ -1,17 +1,12 @@
 package view;
 
-import controller.ActionManager;
 import controller.KeyboardTool;
-import data.Data;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.logging.Filter;
 
 /**Main windows Singleton which contain all the different panels
  * @author arthu
@@ -29,12 +24,9 @@ public class MainWindow extends JFrame {
 	// attributes
 	private static MainWindow instance;
 	private MainPanel mainPanel;
-	private ToolBarPanel toolBarPanel;
   private ToolBarPanelIdea2 toolBarPanelIdea2;
-	private IntroPanel introPanel;
 	private EventRecap eventRecapPanel;
 	public boolean intro = true;
-	private ActionManager actionManager;
 	private JMenuBar menuBar;
 //  private FilterComboBox filterComboBox;
 //  private JPanel filterComboPanel;
@@ -43,50 +35,32 @@ public class MainWindow extends JFrame {
 	 * Constructor, initialize window and panels
 	 */
 	private MainWindow() {
-		this.mainPanel = new MainPanel(MainPanel.PANEL_WIDTH_DEFAULT,MainPanel.PANEL_HEIGHT_DEFAULT);
-		this.setLayout(new BorderLayout());
-		this.actionManager = new ActionManager();
-		this.menuBar = MenuBar.getInstance(this, this.mainPanel, this.actionManager);
-
-		this.setJMenuBar(this.menuBar);
-		this.toolBarPanelIdea2 = new ToolBarPanelIdea2(this.mainPanel, this, this.actionManager);
-    this.toolBarPanelIdea2.setVisible(true);
-		this.getContentPane().add(this.toolBarPanelIdea2, BorderLayout.NORTH);
-
-//    this.filterComboPanel = new JPanel(new FlowLayout());
-//    this.filterComboBox = new FilterComboBox(FilterComboBox.populateArray());
-//    filterComboBox.addActionListener(new ActionListener() {
-//      public void actionPerformed(ActionEvent e) {
-//
-//        Data.getInstance().setCurrentCity(filterComboBox.getSelectedItem().toString());
-//      }
-//
-//    });
-//    this.filterComboPanel.add(this.filterComboBox);
-//    this.filterComboPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-//    this.mainPanel.add(filterComboPanel, BorderLayout.SOUTH);
-
-
-// Ajoute en haut
-//		this.toolBarPanel = new ToolBarPanel();
-//		this.toolBarPanel.setVisible(true);
-		this.eventRecapPanel = new EventRecap();
 		this.setResizable(true);
+		this.setLayout(new BorderLayout());
+		this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
+		this.setTitle(TITLE);
     this.setLocationRelativeTo(null);
+		//this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     KeyboardTool  kbt  =new KeyboardTool(this.getMainPanel());
     this.addKeyListener(kbt);
 
+		this.mainPanel = new MainPanel(MainPanel.PANEL_WIDTH_DEFAULT,MainPanel.PANEL_HEIGHT_DEFAULT);
     this.getContentPane().add(this.mainPanel,
         BorderLayout.CENTER);
-    //this.getContentPane().add(this.toolBarPanelIdea2,
-      //  BorderLayout.NORTH);
-//		this.getContentPane().add(this.toolBarPanel, BorderLayout.EAST);
-    this.getContentPane().add(this.eventRecapPanel,BorderLayout.WEST);
-    //this.revalidate();
-		this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
-		this.setTitle(TITLE);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setLocationRelativeTo(null);
+
+		this.menuBar = MenuBar.getInstance(this, this.mainPanel);
+		this.setJMenuBar(this.menuBar);
+
+		this.toolBarPanelIdea2 = new ToolBarPanelIdea2(this.mainPanel, this);
+    this.toolBarPanelIdea2.setVisible(true);
+		this.getContentPane().add(this.toolBarPanelIdea2, BorderLayout.NORTH);
+
+		this.eventRecapPanel = new EventRecap();
+		JScrollPane eventScrollPane = new JScrollPane(this.eventRecapPanel);
+    this.getContentPane().add(eventScrollPane,BorderLayout.WEST);
+    //this.getContentPane().add(this.eventRecapPanel,BorderLayout.WEST);
+
+    this.revalidate();
 
     BufferedImage source;
 		try {
@@ -98,8 +72,8 @@ public class MainWindow extends JFrame {
 		}
 
     this.pack();
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.mainPanel.requestFocusInWindow();
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.mainPanel.requestFocusInWindow();
   }
 
 	//accessors
@@ -117,13 +91,7 @@ public class MainWindow extends JFrame {
 		this.mainPanel = mainPanel;
 	}
 	
-	/**get the intro panel
-	 * @return IntroPanel introPanel
-	 */
-	public IntroPanel getIntroPanel() {
-		return introPanel;
-	}
-	
+
 	/**get the eventRecapPanel.
 	 * @return EventRecapPanel eventRecapPanel.
 	 */
@@ -137,24 +105,6 @@ public class MainWindow extends JFrame {
 	public void setEventRecapPanel(EventRecap eventRecapPanel) {
 		this.eventRecapPanel = eventRecapPanel;
 	}
-
-	/**get the toolbar panel.
-	 * @return ToolbarPane toolbarPanel
-	 */
-	public ToolBarPanel getToolBarPanel() {
-		return toolBarPanel;
-	}
-
-	/**set the toolBar panel.
-	 * @param toolBarPanel panel with the actions buttons
-	 */
-	public void setToolBarPanel(ToolBarPanel toolBarPanel) {
-		this.toolBarPanel = toolBarPanel;
-	}
-	
-	
-
-
 
 	/**Create Singleton
 	 * @return MainWindos instance
@@ -170,7 +120,4 @@ public class MainWindow extends JFrame {
     return toolBarPanelIdea2;
   }
 
-	public ActionManager getActionManager() {
-		return this.actionManager;
-	}
 }

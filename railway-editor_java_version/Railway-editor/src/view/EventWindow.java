@@ -1,16 +1,11 @@
 package view;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-
-import com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme;
-import controller.ActionLine;
-import controller.ActionManager;
 
 /**
  * JFrame of the events edition.

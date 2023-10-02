@@ -19,7 +19,6 @@ public class ToolBarPanelIdea2 extends JToolBar {
   private static final long serialVersionUID = 1L;
 
   // attributes
-  private final ActionManager actionManager;
   private JLabel lineId;
   private FilterComboBox filterComboBox;
   private MainPanel mainPanel;
@@ -29,10 +28,9 @@ public class ToolBarPanelIdea2 extends JToolBar {
   /**
    * constructor
    */
-  public ToolBarPanelIdea2(MainPanel mainPanel, MainWindow mainWindow, ActionManager actionManager) {
+  public ToolBarPanelIdea2(MainPanel mainPanel, MainWindow mainWindow) {
     this.mainPanel = mainPanel;
     this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-    this.actionManager = mainWindow.getActionManager();
     this.filterComboBox = new FilterComboBox(FilterComboBox.populateArray());
     this.initComponents();
   }
@@ -83,7 +81,7 @@ public class ToolBarPanelIdea2 extends JToolBar {
 
     // Station panel components
     NoneSelectedButtonGroup actionButtonGroup = new NoneSelectedButtonGroup();
-    JButton addStationBtn = new JButton(new ActionStation(this.mainPanel, ActionLine.getInstance()));
+    JButton addStationBtn = new JButton(ActionStation.getInstance());
     addStationBtn.setName(ActionStation.ACTION_NAME);
     addStationBtn.setText("ADD");
     addStationBtn.setFocusable(false);
@@ -227,7 +225,7 @@ public class ToolBarPanelIdea2 extends JToolBar {
     runSimulationPanel.setAlignmentY(Component.TOP_ALIGNMENT);
     TitledBorder runSimulationPanelBorder = new TitledBorder("Run Simulation");
     runSimulationPanel.setBorder(runSimulationPanelBorder);
-    JButton runSimulationBtn = new JButton(new ActionRunSimulation(this.mainPanel, this.actionManager));
+    JButton runSimulationBtn = new JButton(new ActionRunSimulation(this.mainPanel));
     runSimulationBtn.setName(ActionRunSimulation.ACTION_NAME);
     runSimulationBtn.setText("RUN");
     runSimulationBtn.setFocusable(false);

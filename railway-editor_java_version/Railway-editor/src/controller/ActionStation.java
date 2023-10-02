@@ -15,21 +15,26 @@ import java.util.Random;
 
 public class ActionStation extends AbstractAction {
   public static final String ACTION_NAME = "ADD_STATION";
-  private final ActionLine actionAddLine;
-  private MainPanel mainPanel;
+  private static ActionStation instance;
   private int stationid;
-  private int lineToUpdateIndex;
 
-// TODO : make this class a singleton
-  public ActionStation(MainPanel mainPanel, ActionLine actionAddLine) {
-    this.actionAddLine = actionAddLine;
-    this.mainPanel = mainPanel;
+  private ActionStation() {
     this.stationid = 0;
+  }
+
+  /**Create Singleton
+   * @return ActionStation instance
+   */
+  public static ActionStation getInstance() {
+    if (instance == null) {
+      instance = new ActionStation();
+    }
+    return instance;
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    lineToUpdateIndex = this.actionAddLine.getLineToUpdateIndex();
+    int lineToUpdateIndex = ActionLine.getInstance().getLineToUpdateIndex();
     stationid = 0;
     for (LineView lineView : MainWindow.getInstance().getMainPanel().getLineViews()) {
       stationid += lineView.getStationViews().size();// count stations number to get a new stationId

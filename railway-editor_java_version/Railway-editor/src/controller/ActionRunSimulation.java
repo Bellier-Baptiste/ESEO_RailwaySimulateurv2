@@ -10,11 +10,9 @@ import java.io.IOException;
 public class ActionRunSimulation extends AbstractAction {
   public static final String ACTION_NAME = "RUN_SIMULATION";
   private MainPanel mainPanel;
-  private ActionManager actionManager;
 
-  public ActionRunSimulation(MainPanel mainPanel, ActionManager actionManager) {
+  public ActionRunSimulation(MainPanel mainPanel) {
     this.mainPanel = mainPanel;
-    this.actionManager = actionManager;
   }
 
   @Override
@@ -24,7 +22,7 @@ public class ActionRunSimulation extends AbstractAction {
       String rootJavaProjectPath = System.getProperty("user.dir");
       String rootGoProjectPath = rootJavaProjectPath.replace("railway-editor_java_version", "pfe-2018-network-journey-simulator");
       File runThisSimulation = new File(rootGoProjectPath + "\\src\\configs\\runThisSimulation.xml");
-      ActionExport actionExport = new ActionExport(this.mainPanel, this.actionManager);
+      ActionExport actionExport = new ActionExport(this.mainPanel);
       actionExport.export(runThisSimulation);
 
       // create a new list of arguments for our process
