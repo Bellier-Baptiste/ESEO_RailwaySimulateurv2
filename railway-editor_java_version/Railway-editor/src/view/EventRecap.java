@@ -1,5 +1,6 @@
 package view;
 
+import Model.Event;
 import data.Data;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXTaskPane;
@@ -22,21 +23,34 @@ public class EventRecap extends JScrollPane {
 	// constants
 	public static final int LARGEUR_PAR_DEFAUT = 200;
 	public static final int HAUTEUR_PAR_DEFAUT = 600;
+  private static EventRecap instance;
 
-	private JXTaskPaneContainer taskPaneContainer;
+  private JXTaskPaneContainer taskPaneContainer;
 
 
 	/**
 	 * constructor
 	 */
-	public EventRecap() {
+	private EventRecap() {
 		this.setPreferredSize(new Dimension(LARGEUR_PAR_DEFAUT, HAUTEUR_PAR_DEFAUT));
 		TitledBorder eventRecapBorder = new TitledBorder("Events List");
 		this.setBorder(eventRecapBorder);
 		this.taskPaneContainer = new JXTaskPaneContainer();
-		this.taskPaneContainer.setBackgroundPainter(null);
-		this.setViewportView(taskPaneContainer);
+    this.eventsListRemoveBackground();
 	}
+
+  public static EventRecap getInstance() {
+    if (instance == null) {
+      instance = new EventRecap();
+    }
+    return instance;
+  }
+
+  public void eventsListRemoveBackground() {
+    this.taskPaneContainer.setBackgroundPainter(null);
+    this.taskPaneContainer.repaint();
+    this.taskPaneContainer.revalidate();
+  }
 
 	/**Create a recap for event line delay.
 	 * @param id event id
@@ -92,14 +106,16 @@ public class EventRecap extends JScrollPane {
 
 			public void actionPerformed(ActionEvent e) {
 				taskPaneContainer.remove(taskpane);
-				Data.getInstance().getEventList().remove(id);
-			}
+        Data.getInstance().getEventList().removeIf(event -> event.getId() == id);
+        taskPaneContainer.revalidate();
+      }
 		});
 
 		// add the task pane to the taskPaneContainer
 		this.taskPaneContainer.add(taskpane);
 		this.setViewportView(taskPaneContainer);
-	}
+    taskPaneContainer.revalidate();
+  }
 
 	/**create a recap for event line closed.
 	 * @param id event id
@@ -150,15 +166,15 @@ public class EventRecap extends JScrollPane {
 
 			public void actionPerformed(ActionEvent e) {
 				taskPaneContainer.remove(taskpane);
-				Data.getInstance().getEventList().remove(id);
-
+        Data.getInstance().getEventList().removeIf(event -> event.getId() == id);
+        taskPaneContainer.revalidate();
 			}
 		});
 
 		// add the task pane to the taskPaneContainer
 		this.taskPaneContainer.add(taskpane);
 		this.setViewportView(taskPaneContainer);
-	}
+  }
 
 	/** create a recap for event attendancePeak.
 		 * @param id event id
@@ -208,14 +224,17 @@ public class EventRecap extends JScrollPane {
 
 			public void actionPerformed(ActionEvent e) {
 				taskPaneContainer.remove(taskpane);
-				Data.getInstance().getEventList().remove(id);
-			}
+        Data.getInstance().getEventList().removeIf(event -> event.getId() == id);
+        taskPaneContainer.revalidate();
+      }
 		});
 
 		// add the task pane to the taskPaneContainer
 		this.taskPaneContainer.add(taskpane);
 		this.setViewportView(taskPaneContainer);
-	}
+    taskPaneContainer.revalidate();
+
+  }
 	
 	/** create a recap for event stationClosed.
 	 * @param id event id
@@ -258,13 +277,15 @@ public void createEventStationClosed(int id, String startDateStr, String endDate
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			taskPaneContainer.remove(taskpane);
-			Data.getInstance().getEventList().remove(id);
-		}
-	});
+      taskPaneContainer.remove(taskpane);
+      Data.getInstance().getEventList().removeIf(event -> event.getId() == id);
+      taskPaneContainer.revalidate();
+    }
+  });
 	// add the task pane to the taskPaneContainer
 	this.taskPaneContainer.add(taskpane);
 	this.setViewportView(taskPaneContainer);
+  taskPaneContainer.revalidate();
 }
 
 	/** create a recap for event hour.
@@ -315,12 +336,14 @@ public void createEventStationClosed(int id, String startDateStr, String endDate
 
 			public void actionPerformed(ActionEvent e) {
 				taskPaneContainer.remove(taskpane);
-				Data.getInstance().getEventList().remove(id);
-			}
+        Data.getInstance().getEventList().removeIf(event -> event.getId() == id);
+        taskPaneContainer.revalidate();
+      }
 		});
 
 		// add the task pane to the taskPaneContainer
 		this.taskPaneContainer.add(taskpane);
 		this.setViewportView(taskPaneContainer);
-	}
+    taskPaneContainer.revalidate();
+  }
 }

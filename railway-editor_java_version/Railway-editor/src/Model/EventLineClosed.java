@@ -17,8 +17,8 @@ public class EventLineClosed extends Event {
 	 * @param endTime event endTime
 	 * @param type event eventType
 	 */
-	public EventLineClosed(String startTime, String endTime, EventType type) {
-		super(startTime, endTime, type);
+	public EventLineClosed(int id, String startTime, String endTime, EventType type) {
+		super(id, startTime, endTime, type);
 		this.EVENT_NAME = "lineClose";
 	}
 

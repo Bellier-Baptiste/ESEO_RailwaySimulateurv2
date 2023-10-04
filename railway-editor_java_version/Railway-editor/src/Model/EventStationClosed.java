@@ -8,8 +8,8 @@ public class EventStationClosed extends Event{
 	 * @param endTime event endTime
 	 * @param type eventType
 	 */
-	public EventStationClosed(String startTime, String endTime, EventType type) {
-		super(startTime, endTime, type);
+	public EventStationClosed(int id, String startTime, String endTime, EventType type) {
+		super(id, startTime, endTime, type);
 		this.EVENT_NAME = "stationClosed";
 	}
 

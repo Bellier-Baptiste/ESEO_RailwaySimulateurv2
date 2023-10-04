@@ -17,8 +17,8 @@ public class EventLineDelay extends Event {
 	 * @param endTime event endTime
 	 * @param type event eventType
 	 */
-	public EventLineDelay(String startTime, String endTime, EventType type) {
-		super(startTime, endTime, type);
+	public EventLineDelay(int id, String startTime, String endTime, EventType type) {
+		super(id, startTime, endTime, type);
 		EVENT_NAME = "lineDelay";
 	}
 

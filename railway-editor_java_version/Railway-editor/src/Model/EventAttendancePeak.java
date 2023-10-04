@@ -15,8 +15,8 @@ public class EventAttendancePeak extends Event {
 	 * @param endTime event endTime
 	 * @param type eventType
 	 */
-	public EventAttendancePeak(String startTime, String endTime, EventType type) {
-		super(startTime, endTime, type);
+	public EventAttendancePeak(int id, String startTime, String endTime, EventType type) {
+		super(id, startTime, endTime, type);
 		this.EVENT_NAME = "attendancePeak";
 	}
 

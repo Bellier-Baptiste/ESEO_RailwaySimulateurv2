@@ -38,7 +38,6 @@ public class EventWindow extends JFrame {
 			ImageIcon img = new ImageIcon(source);
 			this.setIconImage(img.getImage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.setAlwaysOnTop (true);

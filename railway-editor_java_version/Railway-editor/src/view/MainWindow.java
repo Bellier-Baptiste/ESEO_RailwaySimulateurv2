@@ -55,7 +55,7 @@ public class MainWindow extends JFrame {
     this.toolBarPanelIdea2.setVisible(true);
 		this.getContentPane().add(this.toolBarPanelIdea2, BorderLayout.NORTH);
 
-		this.eventRecapPanel = new EventRecap();
+		this.eventRecapPanel = EventRecap.getInstance();
     this.getContentPane().add(this.eventRecapPanel,BorderLayout.WEST);
 
     this.revalidate();

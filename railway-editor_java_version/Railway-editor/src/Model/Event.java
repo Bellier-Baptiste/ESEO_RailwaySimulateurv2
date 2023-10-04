@@ -9,7 +9,9 @@ public abstract class Event {
 	
 	private String startTime;
 	private String endTime;
-	public static enum EventType{LINE,STATION,AREA};
+  private int id;
+
+  public static enum EventType{LINE,STATION,AREA};
 	private EventType type;
 	public	 String EVENT_NAME; 
 
@@ -20,8 +22,9 @@ public abstract class Event {
 	 * @param endTime event endTime
 	 * @param type event type
 	 */
-	public Event(String startTime, String endTime, EventType type) {
+	public Event(int id, String startTime, String endTime, EventType type) {
 		super();
+    this.id = id;
 		this.startTime = startTime;
 		this.endTime = endTime;
 	}
@@ -73,8 +76,18 @@ public abstract class Event {
 	public void setType(EventType type) {
 		this.type = type;
 	}
-	
-	
+
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  /** get the id of the event.
+   * @return int id
+   */
+	public int getId() {
+    return this.id;
+  }
 	
 	
 	

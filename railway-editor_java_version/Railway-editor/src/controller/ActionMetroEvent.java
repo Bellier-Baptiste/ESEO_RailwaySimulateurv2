@@ -15,6 +15,7 @@ public class ActionMetroEvent {
 
   public static final String ACTION_NAME = "ADD_EVENT";
   private static ActionMetroEvent instance;
+  private int currentId = 0;
 
   /**Create Singleton
    * @return ActionMetroEvent instance
@@ -37,6 +38,14 @@ public class ActionMetroEvent {
     } else {
       return false;
     }
+  }
+
+  private int getCurrentId() {
+    return currentId;
+  }
+
+  private void incrementCurrentId() {
+    currentId += 1;
   }
 
   public class ActionAddEvent extends AbstractAction {
@@ -68,7 +77,7 @@ public class ActionMetroEvent {
       String[] eventStringTab = eventString.split(",");
       String startTime = eventStringTab[0] + "_" + eventStringTab[1];
       String endTime = eventStringTab[2] + "_" + eventStringTab[3];
-      EventLineDelay eventLineDelay = new EventLineDelay(startTime, endTime, Event.EventType.LINE);
+      EventLineDelay eventLineDelay = new EventLineDelay(ActionMetroEvent.this.getCurrentId(),startTime, endTime, Event.EventType.LINE);
       eventLineDelay.setIdStationStart(Integer.valueOf(eventStringTab[4]));
       eventLineDelay.setIdStationEnd(Integer.valueOf(eventStringTab[5]));
       int delay = Integer.valueOf(eventStringTab[6].split(":")[0]) * 60
@@ -104,12 +113,11 @@ public class ActionMetroEvent {
         MainWindow.getInstance().getMainPanel().repaint();
 
         String locationsStr = "from " + stationStart.getName() + " to " + stationEnd.getName();
-        int id = Data.getInstance().getEventList().size();
-        MainWindow.getInstance().getEventRecapPanel().createEventLineDelayed(id,startTime, endTime, locationsStr,
+//        int id = Data.getInstance().getEventList().size();
+        MainWindow.getInstance().getEventRecapPanel().createEventLineDelayed(ActionMetroEvent.this.getCurrentId(),startTime, endTime, locationsStr,
             eventStringTab[6], Integer.toString(lineDelayed.getLine().getId()));
         MainWindow.getInstance().getEventRecapPanel().revalidate();
-
-      }
+        ActionMetroEvent.this.incrementCurrentId();      }
     }
   }
 
@@ -130,7 +138,7 @@ public class ActionMetroEvent {
       String[] eventStringTab = eventString.split(",");
       String startTime = eventStringTab[0] + "_" + eventStringTab[1];
       String endTime = eventStringTab[2] + "_" + eventStringTab[3];
-      EventLineClosed eventLineClosed = new EventLineClosed(startTime, endTime, Event.EventType.LINE);
+      EventLineClosed eventLineClosed = new EventLineClosed(ActionMetroEvent.this.getCurrentId(), startTime, endTime, Event.EventType.LINE);
       eventLineClosed.setIdStationStart(Integer.valueOf(eventStringTab[4]));
       eventLineClosed.setIdStationEnd(Integer.valueOf(eventStringTab[5]));
       Data.getInstance().getEventList().add(eventLineClosed);
@@ -163,10 +171,11 @@ public class ActionMetroEvent {
       }
       MainWindow.getInstance().getMainPanel().repaint();
       String locationsStr = "from " + stationStart.getName() + " to " + stationEnd.getName();
-      int id = Data.getInstance().getEventList().size();
-      MainWindow.getInstance().getEventRecapPanel().createEventLineClosed(id,startTime, endTime, locationsStr,
+//      int id = Data.getInstance().getEventList().size();
+      MainWindow.getInstance().getEventRecapPanel().createEventLineClosed(ActionMetroEvent.this.getCurrentId(),startTime, endTime, locationsStr,
           eventStringTab[5]);
       MainWindow.getInstance().getEventRecapPanel().revalidate();
+      ActionMetroEvent.this.incrementCurrentId();
     }
   }
 
@@ -186,7 +195,7 @@ public class ActionMetroEvent {
       String[] eventStringTab = eventString.split(",");
       String startTime = eventStringTab[0] + "_" + eventStringTab[1];
       String endTime = eventStringTab[2] + "_" + eventStringTab[3];
-      EventAttendancePeak eventAttendancePeak = new EventAttendancePeak(startTime, endTime, Event.EventType.STATION);
+      EventAttendancePeak eventAttendancePeak = new EventAttendancePeak(ActionMetroEvent.this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
       eventAttendancePeak.setIdStation(Integer.valueOf(eventStringTab[4]));
       eventAttendancePeak.setSize(Integer.parseInt(eventStringTab[5]));
       Data.getInstance().getEventList().add(eventAttendancePeak);
@@ -203,9 +212,10 @@ public class ActionMetroEvent {
       EventWindow.getInstance().dispatchEvent(new WindowEvent(EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
       MainWindow.getInstance().getMainPanel().repaint();
       int id = Data.getInstance().getEventList().size();
-      MainWindow.getInstance().getEventRecapPanel().createEventAttendancePeak(id, startTime, endTime,
+      MainWindow.getInstance().getEventRecapPanel().createEventAttendancePeak(ActionMetroEvent.this.getCurrentId(), startTime, endTime,
           Integer.toString(stationConcerned.getId()), eventStringTab[5]);
       MainWindow.getInstance().getEventRecapPanel().revalidate();
+      ActionMetroEvent.this.incrementCurrentId();
     }
   }
 
@@ -225,16 +235,17 @@ public class ActionMetroEvent {
       String[] eventStringTab = eventString.split(",");
       String startTime = eventStringTab[0];
       String endTime = eventStringTab[1];
-      EventHour eventHour = new EventHour(startTime, endTime, Event.EventType.LINE);
+      EventHour eventHour = new EventHour(ActionMetroEvent.this.getCurrentId(),startTime, endTime, Event.EventType.LINE);
       eventHour.setIdLine(Integer.valueOf(eventStringTab[2]));
       eventHour.setTrainNumber(Integer.parseInt(eventStringTab[3]));
       Data.getInstance().getEventList().add(eventHour);
       EventWindow.getInstance().dispatchEvent(new WindowEvent(EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
       MainWindow.getInstance().getMainPanel().repaint();
-      int id = Data.getInstance().getEventList().size();
-      MainWindow.getInstance().getEventRecapPanel().createEventHour(id,startTime, endTime, eventStringTab[2],
+      //int id = Data.getInstance().getEventList().size();
+      MainWindow.getInstance().getEventRecapPanel().createEventHour(ActionMetroEvent.this.getCurrentId(),startTime, endTime, eventStringTab[2],
           eventStringTab[3]);
       MainWindow.getInstance().getEventRecapPanel().revalidate();
+      ActionMetroEvent.this.incrementCurrentId();
     }
   }
 
@@ -250,10 +261,9 @@ public class ActionMetroEvent {
       String[] eventStringTab = eventString.split(",");
       String startTime = eventStringTab[0] + "_" + eventStringTab[1];
       String endTime = eventStringTab[2] + "_" + eventStringTab[3];
-      EventStationClosed eventStationClosed = new EventStationClosed(startTime, endTime, Event.EventType.STATION);
+      EventStationClosed eventStationClosed = new EventStationClosed(ActionMetroEvent.this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
       eventStationClosed.setIdStation(Integer.valueOf(eventStringTab[4]));
       Data.getInstance().getEventList().add(eventStationClosed);
-
       Station stationConcerned = null;
       for (LineView lineView : MainWindow.getInstance().getMainPanel().getLineViews()) {
         for (StationView stationView : lineView.getStationViews()) {
@@ -267,9 +277,10 @@ public class ActionMetroEvent {
       EventWindow.getInstance().dispatchEvent(new WindowEvent(EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
       MainWindow.getInstance().getMainPanel().repaint();
       int id = Data.getInstance().getEventList().size();
-      MainWindow.getInstance().getEventRecapPanel().createEventStationClosed(id,startTime, endTime,
+      MainWindow.getInstance().getEventRecapPanel().createEventStationClosed(ActionMetroEvent.this.getCurrentId(),startTime, endTime,
           Integer.toString(stationConcerned.getId()));
       MainWindow.getInstance().getEventRecapPanel().revalidate();
+      ActionMetroEvent.this.incrementCurrentId();
     }
   }
 

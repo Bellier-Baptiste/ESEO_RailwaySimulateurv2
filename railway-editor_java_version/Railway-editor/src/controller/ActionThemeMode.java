@@ -10,6 +10,7 @@ import com.formdev.flatlaf.intellijthemes.FlatLightFlatIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneDarkIJTheme;
 import com.formdev.flatlaf.intellijthemes.materialthemeuilite.FlatAtomOneLightIJTheme;
 import main.RailwayEditor;
+import view.EventRecap;
 import view.MainWindow;
 
 import javax.swing.*;
@@ -45,6 +46,7 @@ public class ActionThemeMode extends  AbstractAction{
     this.isDarkMode = !this.isDarkMode; // Toggle the state
     // Refresh the components to apply the new theme
     SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    EventRecap.getInstance().eventsListRemoveBackground();
     MainWindow.getInstance().requestFocusInWindow();
   }
 }

@@ -14,8 +14,8 @@ public class EventHour extends Event{
 	 * @param endTime event endTime
 	 * @param type event eventType
 	 */
-	public EventHour(String startTime, String endTime, EventType type) {
-		super(startTime, endTime, type);
+	public EventHour(int id, String startTime, String endTime, EventType type) {
+		super(id, startTime, endTime, type);
 		this.EVENT_NAME = "hour";
 
 	}
