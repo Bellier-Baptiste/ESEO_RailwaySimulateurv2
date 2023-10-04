@@ -14,7 +14,7 @@ import java.awt.event.ActionEvent;
  * @author arthu
  *
  */
-public class EventRecap extends JPanel {
+public class EventRecap extends JScrollPane {
 	/**
 	 * 
 	 */
@@ -22,6 +22,8 @@ public class EventRecap extends JPanel {
 	// constants
 	public static final int LARGEUR_PAR_DEFAUT = 200;
 	public static final int HAUTEUR_PAR_DEFAUT = 600;
+
+	private JXTaskPaneContainer taskPaneContainer;
 
 
 	/**
@@ -31,6 +33,9 @@ public class EventRecap extends JPanel {
 		this.setPreferredSize(new Dimension(LARGEUR_PAR_DEFAUT, HAUTEUR_PAR_DEFAUT));
 		TitledBorder eventRecapBorder = new TitledBorder("Events List");
 		this.setBorder(eventRecapBorder);
+		this.taskPaneContainer = new JXTaskPaneContainer();
+		this.taskPaneContainer.setBackgroundPainter(null);
+		this.setViewportView(taskPaneContainer);
 	}
 
 	/**Create a recap for event line delay.
@@ -44,9 +49,6 @@ public class EventRecap extends JPanel {
 	public void createEventLineDelayed(int id,String startDateStr, String endDateStr, String LocationsStr, String delayStr,
 			String lineStr) {
 		JXTaskPane taskpane = new JXTaskPane();
-		// create a taskpanecontainer
-		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
-
 		// create a taskpane, and set it's title and icon
 		taskpane.setTitle("Line Delayed");
 
@@ -89,14 +91,14 @@ public class EventRecap extends JPanel {
 			}
 
 			public void actionPerformed(ActionEvent e) {
-				taskpanecontainer.remove(taskpane);
+				taskPaneContainer.remove(taskpane);
 				Data.getInstance().getEventList().remove(id);
 			}
 		});
 
-		// add the task pane to the taskpanecontainer
-		taskpanecontainer.add(taskpane);
-		this.add(taskpanecontainer, BorderLayout.CENTER);
+		// add the task pane to the taskPaneContainer
+		this.taskPaneContainer.add(taskpane);
+		this.setViewportView(taskPaneContainer);
 	}
 
 	/**create a recap for event line closed.
@@ -109,9 +111,6 @@ public class EventRecap extends JPanel {
 	public void createEventLineClosed(int id,String startDateStr, String endDateStr, String LocationsStr,
 			String lineStr) {
 		JXTaskPane taskpane = new JXTaskPane();
-		// create a taskpanecontainer
-		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
-
 		// create a taskpane, and set it's title and icon
 		taskpane.setTitle("Line Closed");
 
@@ -150,15 +149,15 @@ public class EventRecap extends JPanel {
 			}
 
 			public void actionPerformed(ActionEvent e) {
-				taskpanecontainer.remove(taskpane);
+				taskPaneContainer.remove(taskpane);
 				Data.getInstance().getEventList().remove(id);
 
 			}
 		});
 
-		// add the task pane to the taskpanecontainer
-		taskpanecontainer.add(taskpane);
-		this.add(taskpanecontainer, BorderLayout.CENTER);
+		// add the task pane to the taskPaneContainer
+		this.taskPaneContainer.add(taskpane);
+		this.setViewportView(taskPaneContainer);
 	}
 
 	/** create a recap for event attendancePeak.
@@ -170,8 +169,6 @@ public class EventRecap extends JPanel {
 	 */
 	public void createEventAttendancePeak(int id, String startDateStr, String endDateStr, String stationStr, String peakStr) {
 		JXTaskPane taskpane = new JXTaskPane();
-		// create a taskpanecontainer
-		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
 
 		// create a taskpane, and set it's title and icon
 		taskpane.setTitle("Attendance Peak");
@@ -210,14 +207,14 @@ public class EventRecap extends JPanel {
 			}
 
 			public void actionPerformed(ActionEvent e) {
-				taskpanecontainer.remove(taskpane);
+				taskPaneContainer.remove(taskpane);
 				Data.getInstance().getEventList().remove(id);
 			}
 		});
 
-		// add the task pane to the taskpanecontainer
-		taskpanecontainer.add(taskpane);
-		this.add(taskpanecontainer, BorderLayout.CENTER);
+		// add the task pane to the taskPaneContainer
+		this.taskPaneContainer.add(taskpane);
+		this.setViewportView(taskPaneContainer);
 	}
 	
 	/** create a recap for event stationClosed.
@@ -229,9 +226,6 @@ public class EventRecap extends JPanel {
  */
 public void createEventStationClosed(int id, String startDateStr, String endDateStr, String stationStr) {
 	JXTaskPane taskpane = new JXTaskPane();
-	// create a taskpanecontainer
-	JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
-
 	// create a taskpane, and set it's title and icon
 	taskpane.setTitle("Station Closed");
 
@@ -264,11 +258,13 @@ public void createEventStationClosed(int id, String startDateStr, String endDate
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			taskpanecontainer.remove(taskpane);
+			taskPaneContainer.remove(taskpane);
 			Data.getInstance().getEventList().remove(id);
 		}
 	});
-  this.add(taskpane, BorderLayout.CENTER);
+	// add the task pane to the taskPaneContainer
+	this.taskPaneContainer.add(taskpane);
+	this.setViewportView(taskPaneContainer);
 }
 
 	/** create a recap for event hour.
@@ -280,9 +276,6 @@ public void createEventStationClosed(int id, String startDateStr, String endDate
 	 */
 	public void createEventHour(int id,String startTimeStr, String endTimeStr, String lineStr, String trainNbStr) {
 		JXTaskPane taskpane = new JXTaskPane();
-		// create a taskpanecontainer
-		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
-
 		// create a taskpane, and set it's title and icon
 		taskpane.setTitle("Train Hour");
 
@@ -321,13 +314,13 @@ public void createEventStationClosed(int id, String startDateStr, String endDate
 			}
 
 			public void actionPerformed(ActionEvent e) {
-				taskpanecontainer.remove(taskpane);
+				taskPaneContainer.remove(taskpane);
 				Data.getInstance().getEventList().remove(id);
 			}
 		});
 
-		// add the task pane to the taskpanecontainer
-		taskpanecontainer.add(taskpane);
-		this.add(taskpanecontainer, BorderLayout.CENTER);
+		// add the task pane to the taskPaneContainer
+		this.taskPaneContainer.add(taskpane);
+		this.setViewportView(taskPaneContainer);
 	}
 }

@@ -56,9 +56,7 @@ public class MainWindow extends JFrame {
 		this.getContentPane().add(this.toolBarPanelIdea2, BorderLayout.NORTH);
 
 		this.eventRecapPanel = new EventRecap();
-		JScrollPane eventScrollPane = new JScrollPane(this.eventRecapPanel);
-    this.getContentPane().add(eventScrollPane,BorderLayout.WEST);
-    //this.getContentPane().add(this.eventRecapPanel,BorderLayout.WEST);
+    this.getContentPane().add(this.eventRecapPanel,BorderLayout.WEST);
 
     this.revalidate();
 
