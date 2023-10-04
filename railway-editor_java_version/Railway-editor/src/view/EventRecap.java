@@ -21,7 +21,7 @@ public class EventRecap extends JScrollPane {
 	 */
 	private static final long serialVersionUID = 1L;
 	// constants
-	public static final int LARGEUR_PAR_DEFAUT = 200;
+	public static final int LARGEUR_PAR_DEFAUT = 210;
 	public static final int HAUTEUR_PAR_DEFAUT = 600;
   private static EventRecap instance;
 

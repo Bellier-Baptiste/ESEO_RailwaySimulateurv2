@@ -17,29 +17,29 @@ public class MenuBar extends JMenuBar {
 
     // File menu
     JMenu file = new JMenu("File");
-    JMenuItem open = new JMenuItem(new ActionOpen(mainPanel));
+    JMenuItem open = new JMenuItem(new ActionOpen());
     open.setName(ActionOpen.ACTION_NAME);
     file.add(open);
-    JMenuItem save = new JMenuItem(new ActionExport(mainPanel));
+    JMenuItem save = new JMenuItem(new ActionExport());
     save.setName("Save");
     save.setText("Save");
     file.add(save);
-    JMenuItem export = new JMenuItem(new ActionExport(mainPanel));
+    JMenuItem export = new JMenuItem(new ActionExport());
     export.setName(ActionExport.ACTION_NAME);
     file.add(export);
     this.add(file);
 
     // Configuration menu
     JMenu config = new JMenu("Configuration");
-    JMenuItem newConfig = new JMenuItem(new ActionExport(mainPanel));
+    JMenuItem newConfig = new JMenuItem(new ActionExport());
     newConfig.setName("New");
     newConfig.setText("New");
     config.add(newConfig);
-    JMenuItem openConfig = new JMenuItem(new ActionExport(mainPanel));
+    JMenuItem openConfig = new JMenuItem(new ActionExport());
     openConfig.setName("Open");
     openConfig.setText("Open");
     config.add(openConfig);
-    JMenuItem exportConfig = new JMenuItem(new ActionExport(mainPanel));
+    JMenuItem exportConfig = new JMenuItem(new ActionExport());
     exportConfig.setName("Export");
     exportConfig.setText("Export");
     config.add(exportConfig);

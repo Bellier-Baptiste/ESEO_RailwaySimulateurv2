@@ -54,7 +54,7 @@ public class MainPanel extends JMapViewer {
 		this.setDisplayPosition(point, 0);
 		//this.setDisplayPositionByLatLon(31.23, 121.47, 14);
     //this.setLayout(new FlowLayout(FlowLayout.LEFT));
-
+    this.setZoom(2);
 	}
 	
 	///**

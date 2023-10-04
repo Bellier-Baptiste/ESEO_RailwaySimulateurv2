@@ -18,11 +18,10 @@ public class ActionRunSimulation extends AbstractAction {
   @Override
   public void actionPerformed(ActionEvent e) {
     try {
-      System.out.println(System.getProperty("user.dir"));
       String rootJavaProjectPath = System.getProperty("user.dir");
       String rootGoProjectPath = rootJavaProjectPath.replace("railway-editor_java_version", "pfe-2018-network-journey-simulator");
       File runThisSimulation = new File(rootGoProjectPath + "\\src\\configs\\runThisSimulation.xml");
-      ActionExport actionExport = new ActionExport(this.mainPanel);
+      ActionExport actionExport = new ActionExport();
       actionExport.export(runThisSimulation);
 
       // create a new list of arguments for our process

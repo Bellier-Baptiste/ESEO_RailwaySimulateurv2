@@ -25,11 +25,9 @@ import java.util.List;
 
 public class ActionOpen extends AbstractAction {
   public static final String ACTION_NAME = "Open";
-  private MainPanel mainPanel;
 
-  public ActionOpen(MainPanel mainPanel) {
+  public ActionOpen() {
     super(ACTION_NAME);
-    this.mainPanel = mainPanel;
   }
 
   @Override
@@ -37,7 +35,7 @@ public class ActionOpen extends AbstractAction {
     JFileChooser fileChooser = new JFileChooser();
     FileNameExtensionFilter filter = new FileNameExtensionFilter("xml files", "xml");
     fileChooser.setFileFilter(filter);
-    int returnVal = fileChooser.showOpenDialog(this.mainPanel);
+    int returnVal = fileChooser.showOpenDialog(MainWindow.getInstance().getMainPanel());
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       System.out.println("You chose to open this file: " + fileChooser.getSelectedFile().getName());
       String[] file = fileChooser.getSelectedFile().getName().split("\\.");

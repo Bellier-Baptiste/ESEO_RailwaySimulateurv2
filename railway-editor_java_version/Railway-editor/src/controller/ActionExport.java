@@ -24,11 +24,9 @@ import java.util.List;
 
 public class ActionExport extends AbstractAction {
   public static final String ACTION_NAME = "Export";
-  private MainPanel mainPanel;
 
-public ActionExport(MainPanel mainPanel) {
+public ActionExport() {
     super(ACTION_NAME);
-    this.mainPanel = mainPanel;
   }
 
   @Override
