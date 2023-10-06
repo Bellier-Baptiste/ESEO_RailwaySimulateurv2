@@ -1,24 +1,15 @@
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.border.EtchedBorder;
-import javax.swing.plaf.FontUIResource;
-
+import data.Data;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 
-import data.Data;
+import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.plaf.FontUIResource;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**panel which contains a short description of created events.
  * @author arthu
@@ -268,7 +259,7 @@ public class EventRecap extends JPanel {
  * @param startDateStr event start date
  * @param endDateStr event end date
  * @param stationStr station concerned
- * @param peakStr peak amount
+// * @param peakStr peak amount
  */
 public void createEventStationClosed(int id, String startDateStr, String endDateStr, String stationStr) {
 	changeUIdefaults();

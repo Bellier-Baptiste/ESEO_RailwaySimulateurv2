@@ -41,7 +41,7 @@ public class ClockPanel extends JPanel {
 	public ClockPanel() {
 		Dimension dim = new Dimension(PANEL_WIDTH_DEFAULT, PANEL_HEIGHT_DEFAULT);
 		this.setPreferredSize(dim);
-		this.setBackground(BACKGROUND_COLOR_DEFAULT);
+		//this.setBackground(BACKGROUND_COLOR_DEFAULT);
 	    this.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED)); 
 
 		clockView = new ClockView(this.getPreferredSize().width, this.getPreferredSize().height/2+10,this);

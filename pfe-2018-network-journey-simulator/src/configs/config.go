@@ -197,7 +197,10 @@ func GetInstance() ConfigurationObject {
 	if config == nil {
 		var mutex = &sync.Mutex{}
 		mutex.Lock()
-
+		basePath = strings.Replace(basePath, "src\\configs", "", -1)
+		basePath = strings.Replace(basePath, "src\\models", "", -1)
+		basePath = strings.Replace(basePath, "src\\simulator", "", -1)
+		basePath = strings.Replace(basePath, "src\\tools", "", -1)
 		configPath = filepath.Join(basePath, projectPath, "configs/config.json")
 		stationsPath = filepath.Join(basePath, projectPath, "configs/nameStationList.json")
 		linesPath = filepath.Join(basePath, projectPath, "configs/nameLineList.json")

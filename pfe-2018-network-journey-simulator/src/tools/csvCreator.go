@@ -1,14 +1,14 @@
 package tools
 
 import (
-	"go/build"
+	"fmt"
 	"os"
 	"path/filepath"
 	"pfe-2018-network-journey-simulator/src/configs"
 	"strings"
 )
 
-var basePath = os.Getenv("GOPATH")
+// var basePath = os.Getenv("GOPATH")
 var projectPath = ""
 
 type CsvFile struct {
@@ -31,11 +31,12 @@ func NewFile(name string, columns []string) CsvFile {
 }
 
 func createFile(name string, columns []string, delimiter string) CsvFile {
-
-	if basePath == "" {
-		basePath = build.Default.GOPATH
+	currentPath, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
-
+	basePath := strings.Replace(currentPath, "src\\main", "", -1)
 	outputFolderPath := filepath.Join(basePath, projectPath, "output/")
 
 	outputExists, err := exists(outputFolderPath)
@@ -46,6 +47,7 @@ func createFile(name string, columns []string, delimiter string) CsvFile {
 		os.Mkdir(outputFolderPath, 0777)
 	}
 
+	// Delete "src\main" if there (when launching simulator with command line)
 	filePath := filepath.Join(basePath, projectPath, "output/"+name+".csv")
 
 	file, err := os.Create(filePath)

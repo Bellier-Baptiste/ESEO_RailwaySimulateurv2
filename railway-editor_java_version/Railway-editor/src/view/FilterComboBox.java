@@ -57,7 +57,8 @@ public class FilterComboBox extends JComboBox {
 						MainWindow.getInstance().getMainPanel().getLineViews().clear();
 						MainWindow.getInstance().getMainPanel().getAreaViews().clear();
             Coordinate point = new Coordinate(coords[1], coords[0]);
-            MainWindow.getInstance().getMainPanel().setDisplayPosition(point, 13);
+						MainWindow.getInstance().getMainPanel().setDisplayPosition(point, 13);
+
 					}
 				}
 			}

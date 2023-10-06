@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 type ConfigMap struct {
@@ -116,7 +117,16 @@ func (aConfig *AdvancedConfig) NumberOfTrains() int {
 
 func (aConfig *AdvancedConfig) loadXML(filename string) error {
 	// open XML file
+	fmt.Println("loading advanced config...")
+	fmt.Println("base path : ", basePath)
+	fmt.Println("current path : ", currentPath)
+	//basePath = strings.Replace(currentPath, "src\\configs", "", -1)
+	//basePath = strings.Replace(currentPath, "src\\models", "", -1)
+	//basePath = strings.Replace(currentPath, "src\\simulator", "", -1)
+	//basePath = strings.Replace(currentPath, "src\\tools", "", -1)
+	fmt.Println("base path : ", basePath)
 	configPath = filepath.Join(basePath, projectPath, "configs/", filename)
+	fmt.Println("config path : ", configPath)
 	xmlFile, err := os.Open(configPath)
 	if err != nil {
 		fmt.Println(err)
@@ -300,6 +310,7 @@ func (aConfig *AdvancedConfig) ReattributeIds() {
 }
 
 func (aConfig AdvancedConfig) SaveXML(path string) error {
+	basePath = strings.Replace(currentPath, "src\\models", "", -1)
 
 	var pathToFile = filepath.Join(basePath, projectPath, "configs/", path)
 

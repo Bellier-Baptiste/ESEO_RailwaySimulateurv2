@@ -36,6 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
+
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -105,19 +106,18 @@ public class ListEventPanel extends JPanel implements Observer {
 	 * 
 	 * @param width panel width
 	 * @param height panel heigth
-	 * @param color panel color
 	 * @param actionManager ActionManager
 	 */
-	public ListEventPanel(int width, int height, Color color, ActionManager actionManager) {
+	public ListEventPanel(int width, int height, ActionManager actionManager) {
 		Data.getInstance().addObserver(this);
 		Dimension dim = new Dimension(width, height);
 		view = new JPanel(new GridBagLayout());
-		view.setBackground(Color.WHITE);
+		//view.setBackground(Color.WHITE);
 		eventConfig = new JScrollPane(view);
 		eventConfig.setPreferredSize(new Dimension(500, 500));
 		this.actionManager = actionManager;
 		this.setPreferredSize(dim);
-		this.setBackground(color);
+//		this.setBackground(color);
 		this.setLayout(new GridLayout(0, 2));
 		this.initComponent();
 		editStationConcerned = new JTextField();
@@ -143,7 +143,7 @@ public class ListEventPanel extends JPanel implements Observer {
 		table.getColumn(2).setCellRenderer(new PathCellRenderer());
 		JScrollPane js = new JScrollPane(table);
 
-		js.getViewport().setBackground(Color.WHITE);
+		//js.getViewport().setBackground(Color.WHITE);
 		js.setPreferredSize(table.getPreferredSize());
 		this.add(js);
 		this.add(eventConfig);
@@ -222,8 +222,8 @@ public class ListEventPanel extends JPanel implements Observer {
 
 		JPanel viewDateStart = new JPanel();
 		JPanel viewDateEnd = new JPanel();
-		viewDateStart.setBackground(Color.WHITE);
-		viewDateEnd.setBackground(Color.WHITE);
+		//viewDateStart.setBackground(Color.WHITE);
+		//viewDateEnd.setBackground(Color.WHITE);
 		viewDateStart.setBorder(new BevelBorder(BevelBorder.RAISED));
 		viewDateEnd.setBorder(new BevelBorder(BevelBorder.RAISED));
 
@@ -389,8 +389,8 @@ public class ListEventPanel extends JPanel implements Observer {
 
 		JPanel viewDateStart = new JPanel();
 		JPanel viewDateEnd = new JPanel();
-		viewDateStart.setBackground(Color.WHITE);
-		viewDateEnd.setBackground(Color.WHITE);
+		//viewDateStart.setBackground(Color.WHITE);
+		//viewDateEnd.setBackground(Color.WHITE);
 		viewDateStart.setBorder(new BevelBorder(BevelBorder.RAISED));
 		viewDateEnd.setBorder(new BevelBorder(BevelBorder.RAISED));
 
@@ -537,8 +537,8 @@ public class ListEventPanel extends JPanel implements Observer {
 
 		JPanel viewDateStart = new JPanel();
 		JPanel viewDateEnd = new JPanel();
-		viewDateStart.setBackground(Color.WHITE);
-		viewDateEnd.setBackground(Color.WHITE);
+		//viewDateStart.setBackground(Color.WHITE);
+		//viewDateEnd.setBackground(Color.WHITE);
 		viewDateStart.setBorder(new BevelBorder(BevelBorder.RAISED));
 		viewDateEnd.setBorder(new BevelBorder(BevelBorder.RAISED));
 
@@ -672,8 +672,8 @@ public class ListEventPanel extends JPanel implements Observer {
 
 		JPanel viewDateStart = new JPanel();
 		JPanel viewDateEnd = new JPanel();
-		viewDateStart.setBackground(Color.WHITE);
-		viewDateEnd.setBackground(Color.WHITE);
+		//viewDateStart.setBackground(Color.WHITE);
+		//viewDateEnd.setBackground(Color.WHITE);
 		viewDateStart.setBorder(new BevelBorder(BevelBorder.RAISED));
 		viewDateEnd.setBorder(new BevelBorder(BevelBorder.RAISED));
 

@@ -7,6 +7,7 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+import com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme;
 import controller.ActionManager;
 
 /**
@@ -31,7 +32,7 @@ public class EventWindow extends JFrame {
 	 * @param actionManager ActionManager
 	 */
 	public EventWindow(ActionManager actionManager) {
-		this.listEventPanel = new ListEventPanel(MainPanel.PANEL_WIDTH_DEFAULT,MainPanel.PANEL_HEIGHT_DEFAULT,MainPanel.BACKGROUND_COLOR_DEFAULT,actionManager);
+    this.listEventPanel = new ListEventPanel(MainPanel.PANEL_WIDTH_DEFAULT,MainPanel.PANEL_HEIGHT_DEFAULT,actionManager);
 		this.getContentPane().add(listEventPanel);
 		this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 		this.setTitle(TITLE);
