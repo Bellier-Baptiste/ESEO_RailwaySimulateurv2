@@ -92,6 +92,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="flatlaf-3.2.1" level="project" />
+    <orderEntry type="library" name="flatlaf-intellij-themes-3.2.1" level="project" />
   </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="1bc3a6e3-9b97-492b-ab39-dfa79eb92834" />

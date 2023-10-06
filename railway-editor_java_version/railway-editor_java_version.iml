@@ -10,6 +10,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="swingx-1.6" level="project" />
+    <orderEntry type="library" name="jdatepicker-1.3.4" level="project" />
   </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="4135d13e-42c3-4bdc-a5fd-5870202e672c" />
