@@ -3,7 +3,7 @@ package models
 import (
 	"fmt"
 	"log"
-	"configs"
+	"pfe-2018-network-journey-simulator/src/configs"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

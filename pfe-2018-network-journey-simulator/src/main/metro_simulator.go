@@ -4,19 +4,24 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
-	"go/build"
 	"log"
 	"math"
 	"os"
 	"path/filepath"
-	"configs"
-	"models"
-	"simulator"
+	"pfe-2018-network-journey-simulator/src/configs"
+	"pfe-2018-network-journey-simulator/src/models"
+	"pfe-2018-network-journey-simulator/src/simulator"
 	"strings"
 	"time"
 )
 
 func main() {
+	//flags
+	reader := bufio.NewReader(os.Stdin)
+	printHeader("Metro Simulator")
+	printHeader("")
+	fmt.Print("\n\n")
+	fmt.Println("HELLO WORLD")
 
 	regenerateConfig := flag.Bool("regenconfig", false, "use it to generate the map_config.xml from the config.json file.")
 	configName := flag.String("configname", "map_config.xml", "name of the config to create / use. the file must be in ./configs")
@@ -29,17 +34,15 @@ func main() {
 	var config = configs.GetInstance()
 	config.ChangeParam("print debug", *withVerbose)
 
-	basePath := os.Getenv("GOPATH")
-	if basePath == "" {
-		basePath = build.Default.GOPATH
+	currentPath, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
+	// Delete "src\main" if there (when launching simulator with command line)
+	basePath := strings.Replace(currentPath, "src\\main", "", -1)
 
 	var advancedConfigPath = filepath.Join(basePath, "src/configs/", *configName)
-
-	reader := bufio.NewReader(os.Stdin)
-	printHeader("Metro Simulator")
-	printHeader("")
-	fmt.Print("\n\n")
 
 	printHeader("Verifying Config")
 	if *regenerateConfig {
@@ -99,7 +102,7 @@ func main() {
 			fmt.Println("Wrong answer, default value has been attribued")
 			dayType = "working day"
 		}
-	}else {
+	} else {
 		fmt.Println("Wrong answer, default value has been attribued")
 		dayType = "working day"
 	}

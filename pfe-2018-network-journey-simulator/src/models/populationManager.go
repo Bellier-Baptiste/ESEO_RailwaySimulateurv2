@@ -4,8 +4,8 @@ import (
 	"log"
 	"math"
 	"math/rand"
-	"configs"
-	"tools"
+	"pfe-2018-network-journey-simulator/src/configs"
+	"pfe-2018-network-journey-simulator/src/tools"
 	"sort"
 	"strconv"
 	"strings"
@@ -93,12 +93,12 @@ func NewPopulation(popSize int, popCommutersProportion float64, popRandomsPropor
 	var adConfig = configs.GetAdvancedConfigInstance()
 
 	population.inStation = make([]map[string]*Passenger, len(adConfig.MapC.Stations))
-	for i := range population.inStation{
+	for i := range population.inStation {
 		population.inStation[i] = map[string]*Passenger{}
 	}
 	//population.inTrain = make(map[int]map[string]*Passenger)
 	population.inTrain = make([]map[string]*Passenger, adConfig.NumberOfTrains())
-	for i := range population.inTrain{
+	for i := range population.inTrain {
 		population.inTrain[i] = map[string]*Passenger{}
 	}
 
@@ -145,7 +145,7 @@ func kindToString(kind int) string {
 	return names[kind]
 }
 
-//Sort the outsiders and re-init the list; 2*O(n) complexity. DON'T ABUSE OF IT
+// Sort the outsiders and re-init the list; 2*O(n) complexity. DON'T ABUSE OF IT
 func (p *Population) sortOutsideInit() {
 	p.outsideSorted = make([]*Passenger, len(p.outside))
 	var j = 0
@@ -157,7 +157,7 @@ func (p *Population) sortOutsideInit() {
 	p.SortOutside()
 }
 
-//Sort the outsiders; O(n) complexity, don't abuse of it
+// Sort the outsiders; O(n) complexity, don't abuse of it
 func (p *Population) SortOutside() {
 	sort.Slice(p.outsideSorted, func(i, j int) bool {
 		if p.outsideSorted[i].nextTrip == nil {
@@ -172,14 +172,14 @@ func (p *Population) SortOutside() {
 	})
 }
 
-//use a binary tree to find the last index where p.outsideSorted[index].departureTime <= t
+// use a binary tree to find the last index where p.outsideSorted[index].departureTime <= t
 func (p *Population) OutsideSortedFindIndexByTime(t time.Time) int {
 	return sort.Search(len(p.outsideSorted), func(i int) bool { //f(i) == true => f(i+1) == true
 		return p.outsideSorted[i].nextTrip == nil || t.Before(p.outsideSorted[i].nextTrip.departureTime)
 	})
 }
 
-//reinsert a Passenger inside the sorted OutsideSorted. 1% chance of relaunching a sort (to make sure everything works smoothly
+// reinsert a Passenger inside the sorted OutsideSorted. 1% chance of relaunching a sort (to make sure everything works smoothly
 func (p *Population) OutsideSortedInsertPassenger(passenger *Passenger) {
 	if passenger.nextTrip == nil || passenger.nextTrip.IsCompleted() {
 		passenger.calculateNextTrip()
@@ -201,7 +201,7 @@ func (p *Population) OutsideSortedInsertPassenger(passenger *Passenger) {
 	p.outsideSorted = append(p.outsideSorted[:index], append([]*Passenger{passenger}, p.outsideSorted[index:]...)...)
 }
 
-//pop all passengers having a nextTrip before the time
+// pop all passengers having a nextTrip before the time
 func (p *Population) OutsideSortedPopAllBefore(t time.Time) []*Passenger {
 	var index = p.OutsideSortedFindIndexByTime(t)
 
@@ -214,7 +214,7 @@ func (p *Population) OutsideSortedPopAllBefore(t time.Time) []*Passenger {
 	return output
 }
 
-//verify that the OutsideSorted list is sorted
+// verify that the OutsideSorted list is sorted
 func (p *Population) OutsideSortedCheckSorted() bool {
 	//assert sorted AFTER
 	for i := 0; i < len(p.outsideSorted)-1; i++ {
@@ -289,7 +289,7 @@ func (p *Population) Passengers() map[string]*Passenger {
 
 //----------------------------------------------------------- functions and methods
 
-//find where a passenger is. for debug purposes only
+// find where a passenger is. for debug purposes only
 func (p Population) FindPassenger(passenger Passenger) string {
 	var exists = false
 
@@ -332,7 +332,7 @@ func (p *Population) transferFromPopulationToStation(passenger *Passenger, stati
 	}
 }
 
-//transfer a passenger from a station to the general population
+// transfer a passenger from a station to the general population
 func (p *Population) transferFromStationToPopulation(passenger *Passenger, stationPt *MetroStation, aTime time.Time) {
 	info := prepareCSVline(*passenger, stationPt, aTime, "USE")
 	p.output.Write(info)
@@ -365,7 +365,7 @@ func (p *Population) transferFromStationToTrain(passenger *Passenger, trainPt *M
 	}
 }
 
-//transfer a passenger from a train to a station
+// transfer a passenger from a train to a station
 func (p *Population) transferFromTrainToStation(passenger *Passenger, trainPt *MetroTrain, stationPt *MetroStation, aTime time.Time) {
 	passenger.setTimeArrivalLastStation(aTime)
 
@@ -387,7 +387,7 @@ func (p *Population) transferFromTrainToStation(passenger *Passenger, trainPt *M
 	}
 }
 
-//update the situation in all station (outside <-> station only)
+// update the situation in all station (outside <-> station only)
 func (p *Population) UpdateAll(aTime time.Time, mapO *Map) {
 	// 1. outside > station
 	p.UpdateOutsideToStations(aTime)
@@ -445,7 +445,7 @@ func (p *Population) UpdateStationToOutside(aTime time.Time, station *MetroStati
 	}
 }
 
-//push a passenger outside
+// push a passenger outside
 func (p *Population) StationToOutside(aTime time.Time, station *MetroStation, passenger *Passenger) {
 	var trip = passenger.CurrentTrip()
 	trip.SetArrivalTime(aTime)
@@ -465,7 +465,7 @@ func (p *Population) UpdateStationToTrain(train *MetroTrain) {
 		p.inStationMutex.Lock()
 		passenger := inStation[i]
 		p.inStationMutex.Unlock()
-		if passenger == nil {//happens in the thread
+		if passenger == nil { //happens in the thread
 			continue
 		}
 		if train.GetAvailableCapacity(p) <= 0 {
@@ -489,7 +489,7 @@ func (p *Population) UpdateTrainToStation(train *MetroTrain, aTime time.Time) {
 		passenger := inTrain[i]
 		p.inTrainMutex.Unlock()
 
-		if passenger == nil{
+		if passenger == nil {
 			continue
 		}
 
@@ -538,6 +538,6 @@ func (p *Population) createColumnsTitles() {
 		"transaction_location",
 		"transaction_number",
 		"machine_id",
-		"is_2nd_leg_intermodel",}
+		"is_2nd_leg_intermodel"}
 	p.output = tools.NewFile("tickets", columnsNames)
 }

@@ -1,83 +1,121 @@
+// License: GPL. For details, see Readme.txt file.
 package org.openstreetmap.gui.jmapviewer.tilesources;
 
+import java.io.IOException;
+
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
+
+/**
+ * OSM Tile source.
+ */
 public class OsmTileSource {
 
-    public static final String MAP_MAPNIK = "http://tile.openstreetmap.org";
-    public static final String MAP_OSMA = "http://tah.openstreetmap.org/Tiles";
+  /**
+   * The default "Mapnik" OSM tile source.
+   */
+  public static class Mapnik extends AbstractOsmTileSource {
 
-    public static class Mapnik extends AbstractOsmTileSource {
-        public Mapnik() {
-            super("Mapnik", MAP_MAPNIK);
-        }
+    private static final String PATTERN = "https://%s.tile.openstreetmap.org";
 
-        public TileUpdate getTileUpdate() {
-            return TileUpdate.IfNoneMatch;
-        }
+    private static final String[] SERVER = {"a", "b", "c"};
 
+    private int serverNum;
+
+    /**
+     * Constructs a new {@code "Mapnik"} tile source.
+     */
+    public Mapnik() {
+      super("OpenStreetMap Carto", PATTERN, "standard");
+      modTileFeatures = true;
     }
 
-    public static class CycleMap extends AbstractOsmTileSource {
+    @Override
+    public String getBaseUrl() {
+      String url = String.format(this.baseUrl, new Object[] {SERVER[serverNum]});
+      serverNum = (serverNum + 1) % SERVER.length;
+      return url;
+    }
+  }
 
-        private static final String PATTERN = "http://%s.tile.opencyclemap.org/cycle";
+  /**
+   * The "Cycle Map" OSM tile source.
+   */
+  public abstract static class CycleMap extends AbstractOsmTileSource {
 
-        private static final String[] SERVER = { "a", "b", "c" };
+    private static final String PATTERN = "https://%s.tile.thunderforest.com/cycle";
 
-        private int SERVER_NUM = 0;
+    private static final String[] SERVER = {"a", "b", "c"};
 
-        public CycleMap() {
-            super("OSM Cycle Map", PATTERN);
-        }
+    private int serverNum;
 
-        @Override
-        public String getBaseUrl() {
-            String url = String.format(this.baseUrl, new Object[] { SERVER[SERVER_NUM] });
-            SERVER_NUM = (SERVER_NUM + 1) % SERVER.length;
-            return url;
-        }
-
-        @Override
-        public int getMaxZoom() {
-            return 17;
-        }
-
-        public TileUpdate getTileUpdate() {
-            return TileUpdate.LastModified;
-        }
-
+    /**
+     * Constructs a new {@code CycleMap} tile source.
+     */
+    public CycleMap() {
+      super("OpenCycleMap", PATTERN, "opencyclemap");
     }
 
-    public static abstract class OsmaSource extends AbstractOsmTileSource {
-        String osmaSuffix;
-
-        public OsmaSource(String name, String osmaSuffix) {
-            super(name, MAP_OSMA);
-            this.osmaSuffix = osmaSuffix;
-        }
-
-        @Override
-        public int getMaxZoom() {
-            return 17;
-        }
-
-        @Override
-        public String getBaseUrl() {
-            return MAP_OSMA + "/" + osmaSuffix;
-        }
-
-        public TileUpdate getTileUpdate() {
-            return TileUpdate.IfModifiedSince;
-        }
+    @Override
+    public String getBaseUrl() {
+      String url = String.format(this.baseUrl, new Object[] {SERVER[serverNum]});
+      serverNum = (serverNum + 1) % SERVER.length;
+      return url;
     }
 
-    public static class TilesAtHome extends OsmaSource {
-        public TilesAtHome() {
-            super("TilesAtHome", "tile");
-        }
+    /**
+     * Get the thunderforest API key.
+     *
+     * Needs to be registered at their web site.
+     * @return the API key
+     */
+    protected abstract String getApiKey();
+
+    @Override
+    public int getMaxZoom() {
+      return 18;
     }
 
-    public static class Maplint extends OsmaSource {
-        public Maplint() {
-            super("Maplint", "maplint");
-        }
+    @Override
+    public String getTileUrl(int zoom, int tilex, int tiley) throws IOException {
+      return this.getBaseUrl() + getTilePath(zoom, tilex, tiley) + "?apikey=" + getApiKey();
     }
+
+    @Override
+    public String getTermsOfUseText() {
+      return "Maps Â© Thunderforest";
+    }
+
+    @Override
+    public String getTermsOfUseURL() {
+      return "https://thunderforest.com/terms/";
+    }
+  }
+
+  /**
+   * The "Transport Map" OSM tile source.
+   */
+  public static class TransportMap extends AbstractOsmTileSource {
+
+    /**
+     * Constructs a new {@code TransportMap} tile source.
+     */
+    public TransportMap() {
+      super("Public Transport", "https://tile.memomaps.de/tilegen", "public_transport_oepnv");
+    }
+
+    @Override
+    public int getMaxZoom() {
+      return 18;
+    }
+
+    @Override
+    public String getAttributionText(int zoom, ICoordinate topLeft, ICoordinate botRight) {
+      return "Â© OpenStreetMap contributors, CC-BY-SA";
+    }
+
+    @Override
+    public String getAttributionLinkURL() {
+      return "https://Ã¶pnvkarte.de/<";
+    }
+  }
 }
