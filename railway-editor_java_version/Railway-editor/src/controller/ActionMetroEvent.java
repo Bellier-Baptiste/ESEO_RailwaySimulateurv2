@@ -71,6 +71,8 @@ public class ActionMetroEvent {
     public void actionPerformed(ActionEvent e) {
       MainWindow.getInstance().toFront();
       this.addEventDelay(ListEventPanel.getInstance().eventLineDelayToString());
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+      EventRecap.getInstance().eventsListRemoveBackground();
     }
 
     public void addEventDelay(String eventString) {
@@ -131,7 +133,8 @@ public class ActionMetroEvent {
     public void actionPerformed(ActionEvent e) {
       MainWindow.getInstance().toFront();
       this.addLineClosed(ListEventPanel.getInstance().eventLineClosedToString());
-
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+      EventRecap.getInstance().eventsListRemoveBackground();
     }
 
     public void addLineClosed(String eventString) {
@@ -189,6 +192,8 @@ public class ActionMetroEvent {
     public void actionPerformed(ActionEvent e) {
       MainWindow.getInstance().toFront();
       this.addAttendancePeak(ListEventPanel.getInstance().eventAttendancePeakToString());
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+      EventRecap.getInstance().eventsListRemoveBackground();
     }
 
     public void addAttendancePeak(String eventString) {
@@ -229,6 +234,8 @@ public class ActionMetroEvent {
     public void actionPerformed(ActionEvent e) {
       MainWindow.getInstance().toFront();
       this.addTrainHour(ListEventPanel.getInstance().eventTrainHourToString());
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+      EventRecap.getInstance().eventsListRemoveBackground();
     }
 
     public void addTrainHour(String eventString) {
@@ -255,6 +262,8 @@ public class ActionMetroEvent {
     public void actionPerformed(ActionEvent e) {
       MainWindow.getInstance().toFront();
       this.addStationClosed(ListEventPanel.getInstance().eventStationClosedToString());
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+      EventRecap.getInstance().eventsListRemoveBackground();
     }
 
     public void addStationClosed(String eventString) {
