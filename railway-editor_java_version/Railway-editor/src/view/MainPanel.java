@@ -1,9 +1,11 @@
 package view;
 
+import controller.ActionThemeMode;
 import controller.MovingAdapter;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ public class MainPanel extends JMapViewer {
 	private static final long serialVersionUID = 1L;
 	public static final int PANEL_WIDTH_DEFAULT = 1000;
 	public static final int PANEL_HEIGHT_DEFAULT = 600;
+	private static MainPanel instance;
 //	public static final Color BACKGROUND_COLOR_DEFAULT = Color.WHITE;
 
 	private List<LineView> lineViews;
@@ -33,12 +36,11 @@ public class MainPanel extends JMapViewer {
 	private boolean hideHud;
 	
 	/**Constructor
-	 * @param width panel width
-	 * @param height panel height
+	 *
 	 */
-	public MainPanel(int width, int height) {
+	private MainPanel() {
 		MovingAdapter ma = new MovingAdapter();
-		Dimension dim = new Dimension(width, height);
+		Dimension dim = new Dimension(MainPanel.PANEL_WIDTH_DEFAULT, MainPanel.PANEL_HEIGHT_DEFAULT);
 		this.setPreferredSize(dim);
 //		this.setBackground(color);
 		this.lineViews = new ArrayList<>();
@@ -56,8 +58,20 @@ public class MainPanel extends JMapViewer {
     //this.setLayout(new FlowLayout(FlowLayout.LEFT));
     this.setZoom(2);
 	}
-	
-	///**
+
+	/**
+	 * Create Singleton
+	 *
+	 * @return MainPanel instance
+	 */
+	public static MainPanel getInstance() {
+		if (instance == null) {
+			instance = new MainPanel();
+		}
+		return instance;
+	}
+
+  ///**
 //	 * add a stationView to the list.
 //	 * @param stationView stationView to add
 //	 */

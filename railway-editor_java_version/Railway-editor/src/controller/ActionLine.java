@@ -24,7 +24,9 @@ public class ActionLine {
     lineToUpdateIndex = 0;
   }
 
-  /**Create Singleton
+  /**
+   * Create Singleton
+   *
    * @return ActionLine instance
    */
   public static ActionLine getInstance() {
@@ -42,66 +44,44 @@ public class ActionLine {
     this.lineToUpdateIndex = lineToUpdateIndex;
   }
 
-  public class ActionAddLine extends AbstractAction {
-
-    public ActionAddLine() {
-      super(ADD_LINE);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      int lineIndex = MainWindow.getInstance().getMainPanel().getLineViews().size(); // find the new line number
-      ActionLine.this.setLineToUpdateIndex(lineIndex);
-      Line line = new Line(lineIndex, new ArrayList<Station>()); // create a new line (model)
-      List<StationView> stationsViews = new ArrayList<StationView>(); // create a new vie for the new line's sattions
-      LineView lineview = new LineView(line, stationsViews);
-      @SuppressWarnings("unused")
-      LineController lineController = new LineController(line, lineview);
-      MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(Integer.toString(lineIndex));// change line id
-      // displayed in the
-      // toolBar Panel
-      MainWindow.getInstance().getMainPanel().repaint();
-    }
+  public void addLine() {
+    int lineIndex = MainWindow.getInstance().getMainPanel().getLineViews().size(); // find the new line number
+    ActionLine.this.setLineToUpdateIndex(lineIndex);
+    Line line = new Line(lineIndex, new ArrayList<Station>()); // create a new line (model)
+    List<StationView> stationsViews = new ArrayList<StationView>(); // create a new vie for the new line's sattions
+    LineView lineview = new LineView(line, stationsViews);
+    @SuppressWarnings("unused")
+    LineController lineController = new LineController(line, lineview);
+    MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(Integer.toString(lineIndex));// change line id
+    // displayed in the
+    // toolBar Panel
+    MainWindow.getInstance().getMainPanel().repaint();
   }
 
-  public class ActionIncrementLine extends AbstractAction {
+  public void incrementLine() {
+    JLabel lineId = MainWindow.getInstance().getToolBarPanelIdea2().getLineId();
 
-    public ActionIncrementLine() {
-      super(INCREMENT_LINE);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      JLabel lineId = MainWindow.getInstance().getToolBarPanelIdea2().getLineId();
-
-      if (!lineId.getText().equals("none")) { // if a line exists
-        int currentLineId = Integer.valueOf(lineId.getText());
-        if (currentLineId < MainWindow.getInstance().getMainPanel().getLineViews().size() - 1) {// if this is not
-          // the last line created
-          MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(Integer.toString(currentLineId + 1));
-          ActionLine.this.setLineToUpdateIndex(currentLineId + 1);
-        }
+    if (!lineId.getText().equals("none")) { // if a line exists
+      int currentLineId = Integer.valueOf(lineId.getText());
+      if (currentLineId < MainWindow.getInstance().getMainPanel().getLineViews().size() - 1) {// if this is not
+        // the last line created
+        MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(Integer.toString(currentLineId + 1));
+        ActionLine.this.setLineToUpdateIndex(currentLineId + 1);
       }
     }
   }
 
-  public class ActionDecrementLine extends AbstractAction {
+  public void decrementLine() {
+    JLabel lineId = MainWindow.getInstance().getToolBarPanelIdea2().getLineId();
 
-    public ActionDecrementLine() {
-      super(DECREMENT_LINE);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      JLabel lineId = MainWindow.getInstance().getToolBarPanelIdea2().getLineId();
-
-      if (!lineId.getText().equals("none")) {// if a line exists
-        int currentLineId = Integer.valueOf(lineId.getText());
-        if (currentLineId > 0) {// if this is not the first line created
-          MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(Integer.toString(currentLineId - 1));
-          ActionLine.this.setLineToUpdateIndex(currentLineId - 1);
-        }
+    if (!lineId.getText().equals("none")) {// if a line exists
+      int currentLineId = Integer.valueOf(lineId.getText());
+      if (currentLineId > 0) {// if this is not the first line created
+        MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(Integer.toString(currentLineId - 1));
+        ActionLine.this.setLineToUpdateIndex(currentLineId - 1);
       }
     }
   }
 }
+
+

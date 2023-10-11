@@ -6,19 +6,28 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 import view.AreaView;
 import view.MainWindow;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-
 // TODO : make this class a singleton
-public class ActionArea extends AbstractAction {
+public class ActionArea {
   public static final String ACTION_NAME = "ADD_AREA";
   private static final int AREA_POSX_DEFAULT = 150;
   private static final int AREA_POSY_DEFAULT = 150;
   private static final int AREA_WIDTH_DEFAULT = 75;
   private static final int AREA_HEIGHT_DEFAULT = 75;
+  private static ActionArea instance;
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
+  /**
+   * Create Singleton
+   *
+   * @return ActionArea instance
+   */
+  public static ActionArea getInstance() {
+    if (instance == null) {
+      instance = new ActionArea();
+    }
+    return instance;
+  }
+
+  public void addArea() {
     Area area = new Area(Data.getInstance().getNewAreaId(), AREA_POSX_DEFAULT, AREA_POSY_DEFAULT,
         AREA_WIDTH_DEFAULT, AREA_HEIGHT_DEFAULT);
 

@@ -21,8 +21,7 @@ public class ActionRunSimulation extends AbstractAction {
       String rootJavaProjectPath = System.getProperty("user.dir");
       String rootGoProjectPath = rootJavaProjectPath.replace("railway-editor_java_version", "pfe-2018-network-journey-simulator");
       File runThisSimulation = new File(rootGoProjectPath + "\\src\\configs\\runThisSimulation.xml");
-      ActionExport actionExport = new ActionExport();
-      actionExport.export(runThisSimulation);
+      ActionFile.getInstance().export(runThisSimulation);
 
       // create a new list of arguments for our process
       String[] commands = {"cmd", "/C", "start metro_simulator.exe -configname runThisSimulation.xml"};

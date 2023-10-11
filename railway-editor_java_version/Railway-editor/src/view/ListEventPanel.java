@@ -166,7 +166,7 @@ public class ListEventPanel extends JPanel implements Observer {
               c.gridx = 0;
               c.gridy = 10;
               c.weighty = 0.1;
-              confirmEventBtn.addActionListener(ActionMetroEvent.getInstance().new ActionAddEventLineDelay());
+              confirmEventBtn.addActionListener(e -> ActionMetroEvent.getInstance().addLineDelay());
               view.add(confirmEventBtn, c);
               break;
             case "LineClosed":
@@ -177,7 +177,7 @@ public class ListEventPanel extends JPanel implements Observer {
               c.gridx = 0;
               c.gridy = 10;
               c.weighty = 0.1;
-              confirmEventBtn.addActionListener(ActionMetroEvent.getInstance().new ActionAddEventLineClosed());
+              confirmEventBtn.addActionListener(e -> ActionMetroEvent.getInstance().addLineClosed());
               view.add(confirmEventBtn, c);
               break;
             case "AttendancePeak":
@@ -188,7 +188,7 @@ public class ListEventPanel extends JPanel implements Observer {
               c.gridx = 0;
               c.gridy = 10;
               c.weighty = 0.1;
-              confirmEventBtn.addActionListener(ActionMetroEvent.getInstance().new ActionAddEventAttendancePeak());
+              confirmEventBtn.addActionListener(e -> ActionMetroEvent.getInstance().addAttendancePeak());
               view.add(confirmEventBtn, c);
               break;
             case "TrainHour":
@@ -199,7 +199,7 @@ public class ListEventPanel extends JPanel implements Observer {
               c.gridx = 0;
               c.gridy = 10;
               c.weighty = 0.1;
-              confirmEventBtn.addActionListener(ActionMetroEvent.getInstance().new ActionAddEventTrainHour());
+              confirmEventBtn.addActionListener(e -> ActionMetroEvent.getInstance().addTrainHour());
               view.add(confirmEventBtn, c);
               break;
             case "StationClosed":
@@ -210,7 +210,7 @@ public class ListEventPanel extends JPanel implements Observer {
               c.gridx = 0;
               c.gridy = 10;
               c.weighty = 0.1;
-              confirmEventBtn.addActionListener(ActionMetroEvent.getInstance().new ActionAddEventStationClosed());
+              confirmEventBtn.addActionListener(e -> ActionMetroEvent.getInstance().addStationClosed());
               view.add(confirmEventBtn, c);
               break;
             default:

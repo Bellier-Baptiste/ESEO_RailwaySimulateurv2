@@ -4,16 +4,14 @@ import Model.Station;
 import data.Data;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import view.LineView;
-import view.MainPanel;
 import view.MainWindow;
 import view.StationView;
 
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Random;
 
-public class ActionStation extends AbstractAction {
+public class ActionStation {
   public static final String ACTION_NAME = "ADD_STATION";
   private static ActionStation instance;
   private int stationid;
@@ -32,8 +30,7 @@ public class ActionStation extends AbstractAction {
     return instance;
   }
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
+  public void addStation() {
     int lineToUpdateIndex = ActionLine.getInstance().getLineToUpdateIndex();
     stationid = 0;
     for (LineView lineView : MainWindow.getInstance().getMainPanel().getLineViews()) {

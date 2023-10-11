@@ -44,14 +44,14 @@ public class MainWindow extends JFrame {
     KeyboardTool  kbt  =new KeyboardTool(this.getMainPanel());
     this.addKeyListener(kbt);
 
-		this.mainPanel = new MainPanel(MainPanel.PANEL_WIDTH_DEFAULT,MainPanel.PANEL_HEIGHT_DEFAULT);
+		this.mainPanel = MainPanel.getInstance();
     this.getContentPane().add(this.mainPanel,
         BorderLayout.CENTER);
 
 		this.menuBar = MenuBar.getInstance(this, this.mainPanel);
 		this.setJMenuBar(this.menuBar);
 
-		this.toolBarPanelIdea2 = new ToolBarPanelIdea2(this.mainPanel, this);
+		this.toolBarPanelIdea2 = new ToolBarPanelIdea2();
     this.toolBarPanelIdea2.setVisible(true);
 		this.getContentPane().add(this.toolBarPanelIdea2, BorderLayout.NORTH);
 

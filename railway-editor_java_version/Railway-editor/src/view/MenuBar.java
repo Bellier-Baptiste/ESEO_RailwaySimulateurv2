@@ -1,7 +1,6 @@
 package view;
 
-import controller.ActionExport;
-import controller.ActionOpen;
+import controller.ActionFile;
 import controller.ActionThemeMode;
 
 import javax.swing.*;
@@ -17,37 +16,36 @@ public class MenuBar extends JMenuBar {
 
     // File menu
     JMenu file = new JMenu("File");
-    JMenuItem open = new JMenuItem(new ActionOpen());
-    open.setName(ActionOpen.ACTION_NAME);
+    JMenuItem open = new JMenuItem("Open");
+    open.setName(ActionFile.IMPORT_NAME);
+    open.addActionListener(e -> ActionFile.getInstance().showOpenDialog());
     file.add(open);
-    JMenuItem save = new JMenuItem(new ActionExport());
+    JMenuItem save = new JMenuItem("Save");
     save.setName("Save");
-    save.setText("Save");
     file.add(save);
-    JMenuItem export = new JMenuItem(new ActionExport());
-    export.setName(ActionExport.ACTION_NAME);
+    JMenuItem export = new JMenuItem("Export");
+    export.addActionListener(e -> ActionFile.getInstance().showExportDialog());
+    export.setName(ActionFile.EXPORT_NAME);
     file.add(export);
     this.add(file);
 
     // Configuration menu
     JMenu config = new JMenu("Configuration");
-    JMenuItem newConfig = new JMenuItem(new ActionExport());
+    JMenuItem newConfig = new JMenuItem("New");
     newConfig.setName("New");
-    newConfig.setText("New");
     config.add(newConfig);
-    JMenuItem openConfig = new JMenuItem(new ActionExport());
+    JMenuItem openConfig = new JMenuItem("Open");
     openConfig.setName("Open");
-    openConfig.setText("Open");
     config.add(openConfig);
-    JMenuItem exportConfig = new JMenuItem(new ActionExport());
+    JMenuItem exportConfig = new JMenuItem("Export");
     exportConfig.setName("Export");
-    exportConfig.setText("Export");
     config.add(exportConfig);
 
     // Theme menu
-    JButton themeMode = new JButton();
-    themeMode.setAction(new ActionThemeMode(mainWindow, themeMode));
-    this.add(themeMode);
+    JButton changeThemeBtn = new JButton("Light Mode");
+    changeThemeBtn.setName(ActionThemeMode.ACTION_NAME);
+    changeThemeBtn.addActionListener(e -> ActionThemeMode.getInstance(changeThemeBtn).changeTheme());
+    this.add(changeThemeBtn);
     this.add(config);
     this.add(file);
   }
