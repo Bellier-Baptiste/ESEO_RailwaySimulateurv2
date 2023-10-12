@@ -4,20 +4,36 @@ import view.MainPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-public class ActionRunSimulation extends AbstractAction {
+public class ActionRunSimulation   {
   public static final String ACTION_NAME = "RUN_SIMULATION";
-  private MainPanel mainPanel;
+  private static ActionRunSimulation instance;
 
-  public ActionRunSimulation(MainPanel mainPanel) {
-    this.mainPanel = mainPanel;
+  private ActionRunSimulation( ) {
   }
 
-  @Override
-  public void actionPerformed(ActionEvent e) {
+  /**
+   * Create Singleton
+   *
+   * @return ActionExport instance
+   */
+  public static ActionRunSimulation getInstance() {
+    if (instance == null) {
+      instance = new ActionRunSimulation();
+    }
+    return instance;
+  }
+
+  public void runSimulation() {
     try {
+      // Check if simulator.exe is already running
+      if (isSimulatorRunning()) {
+        return;
+      }
+
       String rootJavaProjectPath = System.getProperty("user.dir");
       String rootGoProjectPath = rootJavaProjectPath.replace("railway-editor_java_version", "pfe-2018-network-journey-simulator");
       File runThisSimulation = new File(rootGoProjectPath + "\\src\\configs\\runThisSimulation.xml");
@@ -41,5 +57,30 @@ public class ActionRunSimulation extends AbstractAction {
     } catch (IOException | InterruptedException ex) {
       ex.printStackTrace();
     }
+  }
+
+  // Check if the process is running
+  private boolean isSimulatorRunning() {
+   try {
+     String findProcess = "metro_simulator.exe";
+     String filenameFilter = "/nh /fi \"Imagename eq " + findProcess + "\"";
+     String tasksCmd = System.getenv("windir") + "/system32/tasklist.exe " + filenameFilter;
+
+     Process p = Runtime.getRuntime().exec(tasksCmd);
+     BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+     ArrayList<String> procs = new ArrayList<>();
+     String line = null;
+     while ((line = input.readLine()) != null)
+       procs.add(line);
+
+     input.close();
+
+     Boolean processFound = procs.stream().filter(row -> row.indexOf(findProcess) > -1).count() > 0;
+     return processFound;
+   } catch (IOException ex) {
+     ex.printStackTrace();
+     return false;
+   }
   }
 }
