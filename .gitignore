@@ -54,6 +54,9 @@
  .idea/*.iml
 # .idea/modules
 
+# Sonar
+.scannerwork/
+
 # CMake
 cmake-build-*/
 
