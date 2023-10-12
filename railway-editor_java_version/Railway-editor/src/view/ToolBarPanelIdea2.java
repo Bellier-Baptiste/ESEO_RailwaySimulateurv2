@@ -279,10 +279,9 @@ public class ToolBarPanelIdea2 extends JToolBar {
     runSimulationPanel.setAlignmentY(Component.TOP_ALIGNMENT);
     TitledBorder runSimulationPanelBorder = new TitledBorder("Run Simulation");
     runSimulationPanel.setBorder(runSimulationPanelBorder);
-    JButton runSimulationBtn = new JButton(new ActionRunSimulation(MainPanel
-        .getInstance()));
+    JButton runSimulationBtn = new JButton("RUN");
     runSimulationBtn.setName(ActionRunSimulation.ACTION_NAME);
-    runSimulationBtn.setText("RUN");
+    runSimulationBtn.addActionListener(e -> ActionRunSimulation.getInstance().runSimulation());
     runSimulationBtn.setFocusable(false);
     runSimulationBtn.setPreferredSize(new Dimension(80, 30));
 
