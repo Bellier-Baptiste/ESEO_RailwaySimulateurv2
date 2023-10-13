@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.List;
 
-import Model.Line;
+import model.Line;
 
 /**Represent the Line view.
  * @author Arthur Lagarce
@@ -16,8 +16,6 @@ public class LineView {
 	// attributes
 	private Line line;
 	private List<StationView>  stationViews;
-	private int[] xPoints;
-	private int[] yPoints;
 	private Stroke stroke;
 
 	/** Constructor.
@@ -61,8 +59,8 @@ public class LineView {
 	 */
 	public void affiche(Graphics2D g2D) {
 		//x and y point array creation
-		xPoints = new int[this.stationViews.size()];
-		yPoints = new int[this.stationViews.size()];
+		int[] xPoints = new int[this.stationViews.size()];
+		int[] yPoints = new int[this.stationViews.size()];
 		for (int i=0;i<this.stationViews.size();i++) {
 			//fill arrays with the center point of circles representing stations
 			xPoints[i] = this.stationViews.get(i).getStation().getPosX();

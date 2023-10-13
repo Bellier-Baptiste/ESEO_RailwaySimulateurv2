@@ -1,6 +1,6 @@
 package controller;
 
-import Model.Line;
+import model.Line;
 import view.LineView;
 import view.MainWindow;
 

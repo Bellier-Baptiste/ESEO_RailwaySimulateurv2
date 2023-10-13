@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * Model class extending event which describes a change of trains number on a line at a certain hour of the day.
@@ -16,7 +16,7 @@ public class EventHour extends Event{
 	 */
 	public EventHour(int id, String startTime, String endTime, EventType type) {
 		super(id, startTime, endTime, type);
-		this.EVENT_NAME = "hour";
+		super.eventName = "hour";
 
 	}
 	/**get the id of the line concerned.

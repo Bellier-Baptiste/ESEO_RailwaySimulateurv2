@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import Model.Area;
+import model.Area;
 import data.Data;
 
 public class AreaTest {

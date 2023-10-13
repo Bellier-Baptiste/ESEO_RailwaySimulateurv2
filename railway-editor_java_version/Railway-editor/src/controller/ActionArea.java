@@ -1,12 +1,11 @@
 package controller;
 
-import Model.Area;
+import model.Area;
 import data.Data;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import view.AreaView;
 import view.MainWindow;
 
-// TODO : make this class a singleton
 public class ActionArea {
   public static final String ACTION_NAME = "ADD_AREA";
   private static final int AREA_POSX_DEFAULT = 150;

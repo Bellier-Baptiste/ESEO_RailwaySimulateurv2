@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * Model class extending event which describes a delay between 2 stations.
@@ -19,7 +19,7 @@ public class EventLineDelay extends Event {
 	 */
 	public EventLineDelay(int id, String startTime, String endTime, EventType type) {
 		super(id, startTime, endTime, type);
-		EVENT_NAME = "lineDelay";
+		eventName = "lineDelay";
 	}
 
 	/**

@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-import Model.Station;
+import model.Station;
 
 /**
  * Class which draw a station on the main Panel

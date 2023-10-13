@@ -1,14 +1,12 @@
 package controller;
 
-import Model.*;
-import Model.Event;
+import model.*;
+import model.Event;
 import data.Data;
 import view.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 
 public class ActionMetroEvent {
@@ -114,7 +112,6 @@ public class ActionMetroEvent {
     eventLineClosed.setIdStationStart(Integer.valueOf(eventStringTab[4]));
     eventLineClosed.setIdStationEnd(Integer.valueOf(eventStringTab[5]));
     Data.getInstance().getEventList().add(eventLineClosed);
-
     Station stationStart = null;
     Station stationEnd = null;
     LineView lineDelayed = null;

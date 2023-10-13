@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observable;
 import java.util.Random;
+import java.util.function.Consumer;
 
-import Model.Event;
+import model.Event;
 
 /**
  * Data Singleton class which stores all informations relative to stations and
@@ -17,9 +17,11 @@ import Model.Event;
  * @author arthu
  *
  */
-public class Data extends Observable {
+public class Data {
 
 	// attributes
+	private Consumer<Object> observer;
+
 	private static Data instance;
 	private static final String[] STATIONS_NAMES = { "Agapanthe", "Bleuet", "Coquelicot", "Dahlia", "Edelweiss",
 			"Ficaire", "Grebera", "Hortensia", "Iris", "Jasmin", "Kalmie", "Lys", "Marguerite", "Narcisse", "Ophrys",
@@ -79,7 +81,7 @@ public class Data extends Observable {
 			"Pippin", "Palac", "Gery", "Yansham", "Cemoor", "Pewood", "Spemoor", "Beminster", "Autwich", "Sefalls",
 			"Beybrook", "Hibrook", "Wywood", "Opton", "Baybluff", };
 
-	private final static Color[] LINES_COLORS = new Color[50];
+	private final Color[] lineColors = new Color[50];
 	Random rand = new Random();
 
 	private int areaId;
@@ -111,20 +113,29 @@ public class Data extends Observable {
 	 */
 	private Data() {
 		super();
-		this.availableStationNames = new LinkedList<String>(Arrays.asList(STATIONS_NAMES));
-		for (int i = 0; i < 50; i++) {
-			float r = rand.nextFloat();
-			float g = rand.nextFloat();
-			float b = rand.nextFloat();
-			LINES_COLORS[i] = new Color(r, g, b);
-			this.selectType = null;
-			this.currentCity = "";
-		}
+		this.availableStationNames = new LinkedList<>(Arrays.asList(STATIONS_NAMES));
+		this.initLineColors();
+		this.selectType = null;
+		this.currentCity = "";
 		areaId = 0;
 		this.eventList = new ArrayList<>();
 	}
 
+	private void initLineColors() {
+		for (int i = 0; i < 50; i++) {
+			float r = rand.nextFloat();
+			float g = rand.nextFloat();
+			float b = rand.nextFloat();
+			lineColors[i] = new Color(r, g, b);
+		}
+	}
+
 	// accessors
+
+	public void setObserver(Consumer<Object> observer) { // Setter pour le Consumer
+		this.observer = observer;
+	}
+
 	/**get the list of available stations name.
 	 * @return list of strings stations names
 	 */
@@ -142,8 +153,8 @@ public class Data extends Observable {
 	/**get the available lines color.
 	 * @return Color[] lines color
 	 */
-	public static Color[] getLinesColors() {
-		return LINES_COLORS;
+	public Color[] getLinesColors() {
+		return lineColors;
 	}
 	
 
@@ -200,8 +211,7 @@ public class Data extends Observable {
 	 */
 	public void setStationStartId(int stationStartId) {
 		this.stationStartId = stationStartId;
-		setChanged();
-		notifyObservers("start");
+		observer.accept("start");
 	}
 
 	/**get event stationEnd id
@@ -216,8 +226,7 @@ public class Data extends Observable {
 	 */
 	public void setStationEndId(int stationEndId) {
 		this.stationEndId = stationEndId;
-		setChanged();
-		notifyObservers("end");
+		observer.accept("end");
 	}
 	
 	/**get event stationConcerned id
@@ -232,8 +241,7 @@ public class Data extends Observable {
 	 */
 	public void setStationConcernedId(int stationConcernedId) {
 		this.stationConcernedId = stationConcernedId;
-		setChanged();
-		notifyObservers("concerned");
+		observer.accept("concerned");
 	}
 
 	/**get Event selected type.

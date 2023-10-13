@@ -7,12 +7,11 @@ import view.EventRecap;
 import view.MainWindow;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.util.Collections;
 
 public class ActionThemeMode {
-  //private static final String ACTION_NAME = "⬛ Dark Mode";
-  public static final String ACTION_NAME = "Light Mode";
+  public static final String LIGHT_MODE = "Light Mode";
+  public static final String DARK_MODE = "Dark Mode";
   private static ActionThemeMode instance;
   private final JButton themeMode;
 
@@ -41,11 +40,11 @@ public class ActionThemeMode {
     if (this.isDarkMode) {
       FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@accentColor", "#007aff") );
       FlatArcIJTheme.setup();
-      themeMode.setText("Dark Mode");
+      themeMode.setText(DARK_MODE);
     } else {
       FlatLaf.setGlobalExtraDefaults( Collections.singletonMap( "@accentColor", "#0a84ff") );
       FlatArcDarkIJTheme.setup();
-      themeMode.setText("Light Mode");
+      themeMode.setText(LIGHT_MODE);
     }
     this.isDarkMode = !this.isDarkMode; // Toggle the state
     // Refresh the components to apply the new theme

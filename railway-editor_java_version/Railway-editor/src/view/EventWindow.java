@@ -1,72 +1,86 @@
+/**
+ * Class part of the view package of the application.
+ */
+
 package view;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-
+import javax.swing.WindowConstants;
 /**
- * JFrame of the events edition.
- * @author arthu
+ * JFrame of the event's edition.
  *
+ * @author arthur
  */
+
 public class EventWindow extends JFrame {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+  /**
+   * Serial version UID.
+   */
+  private static final long serialVersionUID = 1L;
+
+  /**
+   * Singleton instance.
+   */
   private static EventWindow instance;
-  // constantes
-	private final int WINDOW_WIDTH = 800;
-	private final int WINDOW_HEIGHT = 270;
-	private final String TITLE = "Event-editor";
-	// attributes
-	private ListEventPanel listEventPanel;
 
-	
-	/**Constructor.
-	 */
-	public EventWindow() {
+  /**
+   * Event window width.
+   */
+  private static final int WINDOW_WIDTH = 800;
+
+  /**
+   * Event window height.
+   */
+  private static final int WINDOW_HEIGHT = 270;
+  /**
+   * Event window title.
+   */
+  private static final String TITLE = "Event-editor";
+
+
+  // attributes
+  /**
+   * Panel of the list of events available.
+   */
+  private ListEventPanel listEventPanel;
+
+  /**
+   * Constructor, initialize window and panels.
+   */
+  public EventWindow() {
     this.listEventPanel = ListEventPanel.getInstance();
-		this.getContentPane().add(listEventPanel);
-		this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
-		this.setTitle(TITLE);
-		try {
-			BufferedImage source = ImageIO.read(getClass().getResource("/resources/railwayEditorIcon3.png"));
-			ImageIcon img = new ImageIcon(source);
-			this.setIconImage(img.getImage());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		this.setAlwaysOnTop (true);
+    this.getContentPane().add(listEventPanel);
+    this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    this.setTitle(TITLE);
+    try {
+      BufferedImage source = ImageIO.read(
+          Objects.requireNonNull(getClass().getResource(
+          "/resources/railwayEditorIcon3.png")));
+      ImageIcon img = new ImageIcon(source);
+      this.setIconImage(img.getImage());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    this.setAlwaysOnTop(true);
 
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	}
+    this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+  }
 
+  /**
+   * Create EventWindow Singleton.
+   *
+   * @return EventWindow instance
+   */
   public static EventWindow getInstance() {
     if (instance == null) {
       instance = new EventWindow();
     }
     return instance;
   }
-
-
-  /**get the panel of the available elements.
-	 * @return JPanel ListEventPanel
-	 */
-	public ListEventPanel getListEventPanel() {
-		return listEventPanel;
-	}
-
-
-	/**set the panel of the available elements.
-	 * @param listEventPanel panel of event editor
-	 */
-	public void setListEventPanel(ListEventPanel listEventPanel) {
-		this.listEventPanel = listEventPanel;
-	}
-	
-	
 }

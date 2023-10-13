@@ -1,6 +1,10 @@
+/**
+ * Class part of the package testController.
+ */
+
 package testController;
 
-import Model.Line;
+import model.Line;
 import controller.ActionArea;
 import controller.ActionLine;
 import controller.ActionStation;
@@ -8,6 +12,10 @@ import org.junit.Test;
 import view.MainWindow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/**
+ * Test class for the ActionManager class.
+ */
 
 public class ActionManagerTest {
 

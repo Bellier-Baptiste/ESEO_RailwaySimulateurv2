@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  *Model class extendig event which describes the closing of a line portion.
@@ -19,7 +19,7 @@ public class EventLineClosed extends Event {
 	 */
 	public EventLineClosed(int id, String startTime, String endTime, EventType type) {
 		super(id, startTime, endTime, type);
-		this.EVENT_NAME = "lineClose";
+		this.eventName = "lineClosed";
 	}
 
 

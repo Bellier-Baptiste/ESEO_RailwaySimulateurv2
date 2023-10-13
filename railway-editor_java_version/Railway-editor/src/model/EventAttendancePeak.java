@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * Model class extending event which describes an attendance peak on a station. 
@@ -17,7 +17,7 @@ public class EventAttendancePeak extends Event {
 	 */
 	public EventAttendancePeak(int id, String startTime, String endTime, EventType type) {
 		super(id, startTime, endTime, type);
-		this.EVENT_NAME = "attendancePeak";
+		this.eventName = "attendancePeak";
 	}
 
 	/**get the id of the station concerned by the peak.

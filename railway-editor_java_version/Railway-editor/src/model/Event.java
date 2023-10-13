@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 
 /**Model class which describes a generic event.
@@ -10,10 +10,9 @@ public abstract class Event {
 	private String startTime;
 	private String endTime;
   private int id;
-
-  public static enum EventType{LINE,STATION,AREA};
+  public enum EventType{LINE,STATION,AREA};
 	private EventType type;
-	public	 String EVENT_NAME; 
+	public String eventName;
 
 
 	
@@ -22,7 +21,8 @@ public abstract class Event {
 	 * @param endTime event endTime
 	 * @param type event type
 	 */
-	public Event(int id, String startTime, String endTime, EventType type) {
+	protected Event(int id, String startTime, String endTime,
+											EventType type) {
 		super();
     this.id = id;
 		this.startTime = startTime;

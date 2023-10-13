@@ -1,13 +1,12 @@
 package controller;
 
-import Model.Line;
-import Model.Station;
+import model.Line;
+import model.Station;
 import view.LineView;
 import view.MainWindow;
 import view.StationView;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 

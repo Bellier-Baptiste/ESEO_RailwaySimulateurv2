@@ -1,12 +1,10 @@
 package controller;
 
-import view.MainPanel;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class ActionRunSimulation   {
   public static final String ACTION_NAME = "RUN_SIMULATION";
@@ -47,15 +45,10 @@ public class ActionRunSimulation   {
       pb.directory(new File(rootGoProjectPath));
       Process process = pb.start();
       // wait that the process finish
-      int exitCode = process.waitFor();
-      // verify the exit code
-      if (exitCode == 0) {
-        System.out.println("The Go file has been executed successfully !");
-      } else {
-        System.err.println("Error while executing the Go file. Exit code : " + exitCode);
-      }
+      process.waitFor();
     } catch (IOException | InterruptedException ex) {
       ex.printStackTrace();
+      Thread.currentThread().interrupt();
     }
   }
 
@@ -76,8 +69,7 @@ public class ActionRunSimulation   {
 
      input.close();
 
-     Boolean processFound = procs.stream().filter(row -> row.indexOf(findProcess) > -1).count() > 0;
-     return processFound;
+     return procs.stream().filter(row -> row.indexOf(findProcess) > -1).count() > 0;
    } catch (IOException ex) {
      ex.printStackTrace();
      return false;

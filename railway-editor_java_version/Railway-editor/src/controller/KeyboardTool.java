@@ -25,7 +25,7 @@ public class KeyboardTool implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		if ((int) e.getKeyCode() == KeyEvent.VK_H) {
+		if (e.getKeyCode() == KeyEvent.VK_H) {
 			mainPanel.setHideHud(!mainPanel.isHideHud());
 			mainPanel.repaint();
 		}

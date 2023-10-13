@@ -1,7 +1,7 @@
 package controller;
 
-import Model.*;
-import Model.Event;
+import model.*;
+import model.Event;
 import data.Data;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -19,7 +19,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -343,7 +342,7 @@ public class ActionFile {
         timeEnd = timeEnd.replace("_", "T");
         timeEnd = timeEnd+":00.000Z";
 
-        Element eventName = document.createElement(event.EVENT_NAME);
+        Element eventName = document.createElement(event.eventName);
         events.appendChild(eventName);
         Element eventStart = document.createElement("start");
         eventStart.appendChild(document.createTextNode(timeStart));
@@ -353,7 +352,7 @@ public class ActionFile {
         eventEnd.appendChild(document.createTextNode(timeEnd));
         eventName.appendChild(eventEnd);
 
-        switch (event.EVENT_NAME) {
+        switch (event.eventName) {
           case "lineDelay":
             EventLineDelay eventLineDelay = (EventLineDelay) event;
 
@@ -371,7 +370,7 @@ public class ActionFile {
             eventName.appendChild(delay);
             break;
 
-          case "lineClose":
+          case "lineClosed":
             EventLineClosed eventLineClosed = (EventLineClosed) event;
 
             Element stationStartClosed = document.createElement("stationIdStart");

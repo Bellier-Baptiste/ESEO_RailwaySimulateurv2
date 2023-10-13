@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 public class EventStationClosed extends Event{
 	private int idStation;
@@ -10,7 +10,7 @@ public class EventStationClosed extends Event{
 	 */
 	public EventStationClosed(int id, String startTime, String endTime, EventType type) {
 		super(id, startTime, endTime, type);
-		this.EVENT_NAME = "stationClosed";
+		this.eventName = "stationClosed";
 	}
 
 	/**get the id of the station concerned by the peak.

@@ -18,18 +18,14 @@ public class MainWindow extends JFrame {
 	// constantes
 	public static final int WINDOW_WIDTH = 1000;
 	public static final int WINDOW_HEIGHT = 600;
-	private final String TITLE = "Railway-editor";
-  private boolean isDarkMode = true;
-	
+	private static final String TITLE = "Railway-editor";
+
 	// attributes
 	private static MainWindow instance;
 	private MainPanel mainPanel;
   private ToolBarPanelIdea2 toolBarPanelIdea2;
 	private EventRecap eventRecapPanel;
-	public boolean intro = true;
-	private JMenuBar menuBar;
-//  private FilterComboBox filterComboBox;
-//  private JPanel filterComboPanel;
+	private JMenuBar appMenuBar;
 
 	/**
 	 * Constructor, initialize window and panels
@@ -40,7 +36,6 @@ public class MainWindow extends JFrame {
 		this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 		this.setTitle(TITLE);
     this.setLocationRelativeTo(null);
-		//this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     KeyboardTool  kbt  =new KeyboardTool(this.getMainPanel());
     this.addKeyListener(kbt);
 
@@ -48,8 +43,8 @@ public class MainWindow extends JFrame {
     this.getContentPane().add(this.mainPanel,
         BorderLayout.CENTER);
 
-		this.menuBar = MenuBar.getInstance(this, this.mainPanel);
-		this.setJMenuBar(this.menuBar);
+		this.appMenuBar = MenuBar.getInstance();
+		this.setJMenuBar(this.appMenuBar);
 
 		this.toolBarPanelIdea2 = new ToolBarPanelIdea2();
     this.toolBarPanelIdea2.setVisible(true);
@@ -70,7 +65,7 @@ public class MainWindow extends JFrame {
 		}
 
     this.pack();
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.mainPanel.requestFocusInWindow();
   }
 

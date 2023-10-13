@@ -4,7 +4,7 @@
 
 package controller;
 
-import Model.Station;
+import model.Station;
 import data.Data;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import view.LineView;

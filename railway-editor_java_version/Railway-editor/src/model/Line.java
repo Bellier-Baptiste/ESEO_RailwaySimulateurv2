@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 import java.awt.Color;
 import java.util.List;
@@ -23,8 +23,7 @@ public class Line {
 	public Line(int id, List<Station> stations) {
 		super();
 		this.id = id;
-		Data.getInstance();
-		this.color = Data.getLinesColors()[id];
+		this.color = Data.getInstance().getLinesColors()[id];
 		this.stations = stations;
 	}
 	
