@@ -1,32 +1,36 @@
 /*
- * File : advancedConfig.go
- * Brief :
- * Date : N/A
- * Author : N/A, Paul TRÉMOUREUX (quality check)
- * License : MIT License
- *
- * Copyright (c) 2023 Équipe PFE_2023_16
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *
- */
+Package configs
 
+File : advancedConfig.go
+
+Brief :
+
+Date : N/A
+
+Author : Team v2, Paul TRÉMOUREUX (quality check)
+
+License : MIT License
+
+Copyright (c) 2023 Équipe PFE_2023_16
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 package configs
 
 import (
@@ -155,6 +159,12 @@ func closeConfigFile(xmlFile *os.File) error {
 	return err
 }
 
+/*
+*
+loadXML
+Open the mag configuration file that will be used.
+This file is a xml.
+*/
 func (aConfig *AdvancedConfig) loadXML(filename string) error {
 	// open XML file
 	fmt.Println("loading advanced config...")
@@ -307,10 +317,14 @@ func (aConfig *AdvancedConfig) CheckRelationsLines() error {
 }
 
 /*
-CheckRelations
+CheckRelations verify that the relations (stations <-> lines) are good, e.g.
+they don't refer to a non-existing id
 
-Verify that the relations (stations <-> lines) are good, e.g. they don't
-refer to a non-existing id
+Input :
+aConfig *AdvancedConfig
+
+Output :
+err error
 */
 func (aConfig *AdvancedConfig) CheckRelations() error {
 	//TODO verify line € station <=> station € line
@@ -325,16 +339,16 @@ func (aConfig *AdvancedConfig) CheckRelations() error {
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	return err
 }
 
 /*
-Reattribute IDs so they all start at 0 and don't have any missing number.
+ReattributeIdsStationGoodEvents
+
+IDs so they all start at 0 and don't have any missing number.
 we do this because the run part uses the Ids to search in arrays, but it's a
 hassle for the user to check in the xml
 */
-
 func (aConfig *AdvancedConfig) ReattributeIdsStationGoodEvents(previousId,
 	newId int) {
 	for i := range aConfig.MapC.EventsStationClosed {

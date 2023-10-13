@@ -1,3 +1,34 @@
+/*
+File : config.go
+
+Brief :
+
+Date : N/A
+
+Author : Team v2, Paul TRÉMOUREUX (quality check)
+
+License : MIT License
+
+Copyright (c) 2023 Équipe PFE_2023_16
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 package configs
 
 import (
@@ -130,7 +161,8 @@ func (c ConfigurationObject) PopulationChildrenProportion() float64 {
 }
 
 func (c ConfigurationObject) MorningCommuteTime() time.Duration {
-	duration, error := time.ParseDuration(string(config["morning commute time"].(string)))
+	duration, error := time.ParseDuration(string(config["morning commute "+
+		"time"].(string)))
 	if error != nil {
 		log.Fatal(error, "could not parse morning commute time")
 	}
@@ -138,7 +170,8 @@ func (c ConfigurationObject) MorningCommuteTime() time.Duration {
 }
 
 func (c ConfigurationObject) EveningCommuteTime() time.Duration {
-	duration, error := time.ParseDuration(string(config["evening commute time"].(string)))
+	duration, error := time.ParseDuration(string(config["evening commute "+
+		"time"].(string)))
 	if error != nil {
 		log.Fatal(error, "could not parse evening commute time")
 	}
@@ -146,7 +179,8 @@ func (c ConfigurationObject) EveningCommuteTime() time.Duration {
 }
 
 func (c ConfigurationObject) CommutePeriodDuration() time.Duration {
-	duration, error := time.ParseDuration(string(config["commute period duration"].(string)))
+	duration, error := time.ParseDuration(string(config["commute period "+
+		"duration"].(string)))
 	if error != nil {
 		log.Fatal(error, "could not parse commute duration")
 	}
@@ -170,7 +204,8 @@ func (c *ConfigurationObject) ChangeParam(paramName string, value interface{}) {
 }
 
 func (c *ConfigurationObject) GetMaxTimeInStationPassenger() time.Duration {
-	return time.Second * time.Duration(c.getAsInt("passenger max waiting time before exit"))
+	return time.Second * time.Duration(c.getAsInt("passenger max "+
+		"waiting time before exit"))
 }
 
 // functions & methods
@@ -202,7 +237,8 @@ func GetInstance() ConfigurationObject {
 		basePath = strings.Replace(basePath, "src\\simulator", "", -1)
 		basePath = strings.Replace(basePath, "src\\tools", "", -1)
 		configPath = filepath.Join(basePath, projectPath, "configs/config.json")
-		stationsPath = filepath.Join(basePath, projectPath, "configs/nameStationList.json")
+		stationsPath = filepath.Join(basePath, projectPath,
+			"configs/nameStationList.json")
 		linesPath = filepath.Join(basePath, projectPath, "configs/nameLineList.json")
 
 		Load(configPath, stationsPath, linesPath)
@@ -219,7 +255,7 @@ func GetInstance() ConfigurationObject {
 	return config
 }
 
-func Load(configPath string, nameStationListPath string, nameLineListPath string) {
+func Load(configPath, nameStationListPath, nameLineListPath string) {
 
 	configFile, err := os.Open(configPath)
 	if err != nil {
@@ -243,7 +279,8 @@ func Load(configPath string, nameStationListPath string, nameLineListPath string
 
 	nameLineListFile, err := os.Open(nameLineListPath)
 	if err != nil {
-		log.Fatal(err, "error while reading config (4) - nameLineListPath open failed")
+		log.Fatal(err, "error while reading config (4) - nameLineListPath "+
+			"open failed")
 	}
 	nameLineListBytes, err := ioutil.ReadAll(nameLineListFile)
 	json.Unmarshal(nameLineListBytes, &nameLineList)
@@ -251,7 +288,8 @@ func Load(configPath string, nameStationListPath string, nameLineListPath string
 
 func (c *ConfigurationObject) Reload() {
 	configPath = filepath.Join(basePath, projectPath, "configs/config.json")
-	stationsPath = filepath.Join(basePath, projectPath, "configs/nameStationList.json")
+	stationsPath = filepath.Join(basePath, projectPath,
+		"configs/nameStationList.json")
 	linesPath = filepath.Join(basePath, projectPath, "configs/nameLineList.json")
 
 	Load(configPath, stationsPath, linesPath)
@@ -281,7 +319,8 @@ func (c ConfigurationObject) Check() (bool, error) {
 		isCorrect = false
 	}
 
-	if (config.PopulationRandomProportion() + config.PopulationCommutersProportion()) != 1 {
+	if (config.PopulationRandomProportion() +
+		config.PopulationCommutersProportion()) != 1 {
 		errMsg = errMsg + "The population proportions should be equal to one"
 		isCorrect = false
 	}
