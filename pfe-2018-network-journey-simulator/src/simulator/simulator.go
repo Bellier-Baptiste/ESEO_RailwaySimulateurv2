@@ -59,6 +59,9 @@ func (s *Simulator) GetAllEventsLineClosed() []models.EventLineClosed {
 	return s.eventsLineClosed
 }
 
+func (s *Simulator) GetAllEventsStationClosed() []models.EventStationClosed {
+	return s.eventsStationClosed
+}
 func (s *Simulator) GetAllEventsAttendancePeak() []models.EventAttendancePeak {
 	return s.eventsAttendancePeak
 }

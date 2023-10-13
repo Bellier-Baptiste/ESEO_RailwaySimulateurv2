@@ -161,6 +161,21 @@ func TestSimulator_EventLineClosed(t *testing.T) {
 	assert.Equal(t, elc_stationEnd, eventsLineClosed[0].IdStationEnd(), "Bad End station id")
 }
 
+func TestSimulator_EventStationClosed(t *testing.T) {
+	println("TestSimulator_EventStationClosed")
+	sim := NewSimulator()
+	sim.Init("working day")
+	eventsStationClosed := sim.GetAllEventsStationClosed()
+
+	//	println("len : ", len(eventsStationClosed))
+
+	assert.True(t, (len(eventsStationClosed) != 0), "Array of events (station closed) not initialized")
+
+	assert.Equal(t, timeStart, eventsStationClosed[0].Start().Format(time.RFC3339), "Bad Start time")
+	assert.Equal(t, timeEnd, eventsStationClosed[0].End().Format(time.RFC3339), "Bad End time")
+	assert.Equal(t, 2, eventsStationClosed[0].IdStation(), "Bad station id")
+}
+
 func TestSimulator_EventAttendancePeak(t *testing.T) {
 	println("TestSimulator_EventAttendancePeak")
 	sim := NewSimulator()
