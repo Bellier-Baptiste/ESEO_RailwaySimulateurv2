@@ -1,11 +1,12 @@
 package controller;
 
+/** Enum of the event names. */
 public enum EventName {
-  LINE_DELAYED("LINE_DELAYED"),
-  LINE_CLOSED("LINE_CLOSED"),
-  ATTENDANCE_PEAK("ATTENDANCE_PEAK"),
-  TRAIN_HOUR("TRAIN_HOUR"),
-  STATION_CLOSED("STATION_CLOSED");
+  LINE_DELAYED("lineDelay"),
+  LINE_CLOSED("lineClosed"),
+  ATTENDANCE_PEAK("attendancePeak"),
+  TRAIN_HOUR("hour"),
+  STATION_CLOSED("stationClosed");
 
   private final String valeur;
 

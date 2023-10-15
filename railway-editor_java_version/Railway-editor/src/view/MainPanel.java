@@ -39,7 +39,7 @@ public final class MainPanel extends JMapViewer {
    */
   private static MainPanel instance;
   /** MainPanel HUD. */
-  private final transient MainPanelHUD mainPanelHud;
+  private final transient MainPanelHud mainPanelHud;
   /** List of lineViews. */
   private transient List<LineView> lineViews;
   /** List of areaViews. */
@@ -60,7 +60,7 @@ public final class MainPanel extends JMapViewer {
     addMouseMotionListener(ma);
     addMouseWheelListener(ma);
     addMouseListener(ma);
-    mainPanelHud = new MainPanelHUD(0, 650);
+    mainPanelHud = new MainPanelHud(0, 650);
     this.hideHud = false;
     Coordinate point = new Coordinate(47.46667, -0.55);
     this.setDisplayPosition(point, 0);
@@ -138,7 +138,7 @@ public final class MainPanel extends JMapViewer {
    *
    * @return mainPanelHud
    */
-  public MainPanelHUD getMainPanelHud() {
+  public MainPanelHud getMainPanelHud() {
     return mainPanelHud;
   }
 

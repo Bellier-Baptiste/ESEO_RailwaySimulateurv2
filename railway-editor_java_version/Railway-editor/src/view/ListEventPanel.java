@@ -28,6 +28,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Properties;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -78,7 +79,7 @@ public final class ListEventPanel extends JPanel {
   /** default panel height. */
   public static final int PANEL_HEIGHT_DEFAULT = 750;
   /** list event panel column names. */
-  private static final String[] COLUNMN_NAMES = {"Event Name", "Type",
+  private static final String[] COLUMN_NAMES = {"Event Name", "Type",
       "Event Description"};
 
   /** list event panel table data. */
@@ -172,7 +173,7 @@ public final class ListEventPanel extends JPanel {
    * init available table elements.
    */
   public void initComponent() {
-    JXTable table = new JXTable(TABLE_DATA, COLUNMN_NAMES);
+    JXTable table = new JXTable(TABLE_DATA, COLUMN_NAMES);
     table.setDefaultEditor(Object.class, null);
     table.setPreferredSize(new Dimension(600, 100));
     table.getColumn("Type").setMaxWidth(50);
@@ -293,8 +294,8 @@ public final class ListEventPanel extends JPanel {
     JLabel stationStart = new JLabel("id StationStart: ");
     editStationStart = new JTextField();
     try {
-      BufferedImage btnImg = ImageIO.read(getClass().getResource(
-          SELECTION_PNG_PATH));
+      BufferedImage btnImg = ImageIO.read(Objects.requireNonNull(getClass()
+          .getResource(SELECTION_PNG_PATH)));
       Image scaled = btnImg.getScaledInstance(15, 15,
           java.awt.Image.SCALE_SMOOTH);
       ImageIcon icon = new ImageIcon(scaled);
@@ -450,8 +451,9 @@ public final class ListEventPanel extends JPanel {
     JLabel stationStart = new JLabel("id StationStart: ");
     editStationStart = new JTextField();
     try {
-      BufferedImage btnImg = ImageIO.read(getClass().getResource(
-          SELECTION_PNG_PATH));
+      BufferedImage btnImg =
+          ImageIO.read(Objects.requireNonNull(getClass()
+              .getResource(SELECTION_PNG_PATH)));
       Image scaled = btnImg.getScaledInstance(15, 15,
           java.awt.Image.SCALE_SMOOTH);
       ImageIcon icon = new ImageIcon(scaled);
@@ -591,8 +593,8 @@ public final class ListEventPanel extends JPanel {
     JLabel stationConcerned = new JLabel("Id station concerned: ");
     editStationConcerned = new JTextField();
     try {
-      BufferedImage btnImg = ImageIO.read(getClass().getResource(
-          SELECTION_PNG_PATH));
+      BufferedImage btnImg = ImageIO.read(Objects.requireNonNull(getClass()
+          .getResource(SELECTION_PNG_PATH)));
       Image scaled = btnImg.getScaledInstance(15, 15,
           java.awt.Image.SCALE_SMOOTH);
       ImageIcon icon = new ImageIcon(scaled);
@@ -723,8 +725,8 @@ public final class ListEventPanel extends JPanel {
     JLabel stationConcerned = new JLabel("id StationConcerned: ");
     editStationClosedConcerned = new JTextField();
     try {
-      BufferedImage btnImg = ImageIO.read(getClass().getResource(
-          SELECTION_PNG_PATH));
+      BufferedImage btnImg = ImageIO.read(Objects.requireNonNull(getClass()
+          .getResource(SELECTION_PNG_PATH)));
       Image scaled = btnImg.getScaledInstance(15, 15,
           java.awt.Image.SCALE_SMOOTH);
       ImageIcon icon = new ImageIcon(scaled);

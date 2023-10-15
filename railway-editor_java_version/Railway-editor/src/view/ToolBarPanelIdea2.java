@@ -53,12 +53,6 @@ public class ToolBarPanelIdea2 extends JToolBar {
   private FilterComboBox filterComboBox;
 
   /**
-   * Event window to add some event to the network.
-   */
-  private EventWindow eventWindow;
-
-
-  /**
    * ToolBarPanelIdea2's constructor.
    */
   public ToolBarPanelIdea2() {
@@ -281,7 +275,8 @@ public class ToolBarPanelIdea2 extends JToolBar {
     runSimulationPanel.setBorder(runSimulationPanelBorder);
     JButton runSimulationBtn = new JButton("RUN");
     runSimulationBtn.setName(ActionRunSimulation.ACTION_NAME);
-    runSimulationBtn.addActionListener(e -> ActionRunSimulation.getInstance().runSimulation());
+    runSimulationBtn.addActionListener(e -> ActionRunSimulation.getInstance()
+        .runSimulation());
     runSimulationBtn.setFocusable(false);
     runSimulationBtn.setPreferredSize(new Dimension(80, 30));
 
@@ -295,12 +290,5 @@ public class ToolBarPanelIdea2 extends JToolBar {
     this.add(eventPanel);
     this.add(destinationPanel);
     this.add(runSimulationPanel);
-  }
-
-  /**
-   * Hides the event window.
-   */
-  public void hideEventWindow() {
-    eventWindow.setVisible(false);
   }
 }

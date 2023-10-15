@@ -1,16 +1,15 @@
 package view;
 
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.function.Consumer;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
 /**
- * Popup to inform an imminent merge
+ * Popup to inform an imminent merge.
  *
  * @author arthu
  */
@@ -24,13 +23,14 @@ public class Popup {
     title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
     JPanel panel = new JPanel(new GridLayout(0, 1));
     panel.add(title);
-    String messageAide = "you are about to merge station close this dialog box \n" +
-      " and select the second station  you want to merge";
-    jp = JOptionPane.showConfirmDialog(panel, messageAide, "press cancel to abort the operation", JOptionPane.OK_CANCEL_OPTION);
+    String messageAide = "you are about to merge station close this "
+        + "dialog box \nand select the second station  you want to merge";
+    jp = JOptionPane.showConfirmDialog(panel, messageAide,
+        "press cancel to abort the operation", JOptionPane.OK_CANCEL_OPTION);
   }
 
   /**
-   * get the JoptionPane
+   * get the JoptionPane.
    *
    * @return JoptionPane jp
    */
@@ -40,7 +40,7 @@ public class Popup {
 
 
   /**
-   * get the user's choice
+   * get the user's choice.
    *
    * @return int choice
    */
@@ -49,7 +49,7 @@ public class Popup {
   }
 
   /**
-   * set the user choice
+   * set the user choice.
    *
    * @param choice ok or cancel
    */
@@ -57,7 +57,12 @@ public class Popup {
     this.choice = choice;
   }
 
-  public void setObserver(Consumer<Object> observer) { // Setter pour le Consumer
+  /**
+   * set the observer.
+   *
+   * @param observer observer
+   */
+  public void setObserver(Consumer<Object> observer) {
     this.observer = observer;
   }
 

@@ -1,61 +1,28 @@
+/** Class part of the model package of the application. */
+
 package model;
 
+import controller.EventName;
+
 /**
- *Model class extendig event which describes the closing of a line portion.
- * @author arthu
+ * Model class extends EventBetween2Lines which describes the closing of a line
+ * portion.
  *
+ * @author Arthur Lagarce, Aurélie Chamouleau
  */
-public class EventLineClosed extends Event {
-	
+public class EventLineClosed extends EventBetween2Stations {
 
-	private int idStationStart;
-	private int idStationEnd;
-	
-	
-	/** Constructor.
-	 * @param startTime event startTime
-	 * @param endTime event endTime
-	 * @param type event eventType
-	 */
-	public EventLineClosed(int id, String startTime, String endTime, EventType type) {
-		super(id, startTime, endTime, type);
-		this.eventName = "lineClosed";
-	}
-
-
-	/** get the id of the starting station.
-	 * @return int idStationStart
-	 */
-	public int getIdStationStart() {
-		return idStationStart;
-	}
-
-	/** set the if of the starting station.
-	 * @param idStationStart event stationStart id
-	 */
-	public void setIdStationStart(int idStationStart) {
-		this.idStationStart = idStationStart;
-	}
-
-	/**
-	 * get the id of the ending station.
-	 * @return the id of the ending station
-	 */
-	public int getIdStationEnd() {
-		return idStationEnd;
-	}
-
-	/**
-	 * set the id of the ending station.
-	 * @param idStationEnd event stationEnd id
-	 */
-	public void setIdStationEnd(int idStationEnd) {
-		this.idStationEnd = idStationEnd;
-	}
-	
-	
-	
-
-
-
+  /**
+   * Constructor.
+   *
+   * @param id        event id
+   * @param startTime event startTime
+   * @param endTime   event endTime
+   * @param type      event eventType
+   */
+  public EventLineClosed(final int id, final String startTime,
+                         final String endTime, final EventType type) {
+    super(id, startTime, endTime, type);
+    super.setEventName(EventName.LINE_CLOSED);
+  }
 }

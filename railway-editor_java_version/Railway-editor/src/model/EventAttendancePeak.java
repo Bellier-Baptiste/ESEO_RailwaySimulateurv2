@@ -1,52 +1,65 @@
 package model;
 
+import controller.EventName;
+
 /**
- * Model class extending event which describes an attendance peak on a station. 
- * @author arthu
+ * Model class extending event which describes an attendance peak on a station.
  *
+ * @author arthu
  */
 public class EventAttendancePeak extends Event {
 
-	private int idStation;
-	private int size;
-	
-	/**Constructor.
-	 * @param startTime event startTime
-	 * @param endTime event endTime
-	 * @param type eventType
-	 */
-	public EventAttendancePeak(int id, String startTime, String endTime, EventType type) {
-		super(id, startTime, endTime, type);
-		this.eventName = "attendancePeak";
-	}
+  private int idStation;
+  private int size;
 
-	/**get the id of the station concerned by the peak.
-	 * @return int id
-	 */
-	public int getIdStation() {
-		return idStation;
-	}
+  /**
+   * Constructor.
+   *
+   * @param startTime event startTime
+   * @param endTime   event endTime
+   * @param type      eventType
+   */
+  public EventAttendancePeak(int id, String startTime, String endTime,
+                             EventType type) {
+    super(id, startTime, endTime, type);
+    super.setEventName(EventName.ATTENDANCE_PEAK);
+  }
 
-	/**set the id of the station concerned.
-	 * @param idStation id station concerned by the peak
-	 */
-	public void setIdStation(int idStation) {
-		this.idStation = idStation;
-	}
+  /**
+   * get the id of the station concerned by the peak.
+   *
+   * @return int id
+   */
+  public int getIdStation() {
+    return idStation;
+  }
 
-	/** get the peak size.
-	 * @return int size
-	 */
-	public int getSize() {
-		return size;
-	}
+  /**
+   * set the id of the station concerned.
+   *
+   * @param idStation id station concerned by the peak
+   */
+  public void setIdStation(int idStation) {
+    this.idStation = idStation;
+  }
 
-	/** set the peak size.
-	 * @param size size of the peak
-	 */
-	public void setSize(int size) {
-		this.size = size;
-	}
-	
-	
+  /**
+   * get the peak size.
+   *
+   * @return int size
+   */
+  public int getSize() {
+    return size;
+  }
+
+  /**
+   * set the peak size.
+   *
+   * @param size size of the peak
+   */
+  public void setSize(int size) {
+    this.size = size;
+  }
+
+
 }

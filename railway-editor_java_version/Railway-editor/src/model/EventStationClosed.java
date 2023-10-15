@@ -1,31 +1,43 @@
 package model;
 
-public class EventStationClosed extends Event{
-	private int idStation;
-	
-	/**Constructor.
-	 * @param startTime event startTime
-	 * @param endTime event endTime
-	 * @param type eventType
-	 */
-	public EventStationClosed(int id, String startTime, String endTime, EventType type) {
-		super(id, startTime, endTime, type);
-		this.eventName = "stationClosed";
-	}
+import controller.EventName;
 
-	/**get the id of the station concerned by the peak.
-	 * @return int id
-	 */
-	public int getIdStation() {
-		return idStation;
-	}
+/**
+ * Model class extending event which describes a station closing.
+ */
+public class EventStationClosed extends Event {
+  private int idStation;
 
-	/**set the id of the station concerned.
-	 * @param idStation id station concerned by the peak
-	 */
-	public void setIdStation(int idStation) {
-		this.idStation = idStation;
-	}
+  /**
+   * Constructor.
+   *
+   * @param startTime event startTime
+   * @param endTime   event endTime
+   * @param type      eventType
+   */
+  public EventStationClosed(int id, String startTime, String endTime,
+                            EventType type) {
+    super(id, startTime, endTime, type);
+    super.setEventName(EventName.STATION_CLOSED);
+  }
+
+  /**
+   * get the id of the station concerned by the peak.
+   *
+   * @return int id
+   */
+  public int getIdStation() {
+    return idStation;
+  }
+
+  /**
+   * set the id of the station concerned.
+   *
+   * @param idStation id station concerned by the peak
+   */
+  public void setIdStation(int idStation) {
+    this.idStation = idStation;
+  }
 
 
 }
