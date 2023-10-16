@@ -1,30 +1,26 @@
+/**
+ * Class part of the controller package of the application.
+ */
+
 package controller;
 
-import model.Line;
 import view.LineView;
 import view.MainWindow;
 
 /**
- * Controlller to add lineView to the mainPanel.
- * @author arthu
+ * Controller to add lineView to the mainPanel.
  *
+ * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class LineController {
-	
-	//attributes
-	Line line;
-	LineView lineview;
-	
-	//constructor
-	/**Construcor add lineView to the MainPanel.
-	 * @param line line to add
-	 * @param lineview lineView binded to line
-	 */
-	public LineController(Line line, LineView lineview) {
-		this.line = line;
-		this.lineview = lineview;
-		MainWindow.getInstance().getMainPanel().addLineView(lineview);
-	}
-	
-	
+  //attributes
+
+  /**
+   * Constructor add lineView to the MainPanel.
+   *
+   * @param lineViewToAdd lineView bound to line
+   */
+  public LineController(final LineView lineViewToAdd) {
+    MainWindow.getInstance().getMainPanel().addLineView(lineViewToAdd);
+  }
 }

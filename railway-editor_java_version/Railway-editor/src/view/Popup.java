@@ -1,3 +1,5 @@
+/** Class part of the view package of the application. */
+
 package view;
 
 import javax.swing.JLabel;
@@ -14,13 +16,18 @@ import java.util.function.Consumer;
  * @author arthu
  */
 public class Popup {
+  /** Font size. */
+  private static final int FONT_SIZE = 14;
+  /** JOptionPane jp. */
   private static int jp;
+  /** user choice. */
   private int choice;
+  /** observer. */
   private Consumer<Object> observer;
 
   private static void display() {
     JLabel title = new JLabel("Station merge");
-    title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+    title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, FONT_SIZE));
     JPanel panel = new JPanel(new GridLayout(0, 1));
     panel.add(title);
     String messageAide = "you are about to merge station close this "
@@ -51,19 +58,19 @@ public class Popup {
   /**
    * set the user choice.
    *
-   * @param choice ok or cancel
+   * @param choiceToSet ok or cancel
    */
-  public void setChoice(int choice) {
-    this.choice = choice;
+  public void setChoice(final int choiceToSet) {
+    this.choice = choiceToSet;
   }
 
   /**
    * set the observer.
    *
-   * @param observer observer
+   * @param observerToSet observer
    */
-  public void setObserver(Consumer<Object> observer) {
-    this.observer = observer;
+  public void setObserver(final Consumer<Object> observerToSet) {
+    this.observer = observerToSet;
   }
 
   /**

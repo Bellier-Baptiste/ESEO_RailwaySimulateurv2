@@ -1,3 +1,5 @@
+/** Class part of the model package of the application. */
+
 package model;
 
 import controller.EventName;
@@ -9,18 +11,21 @@ import controller.EventName;
  * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class EventHour extends Event {
-
+  /** Line id. */
   private int idLine;
+  /** Number of trains to add. */
   private int trainNumber;
 
   /**
    * Constructor.
    *
+   * @param id        event id
    * @param startTime event startTime
    * @param endTime   event endTime
    * @param type      event eventType
    */
-  public EventHour(int id, String startTime, String endTime, EventType type) {
+  public EventHour(final int id, final String startTime, final String endTime,
+                   final EventType type) {
     super(id, startTime, endTime, type);
     super.setEventName(EventName.TRAIN_HOUR);
   }
@@ -37,10 +42,10 @@ public class EventHour extends Event {
   /**
    * set the id of the line concerned.
    *
-   * @param idLine id of the line concerned
+   * @param eventIdLine id of the line concerned
    */
-  public void setIdLine(int idLine) {
-    this.idLine = idLine;
+  public void setIdLine(final int eventIdLine) {
+    this.idLine = eventIdLine;
   }
 
   /**
@@ -55,10 +60,10 @@ public class EventHour extends Event {
   /**
    * set the new train number.
    *
-   * @param trainNumber new number of train
+   * @param eventTrainNumber new number of train
    */
-  public void setTrainNumber(int trainNumber) {
-    this.trainNumber = trainNumber;
+  public void setTrainNumber(final int eventTrainNumber) {
+    this.trainNumber = eventTrainNumber;
   }
 
 

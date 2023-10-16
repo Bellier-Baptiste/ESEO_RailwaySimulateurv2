@@ -1,3 +1,5 @@
+/** Class part of the view package of the application. */
+
 package view;
 
 import model.Line;
@@ -13,23 +15,31 @@ import java.util.List;
  * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class LineView {
-
+  // constants
+  /** Stroke width. */
+  private static final int STROKE_WIDTH = 5;
+  /** Stroke miterlimit. */
+  private static final int STROKE_MITERLIMIT = 5;
   // attributes
+  /** Line bound to the view. */
   private Line line;
+  /** StationsViews of the lineView. */
   private List<StationView> stationViews;
+  /** Stroke of the line. */
   private Stroke stroke;
 
   /**
    * Constructor.
    *
-   * @param line         line to bind to the view
-   * @param stationViews stationsViews of the lineView
+   * @param lineBound         line to bind to the view
+   * @param lineStationViews stationsViews of the lineView
    */
-  public LineView(Line line, List<StationView> stationViews) {
-    this.line = line;
-    this.stationViews = stationViews;
-    this.stroke = new BasicStroke(5, BasicStroke.CAP_SQUARE,
-        BasicStroke.JOIN_ROUND, 5);
+  public LineView(final Line lineBound,
+                  final List<StationView> lineStationViews) {
+    this.line = lineBound;
+    this.stationViews = lineStationViews;
+    this.stroke = new BasicStroke(STROKE_WIDTH, BasicStroke.CAP_SQUARE,
+        BasicStroke.JOIN_ROUND, STROKE_MITERLIMIT);
   }
 
   // accessors
@@ -46,18 +56,28 @@ public class LineView {
   /**
    * line a model line to this view.
    *
-   * @param line line to bind
+   * @param lineBound line to bind
    */
-  public void setLine(Line line) {
-    this.line = line;
+  public void setLine(final Line lineBound) {
+    this.line = lineBound;
   }
 
+  /**
+   * get the stationsViews of the lineView.
+   *
+   * @return List of stationsViews of the lineView
+   */
   public List<StationView> getStationViews() {
-    return stationViews;
+    return this.stationViews;
   }
 
-  public void setStationViews(List<StationView> stationViews) {
-    this.stationViews = stationViews;
+  /**
+   * set the stationsViews of the lineView.
+   *
+   * @param lineStationViews stationsViews of the line
+   */
+  public void setStationViews(final List<StationView> lineStationViews) {
+    this.stationViews = lineStationViews;
   }
 
 
@@ -68,7 +88,7 @@ public class LineView {
    *
    * @param g2D graphics component
    */
-  public void affiche(Graphics2D g2D) {
+  public void show(final Graphics2D g2D) {
     //x and y point array creation
     int[] pointsX = new int[this.stationViews.size()];
     int[] pointsY = new int[this.stationViews.size()];
@@ -89,17 +109,17 @@ public class LineView {
     }
     //draw the station (g2D.drawCircle)
     for (StationView stationView : stationViews) {
-      stationView.affiche(g2D, this.line.getColor());
+      stationView.show(g2D, this.line.getColor());
     }
   }
 
   /**
    * set line Stroke.
    *
-   * @param stroke stroke
+   * @param lineStroke stroke
    */
-  public void setStroke(Stroke stroke) {
-    this.stroke = stroke;
+  public void setStroke(final Stroke lineStroke) {
+    this.stroke = lineStroke;
   }
 
 }

@@ -1,3 +1,5 @@
+/** Class part of the model package of the application. */
+
 package model;
 
 import data.Data;
@@ -18,40 +20,58 @@ import java.util.Random;
  * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class Area {
+  /** Area opacity. */
+  public static final float AREA_OPACITY = 0.5f;
+  /** One hundred percent. */
+  public static final int ONE_HUNDRED = 100;
+  /** Area X position. */
   private int posX;
+  /** Area Y position. */
   private int posY;
+  /** Area id. */
   private int id;
+  /** Area width. */
   private int width;
+  /** Area height. */
   private int height;
+  /** Area distribution. */
   private HashMap<String, Integer> distribution;
+  /** Area distribution keys. */
   private List<String> distributionKey;
+  /** Area color. */
   private Color color;
+  /** Area destination. */
   private String destination;
 
   //top left corner
+  /** Area top left corner latitude. */
   private double latitudeTop;
+  /** Area top left corner longitude. */
   private double longitudeTop;
 
   //bottom right corner
+  /** Area bottom right corner latitude. */
   private double latitudeBot;
+  /** Area bottom right corner longitude. */
   private double longitudeBot;
 
 
   /**
-   * Constructor.
+   * Area constructor.
    *
-   * @param id     area id
-   * @param posX   area positionX
-   * @param posY   area positionY
-   * @param width  area width
-   * @param height area height
+   * @param idToSet     area id
+   * @param areaPosX   area positionX
+   * @param areaPosY   area positionY
+   * @param areaWidth  area Width
+   * @param areaHeight area height
    */
-  public Area(int id, int posX, int posY, int width, int height) {
+  public Area(final int idToSet, final int areaPosX, final int areaPosY,
+              final int areaWidth, final int areaHeight) {
     super();
-    this.posX = posX;
-    this.posY = posY;
-    this.width = width;
-    this.height = height;
+    this.posX = areaPosX;
+    this.posY = areaPosY;
+    this.width = areaWidth;
+    this.height = areaHeight;
     this.distribution = new HashMap<>();
     this.distributionKey = new ArrayList<>();
 
@@ -73,7 +93,7 @@ public class Area {
     float r = rand.nextFloat();
     float g = rand.nextFloat();
     float b = rand.nextFloat();
-    this.color = new Color(r, g, b, 0.5f);
+    this.color = new Color(r, g, b, AREA_OPACITY);
   }
 
 
@@ -90,10 +110,10 @@ public class Area {
   /**
    * setter of id.
    *
-   * @param id areaId
+   * @param idToSet areaId
    */
-  public void setId(int id) {
-    this.id = id;
+  public void setId(final int idToSet) {
+    this.id = idToSet;
   }
 
 
@@ -110,10 +130,10 @@ public class Area {
   /**
    * setter of posX.
    *
-   * @param posX area positionX
+   * @param areaPosX area positionX
    */
-  public void setPosX(int posX) {
-    this.posX = posX;
+  public void setPosX(final int areaPosX) {
+    this.posX = areaPosX;
   }
 
 
@@ -130,10 +150,10 @@ public class Area {
   /**
    * setter of posY.
    *
-   * @param posY area positionY
+   * @param areaPosY area positionY
    */
-  public void setPosY(int posY) {
-    this.posY = posY;
+  public void setPosY(final int areaPosY) {
+    this.posY = areaPosY;
   }
 
 
@@ -150,10 +170,10 @@ public class Area {
   /**
    * setter for width.
    *
-   * @param width area width
+   * @param areaWidth area width
    */
-  public void setWidth(int width) {
-    this.width = width;
+  public void setWidth(final int areaWidth) {
+    this.width = areaWidth;
   }
 
 
@@ -170,10 +190,10 @@ public class Area {
   /**
    * setter for height.
    *
-   * @param height area height
+   * @param areaHeight area height
    */
-  public void setHeight(int height) {
-    this.height = height;
+  public void setHeight(final int areaHeight) {
+    this.height = areaHeight;
   }
 
 
@@ -191,10 +211,10 @@ public class Area {
   /**
    * setter for distribution.
    *
-   * @param distribution area distribution hashMap
+   * @param areaDistribution area distribution hashMap
    */
-  public void setDistribution(Map<String, Integer> distribution) {
-    this.distribution = (HashMap<String, Integer>) distribution;
+  public void setDistribution(final Map<String, Integer> areaDistribution) {
+    this.distribution = (HashMap<String, Integer>) areaDistribution;
   }
 
 
@@ -211,10 +231,10 @@ public class Area {
   /**
    * Setter for area color.
    *
-   * @param color area color
+   * @param areaColor area color
    */
-  public void setColor(Color color) {
-    this.color = color;
+  public void setColor(final Color areaColor) {
+    this.color = areaColor;
   }
 
 
@@ -231,10 +251,10 @@ public class Area {
   /**
    * setter for distributionKey.
    *
-   * @param distributionKey area keys of population types list
+   * @param areaDistributionKey area keys of population types list
    */
-  public void setDistributionKey(List<String> distributionKey) {
-    this.distributionKey = distributionKey;
+  public void setDistributionKey(final List<String> areaDistributionKey) {
+    this.distributionKey = areaDistributionKey;
   }
 
   /**
@@ -249,10 +269,10 @@ public class Area {
   /**
    * setter for the destination area.
    *
-   * @param destination area main destination
+   * @param areaDestination area main destination
    */
-  public void setDestination(String destination) {
-    this.destination = destination;
+  public void setDestination(final String areaDestination) {
+    this.destination = areaDestination;
   }
 
 
@@ -269,10 +289,10 @@ public class Area {
   /**
    * set latitude of the top left corner.
    *
-   * @param latitudeTop area top left corner latitude
+   * @param areaLatitudeTop area top left corner latitude
    */
-  public void setLatitudeTop(double latitudeTop) {
-    this.latitudeTop = latitudeTop;
+  public void setLatitudeTop(final double areaLatitudeTop) {
+    this.latitudeTop = areaLatitudeTop;
   }
 
 
@@ -289,10 +309,10 @@ public class Area {
   /**
    * set longitude of the top left corner.
    *
-   * @param longitudeTop area top-Left corner longitude
+   * @param areaLongitudeTop area top-Left corner longitude
    */
-  public void setLongitudeTop(double longitudeTop) {
-    this.longitudeTop = longitudeTop;
+  public void setLongitudeTop(final double areaLongitudeTop) {
+    this.longitudeTop = areaLongitudeTop;
   }
 
 
@@ -309,10 +329,10 @@ public class Area {
   /**
    * set Latitude of the bottom right corner.
    *
-   * @param latitudeBot area bottom-right corner latitude
+   * @param areaLatitudeBot area bottom-right corner latitude
    */
-  public void setLatitudeBot(double latitudeBot) {
-    this.latitudeBot = latitudeBot;
+  public void setLatitudeBot(final double areaLatitudeBot) {
+    this.latitudeBot = areaLatitudeBot;
   }
 
 
@@ -329,10 +349,10 @@ public class Area {
   /**
    * Set longitude of the bottom right corner.
    *
-   * @param longitudeBot area bottom-right corner longitude
+   * @param areaLongitudeBot area bottom-right corner longitude
    */
-  public void setLongitudeBot(double longitudeBot) {
-    this.longitudeBot = longitudeBot;
+  public void setLongitudeBot(final double areaLongitudeBot) {
+    this.longitudeBot = areaLongitudeBot;
   }
 
 
@@ -342,7 +362,7 @@ public class Area {
    * @param key  population type key to update
    * @param part new percentage
    */
-  public void setNewPart(String key, int part) {
+  public void setNewPart(final String key, final int part) {
     int total = 0;
     int checkedPart;
     for (String key2 : distributionKey) {
@@ -350,8 +370,8 @@ public class Area {
         total += distribution.get(key2);
       }
     }
-    if (total + part > 100) {
-      checkedPart = 100 - total;
+    if (total + part > ONE_HUNDRED) {
+      checkedPart = ONE_HUNDRED - total;
     } else {
       checkedPart = part;
     }
@@ -365,7 +385,7 @@ public class Area {
    * @param key  population type key to update
    * @param part new percentage
    */
-  public void addNewPart(String key, int part) {
+  public void addNewPart(final String key, final int part) {
     distribution.put(key, part);
   }
 
@@ -376,7 +396,7 @@ public class Area {
    * @param dx deltaX
    * @param dy deltaY
    */
-  public void moveArea(int dx, int dy) {
+  public void moveArea(final int dx, final int dy) {
     this.posX += dx;
     this.posY += dy;
     this.setPosX(this.posX);
@@ -400,7 +420,7 @@ public class Area {
    *
    * @param dx deltaX
    */
-  public void extendLeftSide(int dx) {
+  public void extendLeftSide(final int dx) {
     int rightX = this.posX + this.width;
     this.setPosX(this.posX + dx);
     this.setWidth(rightX - this.posX);
@@ -411,7 +431,7 @@ public class Area {
    *
    * @param dx deltaX
    */
-  public void extendRightSide(int dx) {
+  public void extendRightSide(final int dx) {
     this.setWidth(this.width + dx);
   }
 
@@ -420,7 +440,7 @@ public class Area {
    *
    * @param dy deltaY
    */
-  public void extendTopSide(int dy) {
+  public void extendTopSide(final int dy) {
     int botY = this.posY + this.height;
     this.setPosY(this.posY + dy);
     this.setHeight(botY - this.posY);
@@ -431,7 +451,7 @@ public class Area {
    *
    * @param dy delta y
    */
-  public void extendBotSide(int dy) {
+  public void extendBotSide(final int dy) {
     this.setHeight(this.height + dy);
   }
 

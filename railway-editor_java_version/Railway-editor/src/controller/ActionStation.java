@@ -4,8 +4,8 @@
 
 package controller;
 
-import model.Station;
 import data.Data;
+import model.Station;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import view.LineView;
 import view.MainWindow;
@@ -20,7 +20,18 @@ import java.util.Random;
 public final class ActionStation {
   /** Action name of the add button. */
   public static final String ACTION_NAME = "ADD_STATION";
-
+  /** Low bound for the random position of the station. */
+  private static final int LOW_BOUND = 10;
+  /** High bound for the random position of the station. */
+  private static final int HIGH_BOUND = 350;
+  /** X offset position of next station. */
+  private static final int X_OFFSET = 25;
+  /** Y offset position of next station. */
+  private static final int Y_OFFSET = 25;
+  /** Station size. */
+  public static final int STATION_SIZE = 18;
+  /** Center station size. */
+  public static final int CENTER_STATION_SIZE = 14;
   /** Singleton instance. */
   private static ActionStation instance;
 
@@ -58,8 +69,8 @@ public final class ActionStation {
       stationId += lineView.getStationViews().size();
     }
     // new first station Location
-    int low = 10;
-    int high = 350;
+    int low = LOW_BOUND;
+    int high = HIGH_BOUND;
     int x = this.rand.nextInt(high - low) + low;
     int y = this.rand.nextInt(high - low) + low;
 
@@ -78,9 +89,9 @@ public final class ActionStation {
     // if there are already stations on this line
     if (stationViews != null && !stationViews.isEmpty()) {
       stationX = stationViews.get(stationViews.size() - 1).getStation()
-          .getPosX() + 25;
+          .getPosX() + X_OFFSET;
       stationY = stationViews.get(stationViews.size() - 1).getStation()
-          .getPosY() + 25;
+          .getPosY() + Y_OFFSET;
     } else { // if is the first station for the line
       stationX = x;
       stationY = y;
@@ -99,8 +110,8 @@ public final class ActionStation {
     station.setLatitude(latLon.getLat());
     station.setLongitude(latLon.getLon());
 
-    int stationSize = 18;
-    int centerStationSize = 14;
+    int stationSize = STATION_SIZE;
+    int centerStationSize = CENTER_STATION_SIZE;
     // create stationView relative to this station
     StationView stationView = new StationView(station);
     stationView.setStationSize(stationSize);

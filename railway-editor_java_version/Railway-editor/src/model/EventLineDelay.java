@@ -1,3 +1,5 @@
+/** Class part of the model package of the application. */
+
 package model;
 
 import controller.EventName;
@@ -5,20 +7,22 @@ import controller.EventName;
 /**
  * Model class extending event which describes a delay between 2 stations.
  *
- * @author arthu
+ * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class EventLineDelay extends EventBetween2Stations {
+  /** Delay in minutes for attendance peak events. */
   private int delay;
 
   /**
    * Constructor.
    *
+   * @param id        event id
    * @param startTime event startTime
    * @param endTime   event endTime
    * @param type      event eventType
    */
-  public EventLineDelay(int id, String startTime, String endTime,
-                        EventType type) {
+  public EventLineDelay(final int id, final String startTime,
+                        final String endTime, final EventType type) {
     super(id, startTime, endTime, type);
     super.setEventName(EventName.LINE_DELAYED);
   }
@@ -35,9 +39,9 @@ public class EventLineDelay extends EventBetween2Stations {
   /**
    * set the delay.
    *
-   * @param delay event delay
+   * @param eventDelay event delay
    */
-  public void setDelay(int delay) {
-    this.delay = delay;
+  public void setDelay(final int eventDelay) {
+    this.delay = eventDelay;
   }
 }

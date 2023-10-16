@@ -1,3 +1,5 @@
+/** Class part of the controller package of the application. */
+
 package controller;
 
 import view.MainPanel;
@@ -6,32 +8,37 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
- * Class to handle the differents keyEvents on the MainPanel.
+ * Class to handle the different keyEvents on the MainPanel.
  *
 * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class KeyboardTool implements KeyListener {
-
-  MainPanel mainPanel;
+  /** Main panel of the application. */
+  private final MainPanel mainPanel;
 
   /**
    * Constructor.
    *
-   * @param mainPanel mainPanel of the app
+   * @param mainPanelToSet mainPanel of the app
    */
-  public KeyboardTool(MainPanel mainPanel) {
-    this.mainPanel = mainPanel;
+  public KeyboardTool(final MainPanel mainPanelToSet) {
+    this.mainPanel = mainPanelToSet;
   }
 
 
+  /**
+   * Invoked when a key has been pressed.
+   *
+   * @param e the event to be processed
+   *
+   * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+   */
   @Override
-  public void keyPressed(KeyEvent e) {
-
+  public void keyPressed(final KeyEvent e) {
     if (e.getKeyCode() == KeyEvent.VK_H) {
       mainPanel.setHideHud(!mainPanel.isHideHud());
       mainPanel.repaint();
     }
-
   }
 
   /**
@@ -40,7 +47,7 @@ public class KeyboardTool implements KeyListener {
    * @param e the event to be processed
    */
   @Override
-  public void keyReleased(KeyEvent e) {
+  public void keyReleased(final KeyEvent e) {
     // Does nothing cause mandatory to implement but not useful for us
   }
 
@@ -50,7 +57,7 @@ public class KeyboardTool implements KeyListener {
    * @param e the event to be processed
    */
   @Override
-  public void keyTyped(KeyEvent e) {
+  public void keyTyped(final KeyEvent e) {
     // Does nothing cause mandatory to implement but not useful for us
   }
 }

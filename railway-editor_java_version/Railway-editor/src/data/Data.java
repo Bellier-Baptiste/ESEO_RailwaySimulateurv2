@@ -21,7 +21,9 @@ import java.util.function.Consumer;
  * @author arthu
  */
 public final class Data {
-
+  // constants
+  /** Number of colors available for lines. */
+  public static final int NB_COLORS = 50;
   // attributes
   /** Observer of the data. */
   private Consumer<Object> observer;
@@ -114,7 +116,7 @@ public final class Data {
       "Sefalls", "Beybrook", "Hibrook", "Wywood", "Opton", "Baybluff", };
 
   /** List of all lines colors. */
-  private final Color[] lineColors = new Color[50];
+  private final Color[] lineColors = new Color[NB_COLORS];
   /** Random object to generate random colors. */
   private final Random rand = new Random();
 
@@ -174,7 +176,7 @@ public final class Data {
   }
 
   private void initLineColors() {
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < NB_COLORS; i++) {
       float r = rand.nextFloat();
       float g = rand.nextFloat();
       float b = rand.nextFloat();

@@ -1,3 +1,5 @@
+/** Class part of the view package of the application. */
+
 package view;
 
 import model.Station;
@@ -13,30 +15,58 @@ import java.awt.Stroke;
  * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class StationView {
+  // constants
+  /**
+   * Station size.
+   */
+  private static final int STATION_SIZE = 18;
+  /**
+   * Center circle station size.
+   */
+  private static final int CENTER_STATION_SIZE = 14;
+  /**
+   * Stroke width.
+   */
+  private static final int STROKE_WIDTH = 5;
   // attributes
+  /**
+   * Station bound to the view.
+   */
   private Station station;
+  /**
+   * Station size.
+   */
   private int stationSize;
+  /**
+   * Center circle station size.
+   */
   private int centerStationSize;
+  /**
+   * Stroke of the station.
+   */
   private Stroke stroke;
+  /**
+   * Center circle color.
+   */
   private Color centerCircleColor;
 
   /**
-   * Constructor.
+   * StationView constructor.
    *
-   * @param station station to bind
+   * @param stationBound station to bind
    */
-  public StationView(Station station) {
-    this.station = station;
-    this.stationSize = 18;
-    this.centerStationSize = 14;
-    this.stroke = new BasicStroke(5);
+  public StationView(final Station stationBound) {
+    this.station = stationBound;
+    this.stationSize = STATION_SIZE;
+    this.centerStationSize = CENTER_STATION_SIZE;
+    this.stroke = new BasicStroke(STROKE_WIDTH);
     this.centerCircleColor = Color.WHITE;
   }
 
   /**
-   * get the station binded to the view.
+   * get the station bound to the view.
    *
-   * @return Station station
+   * @return the bound station of the station view
    */
   public Station getStation() {
     return station;
@@ -45,10 +75,10 @@ public class StationView {
   /**
    * bind a station to the view.
    *
-   * @param station station to bind
+   * @param stationBound station to bind
    */
-  public void setStation(Station station) {
-    this.station = station;
+  public void setStation(final Station stationBound) {
+    this.station = stationBound;
   }
 
   /**
@@ -63,10 +93,10 @@ public class StationView {
   /**
    * set the stationView size.
    *
-   * @param stationSize extrnal circle radius
+   * @param stationSizeToSet external circle radius
    */
-  public void setStationSize(int stationSize) {
-    this.stationSize = stationSize;
+  public void setStationSize(final int stationSizeToSet) {
+    this.stationSize = stationSizeToSet;
   }
 
   /**
@@ -81,10 +111,10 @@ public class StationView {
   /**
    * set the center circle station size.
    *
-   * @param centerStationSize circle radius
+   * @param centerStationSizeToSet circle radius
    */
-  public void setCenterStationSize(int centerStationSize) {
-    this.centerStationSize = centerStationSize;
+  public void setCenterStationSize(final int centerStationSizeToSet) {
+    this.centerStationSize = centerStationSizeToSet;
   }
 
   // methods
@@ -96,7 +126,7 @@ public class StationView {
    * @param g2D   graphics component
    * @param color intern circle color
    */
-  public void affiche(Graphics2D g2D, Color color) {
+  public void show(final Graphics2D g2D, final Color color) {
     g2D.setColor(color);
     g2D.setStroke(this.stroke);
     g2D.drawOval(station.getPosX() - stationSize / 2, station.getPosY()
@@ -110,10 +140,10 @@ public class StationView {
   /**
    * set the stroke.
    *
-   * @param stroke stroke
+   * @param strokeToSet stroke
    */
-  public void setStroke(Stroke stroke) {
-    this.stroke = stroke;
+  public void setStroke(final Stroke strokeToSet) {
+    this.stroke = strokeToSet;
   }
 
   /**
@@ -128,11 +158,9 @@ public class StationView {
   /**
    * set the center circle color.
    *
-   * @param centerCircleColor intern circle color
+   * @param centerCircleColorToSet intern circle color
    */
-  public void setCenterCircleColor(Color centerCircleColor) {
-    this.centerCircleColor = centerCircleColor;
+  public void setCenterCircleColor(final Color centerCircleColorToSet) {
+    this.centerCircleColor = centerCircleColorToSet;
   }
-
-
 }

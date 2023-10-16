@@ -179,7 +179,7 @@ public final class MainPanel extends JMapViewer {
     //LineViews Display
     if (lineViews != null) {
       for (LineView lineView : lineViews) {
-        lineView.affiche(g2D);
+        lineView.show(g2D);
       }
     }
     //AreaViews Display

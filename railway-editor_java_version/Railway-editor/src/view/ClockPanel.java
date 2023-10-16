@@ -1,3 +1,5 @@
+/** Class part of the view package of the application. */
+
 package view;
 
 import javax.swing.BorderFactory;
@@ -6,7 +8,6 @@ import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.SpinnerDateModel;
 import javax.swing.border.BevelBorder;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -21,9 +22,9 @@ import java.util.Date;
  * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class ClockPanel extends JPanel {
-  /**
-   * Serial version UID.
-   */
+  /** ClockView width and height. */
+  public static final int CLOCK_VIEW_WIDTH_HEIGHT = 10;
+  /** Serial version UID. */
   private static final long serialVersionUID = 1L;
   // constants
   /** Default width of the panel. */
@@ -44,7 +45,8 @@ public class ClockPanel extends JPanel {
     this.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
 
     clockView = new ClockView(this.getPreferredSize().width,
-        this.getPreferredSize().height / 2 + 10, this);
+        this.getPreferredSize().height / 2 + CLOCK_VIEW_WIDTH_HEIGHT,
+        this);
     timeSpinner = new JSpinner(new SpinnerDateModel());
     JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(timeSpinner,
         "HH:mm");
@@ -78,10 +80,10 @@ public class ClockPanel extends JPanel {
   /**
    * set the analog clockView.
    *
-   * @param clockView analog clock view
+   * @param clockViewToSet analog clock view
    */
-  public void setClockView(ClockView clockView) {
-    this.clockView = clockView;
+  public void setClockView(final ClockView clockViewToSet) {
+    this.clockView = clockViewToSet;
   }
 
 
@@ -98,10 +100,10 @@ public class ClockPanel extends JPanel {
   /**
    * set the time Selector.
    *
-   * @param timeSpinner time selector
+   * @param timeSpinnerToSet time selector
    */
-  public void setTimeSpinner(JSpinner timeSpinner) {
-    this.timeSpinner = timeSpinner;
+  public void setTimeSpinner(final JSpinner timeSpinnerToSet) {
+    this.timeSpinner = timeSpinnerToSet;
   }
 
 
@@ -113,7 +115,7 @@ public class ClockPanel extends JPanel {
    * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
    */
   @Override
-  public void paintComponent(Graphics g) {
+  public void paintComponent(final Graphics g) {
     Graphics2D g2D = (Graphics2D) g.create();
     g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
         RenderingHints.VALUE_ANTIALIAS_ON);
@@ -121,7 +123,7 @@ public class ClockPanel extends JPanel {
         RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
     super.paintComponent(g);
     clockView.setPosX(this.getWidth() / 2);
-    clockView.setPosY(this.getHeight() / 2 + 10);
+    clockView.setPosY(this.getHeight() / 2 + CLOCK_VIEW_WIDTH_HEIGHT);
     clockView.display(g2D);
   }
 }

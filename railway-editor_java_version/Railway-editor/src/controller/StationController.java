@@ -1,3 +1,7 @@
+/**
+ * Class part of the controller package of the application.
+ */
+
 package controller;
 
 import model.Station;
@@ -11,22 +15,19 @@ import view.StationView;
  */
 public class StationController {
 
-  //constructor
-
   /**
-   * Constructor.
+   * StationController constructor.
    *
    * @param station     station to add
-   * @param stationView stationView binded to station
-   * @param lineIdex    index of the current line
+   * @param stationView stationView bound to station
+   * @param lineIndex   index of the current line
    */
-  public StationController(Station station, StationView stationView,
-                           int lineIdex) {
+  public StationController(final Station station, final StationView stationView,
+                           final int lineIndex) {
     super();
-    MainWindow.getInstance().getMainPanel().getLineViews().get(lineIdex)
+    MainWindow.getInstance().getMainPanel().getLineViews().get(lineIndex)
         .getStationViews().add(stationView);
-    MainWindow.getInstance().getMainPanel().getLineViews().get(lineIdex)
+    MainWindow.getInstance().getMainPanel().getLineViews().get(lineIndex)
         .getLine().addStation(station);
   }
-
 }

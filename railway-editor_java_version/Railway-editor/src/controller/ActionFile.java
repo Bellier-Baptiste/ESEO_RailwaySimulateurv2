@@ -1,4 +1,6 @@
-/** Class part of the controller package of the application. */
+/**
+ * Class part of the controller package of the application.
+ */
 
 package controller;
 
@@ -57,6 +59,8 @@ public class ActionFile {
   public static final String STATIONS = "stations";
   /** String of the station tag. */
   public static final String STATION = "station";
+  /** Number of letters in alphabet. */
+  private static final int ALPHABET_SIZE = 26;
   /** Singleton instance. */
   private static ActionFile instance;
 
@@ -240,7 +244,7 @@ public class ActionFile {
           Element stationClosedId
               = document.createElement("idStation");
           stationClosedId.appendChild(document.createTextNode(Integer.toString(
-                  eventStationClosed.getIdStation())));
+              eventStationClosed.getIdStation())));
           eventName.appendChild(stationClosedId);
           break;
         case "hour":
@@ -886,7 +890,8 @@ public class ActionFile {
     return ((x > ax) && (x < ax + widthA) && (y > ay) && (y < ay + heightA));
   }
 
-  /**map number in letters from their index in alphabet.
+  /**
+   * Map number in letters from their index in alphabet.
    *
    * @param i index
    * @return String letter
@@ -896,8 +901,8 @@ public class ActionFile {
       return "-" + toAlphabetic(-i - 1);
     }
 
-    int quot = i / 26;
-    int rem = i % 26;
+    int quot = i / ALPHABET_SIZE;
+    int rem = i % ALPHABET_SIZE;
     char letter = (char) ('A' + rem);
     if (quot == 0) {
       return "" + letter;

@@ -79,7 +79,7 @@ public final class ActionLine {
     List<StationView> stationsViews = new ArrayList<>();
     LineView lineview = new LineView(line, stationsViews);
     @SuppressWarnings("unused")
-    LineController lineController = new LineController(line, lineview);
+    LineController lineController = new LineController(lineview);
     MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(
         Integer.toString(lineIndex)); // change line id
     // displayed in the

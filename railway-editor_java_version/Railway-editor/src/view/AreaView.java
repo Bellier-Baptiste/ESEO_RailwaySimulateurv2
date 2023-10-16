@@ -1,3 +1,5 @@
+/** Class part of the view package of the application. */
+
 package view;
 
 import java.awt.Graphics2D;
@@ -10,15 +12,16 @@ import model.Area;
  * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class AreaView {
+  /** Area bound to the view. */
   private Area area;
 
   /**
    * Constructor.
    *
-   * @param area area binded to the view
+   * @param areaOfTheView area bound to the view
    */
-  public AreaView(Area area) {
-    this.area = area;
+  public AreaView(final Area areaOfTheView) {
+    this.area = areaOfTheView;
   }
 
   /**
@@ -33,10 +36,10 @@ public class AreaView {
   /**
    * link and area model to the view.
    *
-   * @param area area to bind
+   * @param areaOfTheView area to bind
    */
-  public void setArea(Area area) {
-    this.area = area;
+  public void setArea(final Area areaOfTheView) {
+    this.area = areaOfTheView;
   }
 
   /**
@@ -44,7 +47,7 @@ public class AreaView {
    *
    * @param g2D graphics component
    */
-  public void display(Graphics2D g2D) {
+  public void display(final Graphics2D g2D) {
     g2D.setColor(this.area.getColor());
     g2D.fillRect(this.area.getPosX(), this.area.getPosY(), this.area.getWidth(),
         this.area.getHeight());

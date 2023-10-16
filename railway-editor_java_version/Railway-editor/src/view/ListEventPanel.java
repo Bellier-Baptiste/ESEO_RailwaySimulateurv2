@@ -11,14 +11,25 @@ import org.jdatepicker.impl.UtilDateModel;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXTable;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField.AbstractFormatter;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.BevelBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.Image;
-import java.awt.Component;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -30,17 +41,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JFormattedTextField.AbstractFormatter;
-import javax.swing.border.BevelBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 
 
 /**
@@ -49,9 +49,29 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author arthu
  */
 public final class ListEventPanel extends JPanel {
+  // constants
   /** Serial version UID. */
   private static final long serialVersionUID = 1L;
-  // constants
+  /** Scroll pane width. */
+  private static final int SCROLL_PANE_WIDTH = 500;
+  /** Scroll pane height. */
+  private static final int SCROLL_PANE_HEIGHT = 500;
+  /** Table width. */
+  private static final int TABLE_WIDTH = 600;
+  /** Table height. */
+  private static final int TABLE_HEIGHT = 100;
+  /** Table type column max width. */
+  private static final int TABLE_TYPE_COLUMN_MAX_WIDTH = 50;
+  /** Table event description column min width. */
+  private static final int TABLE_EVENT_DESCRIPTION_COLUMN_MIN_WIDTH = 200;
+  /** GridBagConstraints x position. */
+  private static final int GRID_X_POSITION = 0;
+  /** GridBagConstraints width. */
+  private static final int GRID_WIDTH = 2;
+  /** GridBagConstraints weight. */
+  private static final double GRID_WEIGHT = 0.1;
+  /** GridBagConstraints y position. */
+  private static final int GRID_Y_POSITION = 10;
   /** properties text today. */
   public static final String PROPERTIES_TEXT_TODAY = "text.today";
   /** properties text today value. */
@@ -141,7 +161,8 @@ public final class ListEventPanel extends JPanel {
         (String) stationType));
     view = new JPanel(new GridBagLayout());
     eventConfig = new JScrollPane(view);
-    eventConfig.setPreferredSize(new Dimension(500, 500));
+    eventConfig.setPreferredSize(new Dimension(SCROLL_PANE_WIDTH,
+        SCROLL_PANE_HEIGHT));
     Dimension dim = new Dimension(width, height);
     this.setPreferredSize(dim);
     this.setLayout(new GridLayout(0, 2));
@@ -175,9 +196,10 @@ public final class ListEventPanel extends JPanel {
   public void initComponent() {
     JXTable table = new JXTable(TABLE_DATA, COLUMN_NAMES);
     table.setDefaultEditor(Object.class, null);
-    table.setPreferredSize(new Dimension(600, 100));
-    table.getColumn("Type").setMaxWidth(50);
-    table.getColumn("Event Description").setMinWidth(200);
+    table.setPreferredSize(new Dimension(TABLE_WIDTH, TABLE_HEIGHT));
+    table.getColumn("Type").setMaxWidth(TABLE_TYPE_COLUMN_MAX_WIDTH);
+    table.getColumn("Event Description").setMinWidth(
+        TABLE_EVENT_DESCRIPTION_COLUMN_MIN_WIDTH);
     table.getColumn(2).setCellRenderer(new PathCellRenderer());
     JScrollPane js = new JScrollPane(table);
     js.setPreferredSize(table.getPreferredSize());
@@ -197,10 +219,10 @@ public final class ListEventPanel extends JPanel {
             case "LineDelayed":
               initLineDelayed(c);
               c.fill = GridBagConstraints.HORIZONTAL;
-              c.gridwidth = 2;
-              c.gridx = 0;
-              c.gridy = 10;
-              c.weighty = 0.1;
+              c.gridwidth = GRID_WIDTH;
+              c.gridx = GRID_X_POSITION;
+              c.gridy = GRID_Y_POSITION;
+              c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
                   ActionMetroEvent.getInstance().addLineDelay());
               view.add(confirmEventBtn, c);
@@ -208,10 +230,10 @@ public final class ListEventPanel extends JPanel {
             case "LineClosed":
               initLineClosed(c);
               c.fill = GridBagConstraints.HORIZONTAL;
-              c.gridwidth = 2;
-              c.gridx = 0;
-              c.gridy = 10;
-              c.weighty = 0.1;
+              c.gridwidth = GRID_WIDTH;
+              c.gridx = GRID_X_POSITION;
+              c.gridy = GRID_Y_POSITION;
+              c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
                   ActionMetroEvent.getInstance().addLineClosed());
               view.add(confirmEventBtn, c);
@@ -219,10 +241,10 @@ public final class ListEventPanel extends JPanel {
             case "AttendancePeak":
               initAttendancePeak(c);
               c.fill = GridBagConstraints.HORIZONTAL;
-              c.gridwidth = 2;
-              c.gridx = 0;
-              c.gridy = 10;
-              c.weighty = 0.1;
+              c.gridwidth = GRID_WIDTH;
+              c.gridx = GRID_X_POSITION;
+              c.gridy = GRID_Y_POSITION;
+              c.weighty = GRID_WIDTH;
               confirmEventBtn.addActionListener(e ->
                   ActionMetroEvent.getInstance().addAttendancePeak());
               view.add(confirmEventBtn, c);
@@ -230,10 +252,10 @@ public final class ListEventPanel extends JPanel {
             case "TrainHour":
               initTrainHour(c);
               c.fill = GridBagConstraints.HORIZONTAL;
-              c.gridwidth = 2;
-              c.gridx = 0;
-              c.gridy = 10;
-              c.weighty = 0.1;
+              c.gridwidth = GRID_WIDTH;
+              c.gridx = GRID_X_POSITION;
+              c.gridy = GRID_Y_POSITION;
+              c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
                   ActionMetroEvent.getInstance().addTrainHour());
               view.add(confirmEventBtn, c);
@@ -241,10 +263,10 @@ public final class ListEventPanel extends JPanel {
             case "StationClosed":
               initStationClosed(c);
               c.fill = GridBagConstraints.HORIZONTAL;
-              c.gridwidth = 2;
-              c.gridx = 0;
-              c.gridy = 10;
-              c.weighty = 0.1;
+              c.gridwidth = GRID_WIDTH;
+              c.gridx = GRID_X_POSITION;
+              c.gridy = GRID_Y_POSITION;
+              c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
                   ActionMetroEvent.getInstance().addStationClosed());
               view.add(confirmEventBtn, c);

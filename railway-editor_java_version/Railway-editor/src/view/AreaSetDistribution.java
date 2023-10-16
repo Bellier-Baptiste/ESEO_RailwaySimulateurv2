@@ -1,3 +1,5 @@
+/** Class part of the view package of the application. */
+
 package view;
 
 import data.Data;
@@ -23,26 +25,40 @@ import java.util.Objects;
  * @author Lagarce Arthur, Aurélie Chamouleau
  */
 public class AreaSetDistribution {
+  /** Font size. */
+  private static final int FONT_SIZE = 14;
+  // Attributes.
+  /** Tourist distribution. */
   private String tourist;
+  /** Student distribution. */
   private String student;
+  /** BusinessMan distribution. */
   private String businessMan;
+  /** Worker distribution. */
   private String worker;
+  /** Child distribution. */
   private String child;
+  /** Retired distribution. */
   private String retired;
+  /** Unemployed distribution. */
   private String unemployed;
+  /** Area destination. */
   private String areaDestination;
-  protected static final String[] DESTINATIONS = {"Affaire", "Commerciale",
-      "Loisir", "Industrielle", "Scolaire",
-      "Touristique", "Universitaire"};
+  /** List of the destinations. */
+  protected static final String[] DESTINATIONS = {"Business", "Commercial",
+      "Leisure", "Industrial", "School",
+      "Touristic", "University"};
+  /** Boolean to know if ok button of the popup clicked. */
   private boolean ok = false;
+  /** JComboBox for the list of the destinations. */
   private final JComboBox<String> destinationList = new JComboBox<>(
       DESTINATIONS);
 
-  private void display(Area area) {
+  private void display(final Area area) {
     LookAndFeel previousLf = UIManager.getLookAndFeel();
     destinationList.setSelectedItem(area.getDestination());
     JLabel title = new JLabel("choose Area distribution (%)");
-    title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 14));
+    title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, FONT_SIZE));
     JTextField fieldTourist = new JTextField(Integer.toString(
         area.getDistribution().get(Data.AREA_TOURIST)));
     JTextField fieldStudent = new JTextField(Integer.toString(
@@ -105,7 +121,7 @@ public class AreaSetDistribution {
    *
    * @param area area clicked
    */
-  public void pop(Area area) {
+  public void pop(final Area area) {
     EventQueue.invokeLater(() -> {
       display(area);
       if (ok) {

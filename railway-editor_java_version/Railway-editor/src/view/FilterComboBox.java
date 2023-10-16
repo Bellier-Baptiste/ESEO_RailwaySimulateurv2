@@ -1,3 +1,5 @@
+/** Class part of the view package of the application. */
+
 package view;
 
 import controller.KeyboardTool;
@@ -18,35 +20,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class whiche creates a custom comboBox with integrated research function.
+ * Class which creates a custom comboBox with integrated research function.
  *
- * @author arthu
+ * @author Arthur Lagarce, Aurélie Chamouleau
  */
 @SuppressWarnings("rawtypes")
 public class FilterComboBox extends JComboBox {
-  /**
-   * Serial version UID.
-   */
+  /** Serial version UID. */
   private static final long serialVersionUID = 1L;
+  /** Zoom to set on the destination. */
+  private static final int ZOOM = 13;
+  /** Array of character entered by the user. */
   private List<String> array;
 
   /**
    * Constructor.
    *
-   * @param array array of character entered by the user
+   * @param filterComboBoArray array of character entered by the user
    */
   @SuppressWarnings("unchecked")
-  public FilterComboBox(List<String> array) {
-    super(array.toArray());
-    this.array = array;
+  public FilterComboBox(final List<String> filterComboBoArray) {
+    super(filterComboBoArray.toArray());
+    this.array = filterComboBoArray;
     this.setEditable(true);
-    final JTextField textfield = (JTextField) this.getEditor()
+    final JTextField textField = (JTextField) this.getEditor()
         .getEditorComponent();
-    textfield.addKeyListener(new KeyAdapter() {
+    textField.addKeyListener(new KeyAdapter() {
       @Override
-      public void keyReleased(KeyEvent ke) {
+      public void keyReleased(final KeyEvent ke) {
         if (ke.getKeyCode() != KeyEvent.VK_ENTER) {
-          SwingUtilities.invokeLater(() -> comboFilter(textfield.getText()));
+          SwingUtilities.invokeLater(() -> comboFilter(textField.getText()));
         } else {
           if (!Data.getInstance().getCurrentCity().isEmpty()) {
             MainWindow.getInstance().getMainPanel().requestFocusInWindow();
@@ -58,7 +61,7 @@ public class FilterComboBox extends JComboBox {
             MainWindow.getInstance().getMainPanel().getAreaViews().clear();
             Coordinate point = new Coordinate(coords[1], coords[0]);
             MainWindow.getInstance().getMainPanel().setDisplayPosition(point,
-                13);
+                ZOOM);
 
           }
         }
@@ -73,7 +76,7 @@ public class FilterComboBox extends JComboBox {
    * @param enteredText text entered
    */
   @SuppressWarnings("unchecked")
-  public void comboFilter(String enteredText) {
+  public void comboFilter(final String enteredText) {
     List<String> filterArray = new ArrayList<>();
     for (String s : array) {
       if (s.toLowerCase().contains(enteredText.toLowerCase())) {
@@ -102,8 +105,9 @@ public class FilterComboBox extends JComboBox {
     InputStream file = classLoader.getResourceAsStream("resources/cities.txt");
     try {
       assert file != null;
-      try (BufferedReader br = new BufferedReader(new InputStreamReader(file))) {
-        for (String line; (line = br.readLine()) != null; ) {
+      try (BufferedReader br = new BufferedReader(new InputStreamReader(
+          file))) {
+        for (String line; (line = br.readLine()) != null;) {
           test.add(line.split(";")[0]);
         }
         // line is not visible here.
@@ -121,7 +125,7 @@ public class FilterComboBox extends JComboBox {
    *
    * @return double[] coordinates
    */
-  private double[] findCoordinates(String name) {
+  private double[] findCoordinates(final String name) {
 
     ClassLoader classLoader = ClassLoader.getSystemClassLoader();
     InputStream file = classLoader.getResourceAsStream(

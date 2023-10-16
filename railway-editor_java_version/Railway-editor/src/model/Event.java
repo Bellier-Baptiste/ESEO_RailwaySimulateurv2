@@ -1,39 +1,60 @@
-package model;
+/**
+ * Class part of the model package of the application.
+ */
 
+package model;
 
 import controller.EventName;
 
 /**
  * Model class which describes a generic event.
  *
- * @author arthu
+ * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public abstract class Event {
+  /**
+   * Event starting time.
+   */
   private String startTime;
+  /**
+   * Event ending time.
+   */
   private String endTime;
+  /**
+   * Event id.
+   */
   private int id;
 
-  /** Enum of the event types. */
+  /**
+   * Enum of the event types.
+   */
   public enum EventType { LINE, STATION, AREA }
 
+  /**
+   * Event type.
+   */
   private EventType type;
+  /**
+   * Event name.
+   */
   private EventName eventName;
 
 
   /**
-   * Constructor.
+   * Event constructor.
    *
-   * @param startTime event startTime
-   * @param endTime   event endTime
-   * @param type      event type
+   * @param eventId        event id
+   * @param eventStartTime event startTime
+   * @param eventEndTime   event endTime
+   * @param eventType      event type
    */
-  protected Event(int id, String startTime, String endTime,
-                  EventType type) {
+  protected Event(final int eventId, final String eventStartTime,
+                  final String eventEndTime, final EventType eventType) {
     super();
-    this.id = id;
-    this.startTime = startTime;
-    this.endTime = endTime;
-    this.type = type;
+    this.id = eventId;
+    this.startTime = eventStartTime;
+    this.endTime = eventEndTime;
+    this.type = eventType;
   }
 
 
@@ -50,10 +71,10 @@ public abstract class Event {
   /**
    * set the startTime of the event.
    *
-   * @param startTime event startTime
+   * @param eventStartTime event startTime
    */
-  public void setStartTime(String startTime) {
-    this.startTime = startTime;
+  public void setStartTime(final String eventStartTime) {
+    this.startTime = eventStartTime;
   }
 
 
@@ -70,10 +91,10 @@ public abstract class Event {
   /**
    * set the endTime of the event.
    *
-   * @param endTime event endTime
+   * @param eventEndTime event endTime
    */
-  public void setEndTime(String endTime) {
-    this.endTime = endTime;
+  public void setEndTime(final String eventEndTime) {
+    this.endTime = eventEndTime;
   }
 
 
@@ -90,15 +111,20 @@ public abstract class Event {
   /**
    * set the type of the event.
    *
-   * @param type event type
+   * @param eventType event type
    */
-  public void setType(EventType type) {
-    this.type = type;
+  public void setType(final EventType eventType) {
+    this.type = eventType;
   }
 
 
-  public void setId(int id) {
-    this.id = id;
+  /**
+   * set the id of the event.
+   *
+   * @param eventId event id
+   */
+  public void setId(final int eventId) {
+    this.id = eventId;
   }
 
   /**
@@ -110,10 +136,19 @@ public abstract class Event {
     return this.id;
   }
 
-  public void setEventName(EventName eventName) {
-    this.eventName = eventName;
+  /** Set the event name.
+   *
+   * @param eventNameToSet event name
+   */
+  public void setEventName(final EventName eventNameToSet) {
+    this.eventName = eventNameToSet;
   }
 
+  /**
+   * Get the event name.
+   *
+   * @return event name
+   */
   public EventName getEventName() {
     return eventName;
   }

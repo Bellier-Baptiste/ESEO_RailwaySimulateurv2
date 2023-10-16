@@ -1,3 +1,7 @@
+/**
+ * Class part of the controller package of the application.
+ */
+
 package controller;
 
 import data.Data;
@@ -29,6 +33,38 @@ public class ActionMetroEvent {
    * Add event action name.
    */
   public static final String ADD_EVENT = "ADD_EVENT";
+  /** Event window x offset. */
+  private static final int EVENT_WINDOW_X_OFFSET = 200;
+  /** Event window y offset. */
+  private static final int EVENT_WINDOW_Y_OFFSET = 20;
+  /** Starting date index. */
+  private static final int STARTING_DATE_INDEX = 0;
+  /** Starting time index for train hour. */
+  private static final int STARTING_TIME_INDEX_TRAIN_HOUR = 0;
+  /** Ending time index for train hour. */
+  private static final int ENDING_TIME_INDEX_TRAIN_HOUR = 1;
+  /** Starting time index. */
+  private static final int STARTING_TIME_INDEX = 1;
+  /** Ending date index. */
+  private static final int ENDING_DATE_INDEX = 2;
+  /** Train hour line index. */
+  private static final int TRAIN_HOUR_LINE_INDEX = 2;
+  /** Ending time index. */
+  private static final int ENDING_TIME_INDEX = 3;
+  /** Train hour train number index. */
+  private static final int TRAIN_HOUR_TRAIN_NUMBER_INDEX = 3;
+  /** Starting station index. */
+  private static final int STARTING_STATION_INDEX = 4;
+  /** Station concerned index. */
+  private static final int STATION_CONCERNED_INDEX = 4;
+  /** Ending station index. */
+  private static final int ENDING_STATION_INDEX = 5;
+  /** Size index. */
+  private static final int PEAK_NUMBER_INDEX = 5;
+  /** Delay index. */
+  private static final int DELAY_INDEX = 6;
+  /** Number of minutes in an hour. */
+  private static final int MINUTES_IN_HOUR = 60;
   /**
    * Singleton instance.
    */
@@ -85,8 +121,9 @@ public class ActionMetroEvent {
    * Add event action.
    */
   public void addEvent() {
-    EventWindow.getInstance().setLocation(MainWindow.getInstance().getX()
-        + 200, MainWindow.getInstance().getY() + 20);
+    EventWindow.getInstance().setLocation(
+        MainWindow.getInstance().getX() + EVENT_WINDOW_X_OFFSET,
+        MainWindow.getInstance().getY() + EVENT_WINDOW_Y_OFFSET);
     EventWindow.getInstance().setVisible(true);
   }
 
@@ -95,14 +132,20 @@ public class ActionMetroEvent {
     MainWindow.getInstance().toFront();
     String eventString = ListEventPanel.getInstance().eventLineDelayToString();
     String[] eventStringTab = eventString.split(",");
-    String startTime = eventStringTab[0] + "_" + eventStringTab[1];
-    String endTime = eventStringTab[2] + "_" + eventStringTab[3];
-    int delay = Integer.parseInt(eventStringTab[6].split(":")[0]) * 60
-        + Integer.parseInt(eventStringTab[6].split(":")[1]);
+    String startTime =
+        eventStringTab[STARTING_DATE_INDEX] + "-"
+            + eventStringTab[STARTING_TIME_INDEX];
+    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
+            + eventStringTab[ENDING_TIME_INDEX];
+    int delay = Integer.parseInt(eventStringTab[DELAY_INDEX].split(":")[0])
+        * MINUTES_IN_HOUR + Integer.parseInt(eventStringTab[DELAY_INDEX]
+        .split(":")[1]);
     EventLineDelay eventLineDelay = new EventLineDelay(this.getCurrentId(),
         startTime, endTime, Event.EventType.LINE);
-    eventLineDelay.setIdStationStart(Integer.parseInt(eventStringTab[4]));
-    eventLineDelay.setIdStationEnd(Integer.parseInt(eventStringTab[5]));
+    eventLineDelay.setIdStationStart(Integer.parseInt(eventStringTab[
+        STARTING_STATION_INDEX]));
+    eventLineDelay.setIdStationEnd(Integer.parseInt(eventStringTab[
+        ENDING_STATION_INDEX]));
     eventLineDelay.setDelay(delay);
     eventLineDelay.setEventName(EventName.LINE_DELAYED);
     Color eventColor = Color.ORANGE;
@@ -118,12 +161,18 @@ public class ActionMetroEvent {
     MainWindow.getInstance().toFront();
     String eventString = ListEventPanel.getInstance().eventLineClosedToString();
     String[] eventStringTab = eventString.split(",");
-    String startTime = eventStringTab[0] + "_" + eventStringTab[1];
-    String endTime = eventStringTab[2] + "_" + eventStringTab[3];
+    String startTime =
+        eventStringTab[STARTING_DATE_INDEX] + "-" + eventStringTab[
+            STARTING_TIME_INDEX];
+    String endTime =
+        eventStringTab[ENDING_DATE_INDEX] + "-" + eventStringTab[
+            ENDING_TIME_INDEX];
     EventLineClosed eventLineClosed = new EventLineClosed(this.getCurrentId(),
         startTime, endTime, Event.EventType.LINE);
-    eventLineClosed.setIdStationStart(Integer.parseInt(eventStringTab[4]));
-    eventLineClosed.setIdStationEnd(Integer.parseInt(eventStringTab[5]));
+    eventLineClosed.setIdStationStart(Integer.parseInt(eventStringTab[
+        STARTING_STATION_INDEX]));
+    eventLineClosed.setIdStationEnd(Integer.parseInt(eventStringTab[
+        ENDING_STATION_INDEX]));
     Color eventColor = Color.RED;
     this.addEventBetween2Stations(eventLineClosed, eventColor, eventStringTab);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
@@ -197,12 +246,18 @@ public class ActionMetroEvent {
     String eventString = ListEventPanel.getInstance()
         .eventAttendancePeakToString();
     String[] eventStringTab = eventString.split(",");
-    String startTime = eventStringTab[0] + "_" + eventStringTab[1];
-    String endTime = eventStringTab[2] + "_" + eventStringTab[3];
+    String startTime =
+        eventStringTab[STARTING_DATE_INDEX] + "-" + eventStringTab[
+            STARTING_TIME_INDEX];
+    String endTime =
+        eventStringTab[ENDING_DATE_INDEX] + "-" + eventStringTab[
+            ENDING_TIME_INDEX];
     EventAttendancePeak eventAttendancePeak = new EventAttendancePeak(
         this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
-    eventAttendancePeak.setIdStation(Integer.parseInt(eventStringTab[4]));
-    eventAttendancePeak.setSize(Integer.parseInt(eventStringTab[5]));
+    eventAttendancePeak.setIdStation(Integer.parseInt(eventStringTab[
+        STATION_CONCERNED_INDEX]));
+    eventAttendancePeak.setSize(Integer.parseInt(eventStringTab[
+        PEAK_NUMBER_INDEX]));
     Data.getInstance().getEventList().add(eventAttendancePeak);
 
     Station stationConcerned = null;
@@ -222,7 +277,8 @@ public class ActionMetroEvent {
     if (stationConcerned != null) {
       MainWindow.getInstance().getEventRecapPanel().createEventAttendancePeak(
           this.getCurrentId(), startTime, endTime,
-          Integer.toString(stationConcerned.getId()), eventStringTab[5]);
+          Integer.toString(stationConcerned.getId()),
+          eventStringTab[PEAK_NUMBER_INDEX]);
     }
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
@@ -235,19 +291,21 @@ public class ActionMetroEvent {
     MainWindow.getInstance().toFront();
     String eventString = ListEventPanel.getInstance().eventTrainHourToString();
     String[] eventStringTab = eventString.split(",");
-    String startTime = eventStringTab[0];
-    String endTime = eventStringTab[1];
+    String startTime = eventStringTab[STARTING_TIME_INDEX_TRAIN_HOUR];
+    String endTime = eventStringTab[ENDING_TIME_INDEX_TRAIN_HOUR];
     EventHour eventHour = new EventHour(this.getCurrentId(), startTime,
         endTime, Event.EventType.LINE);
-    eventHour.setIdLine(Integer.parseInt(eventStringTab[2]));
-    eventHour.setTrainNumber(Integer.parseInt(eventStringTab[3]));
+    eventHour.setIdLine(Integer.parseInt(eventStringTab[
+        TRAIN_HOUR_LINE_INDEX]));
+    eventHour.setTrainNumber(Integer.parseInt(eventStringTab[
+        TRAIN_HOUR_TRAIN_NUMBER_INDEX]));
     Data.getInstance().getEventList().add(eventHour);
     EventWindow.getInstance().dispatchEvent(new WindowEvent(
         EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
     MainWindow.getInstance().getMainPanel().repaint();
     MainWindow.getInstance().getEventRecapPanel().createEventHour(
         this.getCurrentId(), startTime, endTime, eventStringTab[2],
-        eventStringTab[3]);
+        eventStringTab[TRAIN_HOUR_TRAIN_NUMBER_INDEX]);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
     SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
@@ -260,11 +318,16 @@ public class ActionMetroEvent {
     String eventString = ListEventPanel.getInstance()
         .eventStationClosedToString();
     String[] eventStringTab = eventString.split(",");
-    String startTime = eventStringTab[0] + "_" + eventStringTab[1];
-    String endTime = eventStringTab[2] + "_" + eventStringTab[3];
+    String startTime =
+        eventStringTab[STARTING_DATE_INDEX] + "-"
+            + eventStringTab[STARTING_TIME_INDEX];
+    String endTime =
+        eventStringTab[ENDING_DATE_INDEX] + "-"
+            + eventStringTab[ENDING_TIME_INDEX];
     EventStationClosed eventStationClosed = new EventStationClosed(
         this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
-    eventStationClosed.setIdStation(Integer.parseInt(eventStringTab[4]));
+    eventStationClosed.setIdStation(Integer.parseInt(eventStringTab[
+        STATION_CONCERNED_INDEX]));
     Data.getInstance().getEventList().add(eventStationClosed);
     Station stationConcerned = null;
     for (LineView lineView : MainWindow.getInstance().getMainPanel()

@@ -29,39 +29,73 @@ import java.util.List;
  */
 public class MovingAdapter extends MouseAdapter {
   // attributes
-  /** x coordinate of the click. */
-  private int x;
-  /** y coordinate of the click. */
-  private int y;
-  /** view of the station to merge. */
+  /**
+   * x coordinate of the click.
+   */
+  private int coordX;
+  /**
+   * y coordinate of the click.
+   */
+  private int coordY;
+  /**
+   * view of the station to merge.
+   */
   private StationView[] stationsToMergeView;
-  /** boolean to know if the station to merge has been selected. */
+  /**
+   * boolean to know if the station to merge has been selected.
+   */
   private boolean selectSecStation;
-  /** line of the selected station view. */
+  /**
+   * line of the selected station view.
+   */
   private LineView selectedStationLineView;
-  /** view of the lines of the stations to merge. */
+  /**
+   * view of the lines of the stations to merge.
+   */
   private LineView[] lineStationToMergeViews;
-  /** boolean to know if a station is being dragged. */
+  /**
+   * boolean to know if a station is being dragged.
+   */
   private boolean stationDrag;
-  /** boolean to know if an area is being dragged. */
+  /**
+   * boolean to know if an area is being dragged.
+   */
   private boolean areaDrag;
-  /** boolean to know if an area is being extended on the left side. */
+  /**
+   * boolean to know if an area is being extended on the left side.
+   */
   private boolean extendLeftSide;
-  /** boolean to know if an area is being extended on the right side. */
+  /**
+   * boolean to know if an area is being extended on the right side.
+   */
   private boolean extendRightSide;
-  /** boolean to know if an area is being extended on the top side. */
+  /**
+   * boolean to know if an area is being extended on the top side.
+   */
   private boolean extendTopSide;
-  /** boolean to know if an area is being extended on the bottom side. */
+  /**
+   * boolean to know if an area is being extended on the bottom side.
+   */
   private boolean extendBotSide;
-  /** boolean to know if the right button of the mouse is pressed. */
+  /**
+   * boolean to know if the right button of the mouse is pressed.
+   */
   private boolean rightPressed;
-  /** station being dragged. */
+  /**
+   * station being dragged.
+   */
   private Station draggedStation;
-  /** area being dragged. */
+  /**
+   * area being dragged.
+   */
   private Area draggedArea;
-  /** area being extended. */
+  /**
+   * area being extended.
+   */
   private Area extendedArea;
-  /** form to set the distribution of the area. */
+  /**
+   * form to set the distribution of the area.
+   */
   private final AreaSetDistribution form;
 
   /**
@@ -82,8 +116,8 @@ public class MovingAdapter extends MouseAdapter {
    */
   @Override
   public void mousePressed(final MouseEvent e) {
-    x = e.getX();
-    y = e.getY();
+    coordX = e.getX();
+    coordY = e.getY();
 
     rightPressed = (e.getButton() == MouseEvent.BUTTON3);
 
@@ -96,15 +130,15 @@ public class MovingAdapter extends MouseAdapter {
    */
   @Override
   public void mouseDragged(final MouseEvent e) {
-    // drag the station and update it's position in real time
+    // drag the station and update its position in real time
     int dx = 0;
     int dy = 0;
 
     if (isInWidth(e.getX())) {
-      dx = e.getX() - x;
+      dx = e.getX() - coordX;
     }
     if (isInHeight(e.getY())) {
-      dy = e.getY() - y;
+      dy = e.getY() - coordY;
     }
 
     if (rightPressed) {
@@ -112,12 +146,12 @@ public class MovingAdapter extends MouseAdapter {
       moveAllAreas(dx, dy);
     }
 
-    StationView clickedStation = this.getClickedStation(x, y);
-    AreaView clickedArea = this.getClickedArea(x, y);
-    AreaView clickedTopAreaBorder = this.onTopAreaBorder(x, y);
-    AreaView clickedBotAreaBorder = this.onBotAreaBorder(x, y);
-    AreaView clickedLeftAreaBorder = this.onLeftAreaBorder(x, y);
-    AreaView clickedRightAreaBorder = this.onRightAreaBorder(x, y);
+    StationView clickedStation = this.getClickedStation(coordX, coordY);
+    AreaView clickedArea = this.getClickedArea(coordX, coordY);
+    AreaView clickedTopAreaBorder = this.onTopAreaBorder(coordX, coordY);
+    AreaView clickedBotAreaBorder = this.onBotAreaBorder(coordX, coordY);
+    AreaView clickedLeftAreaBorder = this.onLeftAreaBorder(coordX, coordY);
+    AreaView clickedRightAreaBorder = this.onRightAreaBorder(coordX, coordY);
     if (stationDrag) {
       draggedStation.moveStation(dx, dy);
       MainWindow.getInstance().getMainPanel().repaint();
@@ -138,8 +172,8 @@ public class MovingAdapter extends MouseAdapter {
       MainWindow.getInstance().getMainPanel().repaint();
     } else if (clickedStation != null) {
       this.stationDrag = true;
-      int stationSize = 18;
-      int centerStationSize = 14;
+      int stationSize = ActionStation.STATION_SIZE;
+      int centerStationSize = ActionStation.CENTER_STATION_SIZE;
 
       clickedStation.setStationSize(stationSize);
       clickedStation.setCenterStationSize(centerStationSize);
@@ -162,8 +196,8 @@ public class MovingAdapter extends MouseAdapter {
       this.extendedArea = clickedRightAreaBorder.getArea();
     }
 
-    x += dx;
-    y += dy;
+    coordX += dx;
+    coordY += dy;
 
   }
 
@@ -254,8 +288,7 @@ public class MovingAdapter extends MouseAdapter {
   /**
    * Action when the mousewheel is moved.
    *
-   * @see
-   * java.awt.event.MouseAdapter#mouseWheelMoved(java.awt.event.MouseWheelEvent)
+   * @see MouseAdapter#mouseWheelMoved(MouseWheelEvent)
    */
   @Override
   public void mouseWheelMoved(final MouseWheelEvent e) {
@@ -271,7 +304,7 @@ public class MovingAdapter extends MouseAdapter {
   @Override
   public void mouseMoved(final MouseEvent e) {
     if (this.onLeftAreaBorder(e.getX(), e.getY()) != null
-          || this.onRightAreaBorder(e.getX(), e.getY()) != null) {
+        || this.onRightAreaBorder(e.getX(), e.getY()) != null) {
       MainWindow.getInstance().getMainPanel().setCursor(new Cursor(
           Cursor.E_RESIZE_CURSOR));
     } else if (this.onTopAreaBorder(e.getX(), e.getY()) != null
@@ -282,7 +315,7 @@ public class MovingAdapter extends MouseAdapter {
       MainWindow.getInstance().getMainPanel().setCursor(new Cursor(
           Cursor.DEFAULT_CURSOR));
     }
-    Station station = null;
+    Station station;
     StationView clickedStationView = this.getClickedStation(e.getX(), e.getY());
     if (clickedStationView != null) {
       Station clickedStation = clickedStationView.getStation();
@@ -304,46 +337,48 @@ public class MovingAdapter extends MouseAdapter {
   /**
    * If a click is in a circle (if we clicked on a station).
    *
-   * @param coordX    x click coordinates
-   * @param coordY    y click coordinates
-   * @param a    circle center x coordinates
-   * @param b    circle center y coordinates
-   * @param size circle diameter
-   *
+   * @param otherCoordX x click coordinates
+   * @param otherCoordY y click coordinates
+   * @param a           circle center x coordinates
+   * @param b           circle center y coordinates
+   * @param size        circle diameter
    * @return true if the click is in the circle, false otherwise
    */
-  private boolean contains(final int coordX, final int coordY, final int a,
+  private boolean contains(final int otherCoordX, final int otherCoordY,
+                           final int a,
                            final int b,
                            final int size) {
-    return (Math.pow(coordX - (a - size / 2f), 2)
-        + Math.pow(coordY - (b - size / 2f), 2) < Math.pow(size, 2));
+    return (Math.pow(otherCoordX - (a - size / 2f), 2)
+        + Math.pow(otherCoordY - (b - size / 2f), 2) < Math.pow(size, 2));
   }
 
   /**
    * If a click is in an area.
    *
-   * @param coordX    x click coordinates
-   * @param coordY    y click coordinates
-   * @param a     area top left corner x coordinates
-   * @param b     area top left corner y coordinates
-   * @param width  area width
-   * @param height area height
+   * @param otherCoordX x click coordinates
+   * @param otherCoordY y click coordinates
+   * @param a           area top left corner x coordinates
+   * @param b           area top left corner y coordinates
+   * @param width       area width
+   * @param height      area height
    * @return true if the click is in the area, false otherwise
    */
-  private boolean containsArea(final int coordX, final int coordY, final int a,
-                               final int b, final int width, final int height) {
-    return (coordX > a + 2 && coordX < a + width - 2 && coordY > b + 2
-        && coordY < b + height - 2);
+  private boolean containsArea(final int otherCoordX, final int otherCoordY,
+                               final int a, final int b, final int width,
+                               final int height) {
+    return (otherCoordX > a + 2 && otherCoordX < a + width - 2
+        && otherCoordY > b + 2 && otherCoordY < b + height - 2);
   }
 
   /**
    * Find the station we selected with our click.
    *
-   * @param coordX x click coordinates
-   * @param coordY y click coordinates
+   * @param clickedCoordX x click coordinates
+   * @param clickedCoordY y click coordinates
    * @return the station we clicked on
    */
-  private StationView getClickedStation(final int coordX, final int coordY) {
+  private StationView getClickedStation(final int clickedCoordX,
+                                        final int clickedCoordY) {
     List<LineView> lineViews = MainWindow.getInstance().getMainPanel()
         .getLineViews();
     StationView returnedStation = null;
@@ -352,7 +387,8 @@ public class MovingAdapter extends MouseAdapter {
       stationviews = lineview.getStationViews();
 
       for (StationView stationView : stationviews) {
-        if (contains(coordX, coordY, stationView.getStation().getPosX(),
+        if (contains(clickedCoordX, clickedCoordY,
+            stationView.getStation().getPosX(),
             stationView.getStation().getPosY(), stationView.getStationSize())) {
           returnedStation = stationView;
           this.selectedStationLineView = lineview;
@@ -365,20 +401,21 @@ public class MovingAdapter extends MouseAdapter {
   /**
    * Finds the area we selected with our click.
    *
-   * @param coordX x click coordinates
-   * @param coordY y click coordinates
+   * @param clickedCoordX x click coordinates
+   * @param clickedCoordY y click coordinates
    * @return the area we clicked on
    */
-  private AreaView getClickedArea(final int coordX, final int coordY) {
+  private AreaView getClickedArea(final int clickedCoordX,
+                                  final int clickedCoordY) {
 
     List<AreaView> areaViews = MainWindow.getInstance().getMainPanel()
         .getAreaViews();
     AreaView returnedArea = null;
     for (AreaView areaView : areaViews) {
 
-      if (containsArea(coordX, coordY, areaView.getArea().getPosX(),
-          areaView.getArea().getPosY(), areaView.getArea().getWidth(),
-          areaView.getArea().getHeight())) {
+      if (containsArea(clickedCoordX, clickedCoordY,
+          areaView.getArea().getPosX(), areaView.getArea().getPosY(),
+          areaView.getArea().getWidth(), areaView.getArea().getHeight())) {
         returnedArea = areaView;
       }
     }
@@ -387,7 +424,7 @@ public class MovingAdapter extends MouseAdapter {
 
   /**
    * Merge 2 stations (basically replace one with the other in the correct line
-   * stations list.
+   * stations list).
    *
    * @param stationToMergeViews station views to merge
    */
@@ -424,42 +461,43 @@ public class MovingAdapter extends MouseAdapter {
   /**
    * Checks if the station is not out of the Panel horizontally.
    *
-   * @param coordX x coordinate of the station
+   * @param otherCoordX x coordinate of the station
    * @return true if the station is in the panel, false otherwise
    */
-  private boolean isInWidth(final int coordX) {
-    return (coordX > 0 && coordX < MainWindow.getInstance().getMainPanel()
-        .getSize().width);
+  private boolean isInWidth(final int otherCoordX) {
+    return (otherCoordX > 0 && otherCoordX < MainWindow.getInstance()
+        .getMainPanel().getSize().width);
   }
 
   /**
    * Checks if the station is not out of the Panel vertically.
    *
-   * @param coordY y coordinate of the station
+   * @param otherCoordY y coordinate of the station
    * @return true if the station is in the panel, false otherwise
    */
-  private boolean isInHeight(final int coordY) {
-    return (coordY > 0 && coordY < MainWindow.getInstance().getMainPanel()
-        .getSize().height);
+  private boolean isInHeight(final int otherCoordY) {
+    return (otherCoordY > 0 && otherCoordY < MainWindow.getInstance()
+        .getMainPanel().getSize().height);
   }
 
   /**
    * Checks if cursor is on a left area border.
    *
-   * @param coordX x coordinate of the cursor
-   * @param coordY y coordinate of the cursor
+   * @param otherCoordX x coordinate of the cursor
+   * @param otherCoordY y coordinate of the cursor
    * @return the area where the cursor is in.
    */
-  private AreaView onLeftAreaBorder(final int coordX, final int coordY) {
+  private AreaView onLeftAreaBorder(final int otherCoordX,
+                                    final int otherCoordY) {
     List<AreaView> areaViews = MainWindow.getInstance().getMainPanel()
         .getAreaViews();
     AreaView returnedArea = null;
     for (AreaView areaView : areaViews) {
 
-      if ((coordX >= areaView.getArea().getPosX() - 2
-          && coordX <= areaView.getArea().getPosX() + 2)
-          && coordY >= areaView.getArea().getPosY()
-          && coordY < areaView.getArea().getPosY()
+      if ((otherCoordX >= areaView.getArea().getPosX() - 2
+          && otherCoordX <= areaView.getArea().getPosX() + 2)
+          && otherCoordY >= areaView.getArea().getPosY()
+          && otherCoordY < areaView.getArea().getPosY()
           + areaView.getArea().getHeight()) {
         returnedArea = areaView;
       }
@@ -470,19 +508,20 @@ public class MovingAdapter extends MouseAdapter {
   /**
    * check if cursor is on a top area border.
    *
-   * @param coordX x coordinate of the cursor
-   * @param coordY y coordinate of the cursor
+   * @param otherCoordX x coordinate of the cursor
+   * @param otherCoordY y coordinate of the cursor
    * @return the area where the cursor is in.
    */
-  private AreaView onTopAreaBorder(final int coordX, final int coordY) {
+  private AreaView onTopAreaBorder(final int otherCoordX,
+                                   final int otherCoordY) {
     List<AreaView> areaViews = MainWindow.getInstance().getMainPanel()
         .getAreaViews();
     AreaView returnedArea = null;
     for (AreaView areaView : areaViews) {
-      if ((coordY >= areaView.getArea().getPosY() - 2
-          && coordY <= areaView.getArea().getPosY() + 2)
-          && coordX >= areaView.getArea().getPosX()
-          && coordX < areaView.getArea().getPosX()
+      if ((otherCoordY >= areaView.getArea().getPosY() - 2
+          && otherCoordY <= areaView.getArea().getPosY() + 2)
+          && otherCoordX >= areaView.getArea().getPosX()
+          && otherCoordX < areaView.getArea().getPosX()
           + areaView.getArea().getWidth()) {
         returnedArea = areaView;
       }
@@ -493,22 +532,23 @@ public class MovingAdapter extends MouseAdapter {
   /**
    * check if cursor is on a right area border.
    *
-   * @param coordX x coordinate of the cursor
-   * @param coordY y coordinate of the cursor
+   * @param otherCoordX x coordinate of the cursor
+   * @param otherCoordY y coordinate of the cursor
    * @return the area where the cursor is in.
    */
-  private AreaView onRightAreaBorder(final int coordX, final int coordY) {
+  private AreaView onRightAreaBorder(final int otherCoordX,
+                                     final int otherCoordY) {
     List<AreaView> areaViews = MainWindow.getInstance().getMainPanel()
         .getAreaViews();
     AreaView returnedArea = null;
     for (AreaView areaView : areaViews) {
 
-      if (((coordX >= areaView.getArea().getPosX()
+      if (((otherCoordX >= areaView.getArea().getPosX()
           + areaView.getArea().getWidth() - 2)
-          && coordX <= areaView.getArea().getPosX()
+          && otherCoordX <= areaView.getArea().getPosX()
           + areaView.getArea().getWidth() + 2)
-          && coordY >= areaView.getArea().getPosY()
-          && coordY < areaView.getArea().getPosY()
+          && otherCoordY >= areaView.getArea().getPosY()
+          && otherCoordY < areaView.getArea().getPosY()
           + areaView.getArea().getHeight()) {
         returnedArea = areaView;
       }
@@ -519,21 +559,22 @@ public class MovingAdapter extends MouseAdapter {
   /**
    * check if cursor is on a bottom area border.
    *
-   * @param coordX x coordinate of the cursor
-   * @param coordY y coordinate of the cursor
+   * @param otherCoordX x coordinate of the cursor
+   * @param otherCoordY y coordinate of the cursor
    * @return the area where the cursor is in.
    */
-  private AreaView onBotAreaBorder(final int coordX, final int coordY) {
+  private AreaView onBotAreaBorder(final int otherCoordX,
+                                   final int otherCoordY) {
     List<AreaView> areaViews = MainWindow.getInstance().getMainPanel()
         .getAreaViews();
     AreaView returnedArea = null;
     for (AreaView areaView : areaViews) {
-      if ((coordY >= areaView.getArea().getPosY()
+      if ((otherCoordY >= areaView.getArea().getPosY()
           + areaView.getArea().getHeight() - 2
-          && coordY <= areaView.getArea().getPosY()
+          && otherCoordY <= areaView.getArea().getPosY()
           + areaView.getArea().getHeight() + 2)
-          && coordX >= areaView.getArea().getPosX()
-          && coordX < areaView.getArea().getPosX()
+          && otherCoordX >= areaView.getArea().getPosX()
+          && otherCoordX < areaView.getArea().getPosX()
           + areaView.getArea().getWidth()) {
         returnedArea = areaView;
       }
@@ -566,7 +607,7 @@ public class MovingAdapter extends MouseAdapter {
    * Moves all the areas in the same direction.
    *
    * @param dx x direction
-   * @param dy  y direction
+   * @param dy y direction
    */
   private void moveAllAreas(final int dx, final int dy) {
     for (AreaView areaView : MainWindow.getInstance().getMainPanel()
@@ -586,7 +627,7 @@ public class MovingAdapter extends MouseAdapter {
       for (StationView stationView : lineView.getStationViews()) {
         Point pos = MainWindow.getInstance().getMainPanel().getMapPosition(
             stationView.getStation().getLatitude(), stationView.getStation()
-              .getLongitude(), false);
+                .getLongitude(), false);
         stationView.getStation().setPosX((int) pos.getX());
         stationView.getStation().setPosY((int) pos.getY());
       }
@@ -604,11 +645,11 @@ public class MovingAdapter extends MouseAdapter {
         .getAreaViews()) {
       Point pos1 = MainWindow.getInstance().getMainPanel().getMapPosition(
           areaView.getArea().getLatitudeTop(), areaView.getArea()
-            .getLongitudeTop(), false);
+              .getLongitudeTop(), false);
 
       Point pos2 = MainWindow.getInstance().getMainPanel().getMapPosition(
           areaView.getArea().getLatitudeBot(), areaView.getArea()
-            .getLongitudeBot(), false);
+              .getLongitudeBot(), false);
       areaView.getArea().setPosX((int) pos1.getX());
       areaView.getArea().setPosY((int) pos1.getY());
       areaView.getArea().setWidth(Math.abs(pos2.x - pos1.x));

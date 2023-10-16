@@ -1,3 +1,5 @@
+/** Class part of the model package of the application. */
+
 package model;
 
 import data.Data;
@@ -12,12 +14,19 @@ import view.MainWindow;
 public class Station {
 
   //attributes
+  /** Station posX in pixel. */
   private int posX;
+  /** Station posY in pixel. */
   private int posY;
+  /** Station name. */
   private String name;
+  /** Station id. */
   private int id;
+  /** Station area. */
   private Area area;
+  /** Station latitude. */
   private double latitude;
+  /** Station longitude. */
   private double longitude;
 
 
@@ -33,17 +42,18 @@ public class Station {
   /**
    * Constructor with its parameters.
    *
-   * @param id   station id
-   * @param posX station positionX
-   * @param posY station positionY
-   * @param name station name
+   * @param stationId   station id
+   * @param stationPosX station positionX
+   * @param stationPosY station positionY
+   * @param stationName station name
    */
-  public Station(int id, int posX, int posY, String name) {
+  public Station(final int stationId, final int stationPosX,
+                 final int stationPosY, final String stationName) {
     super();
-    this.posX = posX;
-    this.posY = posY;
-    this.name = name;
-    this.id = id;
+    this.id = stationId;
+    this.posX = stationPosX;
+    this.posY = stationPosY;
+    this.name = stationName;
   }
 
   //accessors
@@ -61,10 +71,10 @@ public class Station {
   /**
    * set station posX in pixel.
    *
-   * @param posX station positionX
+   * @param stationPosX station positionX
    */
-  public void setPosX(int posX) {
-    this.posX = posX;
+  public void setPosX(final int stationPosX) {
+    this.posX = stationPosX;
   }
 
 
@@ -81,10 +91,10 @@ public class Station {
   /**
    * set stationPosY in pixel.
    *
-   * @param posY station positionY
+   * @param stationPosY station positionY
    */
-  public void setPosY(int posY) {
-    this.posY = posY;
+  public void setPosY(final int stationPosY) {
+    this.posY = stationPosY;
   }
 
 
@@ -100,10 +110,10 @@ public class Station {
   /**
    * set station latitude.
    *
-   * @param latitude station latitude
+   * @param stationLatitude station latitude
    */
-  public void setLatitude(double latitude) {
-    this.latitude = latitude;
+  public void setLatitude(final double stationLatitude) {
+    this.latitude = stationLatitude;
   }
 
   /**
@@ -118,10 +128,10 @@ public class Station {
   /**
    * set station longitude.
    *
-   * @param longitude station longitude
+   * @param stationLongitude station longitude
    */
-  public void setLongitude(double longitude) {
-    this.longitude = longitude;
+  public void setLongitude(final double stationLongitude) {
+    this.longitude = stationLongitude;
   }
 
   /**
@@ -137,10 +147,10 @@ public class Station {
   /**
    * set station name.
    *
-   * @param name station name
+   * @param stationName station name
    */
-  public void setName(String name) {
-    this.name = name;
+  public void setName(final String stationName) {
+    this.name = stationName;
   }
 
 
@@ -156,10 +166,10 @@ public class Station {
   /**
    * set station id.
    *
-   * @param id station id
+   * @param stationId station id
    */
-  public void setId(int id) {
-    this.id = id;
+  public void setId(final int stationId) {
+    this.id = stationId;
   }
 
 
@@ -175,10 +185,10 @@ public class Station {
   /**
    * set station Area.
    *
-   * @param area station area
+   * @param stationArea station area
    */
-  public void setAreas(Area area) {
-    this.area = area;
+  public void setAreas(final Area stationArea) {
+    this.area = stationArea;
   }
 
 
@@ -189,7 +199,7 @@ public class Station {
    * @param dx deltaX
    * @param dy deltaY
    */
-  public void moveStation(int dx, int dy) {
+  public void moveStation(final int dx, final int dy) {
     this.posX += dx;
     this.posY += dy;
     this.setPosX(this.posX);

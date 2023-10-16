@@ -1,10 +1,14 @@
+/** Class part of the model package of the application. */
+
 package model;
 
 /**
  * Model class which describes a generic event between two stations.
  */
 public abstract class EventBetween2Stations extends Event {
+  /** Id of the starting station. */
   private int idStationStart;
+  /** Id of the ending station. */
   private int idStationEnd;
 
   /**
@@ -15,8 +19,8 @@ public abstract class EventBetween2Stations extends Event {
    * @param endTime   event endTime
    * @param type      event type
    */
-  protected EventBetween2Stations(int id, String startTime, String endTime,
-                                  EventType type) {
+  protected EventBetween2Stations(final int id, final String startTime,
+                                  final String endTime, final EventType type) {
     super(id, startTime, endTime, type);
   }
 
@@ -32,10 +36,10 @@ public abstract class EventBetween2Stations extends Event {
   /**
    * get the id of the ending station.
    *
-   * @param idStationStart event stationStart Id
+   * @param eventIdStationStart event stationStart Id
    */
-  public void setIdStationStart(int idStationStart) {
-    this.idStationStart = idStationStart;
+  public void setIdStationStart(final int eventIdStationStart) {
+    this.idStationStart = eventIdStationStart;
   }
 
   /**
@@ -50,9 +54,9 @@ public abstract class EventBetween2Stations extends Event {
   /**
    * set the id of the ending station.
    *
-   * @param idStationEnd event stationEnd Id
+   * @param eventIdStationEnd event stationEnd Id
    */
-  public void setIdStationEnd(int idStationEnd) {
-    this.idStationEnd = idStationEnd;
+  public void setIdStationEnd(final int eventIdStationEnd) {
+    this.idStationEnd = eventIdStationEnd;
   }
 }

@@ -1,3 +1,5 @@
+/** Class part of the model package of the application. */
+
 package model;
 
 import controller.EventName;
@@ -5,22 +7,25 @@ import controller.EventName;
 /**
  * Model class extending event which describes an attendance peak on a station.
  *
- * @author arthu
+ * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class EventAttendancePeak extends Event {
-
+  /** Station id. */
   private int idStation;
+  /** Peak size. */
   private int size;
 
   /**
    * Constructor.
    *
+   * @param id        event id
    * @param startTime event startTime
    * @param endTime   event endTime
    * @param type      eventType
    */
-  public EventAttendancePeak(int id, String startTime, String endTime,
-                             EventType type) {
+  public EventAttendancePeak(final int id, final String startTime,
+                             final String endTime,
+                             final EventType type) {
     super(id, startTime, endTime, type);
     super.setEventName(EventName.ATTENDANCE_PEAK);
   }
@@ -37,10 +42,10 @@ public class EventAttendancePeak extends Event {
   /**
    * set the id of the station concerned.
    *
-   * @param idStation id station concerned by the peak
+   * @param eventIdStation id station concerned by the peak
    */
-  public void setIdStation(int idStation) {
-    this.idStation = idStation;
+  public void setIdStation(final int eventIdStation) {
+    this.idStation = eventIdStation;
   }
 
   /**
@@ -55,11 +60,9 @@ public class EventAttendancePeak extends Event {
   /**
    * set the peak size.
    *
-   * @param size size of the peak
+   * @param peakSize size of the peak
    */
-  public void setSize(int size) {
-    this.size = size;
+  public void setSize(final int peakSize) {
+    this.size = peakSize;
   }
-
-
 }
