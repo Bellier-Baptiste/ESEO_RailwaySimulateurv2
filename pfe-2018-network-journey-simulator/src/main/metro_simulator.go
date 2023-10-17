@@ -15,6 +15,71 @@ import (
 	"time"
 )
 
+const (
+	dayTypeWD string = "working day"
+	dayTypeWE string = "week-end"
+	dayTypeBH string = "bank holiday"
+	dayTypeHD string = "holidays"
+)
+
+func printHeader(text string) {
+	var charFiller = "-"
+	var length = 51
+	if text == "" {
+		fmt.Println(strings.Repeat(charFiller, length))
+		return
+	}
+
+	if len(text) > length {
+		fmt.Println(charFiller+charFiller+" ", text)
+	} else {
+		var middle = float64(length-4-len(text)) / float64(2)
+		var before = int(math.Floor(middle))
+		var after = int(math.Ceil(middle))
+		fmt.Println(strings.Repeat(charFiller, before), " "+text+" ",
+			strings.Repeat(charFiller, after))
+	}
+}
+
+func createAdvancedConfig(name string) {
+	var mapObject, err = models.CreateMap()
+	if err != nil {
+		log.Fatal("failed to create map", err)
+	}
+
+	adConfig := mapObject.ExportMapToAdConfig()
+
+	err = adConfig.SaveXML(name)
+	if err != nil {
+		log.Fatal("failed to save config", err)
+	}
+	fmt.Println("new config created and saved with the name ", name)
+}
+
+func dayTypeAttribution(ans string) string {
+	if len(ans) > 0 {
+		if strings.HasPrefix(ans, "1") {
+			fmt.Println("Thanks")
+			return dayTypeWD
+		} else if strings.HasPrefix(ans, "2") {
+			fmt.Println("Thanks")
+			return dayTypeWE
+		} else if strings.HasPrefix(ans, "3") {
+			fmt.Println("Thanks")
+			return dayTypeBH
+		} else if strings.HasPrefix(ans, "4") {
+			fmt.Println("Thanks")
+			return dayTypeHD
+		} else {
+			fmt.Println("Wrong answer, default value has been attribued")
+			return dayTypeWD
+		}
+	} else {
+		fmt.Println("Wrong answer, default value has been attribued")
+		return dayTypeWD
+	}
+}
+
 func main() {
 	//flags
 	reader := bufio.NewReader(os.Stdin)
@@ -23,10 +88,15 @@ func main() {
 	fmt.Print("\n\n")
 	fmt.Println("HELLO WORLD")
 
-	regenerateConfig := flag.Bool("regenconfig", false, "use it to generate the map_config.xml from the config.json file.")
-	configName := flag.String("configname", "map_config.xml", "name of the config to create / use. the file must be in ./configs")
-	runTurns := flag.Int("maxruns", -1, "number of singular events (train arriving in station) to execute. -1 to run until the end")
-	withVerbose := flag.Bool("verbose", false, "to have details printed during the run")
+	regenerateConfig := flag.Bool("regenconfig", false,
+		"use it to generate the map_config.xml from the config.json file.")
+	configName := flag.String("configname", "map_config.xml",
+		"name of the config to create / use. the file must be in ./configs")
+	runTurns := flag.Int("maxruns", -1,
+		"number of singular events (train arriving in station) to "+
+			"execute. -1 to run until the end")
+	withVerbose := flag.Bool("verbose", false,
+		"to have details printed during the run")
 
 	flag.Parse()
 
@@ -52,7 +122,8 @@ func main() {
 
 	//verify if an advanced config file is present
 	if _, err := os.Stat(advancedConfigPath); os.IsNotExist(err) {
-		fmt.Println("No advanced config file found (", advancedConfigPath, "), do you want to generate one ? y/n")
+		fmt.Println("No advanced config file found (", advancedConfigPath,
+			"), do you want to generate one ? y/n")
 		ans, _ := reader.ReadString('\n')
 		if len(ans) > 0 && strings.HasPrefix(strings.ToUpper(ans), "Y") {
 			fmt.Println("Creating new config file...")
@@ -62,7 +133,8 @@ func main() {
 			os.Exit(1)
 		}
 	} else {
-		fmt.Println("advanced config file found (", advancedConfigPath, "), running with it.")
+		fmt.Println("advanced config file found (", advancedConfigPath,
+			"), running with it.")
 	}
 
 	configs.InitAdvancedConfigInstance(*configName)
@@ -78,34 +150,15 @@ func main() {
 	fmt.Println("Number of lines : ", len(adConfig.MapC.Lines))
 
 	//the user choose the type of day
-	fmt.Println("Please, choose a day type beyond the following list (enter the corresponding number) :")
+	fmt.Println("Please, choose a day type beyond the following list " +
+		"(enter the corresponding number) :")
 	fmt.Println("1 : working day")
 	fmt.Println("2 : week-end")
 	fmt.Println("3 : bank holiday")
 	fmt.Println("4 : holidays")
 	ans, _ := reader.ReadString('\n')
 	var dayType string
-	if len(ans) > 0 {
-		if strings.HasPrefix(ans, "1") {
-			fmt.Println("Thanks")
-			dayType = "working day"
-		} else if strings.HasPrefix(ans, "2") {
-			fmt.Println("Thanks")
-			dayType = "week-end"
-		} else if strings.HasPrefix(ans, "3") {
-			fmt.Println("Thanks")
-			dayType = "bank holiday"
-		} else if strings.HasPrefix(ans, "4") {
-			fmt.Println("Thanks")
-			dayType = "holidays"
-		} else {
-			fmt.Println("Wrong answer, default value has been attribued")
-			dayType = "working day"
-		}
-	} else {
-		fmt.Println("Wrong answer, default value has been attribued")
-		dayType = "working day"
-	}
+	dayType = dayTypeAttribution(ans)
 
 	printHeader("Initializing Simulation")
 	startTime := time.Now()
@@ -143,37 +196,4 @@ func main() {
 	fmt.Println("run time : ", runTime.String())
 	fmt.Println("trips completed : ", tripsFinished)
 	fmt.Println("trips not completed :", tripsNotFinished)
-}
-
-func printHeader(text string) {
-	var charFiller = "-"
-	var length = 51
-	if text == "" {
-		fmt.Println(strings.Repeat(charFiller, length))
-		return
-	}
-
-	if len(text) > length {
-		fmt.Println(charFiller+charFiller+" ", text)
-	} else {
-		var middle = float64(length-4-len(text)) / float64(2)
-		var before = int(math.Floor(middle))
-		var after = int(math.Ceil(middle))
-		fmt.Println(strings.Repeat(charFiller, before), " "+text+" ", strings.Repeat(charFiller, after))
-	}
-}
-
-func createAdvancedConfig(name string) {
-	var mapObject, err = models.CreateMap()
-	if err != nil {
-		log.Fatal("failed to create map", err)
-	}
-
-	adConfig := mapObject.ExportMapToAdConfig()
-
-	err = adConfig.SaveXML(name)
-	if err != nil {
-		log.Fatal("failed to save config", err)
-	}
-	fmt.Println("new config created and saved with the name ", name)
 }
