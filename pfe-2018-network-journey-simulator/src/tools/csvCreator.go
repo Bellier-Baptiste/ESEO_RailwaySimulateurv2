@@ -22,7 +22,8 @@ func check(e error) {
 	}
 }
 
-func NewFileWithDelimiter(name string, columns []string, delimiter string) CsvFile {
+func NewFileWithDelimiter(name string, columns []string,
+	delimiter string) CsvFile {
 	return createFile(name, columns, delimiter)
 }
 
@@ -135,7 +136,8 @@ func (csv *CsvFile) WriteMultiple(contents [][]string) {
 				rowToAdd += csv.delimiter
 			}
 		}
-		//rowsToAdd += strings.Join(contents[i], csv.delimiter) + "\n"//TODO this is slowing the whole thing down
+		//rowsToAdd += strings.Join(contents[i], csv.delimiter) + "\n"
+		//TODO this is slowing the whole thing down
 	}
 
 	_, err = file.WriteString(rowsToAdd)
