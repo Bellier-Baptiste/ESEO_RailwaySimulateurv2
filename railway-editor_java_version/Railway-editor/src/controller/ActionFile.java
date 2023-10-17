@@ -1,5 +1,25 @@
-/**
- * Class part of the controller package of the application.
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package controller;
@@ -45,7 +65,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Class that contains the actions related to the file menu. */
+/**
+ * A class for performing actions related to the file menu.
+ * Linked to menu items in {@link view.MenuBar}.
+ *
+ * @see data.Data
+ *
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file ActionFile.java
+ * @date 2023/09/22
+ * @since 3.0
+ */
 public class ActionFile {
   /** Name of the export action. */
   public static final String EXPORT_NAME = "Export";
@@ -718,9 +749,6 @@ public class ActionFile {
               distributions.getAttribute(Data.AREA_RETIRED));
           String unemployedAmount = this.formatNumber(
               distributions.getAttribute(Data.AREA_UNEMPLOYED));
-
-          String id = areaElement.getElementsByTagName("id").item(0)
-              .getTextContent();
           Element positions = (Element) areaElement.getElementsByTagName(
               POSITION).item(0);
           String posX = positions.getAttribute("posX");
@@ -729,8 +757,7 @@ public class ActionFile {
               .item(0);
           String width = size.getAttribute("width");
           String height = size.getAttribute("height");
-          Area area = new Area(Integer.parseInt(id), Integer.parseInt(posX),
-              Integer.parseInt(posY),
+          Area area = new Area(Integer.parseInt(posX), Integer.parseInt(posY),
               Integer.parseInt(width), Integer.parseInt(height));
           area.setNewPart(Data.AREA_TOURIST, Integer.parseInt(touristAmount));
           area.setNewPart(Data.AREA_STUDENT, Integer.parseInt(studentAmount));

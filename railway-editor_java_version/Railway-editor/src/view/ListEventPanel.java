@@ -1,4 +1,26 @@
-/** Class part of the view package of the application. */
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 package view;
 
@@ -42,11 +64,14 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
 
-
 /**
- * Panel of all the event edition elements.
+ * Panel of all the {@link model.Event} edition elements.
  *
- * @author arthu
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file ListEventPanel.java
+ * @date N/A
+ * @since 2.0
  */
 public final class ListEventPanel extends JPanel {
   // constants
@@ -93,15 +118,19 @@ public final class ListEventPanel extends JPanel {
   /** how to format time in the date picker. */
   public static final String FORMAT_TIME = "HH:mm";
   /** selection png path. */
+  @SuppressWarnings("squid:S1075")
   public static final String SELECTION_PNG_PATH = "/resources/selection.png";
-  /** default panel width. */
-  public static final int PANEL_WIDTH_DEFAULT = 750;
-  /** default panel height. */
-  public static final int PANEL_HEIGHT_DEFAULT = 750;
   /** list event panel column names. */
   private static final String[] COLUMN_NAMES = {"Event Name", "Type",
       "Event Description"};
-
+  /** Select station icon button width. */
+  private static final int SELECT_STATION_ICON_BTN_WIDTH = 15;
+  /** Select station icon button height. */
+  private static final int SELECT_STATION_ICON_BTN_HEIGHT = 15;
+  /** Select station button width. */
+  private static final int SELECT_STATION_BTN_WIDTH = 50;
+  /** Select station button height. */
+  private static final int SELECT_STATION_BTN_HEIGHT = 20;
   /** list event panel table data. */
   private static final Object[][] TABLE_DATA = {
     {"LineDelayed", "Line", "configure a delay between 2 stations of a line"},
@@ -288,12 +317,10 @@ public final class ListEventPanel extends JPanel {
   private void initLineDelayed(final GridBagConstraints c) {
     JLabel timeStart = new JLabel(START_TIME);
     JLabel timeEnd = new JLabel(END_TIME);
-
     Properties p = new Properties();
     p.put(PROPERTIES_TEXT_TODAY, PROPERTIES_TEXT_TODAY_VALUE);
     p.put(PROPERTIES_TEXT_MONTH, PROPERTIES_TEXT_MONTH_VALUE);
     p.put(PROPERTIES_TEXT_YEAR, PROPERTIES_TEXT_YEAR_VALUE);
-
     JPanel viewDateStart = new JPanel();
     JPanel viewDateEnd = new JPanel();
     viewDateStart.setBorder(new BevelBorder(BevelBorder.RAISED));
@@ -312,24 +339,25 @@ public final class ListEventPanel extends JPanel {
     clockPanelStart = new ClockPanel();
     clockPanelEnd = new ClockPanel();
     clockPanelDelay = new ClockPanel();
-
     JLabel stationStart = new JLabel("id StationStart: ");
     editStationStart = new JTextField();
     try {
       BufferedImage btnImg = ImageIO.read(Objects.requireNonNull(getClass()
           .getResource(SELECTION_PNG_PATH)));
-      Image scaled = btnImg.getScaledInstance(15, 15,
-          java.awt.Image.SCALE_SMOOTH);
+      Image scaled = btnImg.getScaledInstance(SELECT_STATION_ICON_BTN_WIDTH,
+          SELECT_STATION_ICON_BTN_HEIGHT, java.awt.Image.SCALE_SMOOTH);
       ImageIcon icon = new ImageIcon(scaled);
       JButton stationStartPicker = new JButton(icon);
       stationStartPicker.addActionListener(arg0 -> {
         EventWindow.getInstance().setVisible(false);
         Data.getInstance().setSelectType(Data.STATION_START);
       });
-      stationStartPicker.setPreferredSize(new Dimension(50, 20));
+      stationStartPicker.setPreferredSize(new Dimension(
+          SELECT_STATION_BTN_WIDTH, SELECT_STATION_BTN_HEIGHT));
       editStationEnd = new JTextField();
       JXButton stationEndPicker = new JXButton(icon);
-      stationEndPicker.setPreferredSize(new Dimension(50, 20));
+      stationEndPicker.setPreferredSize(new Dimension(SELECT_STATION_BTN_WIDTH,
+          SELECT_STATION_BTN_HEIGHT));
       stationEndPicker.addActionListener(arg0 -> {
         EventWindow.getInstance().setVisible(false);
         Data.getInstance().setSelectType(Data.STATION_END);
@@ -476,19 +504,21 @@ public final class ListEventPanel extends JPanel {
       BufferedImage btnImg =
           ImageIO.read(Objects.requireNonNull(getClass()
               .getResource(SELECTION_PNG_PATH)));
-      Image scaled = btnImg.getScaledInstance(15, 15,
-          java.awt.Image.SCALE_SMOOTH);
+      Image scaled = btnImg.getScaledInstance(SELECT_STATION_ICON_BTN_WIDTH,
+          SELECT_STATION_ICON_BTN_HEIGHT, java.awt.Image.SCALE_SMOOTH);
       ImageIcon icon = new ImageIcon(scaled);
       JButton stationStartPicker = new JButton(icon);
       stationStartPicker.addActionListener(arg0 -> {
         EventWindow.getInstance().setVisible(false);
         Data.getInstance().setSelectType(Data.STATION_START);
       });
-      stationStartPicker.setPreferredSize(new Dimension(50, 20));
+      stationStartPicker.setPreferredSize(new Dimension(
+          SELECT_STATION_BTN_WIDTH, SELECT_STATION_BTN_HEIGHT));
 
       editStationEnd = new JTextField();
       JXButton stationEndPicker = new JXButton(icon);
-      stationEndPicker.setPreferredSize(new Dimension(50, 20));
+      stationEndPicker.setPreferredSize(new Dimension(
+          SELECT_STATION_BTN_WIDTH, SELECT_STATION_BTN_HEIGHT));
       stationEndPicker.addActionListener(arg0 -> {
         EventWindow.getInstance().setVisible(false);
         Data.getInstance().setSelectType(Data.STATION_END);
@@ -617,17 +647,16 @@ public final class ListEventPanel extends JPanel {
     try {
       BufferedImage btnImg = ImageIO.read(Objects.requireNonNull(getClass()
           .getResource(SELECTION_PNG_PATH)));
-      Image scaled = btnImg.getScaledInstance(15, 15,
-          java.awt.Image.SCALE_SMOOTH);
+      Image scaled = btnImg.getScaledInstance(SELECT_STATION_ICON_BTN_WIDTH,
+          SELECT_STATION_ICON_BTN_HEIGHT, java.awt.Image.SCALE_SMOOTH);
       ImageIcon icon = new ImageIcon(scaled);
       JButton stationConcernedPicker = new JButton(icon);
       stationConcernedPicker.addActionListener(arg0 -> {
         EventWindow.getInstance().setVisible(false);
         Data.getInstance().setSelectType(Data.STATION_CONCERNED);
       });
-      stationConcernedPicker.setPreferredSize(new Dimension(50, 20));
-
-
+      stationConcernedPicker.setPreferredSize(new Dimension(
+          SELECT_STATION_BTN_WIDTH, SELECT_STATION_BTN_HEIGHT));
       editPeakNumber = new JTextField();
 
       c.anchor = GridBagConstraints.NORTHWEST;
@@ -749,17 +778,16 @@ public final class ListEventPanel extends JPanel {
     try {
       BufferedImage btnImg = ImageIO.read(Objects.requireNonNull(getClass()
           .getResource(SELECTION_PNG_PATH)));
-      Image scaled = btnImg.getScaledInstance(15, 15,
-          java.awt.Image.SCALE_SMOOTH);
+      Image scaled = btnImg.getScaledInstance(SELECT_STATION_ICON_BTN_WIDTH,
+          SELECT_STATION_ICON_BTN_HEIGHT, java.awt.Image.SCALE_SMOOTH);
       ImageIcon icon = new ImageIcon(scaled);
       JButton stationConcernedPicker = new JButton(icon);
       stationConcernedPicker.addActionListener(arg0 -> {
         EventWindow.getInstance().dispose();
         Data.getInstance().setSelectType(Data.STATION_CONCERNED);
       });
-      stationConcernedPicker.setPreferredSize(new Dimension(50, 20));
-
-
+      stationConcernedPicker.setPreferredSize(new Dimension(
+          SELECT_STATION_BTN_WIDTH, SELECT_STATION_BTN_HEIGHT));
       c.anchor = GridBagConstraints.NORTHWEST;
       c.fill = GridBagConstraints.VERTICAL;
       c.gridwidth = 3;
@@ -908,16 +936,17 @@ public final class ListEventPanel extends JPanel {
    *
    * @author arthu
    */
-  public class DateLabelFormatter extends AbstractFormatter {
+  public static class DateLabelFormatter extends AbstractFormatter {
 
     /**
      * serial version UID.
      */
     private static final long serialVersionUID = 1L;
     /** The date pattern. */
-    private String datePattern = "yyyy-MM-dd";
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
     /** The date formatter. */
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat(
+        DATE_PATTERN);
 
     /** {@inheritDoc} */
     @Override
@@ -927,7 +956,7 @@ public final class ListEventPanel extends JPanel {
 
     /** {@inheritDoc} */
     @Override
-    public String valueToString(final Object value) throws ParseException {
+    public String valueToString(final Object value) {
       if (value != null) {
         Calendar cal = (Calendar) value;
         return dateFormatter.format(cal.getTime());
@@ -1046,17 +1075,23 @@ public final class ListEventPanel extends JPanel {
    */
   public void update(final String stationType) {
     EventWindow.getInstance().setVisible(true);
-    if (stationType.equals("start")) {
-      editStationStart.setText(Integer.toString(Data.getInstance()
-          .getStationStartId()));
-    } else if (stationType.equals("end")) {
-      editStationEnd.setText(Integer.toString(Data.getInstance()
-          .getStationEndId()));
-    } else if (stationType.equals("concerned")) {
-      editStationConcerned.setText(Integer.toString(Data.getInstance()
-          .getStationConcernedId()));
-      editStationClosedConcerned.setText(Integer.toString(Data.getInstance()
-          .getStationConcernedId()));
+    switch (stationType) {
+      case "start":
+        editStationStart.setText(Integer.toString(Data.getInstance()
+            .getStationStartId()));
+        break;
+      case "end":
+        editStationEnd.setText(Integer.toString(Data.getInstance()
+            .getStationEndId()));
+        break;
+      case "concerned":
+        editStationConcerned.setText(Integer.toString(Data.getInstance()
+            .getStationConcernedId()));
+        editStationClosedConcerned.setText(Integer.toString(Data.getInstance()
+            .getStationConcernedId()));
+        break;
+      default:
+        break;
     }
     view.repaint();
   }
@@ -1066,7 +1101,7 @@ public final class ListEventPanel extends JPanel {
    *
    * @author arthu
    */
-  class PathCellRenderer extends DefaultTableCellRenderer {
+  static class PathCellRenderer extends DefaultTableCellRenderer {
     /**
      * serial version UID.
      */

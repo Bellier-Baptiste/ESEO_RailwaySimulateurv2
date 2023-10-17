@@ -22,29 +22,40 @@
  * SOFTWARE.
  */
 
-package controller;
+package testmodel;
 
-import view.LineView;
-import view.MainWindow;
+import model.Station;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Controller to add {@link LineView} to the {@link MainWindow}.
+ * Test-case of {@link Station} model.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @file LineController.java
+ * @file StationTest.java
  * @date N/A
  * @since 2.0
  */
-public class LineController {
-  //attributes
+public class StationTest {
+  public static final String NAME = "eglantine";
 
-  /**
-   * Constructor add lineView to the MainPanel.
-   *
-   * @param lineViewToAdd lineView bound to line
-   */
-  public LineController(final LineView lineViewToAdd) {
-    MainWindow.getInstance().getMainPanel().addLineView(lineViewToAdd);
+
+  @Test
+  public void testConstructeur() {
+    Station station = new Station(0, 5, 5, NAME);
+    assertEquals(0, station.getId());
+    assertEquals(5, station.getPosX());
+    assertEquals(5, station.getPosY());
+    assertEquals("eglantine", station.getName());
+  }
+
+  @Test
+  public void testMoveStation() {
+    Station station = new Station(0, 5, 5, NAME);
+    station.moveStation(3, 3);
+    assertEquals(8, station.getPosX());
+    assertEquals(8, station.getPosY());
   }
 }

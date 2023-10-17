@@ -1,19 +1,49 @@
-/** Class part of the model package of the application. */
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 package model;
 
 import controller.EventName;
 
 /**
- * Model class extending event which describes a change of trains number on a
- * line at a certain hour of the day.
+ * Model class extending {@link Event} which describes a change of trains
+ * number on a {@link model.Line} at a certain hour of the day.
  *
- * @author Arthur Lagarce, Aurélie Chamouleau
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file EventHour.java
+ * @date N/A
+ * @since 2.0
  */
 public class EventHour extends Event {
-  /** Line id. */
+  /**
+   * Line id.
+   */
   private int idLine;
-  /** Number of trains to add. */
+  /**
+   * Number of trains to add.
+   */
   private int trainNumber;
 
   /**

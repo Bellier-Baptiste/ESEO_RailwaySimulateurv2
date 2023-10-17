@@ -1,5 +1,25 @@
-/**
- * Class part of the view package of the application.
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package view;
@@ -12,10 +32,14 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
 /**
- * The panel which contains the hud with the stations names, some instructions
- * and the caption.
+ * The panel which contains the hud with the {@link model.Station} names, some
+ * instructions and the caption.
  *
- * @author Arthur Lagarce, Aurélie Chamouleau
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file MainPanelHud.java
+ * @date N/A
+ * @since 2.0
  */
 public class MainPanelHud {
   /**
@@ -155,33 +179,33 @@ public class MainPanelHud {
     g2D.drawRect(posX, posY, WIDTH, HEIGHT);
     g2D.setColor(Color.WHITE);
     g2D.fillRect(posX + 2, posY + 2, WIDTH - STROKE_WIDTH,
-      HEIGHT - STROKE_WIDTH);
+        HEIGHT - STROKE_WIDTH);
 
     // Station Closed description
 
     g2D.setColor(Color.RED);
     g2D.fillOval(posX + STATION_CLOSED_X, posY + STATION_CLOSED_Y, CIRCLE_SIZE,
-      CIRCLE_SIZE);
+        CIRCLE_SIZE);
     g2D.setColor(Color.BLACK);
     g2D.drawString(STATION_CLOSED_STRING, posX + STATION_CLOSED_X_STRING,
-      posY + STATION_CLOSED_Y_STRING);
+        posY + STATION_CLOSED_Y_STRING);
 
     // Station Delayed description
     g2D.setColor(Color.ORANGE);
     g2D.fillOval(posX + STATION_DELAYED_X, posY + STATION_DELAYED_Y,
-      CIRCLE_SIZE, CIRCLE_SIZE);
+        CIRCLE_SIZE, CIRCLE_SIZE);
     g2D.setColor(Color.BLACK);
     g2D.drawString(STATION_DELAYED_STRING, posX + STATION_DELAYED_X_STRING,
-      posY + STATION_DELAYED_Y_STRING);
+        posY + STATION_DELAYED_Y_STRING);
 
     // Station AttendancePeak description
 
     g2D.setColor(Color.YELLOW);
     g2D.fillOval(posX + STATION_PEAK_X, posY + STATION_PEAK_Y, CIRCLE_SIZE,
-      CIRCLE_SIZE);
+         CIRCLE_SIZE);
     g2D.setColor(Color.BLACK);
     g2D.drawString(STATION_PEAK_STRING, posX + STATION_PEAK_X_STRING,
-      posY + STATION_PEAK_Y_STRING);
+         posY + STATION_PEAK_Y_STRING);
 
     if (this.station != null) {
       g2D.setColor(Color.BLACK);
@@ -194,11 +218,11 @@ public class MainPanelHud {
 
     g2D.setFont(new Font(g2D.getFont().getName(), Font.ITALIC, FONT_SIZE));
     g2D.drawString("press H to hide HUD", posX + HIDE_TIPS_X,
-      posY + HIDE_TIPS_Y);
+        posY + HIDE_TIPS_Y);
 
     g2D.setFont(new Font(g2D.getFont().getName(), Font.ITALIC, FONT_SIZE));
     g2D.drawString("press right click to move the map",
-      posX + DRAG_TIPS_X, posY + DRAG_TIPS_Y);
+        posX + DRAG_TIPS_X, posY + DRAG_TIPS_Y);
   }
 
   /**

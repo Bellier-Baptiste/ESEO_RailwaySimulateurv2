@@ -22,29 +22,13 @@
  * SOFTWARE.
  */
 
-package controller;
+package testmodel;
 
-import view.LineView;
-import view.MainWindow;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-/**
- * Controller to add {@link LineView} to the {@link MainWindow}.
- *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
- * @file LineController.java
- * @date N/A
- * @since 2.0
- */
-public class LineController {
-  //attributes
-
-  /**
-   * Constructor add lineView to the MainPanel.
-   *
-   * @param lineViewToAdd lineView bound to line
-   */
-  public LineController(final LineView lineViewToAdd) {
-    MainWindow.getInstance().getMainPanel().addLineView(lineViewToAdd);
-  }
+@RunWith(Suite.class)
+@SuiteClasses({ AreaTest.class, LineTest.class, StationTest.class })
+public class ModelTestSuite {
 }

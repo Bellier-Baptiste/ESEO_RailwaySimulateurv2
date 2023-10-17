@@ -1,5 +1,25 @@
-/**
- * Class part of the data package of the application.
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package data;
@@ -15,14 +35,24 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 /**
- * Data Singleton class which stores all information relative to stations and
- * lines.
+ * Data Singleton class which stores all information relative to the metro
+ * network configuration.
  *
- * @author arthu
+ * @see model.Line
+ * @see model.Station
+ * @see model.Event
+ *
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file Data.java
+ * @date N/A
+ * @since 2.0
  */
 public final class Data {
   // constants
-  /** Number of colors available for lines. */
+  /**
+   * Number of colors available for lines.
+   */
   public static final int NB_COLORS = 50;
   // attributes
   /** Observer of the data. */
@@ -124,25 +154,37 @@ public final class Data {
   private int areaId;
   /** List of all available stations names. */
   private List<String> availableStationNames;
-  /**  String for tourist label. */
+  /** String for tourist label. */
   public static final String AREA_TOURIST = "Tourist";
   /** String for student label. */
   public static final String AREA_STUDENT = "Student";
-  /** String for businessman label. */
+  /**
+   * String for businessman label.
+   */
   public static final String AREA_BUSINESSMAN = "Businessman";
-  /** String for worker label. */
+  /**
+   * String for worker label.
+   */
   public static final String AREA_WORKER = "Worker";
-  /** String for child label. */
+  /**
+   * String for child label.
+   */
   public static final String AREA_CHILD = "Child";
-  /** String for retired label. */
+  /**
+   * String for retired label.
+   */
   public static final String AREA_RETIRED = "Retired";
-  /** String for unemployed label. */
+  /**
+   * String for unemployed label.
+   */
   public static final String AREA_UNEMPLOYED = "Unemployed";
 
   //event attributes
   /** List of all event created. */
   private List<Event> eventList;
-  /** String for event starting station. */
+  /**
+   * String for event starting station.
+   */
   public static final String STATION_START = "stationStart";
   /** String for event ending station. */
   public static final String STATION_END = "stationEnd";

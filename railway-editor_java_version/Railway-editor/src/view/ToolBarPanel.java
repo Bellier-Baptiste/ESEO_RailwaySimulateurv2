@@ -1,25 +1,18 @@
-/**
- * @file ToolBarPanelIdea2.java
- * @brief Describes and init the toolbar panel with all the HMI buttons for
- * managing the stations, lines, areas, events, destination and running the
- * simulation.
- * @date N/A
- * @author Arthur Lagarce, Aurélie Chamouleau
- * <p>
+/*
  * License : MIT License
- * <p>
+ *
  * Copyright (c) 2023 Team PFE_2023_16
- * <p>
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p>
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * <p>
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -55,12 +48,15 @@ import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
 
 /**
- * ToolBar panel which contains all the action buttons.
+ * ToolBar panel that extends {@link JToolBar} which contains all the action
+ * buttons.
  *
- * @author Arthur Lagarce
- *
+ * @author Aurélie Chamouleau
+ * @file ToolBarPanel.java
+ * @date 2023-09-22
+ * @since 3.0
  */
-public class ToolBarPanelIdea2 extends JToolBar {
+public class ToolBarPanel extends JToolBar {
   // constants
   /** Text of the button with a delete action. */
   public static final String DELETE_TEXT_BTN = "DELETE";
@@ -98,7 +94,7 @@ public class ToolBarPanelIdea2 extends JToolBar {
   /**
    * ToolBarPanelIdea2's constructor.
    */
-  public ToolBarPanelIdea2() {
+  public ToolBarPanel() {
     this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
     this.filterComboBox = new FilterComboBox(FilterComboBox.populateArray());
     this.initComponents();
@@ -255,7 +251,7 @@ public class ToolBarPanelIdea2 extends JToolBar {
     addAreaBtn.addActionListener(e -> ActionArea.getInstance().addArea());
     addAreaBtn.setFocusable(false);
 
-    JToggleButton deleteAreaBtn = new JToggleButton(ToolBarPanelIdea2
+    JToggleButton deleteAreaBtn = new JToggleButton(ToolBarPanel
         .DELETE_TEXT_BTN);
     deleteAreaBtn.setFocusable(false);
     actionButtonGroup.add(deleteAreaBtn);
@@ -294,7 +290,7 @@ public class ToolBarPanelIdea2 extends JToolBar {
     addLineBtn.addActionListener(e -> ActionLine.getInstance().addLine());
     addLineBtn.setFocusable(false);
 
-    JToggleButton deleteLineBtn = new JToggleButton(ToolBarPanelIdea2
+    JToggleButton deleteLineBtn = new JToggleButton(ToolBarPanel
         .DELETE_TEXT_BTN);
     deleteLineBtn.setFocusable(false);
     actionButtonGroup.add(deleteLineBtn);
@@ -357,7 +353,7 @@ public class ToolBarPanelIdea2 extends JToolBar {
     addStationBtn.setName(ActionStation.ACTION_NAME);
     addStationBtn.setFocusable(false);
 
-    JButton deleteStationBtn = new JButton(ToolBarPanelIdea2.DELETE_TEXT_BTN);
+    JButton deleteStationBtn = new JButton(ToolBarPanel.DELETE_TEXT_BTN);
     deleteStationBtn.setFocusable(false);
     JButton mergeStationsBtn = new JButton("MERGE");
     mergeStationsBtn.setFocusable(false);

@@ -1,9 +1,6 @@
-/**
- * Provides classes of the controller's MVC pattern.
- */
-package controller;
-
 /*
+ * License : MIT License
+ *
  * Copyright (c) 2023 Team PFE_2023_16
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,19 +22,22 @@ package controller;
  * SOFTWARE.
  */
 
-import data.Data;
+package controller;
+
 import model.Area;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import view.AreaView;
 import view.MainWindow;
 
 /**
- * A class for managing areas on the map.
+ * A class for managing areas {@link Area} on the map.
+ * Linked to a button in {@link view.ToolBarPanel}.
  *
- * @author Arthur Lagarce, Aurélie Chamouleau
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
  * @file ActionArea.java
- * @brief Allows to add areas to the map
- * @date N/A
+ * @date 2023-10-02
+ * @since 3.0
  */
 public class ActionArea {
   /** Action name. */
@@ -66,10 +66,12 @@ public class ActionArea {
   }
 
   /**
-   * Add an area to the map.
+   * Creates a {@link Area} with its linked {@link AreaView} created and
+   * add this {@link AreaView} to the {@link view.MainPanel} with
+   * {@link view.MainPanel#addAreaView(AreaView)}.
    */
   public void addArea() {
-    Area area = new Area(Data.getInstance().getNewAreaId(), AREA_POSX_DEFAULT,
+    Area area = new Area(AREA_POSX_DEFAULT,
         AREA_POSY_DEFAULT, AREA_WIDTH_DEFAULT, AREA_HEIGHT_DEFAULT);
 
     Coordinate latLonTop = (Coordinate) MainWindow.getInstance().getMainPanel()

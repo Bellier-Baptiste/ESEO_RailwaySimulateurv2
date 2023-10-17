@@ -1,5 +1,25 @@
-/**
- * Class part of the view package of the application.
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package view;
@@ -14,13 +34,17 @@ import javax.swing.WindowConstants;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
- * Main windows Singleton which contain all the different panels.
+ * Main window's Singleton which contain all the different panels.
  *
- * @author Arthur Lagarce, Aurélie Chamouleau
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file MainWindow.java
+ * @date N/A
+ * @since 2.0
  */
-@SuppressWarnings("serial")
 public final class MainWindow extends JFrame {
 
   // constants
@@ -37,11 +61,9 @@ public final class MainWindow extends JFrame {
   /** Main panel of the application. */
   private MainPanel mainPanel;
   /** ToolBar panel of the application. */
-  private ToolBarPanelIdea2 toolBarPanelIdea2;
+  private final ToolBarPanel toolBarPanel;
   /** Event recap panel of the application. */
   private EventRecap eventRecapPanel;
-  /** Menu bar of the application. */
-  private JMenuBar appMenuBar;
 
   /**
    * Constructor, initialize window and panels.
@@ -59,12 +81,12 @@ public final class MainWindow extends JFrame {
     this.getContentPane().add(this.mainPanel,
         BorderLayout.CENTER);
 
-    this.appMenuBar = MenuBar.getInstance();
-    this.setJMenuBar(this.appMenuBar);
+    JMenuBar appMenuBar = MenuBar.getInstance();
+    this.setJMenuBar(appMenuBar);
 
-    this.toolBarPanelIdea2 = new ToolBarPanelIdea2();
-    this.toolBarPanelIdea2.setVisible(true);
-    this.getContentPane().add(this.toolBarPanelIdea2, BorderLayout.NORTH);
+    this.toolBarPanel = new ToolBarPanel();
+    this.toolBarPanel.setVisible(true);
+    this.getContentPane().add(this.toolBarPanel, BorderLayout.NORTH);
 
     this.eventRecapPanel = EventRecap.getInstance();
     this.getContentPane().add(this.eventRecapPanel, BorderLayout.WEST);
@@ -73,8 +95,8 @@ public final class MainWindow extends JFrame {
 
     BufferedImage source;
     try {
-      source = ImageIO.read(getClass().getResource(
-          "/resources/railwayEditorIcon3.png"));
+      source = ImageIO.read(Objects.requireNonNull(getClass().getResource(
+          "/resources/railwayEditorIcon3.png")));
       ImageIcon img = new ImageIcon(source);
       this.setIconImage(img.getImage());
     } catch (IOException e) {
@@ -128,7 +150,7 @@ public final class MainWindow extends JFrame {
   /**
    * Return Singleton.
    *
-   * @return MainWindos instance
+   * @return MainWindow's instance
    */
   public static MainWindow getInstance() {
     if (instance == null) {
@@ -142,8 +164,8 @@ public final class MainWindow extends JFrame {
    *
    * @return the toolbar panel
    */
-  public ToolBarPanelIdea2 getToolBarPanelIdea2() {
-    return toolBarPanelIdea2;
+  public ToolBarPanel getToolBarPanel() {
+    return toolBarPanel;
   }
 
 }

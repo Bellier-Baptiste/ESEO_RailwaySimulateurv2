@@ -1,5 +1,25 @@
-/**
- * Class part of the controller package of the application.
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package controller;
@@ -14,7 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class to manage the actions on the lines.
+ * A class for performing actions on the lines {@link model.Line}.
+ * Linked to buttons in {@link view.ToolBarPanel}.
+ *
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file ActionLine.java
+ * @date 2023-10-02
+ * @since 3.0
  */
 public final class ActionLine {
   /** String of the add action name. */
@@ -67,7 +94,9 @@ public final class ActionLine {
   }
 
   /**
-   * Function to add a new line.
+   * Creates a {@link Line} with its linked {@link LineView} created and
+   * add this {@link LineView} to the {@link view.MainPanel} thanks to
+   * {@link LineController}.
    */
   public void addLine() {
     int lineIndex = MainWindow.getInstance().getMainPanel().getLineViews()
@@ -75,12 +104,12 @@ public final class ActionLine {
     ActionLine.this.setLineToUpdateIndex(lineIndex);
     // create a new line (model)
     Line line = new Line(lineIndex, new ArrayList<>());
-    // create a new vie for the new line's sattions
+    // create a new vie for the new line's stations
     List<StationView> stationsViews = new ArrayList<>();
     LineView lineview = new LineView(line, stationsViews);
     @SuppressWarnings("unused")
     LineController lineController = new LineController(lineview);
-    MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(
+    MainWindow.getInstance().getToolBarPanel().getLineId().setText(
         Integer.toString(lineIndex)); // change line id
     // displayed in the
     // toolBar Panel
@@ -91,14 +120,14 @@ public final class ActionLine {
    * Function to select the upper line.
    */
   public void incrementLine() {
-    JLabel lineId = MainWindow.getInstance().getToolBarPanelIdea2().getLineId();
+    JLabel lineId = MainWindow.getInstance().getToolBarPanel().getLineId();
 
     if (!lineId.getText().equals("none")) { // if a line exists
       int currentLineId = Integer.parseInt(lineId.getText());
       if (currentLineId < MainWindow.getInstance().getMainPanel().getLineViews()
           .size() - 1) { // if this is not
         // the last line created
-        MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(
+        MainWindow.getInstance().getToolBarPanel().getLineId().setText(
             Integer.toString(currentLineId + 1));
         ActionLine.this.setLineToUpdateIndex(currentLineId + 1);
       }
@@ -109,12 +138,12 @@ public final class ActionLine {
    * Function to select the lower line.
    */
   public void decrementLine() {
-    JLabel lineId = MainWindow.getInstance().getToolBarPanelIdea2().getLineId();
+    JLabel lineId = MainWindow.getInstance().getToolBarPanel().getLineId();
 
     if (!lineId.getText().equals("none")) { // if a line exists
       int currentLineId = Integer.parseInt(lineId.getText());
       if (currentLineId > 0) { // if this is not the first line created
-        MainWindow.getInstance().getToolBarPanelIdea2().getLineId().setText(
+        MainWindow.getInstance().getToolBarPanel().getLineId().setText(
             Integer.toString(currentLineId - 1));
         ActionLine.this.setLineToUpdateIndex(currentLineId - 1);
       }

@@ -1,5 +1,25 @@
-/**
- * Class part of the controller package of the application.
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 
 package controller;
@@ -15,7 +35,14 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Class that handles the action of adding a station to the current line.
+ * A class for performing actions on the stations views {@link StationView} and
+ * the stations {@link Station}.
+ * Linked to buttons in {@link view.ToolBarPanel}.
+ *
+ * @author Aurélie Chamouleau
+ * @file ActionStation.java
+ * @date 2023-10-02
+ * @since 3.0
  */
 public final class ActionStation {
   /** Action name of the add button. */
@@ -58,7 +85,9 @@ public final class ActionStation {
   }
 
   /**
-   * Add a station to the current line.
+   * Creates a {@link Station} with its linked {@link StationView} created and
+   * add this {@link StationView} to the {@link view.MainPanel}
+   * thanks to {@link StationController}.
    */
   public void addStation() {
     int lineToUpdateIndex = ActionLine.getInstance().getLineToUpdateIndex();
@@ -84,8 +113,8 @@ public final class ActionStation {
       // No line existing
       ex.printStackTrace();
     }
-    int stationX = 0;
-    int stationY = 0;
+    int stationX;
+    int stationY;
     // if there are already stations on this line
     if (stationViews != null && !stationViews.isEmpty()) {
       stationX = stationViews.get(stationViews.size() - 1).getStation()
@@ -110,12 +139,10 @@ public final class ActionStation {
     station.setLatitude(latLon.getLat());
     station.setLongitude(latLon.getLon());
 
-    int stationSize = STATION_SIZE;
-    int centerStationSize = CENTER_STATION_SIZE;
     // create stationView relative to this station
     StationView stationView = new StationView(station);
-    stationView.setStationSize(stationSize);
-    stationView.setCenterStationSize(centerStationSize);
+    stationView.setStationSize(STATION_SIZE);
+    stationView.setCenterStationSize(CENTER_STATION_SIZE);
     @SuppressWarnings("unused")
     StationController stationController = new StationController(station,
         stationView, lineToUpdateIndex);
