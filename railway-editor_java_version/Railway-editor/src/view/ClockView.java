@@ -1,3 +1,7 @@
+/**
+ * Class part of the view package of the application.
+ */
+
 package view;
 
 import javax.swing.JPanel;
@@ -11,27 +15,47 @@ import java.awt.Graphics2D;
  * @author Arthur Lagarce, Aurélie Chamouleau
  */
 public class ClockView {
+  /** Hour of the clock. */
   private int hour;
+  /** Minutes of the clock. */
   private int minutes;
+  /** Position X of the clock. */
   private int posX;
+  /** Position Y of the clock. */
   private int posY;
+  /** Panel of the clock. */
   private JPanel panel;
+  /** Size of the clock. */
   private static final int CLOCK_SIZE = 30;
+  /** Size of the clock mark. */
   private static final int CLOCK_MARK_SIZE = 3;
+  /** Size of the minutes. */
   private static final int MINUTE_SIZE = 20;
+  /** Size of the hour. */
   private static final int HOUR_SIZE = 10;
+  /** Number hours on clock. */
+  private static final int NUMBER_HOURS = 12;
+  /** Number of hours in PI range. */
+  private static final int PI_HOURS = 6;
+  /** Number of minutes in PI range. */
+  private static final int PI_MINUTES = 30;
+  /** Stroke width. */
+  private static final int STROKE_WIDTH = 3;
+  /** Clock width. */
+  private static final int CLOCK_WIDTH_HEIGHT = 6;
 
   /**
-   * Constructor.
+   * ClockView constructor.
    *
-   * @param posX  clock positionX
-   * @param posY  clock positionY
-   * @param panel clock panel
+   * @param clockPosX  clock positionX
+   * @param clockPosY  clock positionY
+   * @param clockPanel clock panel
    */
-  public ClockView(int posX, int posY, JPanel panel) {
-    this.posX = posX;
-    this.posY = posY;
-    this.panel = panel;
+  public ClockView(final int clockPosX, final int clockPosY,
+                   final JPanel clockPanel) {
+    this.posX = clockPosX;
+    this.posY = clockPosY;
+    this.panel = clockPanel;
   }
 
   /**
@@ -39,27 +63,28 @@ public class ClockView {
    *
    * @param g2D graphics component
    */
-  public void display(Graphics2D g2D) {
+  public void display(final Graphics2D g2D) {
 
-    for (int i = 1; i <= 12; i++) {
+    for (int i = 1; i <= NUMBER_HOURS; i++) {
       g2D.drawLine(posX, posY + CLOCK_SIZE - CLOCK_MARK_SIZE, posX,
           posY + CLOCK_SIZE);
-      g2D.rotate(Math.PI / 6, posX, posY);
+      g2D.rotate(Math.PI / PI_HOURS, posX, posY);
     }
     g2D.setColor(Color.BLUE);
-    g2D.rotate(minutes * Math.PI / 30, posX, posY);
+    g2D.rotate(minutes * Math.PI / PI_MINUTES, posX, posY);
     g2D.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND,
         BasicStroke.JOIN_ROUND));
     g2D.drawLine(posX, posY, posX, posY - MINUTE_SIZE);
 
-    g2D.rotate(2 * Math.PI - minutes * Math.PI / 30, posX, posY);
-    g2D.rotate(hour * Math.PI / 6, posX, posY);
-    g2D.setStroke(new BasicStroke(3, BasicStroke.CAP_ROUND,
+    g2D.rotate(2 * Math.PI - minutes * Math.PI / PI_MINUTES, posX, posY);
+    g2D.rotate(hour * Math.PI / PI_HOURS, posX, posY);
+    g2D.setStroke(new BasicStroke(STROKE_WIDTH, BasicStroke.CAP_ROUND,
         BasicStroke.JOIN_ROUND));
     g2D.drawLine(posX, posY, posX, posY - HOUR_SIZE);
 
     g2D.setColor(Color.BLACK);
-    g2D.fillOval(posX - 3, posY - 3, 6, 6);
+    g2D.fillOval(posX - STROKE_WIDTH, posY - STROKE_WIDTH,
+        CLOCK_WIDTH_HEIGHT, CLOCK_SIZE);
   }
 
   /**
@@ -74,10 +99,10 @@ public class ClockView {
   /**
    * set the hour.
    *
-   * @param hour hour on the clock
+   * @param hourToSet hour on the clock
    */
-  public void setHour(int hour) {
-    this.hour = hour;
+  public void setHour(final int hourToSet) {
+    this.hour = hourToSet;
   }
 
   /**
@@ -92,10 +117,10 @@ public class ClockView {
   /**
    * set the minutes.
    *
-   * @param minutes on the clock
+   * @param minutesToSet on the clock
    */
-  public void setMinutes(int minutes) {
-    this.minutes = minutes;
+  public void setMinutes(final int minutesToSet) {
+    this.minutes = minutesToSet;
   }
 
   /**
@@ -110,10 +135,10 @@ public class ClockView {
   /**
    * set the panel of the clock.
    *
-   * @param panel panel which contain the clock
+   * @param panelToSet panel which contain the clock
    */
-  public void setPanel(JPanel panel) {
-    this.panel = panel;
+  public void setPanel(final JPanel panelToSet) {
+    this.panel = panelToSet;
   }
 
   /**
@@ -128,10 +153,10 @@ public class ClockView {
   /**
    * set Clock posX.
    *
-   * @param posX clock positionX
+   * @param clockPosX clock positionX
    */
-  public void setPosX(int posX) {
-    this.posX = posX;
+  public void setPosX(final int clockPosX) {
+    this.posX = clockPosX;
   }
 
   /**
@@ -146,11 +171,9 @@ public class ClockView {
   /**
    * set Clock posY.
    *
-   * @param posY clock positionY
+   * @param clockPosY clock positionY
    */
-  public void setPosY(int posY) {
-    this.posY = posY;
+  public void setPosY(final int clockPosY) {
+    this.posY = clockPosY;
   }
-
-
 }

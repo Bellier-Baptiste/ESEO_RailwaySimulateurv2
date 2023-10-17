@@ -22,21 +22,20 @@ import org.openstreetmap.gui.jmapviewer.JMapViewer;
  */
 public final class MainPanel extends JMapViewer {
   //constants
-  /**
-   * Serial version UID.
-   */
+  /** Serial version UID. */
   private static final long serialVersionUID = 1L;
-  /**
-   * MainPanel default width.
-   */
+  /** MainPanel default width. */
   public static final int PANEL_WIDTH_DEFAULT = 1000;
-  /**
-   * MainPanel default height.
-   */
+  /** MainPanel default height. */
   public static final int PANEL_HEIGHT_DEFAULT = 600;
-  /**
-   * MainPanel Singleton instance.
-   */
+  /** MainPanelHUD default position Y. */
+  public static final int MAIN_PANEL_HUD_POSITION_Y = 650;
+  /** MainPanelHUD display position lat. */
+  public static final double MAIN_PANEL_HUD_POSITION_LAT = 47.46667;
+  /** MainPanelHUD display position lon. */
+  public static final double MAIN_PANEL_HUD_POSITION_LON = -0.55;
+  // attributes
+  /** MainPanel Singleton instance. */
   private static MainPanel instance;
   /** MainPanel HUD. */
   private final transient MainPanelHud mainPanelHud;
@@ -60,9 +59,10 @@ public final class MainPanel extends JMapViewer {
     addMouseMotionListener(ma);
     addMouseWheelListener(ma);
     addMouseListener(ma);
-    mainPanelHud = new MainPanelHud(0, 650);
+    mainPanelHud = new MainPanelHud(0, MAIN_PANEL_HUD_POSITION_Y);
     this.hideHud = false;
-    Coordinate point = new Coordinate(47.46667, -0.55);
+    Coordinate point = new Coordinate(MAIN_PANEL_HUD_POSITION_LAT,
+      MAIN_PANEL_HUD_POSITION_LON);
     this.setDisplayPosition(point, 0);
     this.setZoom(2);
   }
@@ -174,7 +174,7 @@ public final class MainPanel extends JMapViewer {
     super.paintComponent(g);
     //hud display
     if (!hideHud) {
-      mainPanelHud.affiche(g2D);
+      mainPanelHud.show(g2D);
     }
     //LineViews Display
     if (lineViews != null) {

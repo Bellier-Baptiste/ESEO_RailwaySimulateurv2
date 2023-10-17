@@ -756,11 +756,12 @@ public class ActionFile {
    *
    * @return the formatted number
    */
-  private String formatNumber(String populationAmount) {
-    if (populationAmount.isEmpty()) {
-      populationAmount = "0";
+  private String formatNumber(final String populationAmount) {
+    String resultPopulationAmount = populationAmount;
+    if (resultPopulationAmount.isEmpty()) {
+      resultPopulationAmount = "0";
     }
-    return populationAmount;
+    return resultPopulationAmount;
   }
 
   /**

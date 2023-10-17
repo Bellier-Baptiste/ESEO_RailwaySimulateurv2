@@ -42,6 +42,10 @@ public final class EventRecap extends JScrollPane {
   private static final String LINE = "Line: ";
   /** string of the for the remove action. */
   private static final String REMOVE = "remove";
+  /** Main font size. */
+  private static final int MAIN_FONT_SIZE = 12;
+  /** Details font size. */
+  private static final int DETAILS_FONT_SIZE = 11;
   /** Singleton instance of the class. */
   private static EventRecap instance;
   /** task pane container. */
@@ -101,23 +105,23 @@ public final class EventRecap extends JScrollPane {
     taskpane.setTitle("Line Delayed");
 
     JXLabel startDate = new JXLabel();
-    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     startDate.setText(START_DATE + startDateStr);
     startDate.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel endDate = new JXLabel();
-    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     endDate.setText(END_DATE + endDateStr);
     endDate.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel locations = new JXLabel();
-    locations.setFont(new Font(SEGEOE_UI, Font.ITALIC, 11));
+    locations.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     locations.setText(locationsStr);
     locations.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel line = new JXLabel();
-    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, 11));
+    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     line.setText(LINE + lineStr);
     line.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel delay = new JXLabel();
-    delay.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    delay.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     delay.setText("Delay: " + delayStr);
     delay.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -166,19 +170,19 @@ public final class EventRecap extends JScrollPane {
     taskpane.setTitle("Line Closed");
 
     JXLabel startDate = new JXLabel();
-    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     startDate.setText(START_DATE + startDateStr);
     startDate.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel endDate = new JXLabel();
-    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     endDate.setText(END_DATE + endDateStr);
     endDate.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel locations = new JXLabel();
-    locations.setFont(new Font(SEGEOE_UI, Font.ITALIC, 11));
+    locations.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     locations.setText(locationsStr);
     locations.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel line = new JXLabel();
-    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, 11));
+    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     line.setText(LINE + lineStr);
     line.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -228,19 +232,19 @@ public final class EventRecap extends JScrollPane {
     taskpane.setTitle("Attendance Peak");
 
     JXLabel startDate = new JXLabel();
-    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     startDate.setText(START_DATE + startDateStr);
     startDate.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel endDate = new JXLabel();
-    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     endDate.setText(END_DATE + endDateStr);
     endDate.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel station = new JXLabel();
-    station.setFont(new Font(SEGEOE_UI, Font.ITALIC, 11));
+    station.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     station.setText("Station: " + stationStr);
     station.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel peak = new JXLabel();
-    peak.setFont(new Font(SEGEOE_UI, Font.ITALIC, 11));
+    peak.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     peak.setText("Peak amount: " + peakStr);
     peak.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -289,15 +293,15 @@ public final class EventRecap extends JScrollPane {
     taskpane.setTitle("Station Closed");
 
     JXLabel startDate = new JXLabel();
-    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     startDate.setText(START_DATE + startDateStr);
     startDate.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel endDate = new JXLabel();
-    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     endDate.setText(END_DATE + endDateStr);
     endDate.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel station = new JXLabel();
-    station.setFont(new Font(SEGEOE_UI, Font.ITALIC, 11));
+    station.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     station.setText("Station: " + stationStr);
     station.setHorizontalAlignment(SwingConstants.LEFT);
 
@@ -342,19 +346,19 @@ public final class EventRecap extends JScrollPane {
     taskpane.setTitle("Train Hour");
 
     JXLabel startTime = new JXLabel();
-    startTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    startTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     startTime.setText("Start Time: " + startTimeStr);
     startTime.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel endTime = new JXLabel();
-    endTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, 12));
+    endTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     endTime.setText("End Time: " + endTimeStr);
     endTime.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel line = new JXLabel();
-    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, 11));
+    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     line.setText(LINE + lineStr);
     line.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel trainNb = new JXLabel();
-    trainNb.setFont(new Font(SEGEOE_UI, Font.ITALIC, 11));
+    trainNb.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     trainNb.setText("Train amount: " + trainNbStr);
     trainNb.setHorizontalAlignment(SwingConstants.LEFT);
 
