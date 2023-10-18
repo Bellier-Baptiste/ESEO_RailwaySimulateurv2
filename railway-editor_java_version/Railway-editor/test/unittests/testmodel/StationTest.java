@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package testmodel;
+package unittests.testmodel;
 
 import model.Station;
 import org.junit.Test;

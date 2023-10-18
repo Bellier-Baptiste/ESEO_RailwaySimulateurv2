@@ -49,10 +49,14 @@ public final class ActionRunSimulation {
    */
   private static ActionRunSimulation instance;
 
+  /** ActionFile instance. */
+  private final ActionFile actionFile;
+
   /**
    * Constructor of the class.
    */
   private ActionRunSimulation() {
+    this.actionFile = ActionFile.getInstance();
   }
 
   /**
@@ -69,20 +73,27 @@ public final class ActionRunSimulation {
 
   /**
    * Run the simulation.
+   *
+   * @return the exit value of the process
    */
-  public void runSimulation() {
+  public int runSimulation() {
     try {
       // Check if simulator.exe is already running
-      if (isSimulatorRunning()) {
-        return;
+      if (this.isSimulatorRunning()) {
+        return 0;
       }
 
       String rootJavaProjectPath = System.getProperty("user.dir");
       String rootGoProjectPath = rootJavaProjectPath.replace(
           "railway-editor_java_version", "pfe-2018-network-journey-simulator");
+
+      // Useful when running the unit test
+      rootGoProjectPath = rootGoProjectPath.replace(
+          "\\Railway-editor", "");
+
       File runThisSimulation = new File(
           rootGoProjectPath + "\\src\\configs\\runThisSimulation.xml");
-      ActionFile.getInstance().export(runThisSimulation);
+      this.actionFile.export(runThisSimulation);
 
       // create a new list of arguments for our process
       String[] commands = {"cmd", "/C",
@@ -94,10 +105,12 @@ public final class ActionRunSimulation {
       Process process = pb.start();
       // wait that the process finish
       process.waitFor();
+      return process.exitValue();
     } catch (IOException | InterruptedException ex) {
       ex.printStackTrace();
       Thread.currentThread().interrupt();
     }
+    return -1;
   }
 
   /**
@@ -105,7 +118,7 @@ public final class ActionRunSimulation {
    *
    * @return true if the process is running, false otherwise
    */
-  private boolean isSimulatorRunning() {
+  public boolean isSimulatorRunning() {
     try {
       String findProcess = "metro_simulator.exe";
       String filenameFilter = "/nh /fi \"Imagename eq " + findProcess + "\"";
