@@ -11,7 +11,7 @@ func TestEventAttendancePeak(t *testing.T) {
 	println("*** eventAttendancePeak_test.go ***")
 	start, _ := time.Parse("15:04", "00:01")
 
-	attendancePeak := NewEventAttendancePeak(1, start, 10)
+	attendancePeak := NewEventAttendancePeak(1, 10, start)
 
 	assert.Equal(t, 1, attendancePeak.IdStation(), "Bad Start station id")
 	attendancePeak.SetidStation(2)
