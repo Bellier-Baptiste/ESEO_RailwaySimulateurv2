@@ -19,11 +19,11 @@ func TestEventLineClosed(t *testing.T) {
 	lineClosed := NewEventLineClosed(0, 1, start, end)
 
 	assert.Equal(t, 0, lineClosed.IdStationStart(), "Bad Start station id")
-	lineClosed.SetidStationStart(2)
+	lineClosed.SetIdStationStart(2)
 	assert.Equal(t, 2, lineClosed.IdStationStart(), "Bad Start station id")
 
 	assert.Equal(t, 1, lineClosed.IdStationEnd(), "Bad End station id")
-	lineClosed.SetidStationEnd(3)
+	lineClosed.SetIdStationEnd(3)
 	assert.Equal(t, 3, lineClosed.IdStationEnd(), "Bad End station id")
 
 	assert.Equal(t, "0000-01-01 00:01:00 +0000 UTC", lineClosed.Start().String(), "Bad Start time")

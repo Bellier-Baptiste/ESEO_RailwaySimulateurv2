@@ -12,18 +12,23 @@ var startTime time.Time
 var timeInStation int
 var timeBetweenStation int
 var stopTime time.Time
-var train_test = MetroTrain{id:1,line:&lines_test[0],direction:"up",capacity:120}
+var train_test = MetroTrain{id: 1, line: &lines_test[0], direction: "up", capacity: 120}
 
 func initForTimetableRealTest() {
 	timetableRealTest = NewTimetableReal()
 	startTime = time.Date(2018, 12, 7, 0, 0, 0, 0, time.UTC)
-	stopTime = time.Date(2018,12,8,0,0,0,0, time.UTC)
+	stopTime = time.Date(2018, 12, 8, 0, 0, 0, 0, time.UTC)
 	timeInStation = 60
 	timeBetweenStation = 180
-	eventTrainTest = NewEventTimetableTrain(&lines_test[0], &stations_test[0], &stations_test[1], &train_test,"up", startTime,startTime.Add(time.Duration(timeInStation+timeBetweenStation)*time.Second),startTime.Add(time.Duration(timeInStation)*time.Second),startTime.Add(time.Duration(2*timeInStation+timeBetweenStation)*time.Second),false,0)
+	metroStationTab := [2]MetroStation{stations_test[0], stations_test[1]}
+	nextStartTime := startTime.Add(time.Duration(timeInStation+timeBetweenStation) * time.Second)
+	departureTime := startTime.Add(time.Duration(timeInStation) * time.Second)
+	nextDepartureTime := startTime.Add(time.Duration(2*timeInStation+timeBetweenStation) * time.Second)
+	timeTab := [4]time.Time{startTime, nextStartTime, departureTime, nextDepartureTime}
+	eventTrainTest = NewEventTimetableTrain(&lines_test[0], metroStationTab, &train_test, "up", timeTab, false, 0)
 }
 
-func TestAddEventsTrain(t *testing.T){
+func TestAddEventsTrain(t *testing.T) {
 	initForTimetableRealTest()
 
 	timetableRealTest.AddEventsTrain(eventTrainTest)

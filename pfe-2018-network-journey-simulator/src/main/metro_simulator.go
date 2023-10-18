@@ -1,3 +1,36 @@
+/*
+Package main
+
+File : metro_simulator.go
+
+Brief :
+
+Date : N/A
+
+Author : Team v2, Paul TRÉMOUREUX (quality check)
+
+License : MIT License
+
+Copyright (c) 2023 Équipe PFE_2023_16
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 package main
 
 import (
@@ -56,6 +89,19 @@ func createAdvancedConfig(name string) {
 	fmt.Println("new config created and saved with the name ", name)
 }
 
+/*
+dayTyperAttribution return a dayType depending on the value of the parameter
+
+Param :
+ans string : input of the user
+
+Return :
+string : the dayType corresponding to ans
+  - week-day if 1
+  - weekend if 2
+  - bank holiday if 3
+  - holiday if 4
+*/
 func dayTypeAttribution(ans string) string {
 	if len(ans) > 0 {
 		if strings.HasPrefix(ans, "1") {
@@ -78,6 +124,32 @@ func dayTypeAttribution(ans string) string {
 		fmt.Println("Wrong answer, default value has been attribued")
 		return dayTypeWD
 	}
+}
+
+/*
+checkFinishedTrips is used to check how many trips are finished or not
+in the simulation
+
+Param :
+sim *simulator.Simulator : the current simulation
+
+Return :
+int : the number of trips not finished (tripsNotFinished)
+int : the number of trips finished (tripsFinished)
+*/
+func checkFinishedTrips(sim *simulator.Simulator) (int, int) {
+	var tripsNotFinished = 0
+	var tripsFinished = 0
+	for _, passenger := range sim.Population().Passengers() {
+		for _, trip := range passenger.Trips() {
+			if !trip.IsCompleted() {
+				tripsNotFinished++
+			} else {
+				tripsFinished++
+			}
+		}
+	}
+	return tripsNotFinished, tripsFinished
 }
 
 func main() {
@@ -162,7 +234,10 @@ func main() {
 	printHeader("Initializing Simulation")
 	startTime := time.Now()
 	newSimulator := simulator.NewSimulator()
-	newSimulator.Init(dayType)
+	err = newSimulator.Init(dayType)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	elapsedTime := time.Since(startTime)
 	fmt.Println("init time : ", elapsedTime.String())
@@ -178,17 +253,7 @@ func main() {
 
 	elapsedTime = time.Since(startTime)
 
-	var tripsNotFinished = 0
-	var tripsFinished = 0
-	for _, passenger := range newSimulator.Population().Passengers() {
-		for _, trip := range passenger.Trips() {
-			if !trip.IsCompleted() {
-				tripsNotFinished++
-			} else {
-				tripsFinished++
-			}
-		}
-	}
+	tripsNotFinished, tripsFinished := checkFinishedTrips(&newSimulator)
 
 	fmt.Println("")
 	printHeader("Simulation completed")
