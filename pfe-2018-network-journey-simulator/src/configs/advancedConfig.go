@@ -175,8 +175,12 @@ func (aConfig *AdvancedConfig) loadXML(filename string) error {
 	//basePath = strings.Replace(currentPath, "src\\simulator", "", -1)
 	//basePath = strings.Replace(currentPath, "src\\tools", "", -1)
 	fmt.Println("base path : ", basePath)
-	//configPath = filepath.Join(basePath, projectPath, "configs/", filename)
-	configPath = filepath.Join(basePath, filename)
+	if basePath == currentPath {
+		configPath = filepath.Join(basePath, filename)
+	}
+	if basePath != currentPath {
+		configPath = filepath.Join(basePath, projectPath, "configs/", filename)
+	}
 	fmt.Println("config path : ", configPath)
 	xmlFile, err := os.Open(configPath)
 	if err != nil {
@@ -320,10 +324,10 @@ func (aConfig *AdvancedConfig) CheckRelationsLines() error {
 CheckRelations verify that the relations (stations <-> lines) are good, e.g.
 they don't refer to a non-existing id
 
-Input :
+Param :
 aConfig *AdvancedConfig
 
-Output :
+Return :
 err error
 */
 func (aConfig *AdvancedConfig) CheckRelations() error {
@@ -423,7 +427,7 @@ func (aConfig *AdvancedConfig) ReattributeIds() {
 	aConfig.ReattributeIdsLineGood(false)
 }
 
-func (aConfig AdvancedConfig) SaveXML(path string) error {
+func (aConfig *AdvancedConfig) SaveXML(path string) error {
 	basePath = strings.Replace(currentPath, "src\\models", "", -1)
 
 	var pathToFile = filepath.Join(basePath, projectPath, "configs/", path)

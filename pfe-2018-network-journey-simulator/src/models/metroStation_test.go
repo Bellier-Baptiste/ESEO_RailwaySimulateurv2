@@ -6,14 +6,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var lines_test = []MetroLine{
+var linesTest = []MetroLine{
 	{name: "A", trainNumber: 5, passengersMaxPerTrain: 120},
 	{name: "B", trainNumber: 5, passengersMaxPerTrain: 120},
 	{name: "C", trainNumber: 5, passengersMaxPerTrain: 120},
 }
 
-func clearLinesTest(){
-	lines_test = []MetroLine{
+func clearLinesTest() {
+	linesTest = []MetroLine{
 		{name: "A", trainNumber: 5, passengersMaxPerTrain: 120},
 		{name: "B", trainNumber: 5, passengersMaxPerTrain: 120},
 		{name: "C", trainNumber: 5, passengersMaxPerTrain: 120},
@@ -22,13 +22,13 @@ func clearLinesTest(){
 
 func initStation() MetroStation {
 	var station = MetroStation{
-		id: 0,
+		id:       0,
 		name:     "metroStationTest",
 		position: Point{x: 0, y: 0},
 	}
 
-	for i := 0; i < len(lines_test); i++ {
-		station.AddMetroLine(&lines_test[i])
+	for i := 0; i < len(linesTest); i++ {
+		station.AddMetroLine(&linesTest[i])
 	}
 
 	return station
@@ -38,11 +38,11 @@ func TestMetroStation_hasDirectLineTo(t *testing.T) {
 	var station1 = initStation()
 	var station2 = initStation()
 
-	station2.removeMetroLine(&lines_test[1])
-	station2.removeMetroLine(&lines_test[2])
+	station2.removeMetroLine(&linesTest[1])
+	station2.removeMetroLine(&linesTest[2])
 
 	assert.True(t, station1.hasDirectLineTo(station2))
-	station2.removeMetroLine(&lines_test[0])
+	station2.removeMetroLine(&linesTest[0])
 
 	assert.False(t, station1.hasDirectLineTo(station2))
 }

@@ -20,7 +20,7 @@ func TestPopulation_GetPassengersWaitingForTrain(t *testing.T) {
 	population := NewPopulation(3000, 0, 1, aMap)
 	stations := aMap.Stations()
 	trainDeparture := time.Date(2018, 10, 12, 20, 00, 0, 0, time.UTC)
-	population.UpdateOutsideToStations(trainDeparture);
+	population.UpdateOutsideToStations(trainDeparture)
 	waiting := population.InStation()[stations[0].Id()]
 	//fmt.Print(waiting)
 	assert.NotNil(t, waiting)
@@ -48,17 +48,17 @@ func TestPopulation_OutsideSortedInsertPassenger(t *testing.T) {
 	var timeMiddle = population.outsideSorted[5].nextTrip.departureTime.Add(time.Second)
 	var timeEnd = population.outsideSorted[9].nextTrip.departureTime.Add(time.Hour)
 
-	someone := NewPassenger("abcd",ADL)
-	var n1 = NewTrip(timeEnd, pathStation{})
+	someone := NewPassenger("abcd", ADL)
+	var n1 = NewTrip(timeEnd, PathStation{})
 	someone.AddTrip(&n1)
 	population.OutsideSortedInsertPassenger(&someone)
 
-	someone2 := NewPassenger("cdef",ADL)
-	var n2 = NewTrip(timeMiddle, pathStation{})
+	someone2 := NewPassenger("cdef", ADL)
+	var n2 = NewTrip(timeMiddle, PathStation{})
 	someone2.AddTrip(&n2)
 	population.OutsideSortedInsertPassenger(&someone2)
 
-	someoneNil := NewPassenger("cdef",ADL)
+	someoneNil := NewPassenger("cdef", ADL)
 	population.OutsideSortedInsertPassenger(&someoneNil)
 
 	//assert sorted AFTER
