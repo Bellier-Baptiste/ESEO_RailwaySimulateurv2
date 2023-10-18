@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"pfe-2018-network-journey-simulator/src/configs"
+	"strings"
 	"testing"
 	"time"
 
@@ -44,8 +45,10 @@ func TestSimulator_SimulatorInit(t *testing.T) {
 
 func TestSimulator_RunOnce(t *testing.T) {
 	println("TestSimulator_RunOnce")
-	var basePath = os.Getenv("GOPATH")
-	var projectPath = "src"
+	//var basePath = os.Getenv("GOPATH")
+	var currentPath, _ = os.Getwd()
+	var basePath = strings.Replace(currentPath, "src\\main", "", -1)
+	var projectPath = "../"
 	var configPath = filepath.Join(basePath, projectPath, "configs/config.json")
 	var stationsPath = filepath.Join(basePath, projectPath, "configs/nameStationList.json")
 	var linesPath = filepath.Join(basePath, projectPath, "configs/nameLineList.json")

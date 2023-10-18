@@ -109,10 +109,10 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	// Delete "src\main" if there (when launching simulator with command line)
+	// Delete "src\main" if there (when launching newSimulator with command line)
 	basePath := strings.Replace(currentPath, "src\\main", "", -1)
 
-	var advancedConfigPath = filepath.Join(basePath, "src/configs/", *configName)
+	var advancedConfigPath = filepath.Join(basePath, "src\\configs\\", *configName)
 
 	printHeader("Verifying Config")
 	if *regenerateConfig {
@@ -162,26 +162,26 @@ func main() {
 
 	printHeader("Initializing Simulation")
 	startTime := time.Now()
-	simulator := simulator.NewSimulator()
-	simulator.Init(dayType)
+	newSimulator := simulator.NewSimulator()
+	newSimulator.Init(dayType)
 
 	elapsedTime := time.Since(startTime)
 	fmt.Println("init time : ", elapsedTime.String())
 
 	printHeader("Running Simulation")
 	startTime = time.Now()
-	simulator.Run(*runTurns)
+	newSimulator.Run(*runTurns)
 	runTime := time.Since(startTime)
 	fmt.Println("\nrun time : ", runTime.String())
 
 	printHeader("Saving results")
-	simulator.ToCSV()
+	newSimulator.ToCSV()
 
 	elapsedTime = time.Since(startTime)
 
 	var tripsNotFinished = 0
 	var tripsFinished = 0
-	for _, passenger := range simulator.Population().Passengers() {
+	for _, passenger := range newSimulator.Population().Passengers() {
 		for _, trip := range passenger.Trips() {
 			if !trip.IsCompleted() {
 				tripsNotFinished++

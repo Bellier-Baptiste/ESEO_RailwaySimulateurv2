@@ -11,10 +11,10 @@ type Calendar struct {
 
 func GetBusinessDay(currentTime time.Time) time.Time {
 	config := configs.GetInstance()
-	buisnessDayOffset := config.BusinessDayStart()
-	buisnessDay, error := time.ParseDuration(buisnessDayOffset)
-	if error != nil {
-		log.Fatal(error, "BusinessDayStart - couldn't parse duration")
+	businessDayOffset := config.BusinessDayStart()
+	businessDay, err := time.ParseDuration(businessDayOffset)
+	if err != nil {
+		log.Fatal(err, "BusinessDayStart - couldn't parse duration")
 	}
-	return currentTime.Add(-buisnessDay)
+	return currentTime.Add(-businessDay)
 }
