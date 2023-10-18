@@ -6,32 +6,35 @@ import (
 	"time"
 )
 
-// Generate a random passenger for testing purposes
-func generate_passenger() *Passenger{
-	return &Passenger{id:"12345",kind:ADL}
+/*
+Unused function
+Generate a random passenger for testing purposes
+func generate_passenger() *Passenger {
+	return &Passenger{id: "12345", kind: ADL}
 }
+*/
 
 func TestCreatePassenger(t *testing.T) {
-	someone := NewPassenger("abcd",ADL)
-	assert.Equal(t,"abcd",someone.Id())
-	assert.Nil(t,someone.Trips())
+	someone := NewPassenger("abcd", ADL)
+	assert.Equal(t, "abcd", someone.Id())
+	assert.Nil(t, someone.Trips())
 }
 
 func TestPassenger_GetTrips(t *testing.T) {
-	someone := NewPassenger("abcd",ADL)
-	var n = NewTrip(time.Time{}, pathStation{})
+	someone := NewPassenger("abcd", ADL)
+	var n = NewTrip(time.Time{}, PathStation{})
 	someone.AddTrip(&n)
 	var trips = someone.trips
 	assert.Equal(t, &trips[0], &someone.trips[0])
 	assert.Equal(t, &trips, &someone.trips)
 }
 
-func TestPassenger_CalculateNextTrip(t *testing.T){
-	someone := NewPassenger("abcd",ADL)
-	var n1 = NewTrip(time.Now(), pathStation{})
+func TestPassenger_CalculateNextTrip(t *testing.T) {
+	someone := NewPassenger("abcd", ADL)
+	var n1 = NewTrip(time.Now(), PathStation{})
 	someone.AddTrip(&n1)
 	var timeNow = time.Now()
-	var n2 = NewTrip(timeNow.Add(time.Minute), pathStation{})
+	var n2 = NewTrip(timeNow.Add(time.Minute), PathStation{})
 	someone.AddTrip(&n2)
 
 	someone.calculateNextTrip()

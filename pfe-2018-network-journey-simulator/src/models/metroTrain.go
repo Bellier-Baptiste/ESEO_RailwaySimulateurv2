@@ -1,3 +1,36 @@
+/*
+Package models
+
+File : metroTrain.go
+
+Brief :
+
+Date : N/A
+
+Author : Team v2, Paul TRÉMOUREUX (quality check)
+
+License : MIT License
+
+Copyright (c) 2023 Équipe PFE_2023_16
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 package models
 
 import (
@@ -22,78 +55,103 @@ type MetroTrain struct {
 	timeArrivalNextStation    time.Time //used to show when there are delays
 }
 
-// getter
-func (train *MetroTrain) GetLine() *MetroLine {
-	return train.line
+/*
+getter
+*/
+
+func (mt *MetroTrain) GetLine() *MetroLine {
+	return mt.line
 }
 
-func (train *MetroTrain) GetCurrentStation() *MetroStation {
-	return train.currentStation
+func (mt *MetroTrain) GetCurrentStation() *MetroStation {
+	return mt.currentStation
 }
 
-func (train *MetroTrain) GetNextStation() *MetroStation {
-	return train.nextStation
+func (mt *MetroTrain) GetNextStation() *MetroStation {
+	return mt.nextStation
 }
 
-func (train *MetroTrain) GetDirectionChanged() bool {
-	return train.directionChanged
+func (mt *MetroTrain) GetDirectionChanged() bool {
+	return mt.directionChanged
 }
 
-func (train *MetroTrain) SetDirectionChanged(boolean bool) {
-	train.directionChanged = boolean
+func (mt *MetroTrain) SetDirectionChanged(boolean bool) {
+	mt.directionChanged = boolean
 }
 
-func (train *MetroTrain) GetTripNumber() int {
-	return train.tripNumber
+func (mt *MetroTrain) GetTripNumber() int {
+	return mt.tripNumber
 }
 
-func (train *MetroTrain) SetTripNumber(tripNumber int) {
-	train.tripNumber = tripNumber
+func (mt *MetroTrain) SetTripNumber(tripNumber int) {
+	mt.tripNumber = tripNumber
 }
 
-func (train *MetroTrain) GetNextOpenedStation() *MetroStation {
-	if !train.GetNextStation().StatusIsClosed() {
-		return train.GetNextStation()
-	}
-	if train.direction == "up" {
-		for i := range train.line.Stations()[train.line.PositionInLine(train.GetNextStation()):] {
-			if !train.line.Stations()[i].StatusIsClosed() {
-				return train.line.Stations()[i]
-			}
-		}
-		//go in reverse
-		for i := train.line.PositionInLine(train.GetNextStation()); i > 0; i-- {
-			if !train.line.Stations()[i].StatusIsClosed() {
-				return train.line.Stations()[i]
-			}
-		}
-	} else {
-		for i := train.line.PositionInLine(train.GetNextStation()); i > 0; i-- {
-			if !train.line.Stations()[i].StatusIsClosed() {
-				return train.line.Stations()[i]
-			}
-		}
-		//go in reverse
+/*
+GetNextOpenedStationUD is up to down loop for GetNextOpenedStation
 
-		for i := range train.line.Stations()[train.line.PositionInLine(train.GetNextStation()):] {
-			if !train.line.Stations()[i].StatusIsClosed() {
-				return train.line.Stations()[i]
-			}
+Return :
+*MetroStation
+*/
+func (mt *MetroTrain) GetNextOpenedStationUD() *MetroStation {
+	for i := range mt.line.Stations()[mt.line.PositionInLine(
+		mt.GetNextStation()):] {
+		if !mt.line.Stations()[i].StatusIsClosed() {
+			return mt.line.Stations()[i]
 		}
 	}
 	return nil
 }
 
-func (train *MetroTrain) GetDirection() string {
-	return train.direction
+/*
+GetNextOpenedStationDU is down to up loop for GetNextOpenedStation
+
+Return :
+*MetroStation
+*/
+func (mt *MetroTrain) GetNextOpenedStationDU() *MetroStation {
+	for i := mt.line.PositionInLine(mt.GetNextStation()); i > 0; i-- {
+		if !mt.line.Stations()[i].StatusIsClosed() {
+			return mt.line.Stations()[i]
+		}
+	}
+	return nil
+}
+
+func (mt *MetroTrain) GetNextOpenedStation() *MetroStation {
+	if !mt.GetNextStation().StatusIsClosed() {
+		return mt.GetNextStation()
+	}
+
+	if mt.direction == "up" {
+		ms := mt.GetNextOpenedStationUD()
+		//go in reverse
+		ms = mt.GetNextOpenedStationDU()
+		return ms
+	} else {
+		ms := mt.GetNextOpenedStationDU()
+		//go in reverse
+		ms = mt.GetNextOpenedStationUD()
+		return ms
+	}
+}
+
+func (mt *MetroTrain) GetDirection() string {
+	return mt.direction
 }
 
 //--- constructor
 
-// NewMetroTrain creates a train
-// :param line *MetroLine the line on which the train will be
-// :param direction the direction in which the train will go ("up" -> stations[0]->station[9999]/ "down")
-func NewMetroTrain(line *MetroLine, direction string) *MetroTrain { //TODO change direction by bool "goReverse" ?
+/*
+NewMetroTrain creates a train
+
+Param :
+line *MetroLine : the line on which the train will be
+direction string : the direction in which the train will go
+("up" -> stations[0]->station[9999]/ "down")
+*/
+func NewMetroTrain(line *MetroLine, direction string) *MetroTrain {
+	//TODO change direction by bool "goReverse" ?
 	var config = configs.GetInstance()
 
 	var out = MetroTrain{
@@ -118,89 +176,102 @@ func NewMetroTrain(line *MetroLine, direction string) *MetroTrain { //TODO chang
 
 //--- Getters & Setters
 
-func (m *MetroTrain) Id() int {
-	return m.id
+func (mt *MetroTrain) Id() int {
+	return mt.id
 }
 
-func (m *MetroTrain) SetId(id int) {
-	m.id = id
+func (mt *MetroTrain) SetId(id int) {
+	mt.id = id
 }
 
-func (train *MetroTrain) GetAvailableCapacity(p *Population) int {
-	currentLoad := len(p.InTrains()[train.id])
-	if currentLoad > train.capacity {
+func (mt *MetroTrain) GetAvailableCapacity(p *Population) int {
+	currentLoad := len(p.InTrains()[mt.id])
+	if currentLoad > mt.capacity {
 		return 0
 	}
-	return train.capacity - currentLoad
+	return mt.capacity - currentLoad
 }
 
-func (train *MetroTrain) CurrentStation() *MetroStation {
-	return train.currentStation
+func (mt *MetroTrain) CurrentStation() *MetroStation {
+	return mt.currentStation
 }
 
-func (train *MetroTrain) TimeArrivalCurrentStation() time.Time {
-	return train.timeArrivalCurrentStation
+func (mt *MetroTrain) TimeArrivalCurrentStation() time.Time {
+	return mt.timeArrivalCurrentStation
 }
 
-func (train *MetroTrain) SetTimeArrivalCurrentStation(timeArrivalCurrentStation time.Time) {
-	train.timeArrivalCurrentStation = timeArrivalCurrentStation
+func (mt *MetroTrain) SetTimeArrivalCurrentStation(
+	timeArrivalCurrentStation time.Time) {
+	mt.timeArrivalCurrentStation = timeArrivalCurrentStation
 }
 
-func (train *MetroTrain) TimeArrivalNextStation() time.Time {
-	return train.timeArrivalNextStation
+func (mt *MetroTrain) TimeArrivalNextStation() time.Time {
+	return mt.timeArrivalNextStation
 }
 
-func (train *MetroTrain) SetTimeArrivalNextStation(timeArrivalNextStation time.Time) {
-	train.timeArrivalNextStation = timeArrivalNextStation
+func (mt *MetroTrain) SetTimeArrivalNextStation(
+	timeArrivalNextStation time.Time) {
+	mt.timeArrivalNextStation = timeArrivalNextStation
 }
 
 //--- Functions & Methods
 
-// should be executed everytime the train arrive in a station. alter its current/next attribute, but don't touch to passengers.
-// idealy, station == train.nextStation. But i know we're prone to errors :P
-func (train *MetroTrain) arriveInStation(station *MetroStation, aTime time.Time) {
-	train.currentStation = station
-	train.timeArrivalCurrentStation = aTime
+/*
+arriveInStation should be executed everytime the train arrive in a station.
+Alter its current/next attribute, but don't touch to passengers.
+ideally, station == train.nextStation. But i know we're prone to errors :P
+*/
+func (mt *MetroTrain) arriveInStation(station *MetroStation, aTime time.Time) {
+	mt.currentStation = station
+	mt.timeArrivalCurrentStation = aTime
 
-	positionInLine := train.line.PositionInLine(train.currentStation)
+	positionInLine := mt.line.PositionInLine(mt.currentStation)
 
 	//next station
-	if train.direction == "up" && positionInLine == len(train.line.stations)-1 {
-		train.direction = "down"
-		train.SetDirectionChanged(true)
+	if mt.direction == "up" && positionInLine == len(mt.line.stations)-1 {
+		mt.direction = "down"
+		mt.SetDirectionChanged(true)
 	}
-	if train.direction == "down" && positionInLine == 0 {
-		train.direction = "up"
-		train.SetDirectionChanged(true)
+	if mt.direction == "down" && positionInLine == 0 {
+		mt.direction = "up"
+		mt.SetDirectionChanged(true)
 	}
 
-	if train.direction == "up" {
-		train.nextStation = train.line.stations[positionInLine+1]
+	if mt.direction == "up" {
+		mt.nextStation = mt.line.stations[positionInLine+1]
 	} else {
-		train.nextStation = train.line.stations[positionInLine-1]
+		mt.nextStation = mt.line.stations[positionInLine-1]
 	}
 }
 
-func (train *MetroTrain) ArriveInNextStation(aTime time.Time) {
-	train.arriveInStation(train.nextStation, aTime)
+func (mt *MetroTrain) ArriveInNextStation(aTime time.Time) {
+	mt.arriveInStation(mt.nextStation, aTime)
 }
 
-func (train *MetroTrain) departFromStation(station *MetroStation, aTime time.Time, timeBetweenStation int) {
-	train.currentStation = nil
-	train.timeArrivalNextStation = aTime.Add(intToDuration(timeBetweenStation))
+func (mt *MetroTrain) departFromStation(aTime time.Time,
+	timeBetweenStation int) {
+	mt.currentStation = nil
+	mt.timeArrivalNextStation = aTime.Add(intToDuration(timeBetweenStation))
 }
 
 func intToDuration(value int) time.Duration {
 	return time.Duration(value) * time.Second
 }
 
-// before a delay, calculate the new time to the next station
-func UpdateBeforeTimeArrivalNextStation(train *MetroTrain, currentTime time.Time, delay int, timeBetweenStation int) {
+/*
+UpdateBeforeTimeArrivalNextStation
+before a delay, calculate the new time to the next station
+*/
+func UpdateBeforeTimeArrivalNextStation(train *MetroTrain,
+	currentTime time.Time, delay, timeBetweenStation int) {
 	if delay < 0 {
-		log.Fatal("bad entry in MetroTrain.UpdateBeforeTimeArrivalNextStation : delay can't be negativ ", delay)
+		log.Fatal("bad entry in "+
+			"MetroTrain.UpdateBeforeTimeArrivalNextStation : "+
+			"delay can't be negative ", delay)
 	}
-	timeLeft := train.TimeArrivalNextStation().Sub(currentTime) //timeLeft is a duration
-	timeLeftInt := float64(timeLeft.Seconds())
+	timeLeft := train.TimeArrivalNextStation().Sub(currentTime)
+	//timeLeft is a duration
+	timeLeftInt := timeLeft.Seconds()
 	if timeLeftInt < 0 {
 		timeLeftInt = timeLeftInt * -1
 	}
@@ -208,18 +279,28 @@ func UpdateBeforeTimeArrivalNextStation(train *MetroTrain, currentTime time.Time
 	newTimeLeft := float64(timeBetweenStation+delay) * percentOFLine
 	newTimeLeftDuration := time.Duration(newTimeLeft) * time.Second
 	if newTimeLeftDuration.Seconds() < 0 {
-		log.Fatal("bad duration in MetroTrain.UpdateBeforeTimeArrivalNextStation : nextTimeArrival can't be before current time of simulation ", newTimeLeftDuration.Seconds())
+		log.Fatal("bad duration in "+
+			"MetroTrain.UpdateBeforeTimeArrivalNextStation : "+
+			"nextTimeArrival can't be before current time of simulation ",
+			newTimeLeftDuration.Seconds())
 	}
 	train.SetTimeArrivalNextStation(currentTime.Add(newTimeLeftDuration))
 }
 
-// after a delay, calculate the new time to the next station
-func UpdateAfterTimeArrivalNextStation(train *MetroTrain, currentTime time.Time, delay int, timeBetweenStation int) {
+/*
+UpdateAfterTimeArrivalNextStation
+after a delay, calculate the new time to the next station
+*/
+func UpdateAfterTimeArrivalNextStation(train *MetroTrain,
+	currentTime time.Time, delay, timeBetweenStation int) {
 	if delay < 0 {
-		log.Fatal("bad entry in MetroTrain.UpdateAfterTimeArrivalNextStation : delay can't be negativ ", delay)
+		log.Fatal("bad entry in "+
+			"MetroTrain.UpdateAfterTimeArrivalNextStation : "+
+			"delay can't be negative ", delay)
 	}
-	timeLeft := train.TimeArrivalNextStation().Sub(currentTime) //timeLeft is a duration
-	timeLeftInt := float64(timeLeft.Seconds())
+	timeLeft := train.TimeArrivalNextStation().Sub(currentTime)
+	//timeLeft is a duration
+	timeLeftInt := timeLeft.Seconds()
 	if timeLeftInt < 0 {
 		timeLeftInt = timeLeftInt * -1
 	}
@@ -227,22 +308,27 @@ func UpdateAfterTimeArrivalNextStation(train *MetroTrain, currentTime time.Time,
 	newTimeLeft := float64(timeBetweenStation) * percentOFLine
 	newTimeLeftDuration := time.Duration(newTimeLeft) * time.Second
 	if newTimeLeftDuration.Seconds() < 0 {
-		log.Fatal("bad duration in MetroTrain.UpdateAfterTimeArrivalNextStation : nextTimeArrival can't be before current time of simulation ", newTimeLeftDuration.Seconds())
+		log.Fatal("bad duration in "+
+			"MetroTrain.UpdateAfterTimeArrivalNextStation : "+
+			"nextTimeArrival can't be before current time of simulation ",
+			newTimeLeftDuration.Seconds())
 	}
-	log.Fatal("newTimeLeftDuration : ", newTimeLeftDuration)
 	fmt.Println("newTimeLeftDuration : ", newTimeLeftDuration)
 	train.SetTimeArrivalNextStation(currentTime.Add(newTimeLeftDuration))
 }
 
-// return a list containing all stations between the train and the end of the line
-func (train *MetroTrain) StationsBeforeReturn() []*MetroStation {
+/*
+StationsBeforeReturn return a list containing all stations between
+the train and the end of the line
+*/
+func (mt *MetroTrain) StationsBeforeReturn() []*MetroStation {
 	var output []*MetroStation
-	output = append(output, train.nextStation)
-	position := train.line.PositionInLine(train.nextStation)
-	if train.direction == "up" {
-		output = train.line.stations[position:]
+	output = append(output, mt.nextStation)
+	position := mt.line.PositionInLine(mt.nextStation)
+	if mt.direction == "up" {
+		output = mt.line.stations[position:]
 	} else {
-		tmp := train.line.stations[:position]
+		tmp := mt.line.stations[:position]
 		for i := len(tmp) - 1; i >= 0; i-- {
 			output = append(output, tmp[i])
 		}

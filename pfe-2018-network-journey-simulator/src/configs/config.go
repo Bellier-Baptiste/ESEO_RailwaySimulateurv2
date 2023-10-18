@@ -1,4 +1,6 @@
 /*
+Package configs
+
 File : config.go
 
 Brief :

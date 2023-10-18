@@ -1,3 +1,36 @@
+/*
+Package models
+
+File : metroStation.go
+
+Brief :
+
+Date : N/A
+
+Author : Team v2, Paul TRÉMOUREUX (quality check)
+
+License : MIT License
+
+Copyright (c) 2023 Équipe PFE_2023_16
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 package models
 
 type MetroStation struct {
@@ -11,7 +44,10 @@ type MetroStation struct {
 	status string
 }
 
-func NewStation(id int, number int, code string, name string, position Point) MetroStation {
+/*
+Unused function
+func NewStation(id, number int, code, name string,
+	position Point) MetroStation {
 	var instance MetroStation
 	instance.setId(id)
 	instance.setNumber(number)
@@ -21,6 +57,7 @@ func NewStation(id int, number int, code string, name string, position Point) Me
 	instance.status = "open"
 	return instance
 }
+*/
 
 func (ms *MetroStation) SetStatus(s string) {
 	ms.status = s
@@ -105,12 +142,14 @@ func (ms *MetroStation) removeMetroLine(line *MetroLine) {
 	line.removeMetroStation(ms)
 }
 
-func (ms MetroStation) distanceTo(station2 MetroStation) float64 { //TODO : calculate distance using the lines
+func (ms *MetroStation) distanceTo(station2 MetroStation) float64 {
+	//TODO : calculate distance using the lines
 	return ms.position.DistanceTo(station2.position)
 }
 
 // verify if the two station can go to each other using only one line
-func (ms MetroStation) hasDirectLineTo(station2 MetroStation) bool { //TODO test
+func (ms *MetroStation) hasDirectLineTo(station2 MetroStation) bool {
+	//TODO test
 	for i := 0; i < len(ms.metroLines); i++ {
 		for j := 0; j < len(station2.metroLines); j++ {
 			if ms.metroLines[i] == station2.metroLines[j] {
@@ -122,7 +161,8 @@ func (ms MetroStation) hasDirectLineTo(station2 MetroStation) bool { //TODO test
 	return false
 }
 
-func (ms MetroStation) getDirectLinesTo(station2 MetroStation) []*MetroLine { //TODO test
+func (ms *MetroStation) getDirectLinesTo(station2 MetroStation) []*MetroLine {
+	//TODO test
 	var output []*MetroLine
 
 	for i := 0; i < len(ms.metroLines); i++ {
@@ -136,7 +176,7 @@ func (ms MetroStation) getDirectLinesTo(station2 MetroStation) []*MetroLine { //
 	return output
 }
 
-func (ms MetroStation) equals(station2 MetroStation) bool {
+func (ms *MetroStation) equals(station2 MetroStation) bool {
 	if !ms.equalsNoRecurrence(&station2) {
 		return false
 	}

@@ -22,8 +22,8 @@ func generateStationsLinesRandomTest() ([]*MetroStation, []*MetroLine) {
 func TestPathStation_append(t *testing.T) {
 	var stations, lines = generateStationsLinesRandomTest()
 
-	var path1 = PathStation(lines[0], stations[0], stations[1])
-	var path2 = PathStation(lines[1], stations[1], stations[2])
+	var path1 = PathStationCreate(lines[0], stations[0], stations[1])
+	var path2 = PathStationCreate(lines[1], stations[1], stations[2])
 
 	var path3 = path1.append(path2)
 

@@ -38,13 +38,13 @@ func generateMapSimpleLine() Map {
 
 	m := Map{
 		stations: []*MetroStation{
-			&stations_test[0],
-			&stations_test[1],
-			&stations_test[2],
+			&stationsTest[0],
+			&stationsTest[1],
+			&stationsTest[2],
 		},
 	}
 
-	m.lines = append(m.lines, &lines_test[0])
+	m.lines = append(m.lines, &linesTest[0])
 
 	for i := 0; i < len(m.stations); i++ {
 		m.stations[i].AddMetroLine(m.lines[0])
@@ -59,13 +59,13 @@ func generateMapTwoLine() Map {
 	clearLinesTest()
 	m := Map{
 		stations: []*MetroStation{
-			&stations_test[0],
-			&stations_test[1],
-			&stations_test[2],
+			&stationsTest[0],
+			&stationsTest[1],
+			&stationsTest[2],
 		},
 	}
 
-	m.lines = append(m.lines, &lines_test[0], &lines_test[1])
+	m.lines = append(m.lines, &linesTest[0], &linesTest[1])
 
 	// 1 <-A-> 2
 	m.stations[0].AddMetroLine(m.lines[0])
