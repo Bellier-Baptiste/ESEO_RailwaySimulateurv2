@@ -43,9 +43,9 @@ public class ActionArea {
   /** Action name. */
   public static final String ACTION_NAME = "ADD_AREA";
   /** Default area x position. */
-  private static final int AREA_POSX_DEFAULT = 150;
+  private static final int AREA_POS_X_DEFAULT = 150;
   /** Default area y position. */
-  private static final int AREA_POSY_DEFAULT = 150;
+  private static final int AREA_POS_Y_DEFAULT = 150;
   /** Default area width. */
   private static final int AREA_WIDTH_DEFAULT = 75;
   /** Default area height. */
@@ -71,8 +71,8 @@ public class ActionArea {
    * {@link view.MainPanel#addAreaView(AreaView)}.
    */
   public void addArea() {
-    Area area = new Area(AREA_POSX_DEFAULT,
-        AREA_POSY_DEFAULT, AREA_WIDTH_DEFAULT, AREA_HEIGHT_DEFAULT);
+    Area area = new Area(AREA_POS_X_DEFAULT,
+        AREA_POS_Y_DEFAULT, AREA_WIDTH_DEFAULT, AREA_HEIGHT_DEFAULT);
 
     Coordinate latLonTop = (Coordinate) MainWindow.getInstance().getMainPanel()
         .getPosition(area.getPosX(), area.getPosY());

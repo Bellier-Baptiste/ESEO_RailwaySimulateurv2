@@ -35,34 +35,87 @@ import java.io.File;
 /**
  * Test-case of running the go simulator from the Java HMI.
  *
+ * @author Aurélie Chamouleau
  * @file ActionsTest.java
  * @date 2023-10-18
  * @since 3.0
  */
 class ActionRunSimulationTest {
 
+  /**
+   * Test the runSimulation method when no other simulator is already running.
+   *
+   * @throws Exception if an error occurs
+   */
   @Test
-  void testRunSimulation() throws Exception {
+  void testRunSimulationNoSimulatorRunning() throws Exception {
+    // Spy the ActionRunSimulation instance
     ActionRunSimulation actionRunSimulation =
         Mockito.spy(ActionRunSimulation.getInstance());
 
-
+    // Spy the ActionFile instance
     ActionFile actionFile = Mockito.spy(ActionFile.getInstance());
+
+    // Use introspection to synchronize the two instances
     java.lang.reflect.Field actionFileField = actionRunSimulation.getClass()
         .getDeclaredField("actionFile");
     actionFileField.setAccessible(true);
-     Mockito.spy((ActionFile) actionFileField.get(actionRunSimulation));
     actionFileField.set(actionRunSimulation, actionFile);
 
+    // Mocking methods
+    // No simulator already running so isSimulatorRunning should return false
     Mockito.when(actionRunSimulation.isSimulatorRunning()).thenReturn(false);
     Mockito.doNothing().when(actionFile).export(Mockito.any(File.class));
 
+    // Run the simulation
     int exitValue = actionRunSimulation.runSimulation();
+
+    // Check that the simulator has been launched
     Assertions.assertEquals(0, exitValue, "The simulator" +
         " should have been launched");
 
+    // Check that the methods have been called
     Mockito.verify(actionFile).export(Mockito.any(File.class));
     Mockito.verifyNoMoreInteractions(actionFile);
+    Mockito.verify(actionRunSimulation).isSimulatorRunning();
+    Mockito.verify(actionRunSimulation).runSimulation();
+    Mockito.verifyNoMoreInteractions((actionRunSimulation));
+  }
+
+  /**
+   * Test the runSimulation method when no other simulator is already running.
+   *
+   * @throws Exception if an error occurs
+   */
+  @Test
+  void testRunSimulationSomeSimulatorRunning() throws Exception {
+    // Spy the ActionRunSimulation instance
+    ActionRunSimulation actionRunSimulation =
+        Mockito.spy(ActionRunSimulation.getInstance());
+
+    // Spy the ActionFile instance
+    ActionFile actionFile = Mockito.spy(ActionFile.getInstance());
+
+    // Use introspection to synchronize the two instances
+    java.lang.reflect.Field actionFileField = actionRunSimulation.getClass()
+        .getDeclaredField("actionFile");
+    actionFileField.setAccessible(true);
+    actionFileField.set(actionRunSimulation, actionFile);
+
+    // Mocking methods
+    // A simulator is already running so isSimulatorRunning should return true
+    Mockito.when(actionRunSimulation.isSimulatorRunning()).thenReturn(true);
+    Mockito.doNothing().when(actionFile).export(Mockito.any(File.class));
+
+    // Run the simulation
+    int exitValue = actionRunSimulation.runSimulation();
+
+    // Check that the simulator has been launched
+    Assertions.assertEquals(-1, exitValue, "The simulator" +
+        " should have been launched");
+
+    // Check that the methods have been called
+    Mockito.verifyNoInteractions(actionFile);
     Mockito.verify(actionRunSimulation).isSimulatorRunning();
     Mockito.verify(actionRunSimulation).runSimulation();
     Mockito.verifyNoMoreInteractions((actionRunSimulation));
