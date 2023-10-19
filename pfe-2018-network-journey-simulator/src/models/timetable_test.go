@@ -1,12 +1,11 @@
 package models
 
-import (
-	"time"
-)
-
+/*
+Unused variables
 var trains_test []*MetroTrain
 var times_test []time.Time
 var timetable_test = Timetable{}
+*/
 
 /**
 specific config.json needed :
@@ -21,7 +20,7 @@ specific config.json needed :
 "time in station": 60,
 "start time": "2018-10-12T00:00:00.000Z",
 "stop time": "2018-10-13T00:00:00.000Z",
- */
+*/
 
 /*//init
 func initForTimetable() ([]*MetroTrain, *EventTimetableTrain){
