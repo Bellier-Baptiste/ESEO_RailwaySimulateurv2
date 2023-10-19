@@ -122,18 +122,17 @@ func (mt *MetroTrain) GetNextOpenedStation() *MetroStation {
 	if !mt.GetNextStation().StatusIsClosed() {
 		return mt.GetNextStation()
 	}
-
+	var ms *MetroStation
 	if mt.direction == "up" {
-		ms := mt.GetNextOpenedStationUD()
+		ms = mt.GetNextOpenedStationUD()
 		//go in reverse
 		ms = mt.GetNextOpenedStationDU()
-		return ms
 	} else {
-		ms := mt.GetNextOpenedStationDU()
+		ms = mt.GetNextOpenedStationDU()
 		//go in reverse
 		ms = mt.GetNextOpenedStationUD()
-		return ms
 	}
+	return ms
 }
 
 func (mt *MetroTrain) GetDirection() string {

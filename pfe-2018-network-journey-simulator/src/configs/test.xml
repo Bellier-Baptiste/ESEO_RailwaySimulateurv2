@@ -15,8 +15,8 @@
       <id>1</id>
       <name>Bleuet</name>
       <position>
-        <latitude>0.07398434273349538</latitude>
-        <longitude>0.028298986810774918</longitude>
+        <latitude>-0.0707253936819678</latitude>
+        <longitude>-0.06531343268050581</longitude>
       </position>
       <lines>
         <line id="1" platform=""></line>
@@ -26,8 +26,8 @@
       <id>2</id>
       <name>Coquelicot</name>
       <position>
-        <latitude>0.009238795325112868</latitude>
-        <longitude>0.003826834323650897</longitude>
+        <latitude>-0.009238795325112866</latitude>
+        <longitude>-0.0038268343236509002</longitude>
       </position>
       <lines>
         <line id="0" platform=""></line>
@@ -37,8 +37,8 @@
       <id>3</id>
       <name>Dahlia</name>
       <position>
-        <latitude>0.07015750840984449</latitude>
-        <longitude>0.01906019148566205</longitude>
+        <latitude>-0.06365432587010232</latitude>
+        <longitude>-0.05824236486864033</longitude>
       </position>
       <lines>
         <line id="1" platform=""></line>
@@ -48,8 +48,8 @@
       <id>4</id>
       <name>Edelweiss</name>
       <position>
-        <latitude>0.018477590650225736</latitude>
-        <longitude>-1.3010426069826053e-18</longitude>
+        <latitude>-0.016309863136978343</latitude>
+        <longitude>-0.010897902135516375</longitude>
       </position>
       <lines>
         <line id="0" platform=""></line>
@@ -59,8 +59,8 @@
       <id>5</id>
       <name>Ficaire</name>
       <position>
-        <latitude>0.06633067408619359</latitude>
-        <longitude>0.009821396160549183</longitude>
+        <latitude>-0.05658325805823684</latitude>
+        <longitude>-0.05117129705677485</longitude>
       </position>
       <lines>
         <line id="1" platform=""></line>
@@ -70,8 +70,8 @@
       <id>6</id>
       <name>Grebera</name>
       <position>
-        <latitude>0.02554865846209121</latitude>
-        <longitude>-0.007071067811865478</longitude>
+        <latitude>-0.025548658462091207</latitude>
+        <longitude>-0.014724736459167276</longitude>
       </position>
       <lines>
         <line id="0" platform=""></line>
@@ -81,8 +81,8 @@
       <id>7</id>
       <name>Hortensia</name>
       <position>
-        <latitude>0.05709187876108071</latitude>
-        <longitude>0.005994561836898286</longitude>
+        <latitude>-0.047344462733123975</latitude>
+        <longitude>-0.047344462733123954</longitude>
       </position>
       <lines>
         <line id="1" platform=""></line>
@@ -92,8 +92,8 @@
       <id>8</id>
       <name>Iris</name>
       <position>
-        <latitude>0.034787453787204076</latitude>
-        <longitude>-0.010897902135516377</longitude>
+        <latitude>-0.032619726273956685</latitude>
+        <longitude>-0.02179580427103275</longitude>
       </position>
       <lines>
         <line id="0" platform=""></line>
@@ -103,8 +103,8 @@
       <id>9</id>
       <name>Jasmin</name>
       <position>
-        <latitude>0.05326504443742981</latitude>
-        <longitude>-0.0032442334882145825</longitude>
+        <latitude>-0.0402733949212585</latitude>
+        <longitude>-0.040273394921258476</longitude>
       </position>
       <lines>
         <line id="1" platform=""></line>
@@ -114,8 +114,8 @@
       <id>10</id>
       <name>Kalmie</name>
       <position>
-        <latitude>0.044026249112316944</latitude>
-        <longitude>-0.00707106781186548</longitude>
+        <latitude>-0.03644656059760759</latitude>
+        <longitude>-0.031034599596145615</longitude>
       </position>
       <lines>
         <line id="0" platform=""></line>
@@ -126,8 +126,8 @@
       <id>11</id>
       <name>Lys</name>
       <position>
-        <latitude>0.036955181300451466</latitude>
-        <longitude>-0.014142135623730954</longitude>
+        <latitude>-0.027207765272494723</latitude>
+        <longitude>-0.027207765272494716</longitude>
       </position>
       <lines>
         <line id="1" platform=""></line>
@@ -137,8 +137,8 @@
       <id>12</id>
       <name>Marguerite</name>
       <position>
-        <latitude>0.05326504443742981</latitude>
-        <longitude>-0.0032442334882145825</longitude>
+        <latitude>-0.04568535592272046</latitude>
+        <longitude>-0.034861433919796514</longitude>
       </position>
       <lines>
         <line id="0" platform=""></line>
@@ -148,8 +148,8 @@
       <id>13</id>
       <name>Narcisse</name>
       <position>
-        <latitude>0.036955181300451466</latitude>
-        <longitude>-0.024142135623730954</longitude>
+        <latitude>-0.023380930948843824</latitude>
+        <longitude>-0.017968969947381848</longitude>
       </position>
       <lines>
         <line id="1" platform=""></line>
@@ -159,8 +159,8 @@
       <id>14</id>
       <name>Ophrys</name>
       <position>
-        <latitude>0.06033611224929529</latitude>
-        <longitude>0.003826834323650892</longitude>
+        <latitude>-0.05492415124783333</latitude>
+        <longitude>-0.03103459959614561</longitude>
       </position>
       <lines>
         <line id="0" platform=""></line>
@@ -170,8 +170,8 @@
       <id>15</id>
       <name>Petunia</name>
       <position>
-        <latitude>0.040782015624102365</latitude>
-        <longitude>-0.033380930948843826</longitude>
+        <latitude>-0.019554096625192925</latitude>
+        <longitude>-0.00873017462226898</longitude>
       </position>
       <lines>
         <line id="1" platform=""></line>
@@ -181,8 +181,8 @@
       <id>16</id>
       <name>Quinoa</name>
       <position>
-        <latitude>0.06740718006116077</latitude>
-        <longitude>0.010897902135516366</longitude>
+        <latitude>-0.061995219059698806</latitude>
+        <longitude>-0.023963531784280134</longitude>
       </position>
       <lines>
         <line id="0" platform=""></line>
@@ -192,8 +192,8 @@
       <id>17</id>
       <name>Renoncule</name>
       <position>
-        <latitude>0.03695518130045146</latitude>
-        <longitude>-0.04261972627395669</longitude>
+        <latitude>-0.010315301300080057</latitude>
+        <longitude>-0.0049033402986180825</longitude>
       </position>
       <lines>
         <line id="1" platform=""></line>
@@ -203,8 +203,8 @@
       <id>18</id>
       <name>Scabieuse</name>
       <position>
-        <latitude>0.07664597538627363</latitude>
-        <longitude>0.014724736459167264</longitude>
+        <latitude>-0.06906628687156428</latitude>
+        <longitude>-0.016892463972414656</longitude>
       </position>
       <lines>
         <line id="0" platform=""></line>
@@ -214,8 +214,8 @@
       <id>19</id>
       <name>Tulipe</name>
       <position>
-        <latitude>0.02771638597533859</latitude>
-        <longitude>-0.046446560597607586</longitude>
+        <latitude>-0.0032442334882145808</latitude>
+        <longitude>0.002167727513247392</longitude>
       </position>
       <lines>
         <line id="1" platform=""></line>
