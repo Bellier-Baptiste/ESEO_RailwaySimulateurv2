@@ -109,6 +109,10 @@ func NewEventTimetableTrain(line *MetroLine,
 	return &e
 }
 
+func (e *EventTimetableTrain) Test() error {
+	return nil
+}
+
 /*
 Getters
 */

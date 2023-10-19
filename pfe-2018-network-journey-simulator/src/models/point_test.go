@@ -1,12 +1,12 @@
 package models
 
 import (
-	"fmt"
 	"github.com/stretchr/testify/assert"
-	"math"
 	"testing"
 )
 
+/*
+Unused function
 func assertEqualFloat(t *testing.T, expected float64, actual float64, allowedError float64, message string) {
 	if math.Abs(expected-actual) < allowedError {
 		return
@@ -15,7 +15,7 @@ func assertEqualFloat(t *testing.T, expected float64, actual float64, allowedErr
 		t.Fatal(message)
 	}
 }
-
+*/
 
 func TestEquals(t *testing.T) {
 	points := []Point{

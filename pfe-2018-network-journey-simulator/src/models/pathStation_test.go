@@ -7,14 +7,14 @@ import (
 
 func generateStationsLinesRandomTest() ([]*MetroStation, []*MetroLine) {
 	var stations = []*MetroStation{
-		&MetroStation{id: 1},
-		&MetroStation{id: 2},
-		&MetroStation{id: 3},
+		{id: 1},
+		{id: 2},
+		{id: 3},
 	}
 
 	var lines = []*MetroLine{
-		&MetroLine{id: 1},
-		&MetroLine{id: 2},
+		{id: 1},
+		{id: 2},
 	}
 	return stations, lines
 }
