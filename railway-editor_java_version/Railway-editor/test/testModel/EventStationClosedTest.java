@@ -12,7 +12,7 @@ public class EventStationClosedTest {
         assertEquals("2018/12/12_12:00", event.getStartTime());
         assertEquals("2018/12/12_13:00", event.getEndTime());
         assertEquals(EventStationClosed.EventType.STATION, event.getType());
-        assertEquals("stationClosed", event.EVENT_NAME);
+        assertEquals("stationClosed", event.getEventName());
     }
 
     @Test(expected = IllegalArgumentException.class)

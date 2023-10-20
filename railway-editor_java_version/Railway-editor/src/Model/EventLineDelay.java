@@ -19,7 +19,7 @@ public class EventLineDelay extends Event {
 	 */
 	public EventLineDelay(String startTime, String endTime, EventType type) {
 		super(startTime, endTime, type);
-		EVENT_NAME = "lineDelay";
+		setEventName("lineDelay");
 	}
 
 	/**

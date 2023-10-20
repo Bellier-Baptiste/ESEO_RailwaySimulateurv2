@@ -16,7 +16,7 @@ public class EventHour extends Event{
 	 */
 	public EventHour(String startTime, String endTime, EventType type) {
 		super(startTime, endTime, type);
-		this.EVENT_NAME = "hour";
+		setEventName("hour");
 
 	}
 	/**get the id of the line concerned.

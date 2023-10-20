@@ -17,7 +17,7 @@ public class EventAttendancePeak extends Event {
 	 */
 	public EventAttendancePeak(String startTime, String endTime, EventType type) {
 		super(startTime, endTime, type);
-		this.EVENT_NAME = "attendancePeak";
+		setEventName("attendancePeak");
 	}
 
 	/**get the id of the station concerned by the peak.

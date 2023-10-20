@@ -9,7 +9,8 @@ type EventStationClosed struct {
 	finished  bool
 }
 
-func NewEventStationClosed(idStation int, start time.Time, end time.Time) EventStationClosed {
+func NewEventStationClosed(idStation int, start time.Time,
+	end time.Time) EventStationClosed {
 	return EventStationClosed{
 		end:       end,
 		start:     start,

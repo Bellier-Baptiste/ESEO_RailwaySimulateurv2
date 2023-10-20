@@ -19,7 +19,7 @@ public class EventLineClosed extends Event {
 	 */
 	public EventLineClosed(String startTime, String endTime, EventType type) {
 		super(startTime, endTime, type);
-		this.EVENT_NAME = "lineClose";
+		setEventName("lineClose");
 	}
 
 

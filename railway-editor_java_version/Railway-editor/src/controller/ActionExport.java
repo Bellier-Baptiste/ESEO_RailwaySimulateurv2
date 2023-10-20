@@ -325,7 +325,7 @@ public ActionExport(MainPanel mainPanel, ActionManager actionManager) {
         timeEnd = timeEnd.replace("_", "T");
         timeEnd = timeEnd+":00.000Z";
 
-        Element eventName = document.createElement(event.EVENT_NAME);
+        Element eventName = document.createElement(event.getEventName());
         events.appendChild(eventName);
         Element eventStart = document.createElement("start");
         eventStart.appendChild(document.createTextNode(timeStart));
@@ -335,7 +335,7 @@ public ActionExport(MainPanel mainPanel, ActionManager actionManager) {
         eventEnd.appendChild(document.createTextNode(timeEnd));
         eventName.appendChild(eventEnd);
 
-        switch (event.EVENT_NAME) {
+        switch (event.getEventName()) {
           case "lineDelay":
             EventLineDelay eventLineDelay = (EventLineDelay) event;
 

@@ -10,7 +10,7 @@ public class EventStationClosed extends Event{
 	 */
 	public EventStationClosed(String startTime, String endTime, EventType type) {
 		super(startTime, endTime, type);
-		this.EVENT_NAME = "stationClosed";
+		setEventName("stationClosed");
 	}
 
 	/**get the id of the station concerned by the peak.

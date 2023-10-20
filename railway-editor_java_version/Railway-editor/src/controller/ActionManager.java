@@ -3,10 +3,8 @@ package controller;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -769,7 +767,7 @@ public class ActionManager {
 				timeEnd = timeEnd.replace("_", "T");
 				timeEnd = timeEnd+":00.000Z";
 				
-				Element eventName = document.createElement(event.EVENT_NAME);
+				Element eventName = document.createElement(event.getEventName());
 				events.appendChild(eventName);
 				Element eventStart = document.createElement("start");
 				eventStart.appendChild(document.createTextNode(timeStart));
@@ -779,7 +777,7 @@ public class ActionManager {
 				eventEnd.appendChild(document.createTextNode(timeEnd));
 				eventName.appendChild(eventEnd);
 
-				switch (event.EVENT_NAME) {
+				switch (event.getEventName()) {
 				case "lineDelay":
 					EventLineDelay eventLineDelay = (EventLineDelay) event;
 
