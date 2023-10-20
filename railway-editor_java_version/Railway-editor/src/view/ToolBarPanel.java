@@ -91,6 +91,10 @@ public class ToolBarPanel extends JToolBar {
 
   /** Editable combo box to choose destination. */
   private FilterComboBox filterComboBox;
+  /**
+   * Can delete station ? Yes if the right delete toggle button is activated.
+   */
+  private boolean canDeleteStation = false;
 
   /**
    * ToolBarPanelIdea2's constructor.
@@ -141,7 +145,7 @@ public class ToolBarPanel extends JToolBar {
     NoneSelectedButtonGroup actionButtonGroup = new NoneSelectedButtonGroup();
 
     // Adding panels to the toolbar
-    this.add(this.initStationPanel());
+    this.add(this.initStationPanel(actionButtonGroup));
     this.add(this.initLinePanel(actionButtonGroup));
     this.add(this.initAreaPanel(actionButtonGroup));
     this.add(this.initEventPanel());
@@ -221,7 +225,12 @@ public class ToolBarPanel extends JToolBar {
     addEventBtn.addActionListener(e -> ActionMetroEvent.getInstance()
         .addEvent());
     addEventBtn.setFocusable(false);
-    JButton showEventsBtn = new JButton("SHOW LIST");
+    JToggleButton showEventsBtn = new JToggleButton("HIDE LIST");
+    showEventsBtn.addActionListener(e -> {
+          EventRecap.getInstance().setVisible(
+              !EventRecap.getInstance().isVisible());
+          MainWindow.getInstance().pack();
+    });
     showEventsBtn.setFocusable(false);
 
     firstEventRowPanel.add(addEventBtn);
@@ -299,6 +308,7 @@ public class ToolBarPanel extends JToolBar {
 
     JToggleButton deleteLineBtn = new JToggleButton(ToolBarPanel
         .DELETE_TEXT_BTN);
+    deleteLineBtn.setName(ActionLine.DELETE_LINE);
     deleteLineBtn.setFocusable(false);
     actionButtonGroup.add(deleteLineBtn);
     firstLineRowPanel.add(addLineBtn);
@@ -340,7 +350,7 @@ public class ToolBarPanel extends JToolBar {
    *
    * @return JPanel stationPanel
    */
-  private JPanel initStationPanel() {
+  private JPanel initStationPanel(NoneSelectedButtonGroup actionButtonGroup) {
     // Station panel init
     JPanel stationPanel = new JPanel();
     stationPanel.setAlignmentY(Component.TOP_ALIGNMENT);
@@ -360,8 +370,16 @@ public class ToolBarPanel extends JToolBar {
     addStationBtn.setName(ActionStation.ACTION_NAME);
     addStationBtn.setFocusable(false);
 
-    JButton deleteStationBtn = new JButton(ToolBarPanel.DELETE_TEXT_BTN);
+    JToggleButton deleteStationBtn = new JToggleButton(
+        ToolBarPanel.DELETE_TEXT_BTN);
+    deleteStationBtn.setName(ActionStation.DELETE_STATION);
+    deleteStationBtn.addActionListener(e ->
+    {
+      this.canDeleteStation = !this.canDeleteStation;
+      System.out.println(this.canDeleteStation);
+    });
     deleteStationBtn.setFocusable(false);
+    actionButtonGroup.add(deleteStationBtn);
     JButton mergeStationsBtn = new JButton("MERGE");
     mergeStationsBtn.setFocusable(false);
     firstStationRowPanel.add(addStationBtn);
@@ -386,5 +404,9 @@ public class ToolBarPanel extends JToolBar {
     stationPanel.add(secondStationRowPanel);
     stationPanel.add(Box.createVerticalGlue());
     return stationPanel;
+  }
+
+  public boolean getCanDeleteStation() {
+    return this.canDeleteStation;
   }
 }

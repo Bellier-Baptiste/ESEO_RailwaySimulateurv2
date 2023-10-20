@@ -47,6 +47,7 @@ import java.util.Random;
 public final class ActionStation {
   /** Action name of the add button. */
   public static final String ACTION_NAME = "ADD_STATION";
+  public static final String DELETE_STATION = "DELETE_STATION";
   /** Low bound for the random position of the station. */
   private static final int LOW_BOUND = 10;
   /** High bound for the random position of the station. */
@@ -148,6 +149,23 @@ public final class ActionStation {
         stationView, lineToUpdateIndex);
     stationId += 1;
     MainWindow.getInstance().getMainPanel().repaint();
+  }
+
+  /**
+   * Delete selected station (remove it in the correct line stations list).
+   *
+   * @param stationToDeleteView station to delete
+   */
+  void deleteStation(final StationView stationToDeleteView,
+                     LineView selectedStationLineView) {
+    int stationIndex = selectedStationLineView.getLine().getStations()
+        .indexOf(stationToDeleteView.getStation());
+    int stationViewIndex = selectedStationLineView.getStationViews()
+        .indexOf(stationToDeleteView);
+    // remove in station list
+    selectedStationLineView.getLine().getStations().remove(stationIndex);
+    // remove in stationView list
+    selectedStationLineView.getStationViews().remove(stationViewIndex);
   }
 
   /**
