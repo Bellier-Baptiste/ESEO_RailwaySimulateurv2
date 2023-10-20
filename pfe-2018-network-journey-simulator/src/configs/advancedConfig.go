@@ -132,7 +132,9 @@ func InitAdvancedConfigInstance(filename string) {
 		log.Fatal("error in advanced config checking - ", err)
 	}
 
+	println("Here")
 	advancedConfig.ReattributeIds()
+	println("Here")
 }
 
 func GetAdvancedConfigInstance() *AdvancedConfig {
@@ -176,7 +178,7 @@ func (aConfig *AdvancedConfig) loadXML(filename string) error {
 	//basePath = strings.Replace(currentPath, "src\\tools", "", -1)
 	fmt.Println("base path : ", basePath)
 	if basePath == currentPath {
-		configPath = filepath.Join(basePath, filename)
+		configPath = filepath.Join(basePath, "/configs/", filename)
 	}
 	if basePath != currentPath {
 		configPath = filepath.Join(basePath, projectPath, "configs/", filename)

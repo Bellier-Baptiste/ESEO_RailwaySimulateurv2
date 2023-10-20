@@ -65,8 +65,9 @@ func RandomTime(currentDay time.Time) time.Time {
 		currentDay.Day(), 0, 0, 0, 0, currentDay.Location())
 	pickedTime := currentDayMidnight
 
+	instance := configs.GetInstance()
 	bDayStart, err := time.ParseDuration(
-		configs.GetInstance().BusinessDayStart())
+		instance.BusinessDayStart())
 	if err != nil {
 		log.Fatal(err, "BusinessDayStart - couldn't parse duration")
 	}
@@ -76,7 +77,7 @@ func RandomTime(currentDay time.Time) time.Time {
 		log.Fatal(err, "a Day- couldn't parse duration")
 	}
 
-	bDayEnd, err := time.ParseDuration(configs.GetInstance().BusinessDayEnd())
+	bDayEnd, err := time.ParseDuration(instance.BusinessDayEnd())
 	if err != nil {
 		log.Fatal(err, "BusinessDayEnd - couldn't parse duration")
 	}
