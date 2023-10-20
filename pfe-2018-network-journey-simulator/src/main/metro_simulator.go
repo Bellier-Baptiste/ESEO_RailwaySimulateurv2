@@ -235,7 +235,9 @@ func main() {
 	printHeader("Initializing Simulation")
 	startTime := time.Now()
 	newSimulator := simulator.NewSimulator()
-	err = newSimulator.Init(dayType)
+	var output bool
+	output, err = newSimulator.Init(dayType)
+	fmt.Println("NewSimulator =", output)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -254,7 +256,7 @@ func main() {
 
 	elapsedTime = time.Since(startTime)
 
-	tripsNotFinished, tripsFinished := checkFinishedTrips(&newSimulator)
+	tripsNotFinished, tripsFinished := checkFinishedTrips(newSimulator)
 
 	fmt.Println("")
 	printHeader("Simulation completed")

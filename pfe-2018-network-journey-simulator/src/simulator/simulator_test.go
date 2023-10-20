@@ -1,3 +1,34 @@
+/*
+File : simulator_test.go
+
+Brief :
+
+Date : N/A
+
+Author : Team v2, Paul TRÉMOUREUX (quality check)
+
+License : MIT License
+
+Copyright (c) 2023 Équipe PFE_2023_16
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 package simulator
 
 import (
@@ -38,6 +69,7 @@ func TestMain(m *testing.M) {
 func TestSimulator_SimulatorInit(t *testing.T) {
 	println("TestSimulator_SimulatorInit")
 	var sim = NewSimulator()
+	println(sim.tripNumberCounter)
 	var output, err = sim.Init("working day")
 	assert.Nil(t, err)
 	assert.True(t, output)
@@ -56,7 +88,9 @@ func TestSimulator_RunOnce(t *testing.T) {
 
 	sim := NewSimulator()
 
-	sim.Init("working day")
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
 	//TODO only works while modifying config.json; make it so it doesn't
 
 	//println(simulator.mapObject.Lines()[0].String(),"\n")
@@ -73,7 +107,9 @@ func TestSimulator_RunMultiple(t *testing.T) {
 	println("TestSimulator_RunMultiple")
 	sim := NewSimulator()
 
-	sim.Init("working day")
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
 	//TODO only works while modifying config.json; make it so it doesn't
 
 	//println(simulator.mapObject.Lines()[0].String(),"\n")
@@ -99,7 +135,9 @@ func TestSimulator_Run(t *testing.T) {
 
 	sim := NewSimulator()
 
-	sim.Init("working day")
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
 	//TODO only works while modifying config.json; make it so it doesn't
 
 	//println(simulator.mapObject.Lines()[0].String(),"\n")
@@ -138,7 +176,9 @@ func TestSimulator_TripNumber(t *testing.T) {
 	println("\r")
 	println("TestSimulator_TripNumber")
 	sim := NewSimulator()
-	sim.Init("working day")
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
 
 	//	println("number of trains : ", len(sim.GetTrains()))
 
@@ -151,7 +191,9 @@ func TestSimulator_TripNumber(t *testing.T) {
 func TestSimulator_EventLineClosed(t *testing.T) {
 	println("TestSimulator_EventLineClosed")
 	sim := NewSimulator()
-	sim.Init("working day")
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
 	eventsLineClosed := sim.GetAllEventsLineClosed()
 
 	//	println("len : ", len(eventsLineClosed))
@@ -167,13 +209,15 @@ func TestSimulator_EventLineClosed(t *testing.T) {
 func TestSimulator_EventAttendancePeak(t *testing.T) {
 	println("TestSimulator_EventAttendancePeak")
 	sim := NewSimulator()
-	sim.Init("working day")
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
 
 	eventsAttendancePeak := sim.GetAllEventsAttendancePeak()
 
 	println("len : ", len(eventsAttendancePeak))
 
-	assert.True(t, (len(eventsAttendancePeak) != 0), "Array of events (attendance peak) not initialized")
+	assert.True(t, len(eventsAttendancePeak) != 0, "Array of events (attendance peak) not initialized")
 
 	assert.Equal(t, timeStart, eventsAttendancePeak[0].Time().Format(time.RFC3339), "Bad Time attribut")
 	assert.Equal(t, eap_stationStart, eventsAttendancePeak[0].IdStation(), "Bad station id attribut")
