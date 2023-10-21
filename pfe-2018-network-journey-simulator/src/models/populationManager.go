@@ -1,3 +1,36 @@
+/*
+Package models
+
+File : populationManager.go
+
+Brief :
+
+Date : N/A
+
+Author : Team v2, Paul TRÉMOUREUX (quality check)
+
+License : MIT License
+
+Copyright (c) 2023 Équipe PFE_2023_16
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 package models
 
 import (
@@ -15,8 +48,10 @@ import (
 
 type Population struct {
 	outside       map[string]*Passenger
-	outsideSorted []*Passenger //passengers outside, sorted by the time they should enter a station (id only)
-	//inStation     map[int]map[string]*Passenger//stationId->lineId->up(0)/down(1)->passengers
+	outsideSorted []*Passenger
+	//passengers outside, sorted by the time they should enter a station (id only)
+	//inStation map[int]map[string]*Passenger
+	//stationId->lineId->up(0)/down(1)->passengers
 	inStation []map[string]*Passenger
 	//inTrain   map[int]map[string]*Passenger
 	inTrain []map[string]*Passenger
@@ -29,15 +64,46 @@ type Population struct {
 	maxTimeInStationPassenger time.Duration
 }
 
-// create a population and assign it trips (random and commuting)
-func NewPopulation(popSize int, popCommutersProportion float64, popRandomsProportion float64, aMap Map) Population {
+func (p *Population) test(popSizeRandoms, popSizeCommuters int,
+	config configs.ConfigurationObject, aMap Map) {
+	for i := popSizeRandoms; i < popSizeRandoms+popSizeCommuters; i++ {
+		id := strconv.FormatInt(int64(i), 10)
+		passenger := NewPassenger(id, PickAKind())
+		startTime := config.TimeStart()
+		currentDay := startTime
+		endTime := config.TimeEnd()
+		timeOfMorningCommute := config.MorningCommuteTime()
+		timeOfEveningCommute := config.EveningCommuteTime()
+		commutePeriodDuration := int64(config.CommutePeriodDuration().Seconds())
+		for currentDay.Before(endTime) {
+			morningTrip, eveningTrip := CommuntingTrips(commutePeriodDuration,
+				timeOfMorningCommute, timeOfEveningCommute, currentDay, aMap)
+			if morningTrip.IsValid(startTime, endTime) {
+				passenger.AddTrip(&morningTrip)
+			}
+			if eveningTrip.IsValid(startTime, endTime) {
+				passenger.AddTrip(&eveningTrip)
+			}
+			currentDay = currentDay.AddDate(0, 0, 1)
+		}
+		p.outside[passenger.Id()] = &passenger
+	}
+}
+
+/*
+NewPopulation create a population and assign it trips (random and commuting)
+*/
+func NewPopulation(popSize int, popCommutersProportion,
+	popRandomsProportion float64, aMap Map) *Population {
 
 	if math.Abs(popCommutersProportion+popRandomsProportion-1) > 0.02 {
-		log.Fatal("NewPopulation error : popCommutersProportion + popRandomsProportions != 1 (", popCommutersProportion, "+", popRandomsProportion, ")")
+		log.Fatal("NewPopulation error : popCommutersProportion + "+
+			"popRandomsProportions != 1 (", popCommutersProportion, "+",
+			popRandomsProportion, ")")
 	}
 
 	config := configs.GetInstance()
-	rand.Seed(config.Seed())
+	rand.New(rand.NewSource(config.Seed()))
 	popSizeRandoms := int(float64(popSize) * popRandomsProportion)
 	popSizeCommuters := int(float64(popSize) * popCommutersProportion)
 	var population Population
@@ -64,27 +130,7 @@ func NewPopulation(popSize int, popCommutersProportion float64, popRandomsPropor
 		population.outside[passenger.Id()] = &passenger
 	}
 
-	for i := popSizeRandoms; i < popSizeRandoms+popSizeCommuters; i++ {
-		id := strconv.FormatInt(int64(i), 10)
-		passenger := NewPassenger(id, PickAKind())
-		startTime := config.TimeStart()
-		currentDay := startTime
-		endTime := config.TimeEnd()
-		timeOfMorningCommute := config.MorningCommuteTime()
-		timeOfEveningCommute := config.EveningCommuteTime()
-		commutePeriodDuration := int64(config.CommutePeriodDuration().Seconds())
-		for currentDay.Before(endTime) {
-			morningTrip, eveningTrip := CommuntingTrips(commutePeriodDuration, timeOfMorningCommute, timeOfEveningCommute, currentDay, aMap)
-			if morningTrip.IsValid(startTime, endTime) {
-				passenger.AddTrip(&morningTrip)
-			}
-			if eveningTrip.IsValid(startTime, endTime) {
-				passenger.AddTrip(&eveningTrip)
-			}
-			currentDay = currentDay.AddDate(0, 0, 1)
-		}
-		population.outside[passenger.Id()] = &passenger
-	}
+	population.test(popSizeRandoms, popSizeCommuters, config, aMap)
 
 	for i := range population.outside {
 		population.outside[i].calculateNextTrip()
@@ -92,7 +138,8 @@ func NewPopulation(popSize int, popCommutersProportion float64, popRandomsPropor
 
 	var adConfig = configs.GetAdvancedConfigInstance()
 
-	population.inStation = make([]map[string]*Passenger, len(adConfig.MapC.Stations))
+	population.inStation = make([]map[string]*Passenger,
+		len(adConfig.MapC.Stations))
 	for i := range population.inStation {
 		population.inStation[i] = map[string]*Passenger{}
 	}
@@ -108,7 +155,7 @@ func NewPopulation(popSize int, popCommutersProportion float64, popRandomsPropor
 
 	population.printDebug = config.PrintDebug()
 
-	return population
+	return &population
 }
 
 func PickAKind() int {
@@ -126,9 +173,11 @@ func PickAKind() int {
 		kind = SEN
 	} else if (adlProp+senProp < choice) && (choice < senProp+adlProp+chdProp) {
 		kind = CHD
-	} else if (adlProp+senProp+chdProp < choice) && (choice < senProp+adlProp+chdProp+disProp) {
+	} else if (adlProp+senProp+chdProp < choice) &&
+		(choice < senProp+adlProp+chdProp+disProp) {
 		kind = DIS
-	} else if (adlProp+senProp+chdProp+disProp < choice) && (choice < senProp+adlProp+chdProp+disProp+stdProp) {
+	} else if (adlProp+senProp+chdProp+disProp < choice) &&
+		(choice < senProp+adlProp+chdProp+disProp+stdProp) {
 		kind = STD
 	}
 
@@ -157,7 +206,10 @@ func (p *Population) sortOutsideInit() {
 	p.SortOutside()
 }
 
-// Sort the outsiders; O(n) complexity, don't abuse of it
+/*
+SortOutside
+Sort the outsiders; O(n) complexity, don't abuse of it
+*/
 func (p *Population) SortOutside() {
 	sort.Slice(p.outsideSorted, func(i, j int) bool {
 		if p.outsideSorted[i].nextTrip == nil {
@@ -168,18 +220,29 @@ func (p *Population) SortOutside() {
 			return true
 		}
 
-		return p.outsideSorted[i].nextTrip.departureTime.Before(p.outsideSorted[j].nextTrip.departureTime)
+		return p.outsideSorted[i].nextTrip.departureTime.Before(
+			p.outsideSorted[j].nextTrip.departureTime)
 	})
 }
 
-// use a binary tree to find the last index where p.outsideSorted[index].departureTime <= t
+/*
+OutsideSortedFindIndexByTime
+use a binary tree to find the last index where
+p.outsideSorted[index].departureTime <= t
+*/
 func (p *Population) OutsideSortedFindIndexByTime(t time.Time) int {
-	return sort.Search(len(p.outsideSorted), func(i int) bool { //f(i) == true => f(i+1) == true
-		return p.outsideSorted[i].nextTrip == nil || t.Before(p.outsideSorted[i].nextTrip.departureTime)
+	return sort.Search(len(p.outsideSorted), func(i int) bool {
+		//f(i) == true => f(i+1) == true
+		return p.outsideSorted[i].nextTrip == nil ||
+			t.Before(p.outsideSorted[i].nextTrip.departureTime)
 	})
 }
 
-// reinsert a Passenger inside the sorted OutsideSorted. 1% chance of relaunching a sort (to make sure everything works smoothly
+/*
+OutsideSortedInsertPassenger
+reinsert a Passenger inside the sorted OutsideSorted.
+1% chance of relaunching a sort (to make sure everything works smoothly
+*/
 func (p *Population) OutsideSortedInsertPassenger(passenger *Passenger) {
 	if passenger.nextTrip == nil || passenger.nextTrip.IsCompleted() {
 		passenger.calculateNextTrip()
@@ -198,10 +261,14 @@ func (p *Population) OutsideSortedInsertPassenger(passenger *Passenger) {
 		return
 	}
 
-	p.outsideSorted = append(p.outsideSorted[:index], append([]*Passenger{passenger}, p.outsideSorted[index:]...)...)
+	p.outsideSorted = append(p.outsideSorted[:index],
+		append([]*Passenger{passenger}, p.outsideSorted[index:]...)...)
 }
 
-// pop all passengers having a nextTrip before the time
+/*
+OutsideSortedPopAllBefore
+pop all passengers having a nextTrip before the time
+*/
 func (p *Population) OutsideSortedPopAllBefore(t time.Time) []*Passenger {
 	var index = p.OutsideSortedFindIndexByTime(t)
 
@@ -218,16 +285,21 @@ func (p *Population) OutsideSortedPopAllBefore(t time.Time) []*Passenger {
 func (p *Population) OutsideSortedCheckSorted() bool {
 	//assert sorted AFTER
 	for i := 0; i < len(p.outsideSorted)-1; i++ {
-		if p.outsideSorted[i].nextTrip == nil && p.outsideSorted[i+1].nextTrip != nil {
+		if p.outsideSorted[i].nextTrip == nil &&
+			p.outsideSorted[i+1].nextTrip != nil {
 			println("debug: outstideSorted error : nil before not nil")
 			return false
 		}
-		if p.outsideSorted[i].nextTrip == nil || p.outsideSorted[i+1].nextTrip == nil {
+		if p.outsideSorted[i].nextTrip == nil ||
+			p.outsideSorted[i+1].nextTrip == nil {
 			continue
 		}
 
-		if p.outsideSorted[i].nextTrip.departureTime.After(p.outsideSorted[i+1].nextTrip.departureTime) {
-			println("debug: outstideSorted error : not good order ", p.outsideSorted[i].nextTrip.departureTime.String(), " :: ", p.outsideSorted[i+1].nextTrip.departureTime.String())
+		if p.outsideSorted[i].nextTrip.departureTime.After(
+			p.outsideSorted[i+1].nextTrip.departureTime) {
+			println("debug: outstideSorted error : not good order ",
+				p.outsideSorted[i].nextTrip.departureTime.String(), " :: ",
+				p.outsideSorted[i+1].nextTrip.departureTime.String())
 			return false
 		}
 	}
@@ -287,10 +359,13 @@ func (p *Population) Passengers() map[string]*Passenger {
 	return out
 }
 
-//----------------------------------------------------------- functions and methods
+//-------------------------------------------------------- functions and methods
 
-// find where a passenger is. for debug purposes only
-func (p Population) FindPassenger(passenger Passenger) string {
+/*
+FindPassenger
+find where a passenger is. for debug purposes only
+*/
+func (p *Population) FindPassenger(passenger Passenger) string {
 	var exists = false
 
 	_, exists = p.outside[passenger.id]
@@ -316,7 +391,8 @@ func (p Population) FindPassenger(passenger Passenger) string {
 }
 
 // transfer a passenger from the general population to a station
-func (p *Population) transferFromPopulationToStation(passenger *Passenger, stationPt *MetroStation, aTime time.Time) {
+func (p *Population) transferFromPopulationToStation(passenger *Passenger,
+	stationPt *MetroStation, aTime time.Time) {
 	if p.inStation[stationPt.Id()] == nil {
 		p.inStation[stationPt.Id()] = make(map[string]*Passenger)
 	}
@@ -333,7 +409,8 @@ func (p *Population) transferFromPopulationToStation(passenger *Passenger, stati
 }
 
 // transfer a passenger from a station to the general population
-func (p *Population) transferFromStationToPopulation(passenger *Passenger, stationPt *MetroStation, aTime time.Time) {
+func (p *Population) transferFromStationToPopulation(passenger *Passenger,
+	stationPt *MetroStation, aTime time.Time) {
 	info := prepareCSVline(*passenger, stationPt, aTime, "USE")
 	p.output.Write(info)
 	p.outside[passenger.Id()] = passenger
@@ -346,7 +423,8 @@ func (p *Population) transferFromStationToPopulation(passenger *Passenger, stati
 }
 
 // transfer a passenger from the station to the train
-func (p *Population) transferFromStationToTrain(passenger *Passenger, trainPt *MetroTrain, stationPt *MetroStation) {
+func (p *Population) transferFromStationToTrain(passenger *Passenger,
+	trainPt *MetroTrain, stationPt *MetroStation) {
 	p.inTrainMutex.Lock()
 	if p.inTrain[trainPt.Id()] == nil {
 		p.inTrain[trainPt.Id()] = make(map[string]*Passenger)
@@ -360,13 +438,15 @@ func (p *Population) transferFromStationToTrain(passenger *Passenger, trainPt *M
 
 	if p.printDebug {
 		if stationPt.id == 1 {
-			println("station", stationPt.name, " -> train ", trainPt.id, " : passenger", passenger.id)
+			println("station", stationPt.name, " -> train ",
+				trainPt.id, " : passenger", passenger.id)
 		}
 	}
 }
 
 // transfer a passenger from a train to a station
-func (p *Population) transferFromTrainToStation(passenger *Passenger, trainPt *MetroTrain, stationPt *MetroStation, aTime time.Time) {
+func (p *Population) transferFromTrainToStation(passenger *Passenger,
+	trainPt *MetroTrain, stationPt *MetroStation, aTime time.Time) {
 	passenger.setTimeArrivalLastStation(aTime)
 
 	p.inStationMutex.Lock()
@@ -382,12 +462,16 @@ func (p *Population) transferFromTrainToStation(passenger *Passenger, trainPt *M
 
 	if p.printDebug {
 		if stationPt.id == 1 {
-			println("train", trainPt.id, " -> station", stationPt.name, ": passenger", passenger.id)
+			println("train", trainPt.id, " -> station",
+				stationPt.name, ": passenger", passenger.id)
 		}
 	}
 }
 
-// update the situation in all station (outside <-> station only)
+/*
+UpdateAll
+update the situation in all station (outside <-> station only)
+*/
 func (p *Population) UpdateAll(aTime time.Time, mapO *Map) {
 	// 1. outside > station
 	p.UpdateOutsideToStations(aTime)
@@ -419,34 +503,32 @@ func (p *Population) UpdateOutsideToStations(aTime time.Time) {
 	}
 }
 
-func (p *Population) UpdateStationToOutside(aTime time.Time, station *MetroStation) {
+func (p *Population) UpdateStationToOutside(aTime time.Time,
+	station *MetroStation) {
 	for i := range p.inStation[station.Id()] {
 		passenger := p.inStation[station.Id()][i]
 		var trip = passenger.CurrentTrip()
-		if trip.Path().EndStation().Id() == station.Id() {
+		if trip.Path().EndStation().Id() == station.Id() ||
+			passenger.timeArrivalLastStation.Add(
+				p.maxTimeInStationPassenger).Before(aTime) {
 			//TODO account for time in station --> gate
 			trip.SetArrivalTime(aTime)
 			p.transferFromStationToPopulation(passenger, station, aTime)
 
 			passenger.ClearCurrentTrip()
 			passenger.calculateNextTrip()
-			p.OutsideSortedInsertPassenger(passenger) //use after the transfer from station to pop
+			p.OutsideSortedInsertPassenger(passenger)
+			//use after the transfer from station to pop
 			//println("station->outside: passenger #"+passenger.id)
-		} else if passenger.timeArrivalLastStation.Add(p.maxTimeInStationPassenger).Before(aTime) {
-			//make the passenger exit because he's been waiting too long
-			//println("passenger waited too long and got out")
-			trip.SetArrivalTime(aTime)
-			p.transferFromStationToPopulation(passenger, station, aTime)
-
-			passenger.ClearCurrentTrip()
-			passenger.calculateNextTrip()
-			p.OutsideSortedInsertPassenger(passenger) //use after the transfer from station to pop
 		}
 	}
 }
 
-// push a passenger outside
-func (p *Population) StationToOutside(aTime time.Time, station *MetroStation, passenger *Passenger) {
+/*
+StationToOutside push a passenger outside
+*/
+func (p *Population) StationToOutside(aTime time.Time, station *MetroStation,
+	passenger *Passenger) {
 	var trip = passenger.CurrentTrip()
 	trip.SetArrivalTime(aTime)
 	p.transferFromStationToPopulation(passenger, station, aTime)
@@ -459,7 +541,8 @@ func (p *Population) StationToOutside(aTime time.Time, station *MetroStation, pa
 func (p *Population) UpdateStationToTrain(train *MetroTrain) {
 	station := train.CurrentStation()
 	p.inStationMutex.Lock()
-	inStation := p.inStation[station.Id()] //TODO check that
+	inStation := p.inStation[station.Id()]
+	//TODO check above
 	p.inStationMutex.Unlock()
 	for i := range inStation {
 		p.inStationMutex.Lock()
@@ -500,7 +583,7 @@ func (p *Population) UpdateTrainToStation(train *MetroTrain, aTime time.Time) {
 	}
 }
 
-func (p Population) String() string {
+func (p *Population) String() string {
 
 	var passengers = p.Passengers()
 
@@ -517,13 +600,17 @@ func (p Population) String() string {
 	return out
 }
 
-func prepareCSVline(passenger Passenger, station *MetroStation, aTime time.Time, transactionType string) []string {
+func prepareCSVline(passenger Passenger, station *MetroStation,
+	aTime time.Time, transactionType string) []string {
 	var line []string
 	businessDay := GetBusinessDay(aTime).Format("02/01/2006")
 	transactionDate := aTime.Format("02/01/2006 15:04:05")
 	currentStation := strconv.Itoa(station.Id())
-	departureStation := strconv.Itoa(passenger.CurrentTrip().Path().Stations()[0].Id())
-	line = append(line, passenger.Id(), businessDay, transactionDate, transactionType, kindToString(passenger.Kind()), departureStation, currentStation, "", "", "")
+	departureStation := strconv.Itoa(
+		passenger.CurrentTrip().Path().Stations()[0].Id())
+	line = append(line, passenger.Id(), businessDay, transactionDate,
+		transactionType, kindToString(passenger.Kind()), departureStation,
+		currentStation, "", "", "")
 	return line
 }
 
