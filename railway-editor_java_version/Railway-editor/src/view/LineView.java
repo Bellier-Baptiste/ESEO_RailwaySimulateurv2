@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.List;
 
-import Model.Line;
+import model.Line;
 
 /**Represent the Line view.
  * @author Arthur Lagarce

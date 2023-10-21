@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
-import Model.Station;
+import model.Station;
 
 /**
  * The panel which contains the hud with the stations names, some instructions and the caption.

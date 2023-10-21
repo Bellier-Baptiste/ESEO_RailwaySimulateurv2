@@ -1,8 +1,8 @@
 package controller;
 
-import Model.Area;
-import Model.Line;
-import Model.Station;
+import model.Area;
+import model.Line;
+import model.Station;
 import data.Data;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

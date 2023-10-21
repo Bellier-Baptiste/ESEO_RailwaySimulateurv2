@@ -2,7 +2,7 @@ package testModel;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import Model.EventStationClosed;
+import model.EventStationClosed;
 
 public class EventStationClosedTest {
 

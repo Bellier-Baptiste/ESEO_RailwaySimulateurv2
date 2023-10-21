@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import Model.Area;
-import Model.Station;
+import model.Area;
+import model.Station;
 import data.Data;
 import view.AreaSetDistribution;
 import view.AreaView;

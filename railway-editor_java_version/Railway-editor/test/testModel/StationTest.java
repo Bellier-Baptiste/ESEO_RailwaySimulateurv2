@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import Model.Station;
+import model.Station;
 
 public class StationTest {
 	public static final String NAME = "eglantine";

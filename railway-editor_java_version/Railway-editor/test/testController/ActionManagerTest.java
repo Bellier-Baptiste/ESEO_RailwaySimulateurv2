@@ -1,6 +1,6 @@
 package testController;
 
-import Model.Line;
+import model.Line;
 import controller.ActionManager;
 import org.junit.Test;
 import view.MainWindow;
