@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import Model.Line;
-import Model.Station;
+import model.Line;
+import model.Station;
 
 public class LineTest {
 	

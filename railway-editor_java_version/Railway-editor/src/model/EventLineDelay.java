@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * Model class extending event which describes a delay between 2 stations.

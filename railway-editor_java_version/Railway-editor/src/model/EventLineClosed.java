@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  *Model class extendig event which describes the closing of a line portion.

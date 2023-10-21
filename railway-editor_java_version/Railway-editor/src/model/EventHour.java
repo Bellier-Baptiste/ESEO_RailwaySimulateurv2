@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 /**
  * Model class extending event which describes a change of trains number on a line at a certain hour of the day.

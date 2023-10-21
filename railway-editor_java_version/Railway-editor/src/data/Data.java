@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Random;
 
-import Model.Event;
+import model.Event;
 
 /**
  * Data Singleton class which stores all informations relative to stations and

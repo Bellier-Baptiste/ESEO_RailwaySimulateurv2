@@ -1,6 +1,6 @@
 package controller;
 
-import Model.Station;
+import model.Station;
 import view.MainWindow;
 import view.StationView;
 /**

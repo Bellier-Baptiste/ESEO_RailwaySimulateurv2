@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 public class EventStationClosed extends Event{
 	private int idStation;
