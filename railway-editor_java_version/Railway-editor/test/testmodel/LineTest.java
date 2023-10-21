@@ -32,5 +32,6 @@ public class LineTest {
 		assertTrue(line.getStations().isEmpty());
 		line.addStation(station);
 		assertEquals(1, line.getStations().size());
+
 	}
 }
