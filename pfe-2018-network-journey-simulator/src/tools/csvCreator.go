@@ -1,3 +1,36 @@
+/*
+Package tools
+
+File : csvCreator.go
+
+Brief :
+
+Date : N/A
+
+Author : Team v2, Paul TRÉMOUREUX (quality check)
+
+License : MIT License
+
+Copyright (c) 2023 Équipe PFE_2023_16
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 package tools
 
 import (
@@ -22,7 +55,8 @@ func check(e error) {
 	}
 }
 
-func NewFileWithDelimiter(name string, columns []string, delimiter string) CsvFile {
+func NewFileWithDelimiter(name string, columns []string,
+	delimiter string) CsvFile {
 	return createFile(name, columns, delimiter)
 }
 
@@ -44,7 +78,10 @@ func createFile(name string, columns []string, delimiter string) CsvFile {
 	check(err)
 
 	if !outputExists {
-		os.Mkdir(outputFolderPath, 0777)
+		err := os.Mkdir(outputFolderPath, 0777)
+		if err != nil {
+			return CsvFile{}
+		}
 	}
 
 	// Delete "src\main" if there (when launching simulator with command line)
@@ -53,7 +90,12 @@ func createFile(name string, columns []string, delimiter string) CsvFile {
 	file, err := os.Create(filePath)
 	check(err)
 
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			return
+		}
+	}(file)
 
 	config := configs.GetInstance()
 
@@ -70,14 +112,20 @@ func createFile(name string, columns []string, delimiter string) CsvFile {
 		_, err = file.Write(d1)
 	}
 
-	mode := int(0644)
+	mode := 0644
 	csvMode := os.FileMode(mode)
 
-	file.Chmod(csvMode)
+	err = file.Chmod(csvMode)
+	if err != nil {
+		return CsvFile{}
+	}
 
 	check(err)
 
-	file.Sync()
+	err = file.Sync()
+	if err != nil {
+		return CsvFile{}
+	}
 
 	csv := CsvFile{
 		path:      filePath,
@@ -92,7 +140,12 @@ func (csv *CsvFile) Write(content []string) {
 	file, err := os.OpenFile(csv.path, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	check(err)
 
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			return
+		}
+	}(file)
 
 	//fmt.Println("file opened")
 
@@ -121,7 +174,12 @@ func (csv *CsvFile) WriteMultiple(contents [][]string) {
 	file, err := os.OpenFile(csv.path, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	check(err)
 
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			return
+		}
+	}(file)
 
 	//fmt.Println("file opened")
 
@@ -135,7 +193,8 @@ func (csv *CsvFile) WriteMultiple(contents [][]string) {
 				rowToAdd += csv.delimiter
 			}
 		}
-		//rowsToAdd += strings.Join(contents[i], csv.delimiter) + "\n"//TODO this is slowing the whole thing down
+		//rowsToAdd += strings.Join(contents[i], csv.delimiter) + "\n"
+		//TODO this is slowing the whole thing down
 	}
 
 	_, err = file.WriteString(rowsToAdd)
