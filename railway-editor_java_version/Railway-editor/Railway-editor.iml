@@ -41,7 +41,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../libraries/byte-buddy-1.12.22.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../flatlaf-3.2.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

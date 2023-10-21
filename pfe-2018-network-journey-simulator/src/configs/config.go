@@ -239,10 +239,20 @@ func GetInstance() ConfigurationObject {
 		basePath = strings.Replace(basePath, "src\\models", "", -1)
 		basePath = strings.Replace(basePath, "src\\simulator", "", -1)
 		basePath = strings.Replace(basePath, "src\\tools", "", -1)
-		configPath = filepath.Join(basePath, "src/configs/config.json")
+		if strings.Contains(basePath, "src") {
+			configPath = filepath.Join(basePath, "/configs/config.json")
+			stationsPath = filepath.Join(basePath, "/configs/nameStationList.json")
+			linesPath = filepath.Join(basePath, "/configs/nameLineList.json")
+		} else if strings.Contains(basePath, "configs") {
+			configPath = filepath.Join(basePath, "/config.json")
+			stationsPath = filepath.Join(basePath, "/nameStationList.json")
+			linesPath = filepath.Join(basePath, "/nameLineList.json")
+		} else {
+			configPath = filepath.Join(basePath, "src/configs/config.json")
+			stationsPath = filepath.Join(basePath, "src/configs/nameStationList.json")
+			linesPath = filepath.Join(basePath, "src/configs/nameLineList.json")
+		}
 		println(configPath)
-		stationsPath = filepath.Join(basePath, "src/configs/nameStationList.json")
-		linesPath = filepath.Join(basePath, "src/configs/nameLineList.json")
 
 		Load(configPath, stationsPath, linesPath)
 
@@ -297,7 +307,11 @@ func Load(configPath, nameStationListPath, nameLineListPath string) {
 }
 
 func (c *ConfigurationObject) Reload() {
-	configPath = filepath.Join(basePath, "src/configs/config.json")
+	if strings.Contains(basePath, "src") {
+		configPath = filepath.Join(basePath, "/configs/config.json")
+	} else if strings.Contains(basePath, "configs") {
+		configPath = filepath.Join(basePath, "/config.json")
+	}
 	println(configPath)
 	stationsPath = filepath.Join(basePath, "src/configs/nameStationList.json")
 	linesPath = filepath.Join(basePath, "src/configs/nameLineList.json")
