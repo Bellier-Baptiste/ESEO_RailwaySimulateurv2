@@ -1,61 +1,54 @@
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package model;
 
+import controller.EventName;
+
 /**
- *Model class extendig event which describes the closing of a line portion.
- * @author arthu
+ * Model class extends {@link model.EventBetween2Stations} which describes the
+ * closing between two stations {@link model.Station}.
  *
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file EventLineClosed.java
+ * @date N/A
+ * @since 2.0
  */
-public class EventLineClosed extends Event {
-	
+public class EventLineClosed extends EventBetween2Stations {
 
-	private int idStationStart;
-	private int idStationEnd;
-	
-	
-	/** Constructor.
-	 * @param startTime event startTime
-	 * @param endTime event endTime
-	 * @param type event eventType
-	 */
-	public EventLineClosed(String startTime, String endTime, EventType type) {
-		super(startTime, endTime, type);
-		setEventName("lineClose");
-	}
-
-
-	/** get the id of the starting station.
-	 * @return int idStationStart
-	 */
-	public int getIdStationStart() {
-		return idStationStart;
-	}
-
-	/** set the if of the starting station.
-	 * @param idStationStart event stationStart id
-	 */
-	public void setIdStationStart(int idStationStart) {
-		this.idStationStart = idStationStart;
-	}
-
-	/**
-	 * get the id of the ending station.
-	 * @return the id of the ending station
-	 */
-	public int getIdStationEnd() {
-		return idStationEnd;
-	}
-
-	/**
-	 * set the id of the ending station.
-	 * @param idStationEnd event stationEnd id
-	 */
-	public void setIdStationEnd(int idStationEnd) {
-		this.idStationEnd = idStationEnd;
-	}
-	
-	
-	
-
-
-
+  /**
+   * Constructor.
+   *
+   * @param id        event id
+   * @param startTime event startTime
+   * @param endTime   event endTime
+   * @param type      event eventType
+   */
+  public EventLineClosed(final int id, final String startTime,
+                         final String endTime, final EventType type) {
+    super(id, startTime, endTime, type);
+    super.setEventName(EventName.LINE_CLOSED);
+  }
 }

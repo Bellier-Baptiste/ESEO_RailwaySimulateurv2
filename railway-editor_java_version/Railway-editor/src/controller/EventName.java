@@ -24,27 +24,57 @@
 
 package controller;
 
-import view.LineView;
-import view.MainWindow;
-
 /**
- * Controller to add {@link LineView} to the {@link MainWindow}.
+ * Enum of the {@link model.Event} names.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @file LineController.java
- * @date N/A
- * @since 2.0
+ * @file EventName.java
+ * @date 2023-10-02
+ * @since 3.0
  */
-public class LineController {
-  //attributes
+public enum EventName {
+  /**
+   * Line delayed event name.
+   */
+  LINE_DELAYED("lineDelay"),
+  /**
+   * Line closed event name.
+   */
+  LINE_CLOSED("lineClosed"),
+  /**
+   * Attendance peak event name.
+   */
+  ATTENDANCE_PEAK("attendancePeak"),
+  /**
+   * Train hour event name.
+   */
+  TRAIN_HOUR("hour"),
+  /**
+   * Station closed event name.
+   */
+  STATION_CLOSED("stationClosed");
 
   /**
-   * Constructor add lineView to the MainPanel.
-   *
-   * @param lineViewToAdd lineView bound to line
+   * String value of the event name.
    */
-  public LineController(final LineView lineViewToAdd) {
-    MainWindow.getInstance().getMainPanel().addLineView(lineViewToAdd);
+  private final String value;
+
+  /**
+   * Constructor of the enum.
+   *
+   * @param valueToSet String value to set
+   */
+  EventName(final String valueToSet) {
+    this.value = valueToSet;
+  }
+
+  /**
+   * Get the string value of the event name.
+   *
+   * @return String value
+   */
+  public String getString() {
+    return value;
   }
 }

@@ -24,72 +24,68 @@
 
 package model;
 
-import controller.EventName;
-
 /**
- * Model class extending {@link Event} which describes an attendance peak on a
+ * Model class which describes a generic event between two
  * {@link model.Station}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @file EventAttendancePeak.java
+ * @file EventBetween2Stations.java
  * @date N/A
  * @since 2.0
  */
-public class EventAttendancePeak extends Event {
-  /** Station id. */
-  private int idStation;
-  /** Peak size. */
-  private int size;
+public abstract class EventBetween2Stations extends Event {
+  /** Id of the starting station. */
+  private int idStationStart;
+  /** Id of the ending station. */
+  private int idStationEnd;
 
   /**
-   * Constructor.
+   * EventBetween2Stations constructor.
    *
    * @param id        event id
    * @param startTime event startTime
    * @param endTime   event endTime
-   * @param type      eventType
+   * @param type      event type
    */
-  public EventAttendancePeak(final int id, final String startTime,
-                             final String endTime,
-                             final EventType type) {
+  protected EventBetween2Stations(final int id, final String startTime,
+                                  final String endTime, final EventType type) {
     super(id, startTime, endTime, type);
-    super.setEventName(EventName.ATTENDANCE_PEAK);
   }
 
   /**
-   * get the id of the station concerned by the peak.
+   * get the id of the starting station.
    *
-   * @return int id
+   * @return int idStationStart
    */
-  public int getIdStation() {
-    return idStation;
+  public int getIdStationStart() {
+    return idStationStart;
   }
 
   /**
-   * set the id of the station concerned.
+   * get the id of the ending station.
    *
-   * @param eventIdStation id station concerned by the peak
+   * @param eventIdStationStart event stationStart Id
    */
-  public void setIdStation(final int eventIdStation) {
-    this.idStation = eventIdStation;
+  public void setIdStationStart(final int eventIdStationStart) {
+    this.idStationStart = eventIdStationStart;
   }
 
   /**
-   * get the peak size.
+   * get the id of the ending station.
    *
-   * @return int size
+   * @return idStationEnd
    */
-  public int getSize() {
-    return size;
+  public int getIdStationEnd() {
+    return idStationEnd;
   }
 
   /**
-   * set the peak size.
+   * set the id of the ending station.
    *
-   * @param peakSize size of the peak
+   * @param eventIdStationEnd event stationEnd Id
    */
-  public void setSize(final int peakSize) {
-    this.size = peakSize;
+  public void setIdStationEnd(final int eventIdStationEnd) {
+    this.idStationEnd = eventIdStationEnd;
   }
 }

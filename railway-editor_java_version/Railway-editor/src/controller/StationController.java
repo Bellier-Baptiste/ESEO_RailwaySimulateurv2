@@ -1,26 +1,57 @@
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package controller;
 
 import model.Station;
 import view.MainWindow;
 import view.StationView;
+
 /**
- * Controlller to add stationView to the mainPanel.
- * @author arthu
+ * Controller to add {@link StationView} to the {@link view.MainPanel}.
  *
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file MovingAdapter.java
+ * @date N/A
+ * @since 2.0
  */
 public class StationController {
 
-	//constructor
-	/**
-	 * Constructor.
-	 * @param station station to add
-	 * @param stationView stationView binded to station
-	 * @param lineIdex index of the current line
-	 */
-	public StationController(Station station, StationView stationView, int lineIdex) {
-		super();
-		MainWindow.getInstance().getMainPanel().getLineViews().get(lineIdex).getStationViews().add(stationView);
-		MainWindow.getInstance().getMainPanel().getLineViews().get(lineIdex).getLine().addStation(station);
-	}
-	
+  /**
+   * StationController constructor.
+   *
+   * @param station     station to add
+   * @param stationView stationView bound to station
+   * @param lineIndex   index of the current line
+   */
+  public StationController(final Station station, final StationView stationView,
+                           final int lineIndex) {
+    super();
+    MainWindow.getInstance().getMainPanel().getLineViews().get(lineIndex)
+        .getStationViews().add(stationView);
+    MainWindow.getInstance().getMainPanel().getLineViews().get(lineIndex)
+        .getLine().addStation(station);
+  }
 }

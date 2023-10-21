@@ -1,52 +1,107 @@
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package model;
 
+import controller.EventName;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+
 /**
- * Model class which describes a generic event.
+ * Model Class to describe a generic Event.
  *
- * @author arthu, Benoît VAVASSEUR
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @author Benoît Vavasseur
+ * @file Event.java
+ * @date N/A
+ * @since 2.0
  */
 public abstract class Event {
+  /**
+   * Event starting time.
+   */
+  private String startTime;
+  /**
+   * Event ending time.
+   */
+  private String endTime;
+  /**
+   * Event id.
+   */
+  private int id;
 
-    private String startTime;
-    private String endTime;
+  /**
+   * Enum of the event types.
+   */
+  public enum EventType { LINE, STATION, AREA }
 
-    public enum EventType {LINE, STATION, AREA}
+  /**
+   * Event type.
+   */
+  private EventType type;
+  /**
+   * Event name.
+   */
+  private EventName eventName;
 
-    private EventType type;
 
-    private String eventName;
+  /**
+   * Event constructor.
+   *
+   * @param eventId        event id
+   * @param eventStartTime event startTime
+   * @param eventEndTime   event endTime
+   * @param eventType      event type
+   */
+  protected Event(final int eventId, final String eventStartTime,
+                  final String eventEndTime, final EventType eventType) {
+      super();
+      if (isTimeValid(eventStartTime) && isTimeValid(eventEndTime)
+              && !isStartTimeAfterEndTime(eventStartTime, eventEndTime)) {
+          this.startTime = eventStartTime;
+          this.endTime = eventEndTime;
+          this.type = eventType;
+          this.id = eventId;
+      } else {
+          throw new IllegalArgumentException("Invalid start time or end " +
+                  "time.");
+      }
+  }
 
-    /**
-     * Constructor.
-     *
-     * @param startTime event startTime in format "yyyy/MM/dd_HH:mm"
-     * @param endTime   event endTime in format "yyyy/MM/dd_HH:mm"
-     * @param type      event type
-     */
-    protected Event(String startTime, String endTime, EventType type) {
-        if (isTimeValid(startTime) && isTimeValid(endTime)
-                && !isStartTimeAfterEndTime(startTime, endTime)) {
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.type = type;
-        } else {
-            throw new IllegalArgumentException("Invalid start time or end " +
-                    "time.");
-        }
-    }
 
-    /**
-     * Get the startTime of the event.
-     *
-     * @return String startTime in format "yyyy/MM/dd_HH:mm"
-     */
-    public String getStartTime() {
-        return startTime;
-    }
+  /**
+   * get the startTime of the event.
+   *
+   * @return String startTime
+   */
+  public String getStartTime() {
+    return startTime;
+  }
+
 
     /**
      * Set the startTime of the event.
@@ -64,14 +119,16 @@ public abstract class Event {
         }
     }
 
-    /**
-     * Get the endTime of the event.
-     *
-     * @return String endTime in format "yyyy/MM/dd_HH:mm"
-     */
-    public String getEndTime() {
-        return endTime;
-    }
+
+  /**
+   * get the endTime of the event.
+   *
+   * @return String endTime
+   */
+  public String getEndTime() {
+    return endTime;
+  }
+
 
     /**
      * Set the endTime of the event.
@@ -89,23 +146,52 @@ public abstract class Event {
         }
     }
 
-    /**
-     * Get the type of event.
-     *
-     * @return EventType type
-     */
-    public EventType getType() {
-        return type;
-    }
 
-    /**
-     * Set the type of the event.
-     *
-     * @param type event type
-     */
-    public void setType(EventType type) {
-        this.type = type;
-    }
+  /**
+   * get the type of event.
+   *
+   * @return EventType type
+   */
+  public EventType getType() {
+    return type;
+  }
+
+
+  /**
+   * set the type of the event.
+   *
+   * @param eventType event type
+   */
+  public void setType(final EventType eventType) {
+    this.type = eventType;
+  }
+
+
+  /**
+   * set the id of the event.
+   *
+   * @param eventId event id
+   */
+  public void setId(final int eventId) {
+    this.id = eventId;
+  }
+
+  /**
+   * get the id of the event.
+   *
+   * @return int id
+   */
+  public int getId() {
+    return this.id;
+  }
+
+  /** Set the event name.
+   *
+   * @param eventNameToSet event name
+   */
+  public void setEventName(final EventName eventNameToSet) {
+    this.eventName = eventNameToSet;
+  }
 
     /**
      * Parses a given string to a LocalDateTime using the custom format
@@ -117,7 +203,7 @@ public abstract class Event {
      */
     private LocalDateTime parseTime(String time) {
         DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("yyyy/MM/dd_HH:mm");
+                DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm");
         try {
             return LocalDateTime.parse(time, formatter);
         } catch (DateTimeParseException e) {
@@ -155,15 +241,8 @@ public abstract class Event {
      *
      * @return String eventName
      */
-    public String getEventName() {
+    public EventName getEventName() {
         return eventName;
     }
-    /**
-     * Set the name of the event.
-     *
-     * @param eventName event name
-     */
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
+
 }

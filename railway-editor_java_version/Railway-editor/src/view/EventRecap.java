@@ -1,3 +1,27 @@
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package view;
 
 import data.Data;
@@ -5,368 +29,386 @@ import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 
-import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.plaf.FontUIResource;
-import java.awt.*;
+import javax.swing.AbstractAction;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 
-/**panel which contains a short description of created events.
- * @author arthu
+/**
+ * Panel which contains a short description of created events.
  *
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file ClockView.java
+ * @date N/A
+ * @since 2.0
  */
-public class EventRecap extends JPanel {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	// constants
-	public static final int LARGEUR_PAR_DEFAUT = 200;
-	public static final int HAUTEUR_PAR_DEFAUT = 750;
-	public static final Color BACKGROUND_COLOR = new Color(54, 61, 194);
-	public static final Color BACKGROUND_LABEL_COLOR = new Color(30, 62, 191);
+public final class EventRecap extends JScrollPane {
+  /**
+   * EventRecap serial version UID.
+   */
+  private static final long serialVersionUID = 1L;
+  // constants
+  /** default width of the panel. */
+  public static final int LARGEUR_PAR_DEFAUT = 220;
+  /** default height of the panel. */
+  public static final int HAUTEUR_PAR_DEFAUT = 600;
+  /** default font of the panel. */
+  private static final String SEGEOE_UI = "Segoe UI";
+  /** string of the for the starting date. */
+  private static final String START_DATE = "Start date: ";
+  /** string of the for the ending date. */
+  private static final String END_DATE = "End date: ";
+  /** string of the for the line. */
+  private static final String LINE = "Line: ";
+  /** string of the for the remove action. */
+  private static final String REMOVE = "remove";
+  /** Main font size. */
+  private static final int MAIN_FONT_SIZE = 12;
+  /** Details font size. */
+  private static final int DETAILS_FONT_SIZE = 11;
+  /** Singleton instance of the class. */
+  private static EventRecap instance;
+  /** task pane container. */
+  private final JXTaskPaneContainer taskPaneContainer;
 
-	/**
-	 * constructor
-	 */
-	public EventRecap() {
-		this.setPreferredSize(new Dimension(LARGEUR_PAR_DEFAUT, HAUTEUR_PAR_DEFAUT));
-		this.setBackground(BACKGROUND_COLOR);
-		this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 
-	}
+  /**
+   * Constructor of the class.
+   */
+  private EventRecap() {
+    this.setPreferredSize(new Dimension(LARGEUR_PAR_DEFAUT,
+        HAUTEUR_PAR_DEFAUT));
+    TitledBorder eventRecapBorder = new TitledBorder("Events List");
+    this.setBorder(eventRecapBorder);
+    this.taskPaneContainer = new JXTaskPaneContainer();
+    this.eventsListRemoveBackground();
+  }
 
-//	/** this painter draws a gradient fill */
-//	public Painter getPainter() {
-//		int width = 100;
-//		int height = 100;
-//		Color color1 = Color.WHITE;
-//		Color color2 = Color.GRAY;
-//		LinearGradientPaint gradientPaint = new LinearGradientPaint(0.0f, 0.0f, width, height,
-//				new float[] { 0.0f, 1.0f }, new Color[] { color1, color2 });
-//		MattePainter mattePainter = new MattePainter(gradientPaint);
-//		return mattePainter;
-//	}
+  /**
+   * Return Singleton.
+   *
+   * @return EventRecap instance
+   */
+  public static EventRecap getInstance() {
+    if (instance == null) {
+      instance = new EventRecap();
+    }
+    return instance;
+  }
 
-	private void changeUIdefaults() {
-		// JXTaskPaneContainer settings (developer defaults)
-		/*
-		 * These are all the properties that can be set (may change with new version of
-		 * SwingX) "TaskPaneContainer.useGradient", "TaskPaneContainer.background",
-		 * "TaskPaneContainer.backgroundGradientStart",
-		 * "TaskPaneContainer.backgroundGradientEnd", etc.
-		 */
-		// setting taskpanecontainer defaults
-		UIManager.put("TaskPaneContainer.useGradient", Boolean.FALSE);
-		UIManager.put("TaskPaneContainer.background", BACKGROUND_COLOR);
-		// setting taskpane defaults
-		UIManager.put("TaskPane.font", new FontUIResource(new Font("Verdana", Font.BOLD, 16)));
-		UIManager.put("TaskPane.titleBackgroundGradientStart", Color.WHITE);
-	}
+  /**
+   * Function to remove the native background of the task pane container.
+   */
+  public void eventsListRemoveBackground() {
+    this.taskPaneContainer.setBackgroundPainter(null);
+    this.taskPaneContainer.repaint();
+    this.taskPaneContainer.revalidate();
+  }
 
-	/**Create a recap for event line delay.
-	 * @param id event id
-	 * @param startDateStr event startDate
-	 * @param endDateStr event endDate
-	 * @param LocationsStr stations concerned
-	 * @param delayStr event delay
-	 * @param lineStr line concerned
-	 */
-	public void createEventLineDelayed(int id,String startDateStr, String endDateStr, String LocationsStr, String delayStr,
-			String lineStr) {
-		changeUIdefaults();
-		JXTaskPane taskpane = new JXTaskPane();
-		// create a taskpanecontainer
-		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
+  /**
+   * Create a recap for event line delay.
+   *
+   * @param id           event id
+   * @param startDateStr event startDate
+   * @param endDateStr   event endDate
+   * @param locationsStr stations concerned
+   * @param delayStr     event delay
+   * @param lineStr      line concerned
+   */
+  public void createEventLineDelayed(final int id, final String startDateStr,
+                                     final String endDateStr,
+                                     final String locationsStr,
+                                     final String delayStr,
+                                     final String lineStr) {
+    JXTaskPane taskpane = new JXTaskPane();
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Line Delayed");
 
-		// create a taskpane, and set it's title and icon
-		taskpane.setTitle("Line Delayed");
+    JXLabel startDate = new JXLabel();
+    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    startDate.setText(START_DATE + startDateStr);
+    startDate.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel endDate = new JXLabel();
+    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    endDate.setText(END_DATE + endDateStr);
+    endDate.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel locations = new JXLabel();
+    locations.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    locations.setText(locationsStr);
+    locations.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel line = new JXLabel();
+    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    line.setText(LINE + lineStr);
+    line.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel delay = new JXLabel();
+    delay.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    delay.setText("Delay: " + delayStr);
+    delay.setHorizontalAlignment(SwingConstants.LEFT);
 
-		JXLabel startDate = new JXLabel();
-		startDate.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		startDate.setText("Start date: " + startDateStr);
-		startDate.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel EndDate = new JXLabel();
-		EndDate.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		EndDate.setText("End date: " + endDateStr);
-		EndDate.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel locations = new JXLabel();
-		locations.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-		locations.setText(LocationsStr);
-		locations.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel line = new JXLabel();
-		line.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-		line.setText("Line: " + lineStr);
-		line.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel delay = new JXLabel();
-		delay.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		delay.setText("Delay: " + delayStr);
-		delay.setHorizontalAlignment(JXLabel.LEFT);
+    // add various actions and components to the taskpane
 
-		// add various actions and components to the taskpane
+    taskpane.add(startDate);
+    taskpane.add(endDate);
+    taskpane.add(locations);
+    taskpane.add(line);
+    taskpane.add(delay);
+    taskpane.add(new AbstractAction(REMOVE) {
+      /**
+       * Remove action serial version UID.
+       */
+      private static final long serialVersionUID = 1L;
 
-		taskpane.add(startDate);
-		taskpane.add(EndDate);
-		taskpane.add(locations);
-		taskpane.add(line);
-		taskpane.add(delay);
-		taskpane.add(new AbstractAction() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+      public void actionPerformed(final ActionEvent e) {
+        taskPaneContainer.remove(taskpane);
+        Data.getInstance().getEventList().removeIf(event -> event.getId()
+            == id);
+        taskPaneContainer.revalidate();
+      }
+    });
 
-			{
-				putValue(Action.NAME, "remove");
-			}
+    // add the task pane to the taskPaneContainer
+    this.taskPaneContainer.add(taskpane);
+    this.setViewportView(taskPaneContainer);
+    taskPaneContainer.revalidate();
+  }
 
-			public void actionPerformed(ActionEvent e) {
-				taskpanecontainer.remove(taskpane);
-				Data.getInstance().getEventList().remove(id);
-			}
-		});
+  /**
+   * create a recap for event line closed.
+   *
+   * @param id           event id
+   * @param startDateStr event start date
+   * @param endDateStr   event end date
+   * @param locationsStr stations concerned
+   * @param lineStr      line concerned
+   */
+  public void createEventLineClosed(final int id, final String startDateStr,
+                                    final String endDateStr,
+                                    final String locationsStr,
+                                    final String lineStr) {
+    JXTaskPane taskpane = new JXTaskPane();
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Line Closed");
 
-		// add the task pane to the taskpanecontainer
-		taskpanecontainer.add(taskpane);
-		this.add(taskpanecontainer, BorderLayout.CENTER);
-	}
+    JXLabel startDate = new JXLabel();
+    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    startDate.setText(START_DATE + startDateStr);
+    startDate.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel endDate = new JXLabel();
+    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    endDate.setText(END_DATE + endDateStr);
+    endDate.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel locations = new JXLabel();
+    locations.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    locations.setText(locationsStr);
+    locations.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel line = new JXLabel();
+    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    line.setText(LINE + lineStr);
+    line.setHorizontalAlignment(SwingConstants.LEFT);
 
-	/**create a recap for event line closed.
-	 * @param id event id
-	 * @param startDateStr event start date
-	 * @param endDateStr event end date
-	 * @param LocationsStr stations concerned
-	 * @param lineStr line concerned
-	 */
-	public void createEventLineClosed(int id,String startDateStr, String endDateStr, String LocationsStr,
-			String lineStr) {
-		changeUIdefaults();
-		JXTaskPane taskpane = new JXTaskPane();
-		// create a taskpanecontainer
-		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
 
-		// create a taskpane, and set it's title and icon
-		taskpane.setTitle("Line Closed");
+    // add various actions and components to the taskpane
 
-		JXLabel startDate = new JXLabel();
-		startDate.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		startDate.setText("Start date: " + startDateStr);
-		startDate.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel EndDate = new JXLabel();
-		EndDate.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		EndDate.setText("End date: " + endDateStr);
-		EndDate.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel locations = new JXLabel();
-		locations.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-		locations.setText(LocationsStr);
-		locations.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel line = new JXLabel();
-		line.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-		line.setText("Line: " + lineStr);
-		line.setHorizontalAlignment(JXLabel.LEFT);
-		
+    taskpane.add(startDate);
+    taskpane.add(endDate);
+    taskpane.add(locations);
+    taskpane.add(line);
+    taskpane.add(new AbstractAction(REMOVE
+    ) {
+      /**
+       * Remove action serial version UID.
+       */
+      private static final long serialVersionUID = 1L;
 
-		// add various actions and components to the taskpane
+      public void actionPerformed(final ActionEvent e) {
+        taskPaneContainer.remove(taskpane);
+        Data.getInstance().getEventList().removeIf(event -> event.getId()
+            == id);
+        taskPaneContainer.revalidate();
+      }
+    });
 
-		taskpane.add(startDate);
-		taskpane.add(EndDate);
-		taskpane.add(locations);
-		taskpane.add(line);
-		taskpane.add(new AbstractAction() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+    // add the task pane to the taskPaneContainer
+    this.taskPaneContainer.add(taskpane);
+    this.setViewportView(taskPaneContainer);
+  }
 
-			{
-				putValue(Action.NAME, "remove");
-			}
+  /**
+   * create a recap for event attendancePeak.
+   *
+   * @param id           event id
+   * @param startDateStr event start date
+   * @param endDateStr   event end date
+   * @param stationStr   station concerned
+   * @param peakStr      peak amount
+   */
+  public void createEventAttendancePeak(final int id, final String startDateStr,
+                                        final String endDateStr,
+                                        final String stationStr,
+                                        final String peakStr) {
+    JXTaskPane taskpane = new JXTaskPane();
 
-			public void actionPerformed(ActionEvent e) {
-				taskpanecontainer.remove(taskpane);
-				Data.getInstance().getEventList().remove(id);
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Attendance Peak");
 
-			}
-		});
+    JXLabel startDate = new JXLabel();
+    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    startDate.setText(START_DATE + startDateStr);
+    startDate.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel endDate = new JXLabel();
+    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    endDate.setText(END_DATE + endDateStr);
+    endDate.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel station = new JXLabel();
+    station.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    station.setText("Station: " + stationStr);
+    station.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel peak = new JXLabel();
+    peak.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    peak.setText("Peak amount: " + peakStr);
+    peak.setHorizontalAlignment(SwingConstants.LEFT);
 
-		// add the task pane to the taskpanecontainer
-		taskpanecontainer.add(taskpane);
-		this.add(taskpanecontainer, BorderLayout.CENTER);
-	}
+    // add various actions and components to the taskpane
 
-	/** create a recap for event attendancePeak.
-		 * @param id event id
-	 * @param startDateStr event start date
-	 * @param endDateStr event end date
-	 * @param stationStr station concerned
-	 * @param peakStr peak amount
-	 */
-	public void createEventAttendancePeak(int id, String startDateStr, String endDateStr, String stationStr, String peakStr) {
-		changeUIdefaults();
-		JXTaskPane taskpane = new JXTaskPane();
-		// create a taskpanecontainer
-		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
+    taskpane.add(startDate);
+    taskpane.add(endDate);
+    taskpane.add(station);
+    taskpane.add(peak);
+    taskpane.add(new AbstractAction(REMOVE
+    ) {
+      /**
+       * Remove action serial version UID.
+       */
+      private static final long serialVersionUID = 1L;
 
-		// create a taskpane, and set it's title and icon
-		taskpane.setTitle("Attendance Peak");
+      public void actionPerformed(final ActionEvent e) {
+        taskPaneContainer.remove(taskpane);
+        Data.getInstance().getEventList().removeIf(event -> event.getId()
+            == id);
+        taskPaneContainer.revalidate();
+      }
+    });
 
-		JXLabel startDate = new JXLabel();
-		startDate.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		startDate.setText("Start date: " + startDateStr);
-		startDate.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel EndDate = new JXLabel();
-		EndDate.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		EndDate.setText("End date: " + endDateStr);
-		EndDate.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel station = new JXLabel();
-		station.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-		station.setText("Station: " + stationStr);
-		station.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel peak = new JXLabel();
-		peak.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-		peak.setText("Peak amount: " + peakStr);
-		peak.setHorizontalAlignment(JXLabel.LEFT);
+    // add the task pane to the taskPaneContainer
+    this.taskPaneContainer.add(taskpane);
+    this.setViewportView(taskPaneContainer);
+    taskPaneContainer.revalidate();
 
-		// add various actions and components to the taskpane
+  }
 
-		taskpane.add(startDate);
-		taskpane.add(EndDate);
-		taskpane.add(station);
-		taskpane.add(peak);
-		taskpane.add(new AbstractAction() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+  /**
+   * create a recap for event stationClosed.
+   *
+   * @param id           event id
+   * @param startDateStr event start date
+   * @param endDateStr   event end date
+   * @param stationStr   station concerned
+   *                     // * @param peakStr peak amount
+   */
+  public void createEventStationClosed(final int id, final String startDateStr,
+                                       final String endDateStr,
+                                       final String stationStr) {
+    JXTaskPane taskpane = new JXTaskPane();
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Station Closed");
 
-			{
-				putValue(Action.NAME, "remove");
-			}
+    JXLabel startDate = new JXLabel();
+    startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    startDate.setText(START_DATE + startDateStr);
+    startDate.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel endDate = new JXLabel();
+    endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    endDate.setText(END_DATE + endDateStr);
+    endDate.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel station = new JXLabel();
+    station.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    station.setText("Station: " + stationStr);
+    station.setHorizontalAlignment(SwingConstants.LEFT);
 
-			public void actionPerformed(ActionEvent e) {
-				taskpanecontainer.remove(taskpane);
-				Data.getInstance().getEventList().remove(id);
-			}
-		});
+    // add various actions and components to the taskpane
 
-		// add the task pane to the taskpanecontainer
-		taskpanecontainer.add(taskpane);
-		this.add(taskpanecontainer, BorderLayout.CENTER);
-	}
-	
-	/** create a recap for event stationClosed.
-	 * @param id event id
- * @param startDateStr event start date
- * @param endDateStr event end date
- * @param stationStr station concerned
-// * @param peakStr peak amount
- */
-public void createEventStationClosed(int id, String startDateStr, String endDateStr, String stationStr) {
-	changeUIdefaults();
-	JXTaskPane taskpane = new JXTaskPane();
-	// create a taskpanecontainer
-	JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
+    taskpane.add(startDate);
+    taskpane.add(endDate);
+    taskpane.add(station);
+    taskpane.add(new AbstractAction(REMOVE
+    ) {
+      /**
+       * Remove action serial version UID.
+       */
+      private static final long serialVersionUID = 1L;
+      public void actionPerformed(final ActionEvent e) {
+        taskPaneContainer.remove(taskpane);
+        Data.getInstance().getEventList().removeIf(event -> event.getId()
+            == id);
+        taskPaneContainer.revalidate();
+      }
+    });
+    // add the task pane to the taskPaneContainer
+    this.taskPaneContainer.add(taskpane);
+    this.setViewportView(taskPaneContainer);
+    taskPaneContainer.revalidate();
+  }
 
-	// create a taskpane, and set it's title and icon
-	taskpane.setTitle("Station Closed");
+  /**
+   * create a recap for event hour.
+   *
+   * @param id           event id
+   * @param startTimeStr event startDate
+   * @param endTimeStr   event endDate
+   * @param lineStr      line concerned
+   * @param trainNbStr   trainNumber amount
+   */
+  public void createEventHour(final int id, final String startTimeStr,
+                              final String endTimeStr, final String lineStr,
+                              final String trainNbStr) {
+    JXTaskPane taskpane = new JXTaskPane();
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Train Hour");
 
-	JXLabel startDate = new JXLabel();
-	startDate.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-	startDate.setText("Start date: " + startDateStr);
-	startDate.setHorizontalAlignment(JXLabel.LEFT);
-	JXLabel EndDate = new JXLabel();
-	EndDate.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-	EndDate.setText("End date: " + endDateStr);
-	EndDate.setHorizontalAlignment(JXLabel.LEFT);
-	JXLabel station = new JXLabel();
-	station.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-	station.setText("Station: " + stationStr);
-	station.setHorizontalAlignment(JXLabel.LEFT);
-	
-	// add various actions and components to the taskpane
+    JXLabel startTime = new JXLabel();
+    startTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    startTime.setText("Start Time: " + startTimeStr);
+    startTime.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel endTime = new JXLabel();
+    endTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    endTime.setText("End Time: " + endTimeStr);
+    endTime.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel line = new JXLabel();
+    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    line.setText(LINE + lineStr);
+    line.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel trainNb = new JXLabel();
+    trainNb.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    trainNb.setText("Train amount: " + trainNbStr);
+    trainNb.setHorizontalAlignment(SwingConstants.LEFT);
 
-	taskpane.add(startDate);
-	taskpane.add(EndDate);
-	taskpane.add(station);
-	taskpane.add(new AbstractAction() {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
+    // add various actions and components to the taskpane
+    taskpane.add(startTime);
+    taskpane.add(endTime);
+    taskpane.add(line);
+    taskpane.add(trainNb);
+    taskpane.add(new AbstractAction(REMOVE) {
+      /**
+       * Remove action serial version UID.
+       */
+      private static final long serialVersionUID = 1L;
 
-		{
-			putValue(Action.NAME, "remove");
-		}
+      public void actionPerformed(final ActionEvent e) {
+        taskPaneContainer.remove(taskpane);
+        Data.getInstance().getEventList().removeIf(event -> event.getId()
+            == id);
+        taskPaneContainer.revalidate();
+      }
+    });
 
-		public void actionPerformed(ActionEvent e) {
-			taskpanecontainer.remove(taskpane);
-			Data.getInstance().getEventList().remove(id);
-		}
-	});
+    // add the task pane to the taskPaneContainer
+    this.taskPaneContainer.add(taskpane);
+    this.setViewportView(taskPaneContainer);
+    taskPaneContainer.revalidate();
+  }
 
-	// add the task pane to the taskpanecontainer
-	taskpanecontainer.add(taskpane);
-	this.add(taskpanecontainer, BorderLayout.CENTER);
-}
-
-	/** create a recap for event hour.
-	 * @param id event id
-	 * @param startTimeStr event startDate
-	 * @param endTimeStr event endDate
-	 * @param lineStr line concerned
-	 * @param trainNbStr trainNumber amount
-	 */
-	public void createEventHour(int id,String startTimeStr, String endTimeStr, String lineStr, String trainNbStr) {
-		changeUIdefaults();
-		JXTaskPane taskpane = new JXTaskPane();
-		// create a taskpanecontainer
-		JXTaskPaneContainer taskpanecontainer = new JXTaskPaneContainer();
-
-		// create a taskpane, and set it's title and icon
-		taskpane.setTitle("Train Hour");
-
-		JXLabel startTime = new JXLabel();
-		startTime.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		startTime.setText("Start Time: " + startTimeStr);
-		startTime.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel endTime = new JXLabel();
-		endTime.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-		endTime.setText("End Time: " + endTimeStr);
-		endTime.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel line = new JXLabel();
-		line.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-		line.setText("Line: " + lineStr);
-		line.setHorizontalAlignment(JXLabel.LEFT);
-		JXLabel trainNb = new JXLabel();
-		trainNb.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-		trainNb.setText("Train amount: " + trainNbStr);
-		trainNb.setHorizontalAlignment(JXLabel.LEFT);
-		System.out.println(startTimeStr + " " + endTimeStr + " " + lineStr + " " + trainNbStr);
-
-		// add various actions and components to the taskpane
-
-		taskpane.add(startTime);
-		taskpane.add(endTime);
-		taskpane.add(line);
-		taskpane.add(trainNb);
-		taskpane.add(new AbstractAction() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			{
-				putValue(Action.NAME, "remove");
-			}
-
-			public void actionPerformed(ActionEvent e) {
-				taskpanecontainer.remove(taskpane);
-				Data.getInstance().getEventList().remove(id);
-			}
-		});
-
-		// add the task pane to the taskpanecontainer
-		taskpanecontainer.add(taskpane);
-		this.add(taskpanecontainer, BorderLayout.CENTER);
-	}
 }

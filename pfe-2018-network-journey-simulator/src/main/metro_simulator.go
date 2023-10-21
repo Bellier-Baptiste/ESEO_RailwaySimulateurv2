@@ -21,7 +21,6 @@ func main() {
 	printHeader("Metro Simulator")
 	printHeader("")
 	fmt.Print("\n\n")
-	fmt.Println("HELLO WORLD")
 
 	regenerateConfig := flag.Bool("regenconfig", false, "use it to generate the map_config.xml from the config.json file.")
 	configName := flag.String("configname", "map_config.xml", "name of the config to create / use. the file must be in ./configs")
