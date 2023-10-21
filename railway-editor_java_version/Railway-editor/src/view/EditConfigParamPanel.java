@@ -60,6 +60,11 @@ public class EditConfigParamPanel extends JPanel {
   private static final int BORDER_TOP_GAP = 5;
   /** Border bottom gap. */
   private static final int BORDER_BOTTOM_GAP = 5;
+  // attributes
+  /** JLabel of the parameter name. */
+  private final JLabel label;
+  /** JTextField of the parameter value. */
+  private final JTextField textField;
 
 
   /**
@@ -70,17 +75,18 @@ public class EditConfigParamPanel extends JPanel {
    */
   public EditConfigParamPanel(final Map.Entry<String, Object> entry) {
     // label properties
-    JLabel label = new JLabel(entry.getKey());
-    label.setPreferredSize(new Dimension(EDIT_CONFIG_PARAM_PANEL_LABEL_WIDTH,
+    this.label = new JLabel(entry.getKey());
+    this.label.setPreferredSize(new Dimension(
+        EDIT_CONFIG_PARAM_PANEL_LABEL_WIDTH,
         EDIT_CONFIG_PARAM_PANEL_LABEL_HEIGHT));
-    this.add(label);
+    this.add(this.label);
 
     // text field properties
-    JTextField textField = new JTextField(entry.getValue().toString());
-    textField.setPreferredSize(new Dimension(
+    this.textField = new JTextField(entry.getValue().toString());
+    this.textField.setPreferredSize(new Dimension(
         EDIT_CONFIG_PARAM_PANEL_TEXT_FIELD_WIDTH,
         EDIT_CONFIG_PARAM_PANEL_TEXT_FIELD_HEIGHT));
-    this.add(textField);
+    this.add(this.textField);
 
     // border properties
     Color buttonBackgroundColor = UIManager.getColor("textInactiveText");
@@ -88,5 +94,23 @@ public class EditConfigParamPanel extends JPanel {
     Border emptyBorder = new EmptyBorder(BORDER_TOP_GAP, 0,
         BORDER_BOTTOM_GAP, 0);
     this.setBorder(BorderFactory.createCompoundBorder(lineBorder, emptyBorder));
+  }
+
+  /**
+   * Get the parameter name.
+   *
+   * @return the parameter name
+   */
+  public String getParamName() {
+    return this.label.getText();
+  }
+
+  /**
+   * Get the parameter value.
+   *
+   * @return the parameter value
+   */
+  public String getParamValue() {
+    return this.textField.getText();
   }
 }
