@@ -1,3 +1,36 @@
+/*
+Package models
+
+File : eventTimetableTrain.go
+
+Brief :
+
+Date : N/A
+
+Author : Team v2, Paul TRÉMOUREUX (quality check)
+
+License : MIT License
+
+Copyright (c) 2023 Équipe PFE_2023_16
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 package models
 
 import "time"
@@ -37,43 +70,93 @@ in order to write csv file :
 15 train km --- not used in naia
 */
 
-/**
-@param line *MetroLine
-@param station*MetroStation
-@param nextStation*MetroStation
-@param train *MetroTrain
-@param direction string
-@param arrival time.Time
-@param nextArrival time.Time
-@param departure time.Time
-@param nextDeparture time.Time
-@param isRevenue bool
-@param tripNumber int
-@return event EventTimetableTrain //constructor
+/*
+NewEventTimetableTrain
+
+Param :
+line *MetroLine
+station*MetroStation
+nextStation*MetroStation
+train *MetroTrain
+direction string
+arrival time.Time
+nextArrival time.Time
+departure time.Time
+nextDeparture time.Time
+isRevenue bool
+tripNumber int
+
+Return :
+event EventTimetableTrain //constructor
 */
-func NewEventTimetableTrain(line *MetroLine, station *MetroStation, nextStation *MetroStation, train *MetroTrain, direction string, arrival time.Time, nextArrival time.Time, departure time.Time, nextDeparture time.Time, isRevenue bool, tripNumber int) *EventTimetableTrain {
-	return &EventTimetableTrain{line: line, station: station, nextStation: nextStation, train: train, direction: direction, arrival: arrival, nextArrival: nextArrival, departure: departure, nextDeparture: nextDeparture, isRevenue: isRevenue, tripNumber: tripNumber}
+func NewEventTimetableTrain(line *MetroLine,
+	metroStationTab [2]MetroStation, train *MetroTrain, direction string,
+	timeTab [4]time.Time, isRevenue bool,
+	tripNumber int) *EventTimetableTrain {
+	e := EventTimetableTrain{
+		line:          line,
+		station:       &(metroStationTab[0]),
+		nextStation:   &(metroStationTab[1]),
+		train:         train,
+		direction:     direction,
+		arrival:       timeTab[0],
+		nextArrival:   timeTab[1],
+		departure:     timeTab[2],
+		nextDeparture: timeTab[3],
+		isRevenue:     isRevenue,
+		tripNumber:    tripNumber,
+	}
+	return &e
 }
 
-// Getters
-func (e *EventTimetableTrain) Line() *MetroLine { return e.line }
+func (e *EventTimetableTrain) Test() error {
+	return nil
+}
 
-func (e *EventTimetableTrain) Station() *MetroStation { return e.station }
+/*
+Getters
+*/
 
-func (e *EventTimetableTrain) NextStation() *MetroStation { return e.nextStation }
+func (e *EventTimetableTrain) Line() *MetroLine {
+	return e.line
+}
 
-func (e *EventTimetableTrain) Train() *MetroTrain { return e.train }
+func (e *EventTimetableTrain) Station() *MetroStation {
+	return e.station
+}
 
-func (e *EventTimetableTrain) Direction() string { return e.direction }
+func (e *EventTimetableTrain) NextStation() *MetroStation {
+	return e.nextStation
+}
 
-func (e *EventTimetableTrain) Arrival() time.Time { return e.arrival }
+func (e *EventTimetableTrain) Train() *MetroTrain {
+	return e.train
+}
 
-func (e *EventTimetableTrain) NextArrival() time.Time { return e.nextArrival }
+func (e *EventTimetableTrain) Direction() string {
+	return e.direction
+}
 
-func (e *EventTimetableTrain) Departure() time.Time { return e.departure }
+func (e *EventTimetableTrain) Arrival() time.Time {
+	return e.arrival
+}
 
-func (e *EventTimetableTrain) NextDeparture() time.Time { return e.nextDeparture }
+func (e *EventTimetableTrain) NextArrival() time.Time {
+	return e.nextArrival
+}
 
-func (e *EventTimetableTrain) IsRevenue() bool { return e.isRevenue }
+func (e *EventTimetableTrain) Departure() time.Time {
+	return e.departure
+}
 
-func (e *EventTimetableTrain) TripNumber() int { return e.tripNumber }
+func (e *EventTimetableTrain) NextDeparture() time.Time {
+	return e.nextDeparture
+}
+
+func (e *EventTimetableTrain) IsRevenue() bool {
+	return e.isRevenue
+}
+
+func (e *EventTimetableTrain) TripNumber() int {
+	return e.tripNumber
+}

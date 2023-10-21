@@ -24,11 +24,14 @@ func (timetable *Timetable) addEventsTrain(event *EventTimetableTrain) {
 // --- Constructor
 func NewTimetable(m *Map, trains []*MetroTrain) Timetable {
 	timetable := Timetable{}
-	timetable.GenerateTimetable(m, trains, m.GraphTimeBetweenStation(), m.GraphDelay()) //TODO pass this function directly here
+	timetable.GenerateTimetable(trains, m.GraphTimeBetweenStation(),
+		m.GraphDelay())
+	//TODO pass this function directly here
 	return timetable
 }
 
-func (timetable *Timetable) GenerateTimetable(mapPointer *Map, trains []*MetroTrain, graphTimeBetweenStation [][]int, graphDelay [][]int) {
+func (timetable *Timetable) GenerateTimetable(trains []*MetroTrain,
+	graphTimeBetweenStation [][]int, graphDelay [][]int) {
 	var event *EventTimetableTrain
 	var station *MetroStation
 	var direction string
@@ -64,7 +67,9 @@ func (timetable *Timetable) GenerateTimetable(mapPointer *Map, trains []*MetroTr
 				indexStationList = len(linesWithTrains[i].Stations()) - 1
 				station = linesWithTrains[i].Stations()[indexStationList]
 				direction = "down"
-				shift = linesWithTrains[i].DurationOfLine(graphTimeBetweenStation, graphDelay) + timeInStation*len(linesWithTrains[i].Stations())
+				shift = linesWithTrains[i].DurationOfLine(
+					graphTimeBetweenStation, graphDelay) +
+					timeInStation*len(linesWithTrains[i].Stations())
 			}
 
 			//add all events for this train
@@ -74,11 +79,21 @@ func (timetable *Timetable) GenerateTimetable(mapPointer *Map, trains []*MetroTr
 				currentTime = currentTime.Add(time.Duration(timeInStation) * time.Second)
 				departure = currentTime
 				//add time to next station
-				indexStationList, direction = getNextStation(direction, linesWithTrains[i].Stations(), station, indexStationList)
+				indexStationList, direction = getNextStation(direction,
+					linesWithTrains[i].Stations(), indexStationList)
 				nextStation = linesWithTrains[i].Stations()[indexStationList]
-				currentTime = currentTime.Add(time.Duration(graphTimeBetweenStation[station.Id()][nextStation.Id()]+graphDelay[station.Id()][nextStation.Id()]) * time.Second)
-				//add the event to the timetable, as this timetable is pre-generated isRevenue is set to false
-				event = NewEventTimetableTrain(linesWithTrains[i], station, nextStation, trainsOfLine[j], direction, arrival, currentTime, departure, currentTime.Add(time.Duration(timeInStation)*time.Second), false, tripNumber)
+				currentTime = currentTime.Add(time.Duration(
+					graphTimeBetweenStation[station.Id()][nextStation.Id()]+
+						graphDelay[station.Id()][nextStation.Id()]) *
+					time.Second)
+				//add the event to the timetable, as this timetable is
+				//pre-generated isRevenue is set to false
+				nextDepartureTime := currentTime.Add(
+					time.Duration(timeInStation) * time.Second)
+				metroStationTab := [2]MetroStation{*station, *nextStation}
+				timeTab := [4]time.Time{arrival, currentTime, departure, nextDepartureTime}
+				event = NewEventTimetableTrain(linesWithTrains[i],
+					metroStationTab, trainsOfLine[j], direction, timeTab, false, tripNumber)
 				timetable.addEventsTrain(event)
 
 				//update current station to nextStation value
@@ -119,7 +134,8 @@ func (timetable *Timetable) NextEventsTrain(aTime time.Time) []*MetroTrain{
 	return output
 }*/
 
-func getNextStation(direction string, stationList []*MetroStation, actualStation *MetroStation, indexStationList int) (int, string) {
+func getNextStation(direction string, stationList []*MetroStation,
+	indexStationList int) (int, string) {
 	if direction == "up" && indexStationList < len(stationList)-1 {
 		indexStationList++
 	} else if direction == "up" && indexStationList == len(stationList)-1 {
@@ -136,14 +152,19 @@ func getNextStation(direction string, stationList []*MetroStation, actualStation
 	return indexStationList, direction
 }
 
-// return the time between 2 trains in a station, note that is time between 2 trains going in the same direction
+/*
+Unused function
+timeBetweenTrain return the time between 2 trains in a station, note that
+is time between 2 trains going in the same direction
 func timeBetweenTrain(lineTotalTime int, trainsPerLine int) int {
 	if trainsPerLine == 0 {
-		log.Println("timetableStation / timeBetweenTrain : 0 trains on line (divide by 0 dodged ! that was close)")
+		log.Println("timetableStation / timeBetweenTrain : " +
+			"0 trains on line (divide by 0 dodged ! that was close)")
 		return -1
 	}
 	return lineTotalTime / trainsPerLine
 }
+*/
 
 // get all trains of a given line
 func getTrainsPerLine(line *MetroLine, trains []*MetroTrain) []*MetroTrain {
@@ -168,30 +189,38 @@ func linesWithTrains(trains []*MetroTrain) []*MetroLine {
 }
 
 // search by id if the given line is present in a list of lines
-func (line *MetroLine) isInLineList(lineList []*MetroLine) bool {
+func (ml *MetroLine) isInLineList(lineList []*MetroLine) bool {
 	sol := false
 	for i := 0; i < len(lineList); i++ {
-		if line.Id() == lineList[i].Id() {
+		if ml.Id() == lineList[i].Id() {
 			sol = true
 		}
 	}
 	return sol
 }
 
-// return the duration of the going and coming for a train, waiting time in the station for passengers to climb in is taken in account
-// numberStation must be >1 for a real total time of the line
-func LineTimeLength(line *MetroLine, graph [][]int, graphDelay [][]int, numberStation int, timeInStation int) int {
+/*
+LineTimeLength return the duration of the going and coming for a train,
+waiting time in the station for passengers to climb in is taken in account
+numberStation must be >1 for a real total time of the line
+*/
+func LineTimeLength(line *MetroLine, graph, graphDelay [][]int,
+	numberStation, timeInStation int) int {
 	var totalTime int
 	if numberStation < 1 {
 		log.Fatal("not enough stations on the line to generate a timetable")
 		return 0
 	}
-	totalTime = timeInStation*(2*numberStation-1) + 2*line.DurationOfLine(graph, graphDelay)
+	totalTime = timeInStation*(2*numberStation-1) +
+		2*line.DurationOfLine(graph, graphDelay)
 	return totalTime
 }
 
-// generate CSV file
-func (timetable Timetable) ToCSV() { //TODO check time (>17s for
+/*
+ToCSV generate CSV file
+*/
+func (timetable *Timetable) ToCSV() {
+	//TODO check time (>17s for
 	var aux string
 
 	var row = make([]string, 16)
