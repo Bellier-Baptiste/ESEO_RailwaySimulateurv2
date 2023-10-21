@@ -2,7 +2,7 @@ package view;
 
 import java.awt.Graphics2D;
 
-import Model.Area;
+import model.Area;
 
 /**View class which describes Area shape.
  * @author arthu
