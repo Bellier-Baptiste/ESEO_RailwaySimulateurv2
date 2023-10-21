@@ -24,10 +24,7 @@
 
 package view;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import controller.ActionConfiguration;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -36,10 +33,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.Component;
 import java.awt.FlowLayout;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,12 +60,8 @@ public class EditConfigDialog extends JDialog {
    * Unit increment of the scrollbar.
    */
   private static final int EDIT_CONFIG_DIALOG_SCROLL_PANE_UNIT_INCREMENT = 13;
-  /**
-   * Path of the json file.
-   */
-  private static final String JSON_FILE_PATH = System.getProperty("user"
-      + ".dir").replace("railway-editor_java_version",
-      "pfe-2018-network-journey-simulator\\src" + "\\configs\\config.json");
+
+  // attributes
   /**
    * List of the panels to edit the configuration parameters.
    */
@@ -82,15 +72,17 @@ public class EditConfigDialog extends JDialog {
    */
   private final JPanel editConfigParamPanelsContainer;
   /**
-   * Map of the json file.
+   * ActionConfiguration to read and save the json file.
    */
-  private transient LinkedHashMap<String, Object> jsonMap;
+  private final transient ActionConfiguration actionConfiguration;
 
   /**
    * Constructor of the class.
    * Read the json file and create the panels to edit the configuration
    */
   public EditConfigDialog() {
+    this.actionConfiguration = new ActionConfiguration(this);
+
     // Dialog properties
     this.setTitle("Edit Configuration");
     this.setSize(EDIT_CONFIG_DIALOG_WIDTH, EDIT_CONFIG_DIALOG_HEIGHT);
@@ -121,9 +113,10 @@ public class EditConfigDialog extends JDialog {
    * Initialize the components of the dialog.
    */
   private void initComponents() {
-    this.readJsonFile();
+    this.actionConfiguration.readJsonFile();
     EditConfigParamPanel editConfigParamPanel = null;
-    for (Map.Entry<String, Object> entry : this.jsonMap.entrySet()) {
+    for (Map.Entry<String, Object> entry
+        : this.actionConfiguration.getJsonMap().entrySet()) {
       editConfigParamPanel =
           new EditConfigParamPanel(entry);
       this.editConfigParamPanelList.add(editConfigParamPanel);
@@ -137,7 +130,7 @@ public class EditConfigDialog extends JDialog {
     JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
     // Button to save the changes
     JButton okButton = new JButton("OK");
-    okButton.addActionListener(e -> this.saveJsonFile());
+    okButton.addActionListener(e -> this.actionConfiguration.saveJsonFile());
     okButton.setLayout(new FlowLayout(FlowLayout.RIGHT));
     buttonPanel.add(okButton);
     this.editConfigParamPanelsContainer.add(buttonPanel);
@@ -150,69 +143,11 @@ public class EditConfigDialog extends JDialog {
   }
 
   /**
-   * Read the json file and create the map with the parameters.
+   * Get the list of the panels to edit the configuration parameters.
+   *
+   * @return the list of the panels to edit the configuration parameters
    */
-  private void readJsonFile() {
-    try {
-      // Creation of the json file and the json map
-      File file = new File(JSON_FILE_PATH);
-      this.jsonMap = new LinkedHashMap<>();
-
-      // Create a JSON parser
-      JsonFactory jsonFactory = new JsonFactory();
-      try (JsonParser jsonParser = jsonFactory.createParser(file)) {
-        // Read the JSON file
-        while (jsonParser.nextToken() != null) {
-          JsonToken token = jsonParser.getCurrentToken();
-          if (token == JsonToken.FIELD_NAME) {
-            String fieldName = jsonParser.getCurrentName();
-            jsonParser.nextToken();
-            String value = jsonParser.getValueAsString();
-            this.jsonMap.put(fieldName, value);
-          }
-        }
-      }
-    } catch (IOException e) {
-      Thread.currentThread().interrupt();
-    }
-  }
-
-
-  private void saveJsonFile() {
-    // Iterate over the panels to edit the configuration parameters
-    // and update the json map and the json file
-    this.jsonMap.clear();
-    for (EditConfigParamPanel editConfigParamPanel
-        : this.editConfigParamPanelList) {
-      String key = editConfigParamPanel.getParamName();
-      String value = editConfigParamPanel.getParamValue();
-      // Check if the value is an integer, a double or a boolean and
-      // convert it to the right type if it is the case
-      try {
-        Integer intValue = Integer.parseInt(value);
-        this.jsonMap.put(key, intValue);
-      } catch (NumberFormatException e) {
-        try {
-          Double doubleValue = Double.parseDouble(value);
-          this.jsonMap.put(key, doubleValue);
-        } catch (NumberFormatException e2) {
-          if (value.equals("true") || value.equals("false")) {
-            this.jsonMap.put(key, Boolean.valueOf(value));
-          } else {
-            this.jsonMap.put(key, value);
-          }
-        }
-      }
-    }
-
-    // Use ObjectMapper to write in the JSON file
-    ObjectMapper mapper = new ObjectMapper();
-    // Write the map in the JSON file
-    try {
-      mapper.writeValue(new File(JSON_FILE_PATH), jsonMap);
-    } catch (IOException e) {
-      Thread.currentThread().interrupt();
-    }
-    this.dispose();
+  public List<EditConfigParamPanel> getEditConfigParamPanelList() {
+    return this.editConfigParamPanelList;
   }
 }
