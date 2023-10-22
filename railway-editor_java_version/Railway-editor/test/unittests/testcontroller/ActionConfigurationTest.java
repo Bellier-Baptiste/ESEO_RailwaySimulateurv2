@@ -34,7 +34,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 /**
- * Test-case of running the go simulator from the Java HMI.
+ * Test-case of editing the configuration of the simulation from the Java HMI.
  *
  * @author Aurélie Chamouleau
  * @file ActionConfigurationTest.java
