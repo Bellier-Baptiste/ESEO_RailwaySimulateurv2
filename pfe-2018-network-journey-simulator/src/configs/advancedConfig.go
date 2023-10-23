@@ -172,17 +172,15 @@ func (aConfig *AdvancedConfig) loadXML(filename string) error {
 	fmt.Println("loading advanced config...")
 	fmt.Println("base path : ", basePath)
 	fmt.Println("current path : ", currentPath)
-	//basePath = strings.Replace(currentPath, "src\\configs", "", -1)
-	//basePath = strings.Replace(currentPath, "src\\models", "", -1)
-	//basePath = strings.Replace(currentPath, "src\\simulator", "", -1)
-	//basePath = strings.Replace(currentPath, "src\\tools", "", -1)
 	fmt.Println("base path : ", basePath)
-	if basePath == currentPath {
+	if basePath == currentPath && strings.Contains(basePath, "src") && !strings.Contains(basePath, "configs") {
 		configPath = filepath.Join(basePath, "/configs/", filename)
-	}
-	if basePath != currentPath {
+	} else if strings.Contains(basePath, "configs") {
+		configPath = filepath.Join(basePath, filename)
+	} else {
 		configPath = filepath.Join(basePath, projectPath, "configs/", filename)
 	}
+
 	fmt.Println("config path : ", configPath)
 	xmlFile, err := os.Open(configPath)
 	if err != nil {

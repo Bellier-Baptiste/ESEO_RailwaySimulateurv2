@@ -1,455 +1,390 @@
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package view;
 
-import controller.ActionManager;
+import controller.ActionArea;
+import controller.ActionLine;
+import controller.ActionMetroEvent;
+import controller.ActionRunSimulation;
+import controller.ActionStation;
 import data.Data;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.SoftBevelBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JToggleButton;
+import javax.swing.JToolBar;
+import javax.swing.border.TitledBorder;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
- * ToolBar panel which contains all the action buttons
- * 
- * @author Arthur Lagarce
+ * ToolBar panel that extends {@link JToolBar} which contains all the action
+ * buttons.
  *
+ * @author Aurélie Chamouleau
+ * @file ToolBarPanel.java
+ * @date 2023-09-22
+ * @since 3.0
  */
-public class ToolBarPanel extends JPanel {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	// constants
-	public static final int LARGEUR_PAR_DEFAUT = 120;
-	public static final int HAUTEUR_PAR_DEFAUT = 750;
-	final static boolean shouldFill = true;
-	final static boolean shouldWeightX = true;
-	final static boolean RIGHT_TO_LEFT = false;
-
-	public static final Color BACKGROUND_COLOR = new Color(50, 90, 254);
-	public static final Color BACKGROUND_LABEL_COLOR = new Color(30, 62, 191);
-	public static final Color TEXT_COLOR = new Color(231, 231, 231);
-	public static final int RED = 50;
-	public static final int GREEN = 90;
-	public static final int BLUE = 254;
-
-	// attributes
-	private ActionManager actionManager;
-	private JLabel lineId;
-	private FilterComboBox filterComboBox;
-
-	/**
-	 * constructor
-	 */
-	public ToolBarPanel() {
-		this.setPreferredSize(new Dimension(LARGEUR_PAR_DEFAUT, HAUTEUR_PAR_DEFAUT));
-		this.setBackground(BACKGROUND_COLOR);
-		this.actionManager = new ActionManager();
-		this.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-		this.filterComboBox = new FilterComboBox(FilterComboBox.populateArray());
-		this.initComponents();
-	}
-
-	// Accessors
-	/**get the jLabel which contains the currentLineId.
-	 * @return JLabel currentLineId
-	 */
-	public JLabel getLineId() {
-		return lineId;
-	}
-
-	/**the the JLabel currentLineId.
-	 * @param lineId current line id
-	 */
-	public void setLineId(JLabel lineId) {
-		this.lineId = lineId;
-	}
-
-	/**get the editable combo box which choose the destination.
-	 * @return FilterComboBox filterComboBox
-	 */
-	public FilterComboBox getFilterComboBox() {
-		return filterComboBox;
-	}
-
-	/**set the editable combo box which choose the destination.
-	 * @param filterComboBox editable combo box to choose destination
-	 */
-	public void setFilterComboBox(FilterComboBox filterComboBox) {
-		this.filterComboBox = filterComboBox;
-	}
-
-	/**
-	 * init all the different button in a Grid Layout
-	 */
-	private void initComponents() {
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.anchor = GridBagConstraints.NORTHWEST;
-		c.weightx = 3;
-		c.weighty = 0.02;
-
-		// buttonIcon
-		try {
-			Image img = this.getCroppedImage("/resources/addStationIcPa2.png");
-
-			JButton btnStation = new JButton("add station");
-			btnStation.setVerticalTextPosition(SwingConstants.BOTTOM);
-			btnStation.setHorizontalTextPosition(SwingConstants.CENTER);
-			btnStation.setBorder(new LineBorder(BACKGROUND_LABEL_COLOR));
-			btnStation.setFont(btnStation.getFont().deriveFont(16.0f));
-			btnStation.setForeground(TEXT_COLOR);
-
-			Dimension size = btnStation.getSize();
-			Insets insets = btnStation.getInsets();
-			size.width -= insets.left + insets.right;
-			size.height -= insets.top + insets.bottom;
-			if (size.width > size.height) {
-				size.width = -1;
-			} else {
-				size.height = -1;
-			}
-			Image scaled = img.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
-
-			btnStation.setIcon(new ImageIcon(scaled));
-
-			c.fill = GridBagConstraints.HORIZONTAL;
-			c.gridwidth = 3;
-			c.gridx = 0;
-			c.gridy = 0;
-			c.gridheight = 1;
-
-			btnStation.setBackground(BACKGROUND_COLOR);
-			btnStation.setFocusPainted(false);
-
-			btnStation.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					actionManager.addStation();
-				}
-
-			});
-			this.add(btnStation, c);
-		} catch (Exception ex) {
-			System.out.println(ex);
-		}
-
-		lineId = new JLabel();
-		lineId.setText("none");
-		lineId.setFont(lineId.getFont().deriveFont(30.0f));
-		lineId.setForeground(TEXT_COLOR);
-		lineId.setHorizontalAlignment(JLabel.CENTER);
-		lineId.setBackground(BACKGROUND_LABEL_COLOR);
-		lineId.setBorder(new SoftBevelBorder(SoftBevelBorder.LOWERED));
-
-		lineId.setOpaque(true);
-		c.ipady = 30;
-		c.weighty = 0.0;
-		c.weightx = 0.5;
-		c.gridx = 0;
-		c.gridy = 1;
-
-		this.add(lineId, c);
-
-		JButton btnIncrement = new JButton();
-		btnIncrement.setText("↑");
-		btnIncrement.setBackground(BACKGROUND_COLOR);
-		btnIncrement.setBorder(new LineBorder(BACKGROUND_LABEL_COLOR));
-		btnIncrement.setFont(btnIncrement.getFont().deriveFont(16.0f));
-		btnIncrement.setForeground(TEXT_COLOR);
-		btnIncrement.setFocusPainted(false);
-		btnIncrement.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				actionManager.incrementLine();
-			}
-
-		});
-		c.ipady = 0;
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		c.weighty = 0.04;
-
-		c.gridx = 0;
-		c.gridy = 2;
-
-		this.add(btnIncrement, c);
-
-		JButton btnDecrement = new JButton();
-		btnDecrement.setText("↓");
-		btnDecrement.setFont(btnDecrement.getFont().deriveFont(16.0f));
-		btnDecrement.setForeground(TEXT_COLOR);
-		btnDecrement.setBackground(BACKGROUND_COLOR);
-		btnDecrement.setBorder(new LineBorder(BACKGROUND_LABEL_COLOR));
-
-		btnDecrement.setFocusPainted(false);
-		btnDecrement.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				actionManager.decrementLine();
-			}
-
-		});
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		c.gridx = 2;
-		c.weighty = 0.02;
-
-		c.gridy = 2;
-		this.add(btnDecrement, c);
-		try {
-			Image img = this.getCroppedImage("/resources/addLineIcPa2.png");
-
-			JButton btnLine = new JButton("AddLine");
-			btnLine.setBackground(BACKGROUND_COLOR);
-			btnLine.setVerticalTextPosition(SwingConstants.BOTTOM);
-			btnLine.setHorizontalTextPosition(SwingConstants.CENTER);
-			btnLine.setBorder(new LineBorder(BACKGROUND_LABEL_COLOR));
-			btnLine.setFont(btnLine.getFont().deriveFont(16.0f));
-			btnLine.setForeground(TEXT_COLOR);
-			btnLine.setFocusPainted(false);
-
-			Dimension size = btnLine.getSize();
-			Insets insets = btnLine.getInsets();
-			size.width -= insets.left + insets.right;
-			size.height -= insets.top + insets.bottom;
-			if (size.width > size.height) {
-				size.width = -1;
-			} else {
-				size.height = -1;
-			}
-			Image scaled = img.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
-
-			btnLine.setIcon(new ImageIcon(scaled));
-
-			c.gridwidth = 3;
-			c.gridx = 0;
-			c.weighty = 0.04;
-
-			c.gridy = 3;
-
-			btnLine.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					actionManager.addLine();
-				}
-
-			});
-			this.add(btnLine, c);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		try {
-			Image img = this.getCroppedImage("/resources/areaIcPA.png");
-
-			JButton btnArea = new JButton("AddArea");
-			btnArea.setBackground(BACKGROUND_COLOR);
-			btnArea.setVerticalTextPosition(SwingConstants.BOTTOM);
-			btnArea.setHorizontalTextPosition(SwingConstants.CENTER);
-			btnArea.setBorder(new LineBorder(BACKGROUND_LABEL_COLOR));
-			btnArea.setFont(btnArea.getFont().deriveFont(16.0f));
-			btnArea.setForeground(TEXT_COLOR);
-			btnArea.setFocusPainted(false);
-
-			Dimension size = btnArea.getSize();
-			Insets insets = btnArea.getInsets();
-			size.width -= insets.left + insets.right;
-			size.height -= insets.top + insets.bottom;
-			if (size.width > size.height) {
-				size.width = -1;
-			} else {
-				size.height = -1;
-			}
-			Image scaled = img.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
-
-			btnArea.setIcon(new ImageIcon(scaled));
-
-			c.gridwidth = 3;
-			c.gridx = 0;
-			c.weighty = 0.04;
-
-			c.gridy = 4;
-
-			btnArea.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					actionManager.addArea();
-				}
-
-			});
-			this.add(btnArea, c);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		try {
-			Image img = this.getCroppedImage("/resources/eventIcPa.png");
-
-			JButton btnEvent = new JButton("AddEvent");
-			btnEvent.setBackground(BACKGROUND_COLOR);
-			btnEvent.setVerticalTextPosition(SwingConstants.BOTTOM);
-			btnEvent.setHorizontalTextPosition(SwingConstants.CENTER);
-			btnEvent.setBorder(new LineBorder(BACKGROUND_LABEL_COLOR));
-			btnEvent.setFont(btnEvent.getFont().deriveFont(16.0f));
-			btnEvent.setForeground(TEXT_COLOR);
-			btnEvent.setFocusPainted(false);
-
-			Dimension size = btnEvent.getSize();
-			Insets insets = btnEvent.getInsets();
-			size.width -= insets.left + insets.right;
-			size.height -= insets.top + insets.bottom;
-			if (size.width > size.height) {
-				size.width = -1;
-			} else {
-				size.height = -1;
-			}
-			Image scaled = img.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
-
-			btnEvent.setIcon(new ImageIcon(scaled));
-
-			c.gridwidth = 3;
-			c.gridx = 0;
-			c.weighty = 0.5;
-			c.gridy = 5;
-			btnEvent.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					actionManager.addEvent();
-				}
-
-			});
-			this.add(btnEvent, c);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		try {
-			Image img = this.getCroppedImage("/resources/exportIcPa2.png");
-
-			JButton btnExport = new JButton("Export");
-			btnExport.setBackground(BACKGROUND_COLOR);
-			btnExport.setVerticalTextPosition(SwingConstants.BOTTOM);
-			btnExport.setHorizontalTextPosition(SwingConstants.CENTER);
-			btnExport.setBorder(new LineBorder(BACKGROUND_LABEL_COLOR));
-			btnExport.setFont(btnExport.getFont().deriveFont(16.0f));
-			btnExport.setForeground(TEXT_COLOR);
-			btnExport.setFocusPainted(false);
-
-			Dimension size = btnExport.getSize();
-			Insets insets = btnExport.getInsets();
-			size.width -= insets.left + insets.right;
-			size.height -= insets.top + insets.bottom;
-			if (size.width > size.height) {
-				size.width = -1;
-			} else {
-				size.height = -1;
-			}
-			Image scaled = img.getScaledInstance(70, 70, java.awt.Image.SCALE_SMOOTH);
-
-			btnExport.setIcon(new ImageIcon(scaled));
-			c.gridwidth = 3;
-			c.gridx = 0;
-			c.weighty = 0.5;
-			c.gridy = 6;
-
-			btnExport.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					LookAndFeel previousLF = UIManager.getLookAndFeel();
-					try {
-						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-						JFileChooser fileChooser = new JFileChooser();
-						UIManager.setLookAndFeel(previousLF);
-
-						fileChooser.setDialogTitle("Specify a file to save");
-
-						int userSelection = fileChooser.showSaveDialog(MainWindow.getInstance());
-
-						if (userSelection == JFileChooser.APPROVE_OPTION) {
-							File fileToSave = fileChooser.getSelectedFile();
-
-							System.out.println("Save as file: " + fileToSave.getAbsolutePath());
-							actionManager.export(fileToSave);
-						}
-					} catch (IllegalAccessException | UnsupportedLookAndFeelException | InstantiationException
-							| ClassNotFoundException e1) {
-					}
-
-				}
-
-			});
-			this.add(btnExport, c);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		c.gridwidth = 3;
-		c.gridx = 0;
-		c.weighty = 0.3;
-		c.gridy = 7;
-		JLabel destinationLabel = new JLabel("destination");
-		destinationLabel.setFont(lineId.getFont().deriveFont(18.0f));
-		destinationLabel.setForeground(TEXT_COLOR);
-		lineId.setHorizontalAlignment(JLabel.CENTER);
-		
-		this.add(destinationLabel,c);
-		filterComboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				Data.getInstance().setCurrentCity(filterComboBox.getSelectedItem().toString());
-			}
-
-		});
-		c.gridwidth = 3;
-		c.gridx = 0;
-		c.weighty = 0;
-		c.gridy = 8;
-		this.add(filterComboBox, c);
-
-	}
-
-	private Image getCroppedImage(String address) throws IOException {
-		BufferedImage source = ImageIO.read(getClass().getResource(address));
-
-		boolean flag = false;
-		int upperBorder = -1;
-		do {
-			upperBorder++;
-			for (int c1 = 0; c1 < source.getWidth(); c1++) {
-				if (source.getRGB(c1, upperBorder) != Color.white.getRGB()) {
-					flag = true;
-					break;
-				}
-			}
-
-			if (upperBorder >= source.getHeight())
-				flag = true;
-		} while (!flag);
-
-		BufferedImage destination = new BufferedImage(source.getWidth(), source.getHeight() - upperBorder,
-				BufferedImage.TYPE_INT_ARGB);
-		destination.getGraphics().drawImage(source, 0, upperBorder * -1, null);
-
-		return destination;
-	}
-
+public class ToolBarPanel extends JToolBar {
+  // constants
+  /** Text of the button with a delete action. */
+  public static final String DELETE_TEXT_BTN = "DELETE";
+  /** Preferred destination panel width. */
+  private static final int DESTINATION_PANEL_WIDTH = 180;
+  /** Preferred destination panel height. */
+  private static final int DESTINATION_PANEL_HEIGHT = 60;
+  /** Maximum destination panel width. */
+  private static final int DESTINATION_PANEL_MAX_WIDTH = 180;
+  /** Maximum destination panel height. */
+  private static final int DESTINATION_PANEL_MAX_HEIGHT = 90;
+  /** Filter combo box width. */
+  private static final int FILTER_COMBO_BOX_WIDTH = 140;
+  /** Filter combo box height. */
+  private static final int FILTER_COMBO_BOX_HEIGHT = 30;
+  /** Run simulation panel preferred width. */
+  private static final int RUN_SIMULATION_PANEL_WIDTH = 100;
+  /** Run simulation panel preferred height. */
+  private static final int RUN_SIMULATION_PANEL_HEIGHT = 60;
+  /** Run simulation panel maximum width. */
+  private static final int RUN_SIMULATION_PANEL_MAX_WIDTH = 100;
+  /** Run simulation panel maximum height. */
+  private static final int RUN_SIMULATION_PANEL_MAX_HEIGHT = 90;
+  /** Run simulation button width. */
+  private static final int RUN_SIMULATION_BTN_WIDTH = 80;
+  /** Run simulation button height. */
+  private static final int RUN_SIMULATION_BTN_HEIGHT = 30;
+  // attributes
+  /** Current line id. */
+  private JLabel lineId;
+
+  /** Editable combo box to choose destination. */
+  private FilterComboBox filterComboBox;
+
+  /**
+   * ToolBarPanelIdea2's constructor.
+   */
+  public ToolBarPanel() {
+    this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+    this.filterComboBox = new FilterComboBox(FilterComboBox.populateArray());
+    this.initComponents();
+  }
+
+  // Accessors
+  /** Get the jLabel which contains the currentLineId.
+   *
+   * @return JLabel currentLineId
+   */
+  public JLabel getLineId() {
+    return lineId;
+  }
+
+  /** The JLabel currentLineId.
+   *
+   * @param lineIdToSet current line id
+   */
+  public void setLineId(final JLabel lineIdToSet) {
+    this.lineId = lineIdToSet;
+  }
+
+  /** Get the editable combo box which choose the destination.
+   *
+   * @return FilterComboBox filterComboBox
+   */
+  public FilterComboBox getFilterComboBox() {
+    return filterComboBox;
+  }
+
+  /** Set the editable combo box which choose the destination.
+   *
+   * @param filterComboBoxToSet editable combo box to choose destination
+   */
+  public void setFilterComboBox(final FilterComboBox filterComboBoxToSet) {
+    this.filterComboBox = filterComboBoxToSet;
+  }
+
+  /**
+   * Init all the different buttons.
+   */
+  private void initComponents() {
+    NoneSelectedButtonGroup actionButtonGroup = new NoneSelectedButtonGroup();
+
+    // Adding panels to the toolbar
+    this.add(this.initStationPanel());
+    this.add(this.initLinePanel(actionButtonGroup));
+    this.add(this.initAreaPanel(actionButtonGroup));
+    this.add(this.initEventPanel());
+    this.add(this.initDestinationPanel());
+    this.add(this.initRunSimulationPanel());
+  }
+
+  private JPanel initRunSimulationPanel() {
+    // Run simulation panel init
+    JPanel runSimulationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    runSimulationPanel.setPreferredSize(new Dimension(
+        RUN_SIMULATION_PANEL_WIDTH, RUN_SIMULATION_PANEL_HEIGHT));
+    runSimulationPanel.setMaximumSize(new Dimension(
+        RUN_SIMULATION_PANEL_MAX_WIDTH, RUN_SIMULATION_PANEL_MAX_HEIGHT));
+    runSimulationPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+    TitledBorder runSimulationPanelBorder = new TitledBorder("Run Simulation");
+    runSimulationPanel.setBorder(runSimulationPanelBorder);
+    JButton runSimulationBtn = new JButton("RUN");
+    runSimulationBtn.setName(ActionRunSimulation.ACTION_NAME);
+    runSimulationBtn.addActionListener(e -> {
+      try {
+        ActionRunSimulation.getInstance()
+            .runSimulation();
+      } catch (InterruptedException | IOException ex) {
+        Thread.currentThread().interrupt();
+      }
+    });
+    runSimulationBtn.setFocusable(false);
+    runSimulationBtn.setPreferredSize(new Dimension(RUN_SIMULATION_BTN_WIDTH,
+        RUN_SIMULATION_BTN_HEIGHT));
+
+    runSimulationPanel.add(runSimulationBtn, BorderLayout.CENTER);
+    runSimulationPanel.add(Box.createVerticalGlue());
+    return runSimulationPanel;
+  }
+
+  private JPanel initDestinationPanel() {
+    // Destination panel init
+    JPanel destinationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    destinationPanel.setPreferredSize(new Dimension(DESTINATION_PANEL_WIDTH,
+        DESTINATION_PANEL_HEIGHT));
+    destinationPanel.setMaximumSize(new Dimension(DESTINATION_PANEL_MAX_WIDTH,
+        DESTINATION_PANEL_MAX_HEIGHT));
+    destinationPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+    TitledBorder destinationPanelBorder = new TitledBorder("Destination");
+    destinationPanel.setBorder(destinationPanelBorder);
+    filterComboBox.setPreferredSize(new Dimension(FILTER_COMBO_BOX_WIDTH,
+        FILTER_COMBO_BOX_HEIGHT));
+    filterComboBox.addActionListener(e -> Data.getInstance().setCurrentCity(
+        Objects.requireNonNull(filterComboBox.getSelectedItem()).toString()));
+    destinationPanel.add(this.filterComboBox);
+    destinationPanel.add(Box.createVerticalGlue());
+    return destinationPanel;
+  }
+
+  /**
+   * Init the event panel.
+   *
+   * @return JPanel eventPanel
+   */
+  private JPanel initEventPanel() {
+    // Event panel init
+    JPanel eventPanel = new JPanel();
+    eventPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+    eventPanel.setLayout(new BoxLayout(eventPanel, BoxLayout.Y_AXIS));
+    TitledBorder eventPanelBorder = new TitledBorder("Event");
+    eventPanel.setBorder(eventPanelBorder);
+
+    // Event panel components
+    JPanel firstEventRowPanel = new JPanel();
+    firstEventRowPanel.setLayout(new BoxLayout(firstEventRowPanel,
+        BoxLayout.Y_AXIS));
+    firstEventRowPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    firstEventRowPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+    JButton addEventBtn = new JButton("ADD");
+    addEventBtn.setName(ActionMetroEvent.ADD_EVENT);
+    addEventBtn.addActionListener(e -> ActionMetroEvent.getInstance()
+        .addEvent());
+    addEventBtn.setFocusable(false);
+    JButton showEventsBtn = new JButton("SHOW LIST");
+    showEventsBtn.setFocusable(false);
+
+    firstEventRowPanel.add(addEventBtn);
+    firstEventRowPanel.add(showEventsBtn);
+    eventPanel.add(firstEventRowPanel);
+    eventPanel.add(Box.createVerticalGlue());
+    return eventPanel;
+  }
+
+  /**
+   * Init the area panel.
+   *
+   * @param actionButtonGroup action button group shared with other panels
+   *
+   * @return JPanel areaPanel
+   */
+  private JPanel initAreaPanel(final NoneSelectedButtonGroup
+                                 actionButtonGroup) {
+    // ? Area panel init
+    JPanel areaPanel = new JPanel();
+    areaPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+    areaPanel.setLayout(new BoxLayout(areaPanel, BoxLayout.Y_AXIS));
+    TitledBorder areaPanelBorder = new TitledBorder("Area");
+    areaPanel.setBorder(areaPanelBorder);
+
+    // Area panel components
+    JPanel firstAreaRowPanel = new JPanel();
+    firstAreaRowPanel.setLayout(new BoxLayout(firstAreaRowPanel,
+        BoxLayout.Y_AXIS));
+    firstAreaRowPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+    firstAreaRowPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    JButton addAreaBtn = new JButton("ADD");
+    addAreaBtn.setName(ActionArea.ACTION_NAME);
+    addAreaBtn.addActionListener(e -> ActionArea.getInstance().addArea());
+    addAreaBtn.setFocusable(false);
+
+    JToggleButton deleteAreaBtn = new JToggleButton(ToolBarPanel
+        .DELETE_TEXT_BTN);
+    deleteAreaBtn.setFocusable(false);
+    actionButtonGroup.add(deleteAreaBtn);
+    firstAreaRowPanel.add(addAreaBtn);
+    firstAreaRowPanel.add(deleteAreaBtn);
+    areaPanel.add(firstAreaRowPanel);
+    // Fill the height gap
+    areaPanel.add(Box.createVerticalGlue());
+    return areaPanel;
+  }
+
+
+  /**
+   * Init the line panel.
+   *
+   * @param actionButtonGroup action button group shared with other panels
+   *
+   * @return JPanel linePanel
+   */
+  private JPanel initLinePanel(final NoneSelectedButtonGroup
+                                 actionButtonGroup) {
+    // Line panel init
+    JPanel linePanel = new JPanel();
+    linePanel.setLayout(new BoxLayout(linePanel, BoxLayout.Y_AXIS));
+    linePanel.setAlignmentY(Component.TOP_ALIGNMENT);
+    TitledBorder linePanelBorder = new TitledBorder("Line");
+    linePanel.setBorder(linePanelBorder);
+
+    // Line panel components
+    JPanel firstLineRowPanel = new JPanel();
+    firstLineRowPanel.setLayout(new BoxLayout(firstLineRowPanel,
+        BoxLayout.X_AXIS));
+    firstLineRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    JButton addLineBtn = new JButton("ADD");
+    addLineBtn.setName(ActionLine.ADD_LINE);
+    addLineBtn.addActionListener(e -> ActionLine.getInstance().addLine());
+    addLineBtn.setFocusable(false);
+
+    JToggleButton deleteLineBtn = new JToggleButton(ToolBarPanel
+        .DELETE_TEXT_BTN);
+    deleteLineBtn.setFocusable(false);
+    actionButtonGroup.add(deleteLineBtn);
+    firstLineRowPanel.add(addLineBtn);
+    firstLineRowPanel.add(deleteLineBtn);
+
+    JPanel secondLineRowPanel = new JPanel();
+    secondLineRowPanel.setLayout(new BoxLayout(secondLineRowPanel,
+        BoxLayout.X_AXIS));
+    secondLineRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    this.lineId = new JLabel("None");
+    JButton btnIncrement = new JButton("↑");
+    btnIncrement.setName(ActionLine.INCREMENT_LINE);
+    btnIncrement.addActionListener(e -> ActionLine.getInstance()
+        .incrementLine());
+    btnIncrement.setFocusable(false);
+
+    JButton btnDecrement = new JButton("↓");
+    btnDecrement.setName(ActionLine.DECREMENT_LINE);
+    btnDecrement.addActionListener(e -> ActionLine.getInstance()
+        .decrementLine());
+    btnDecrement.setFocusable(false);
+
+    JLabel lineIdLabel = new JLabel(" Selected line id : ");
+    JLabel whiteSpace = new JLabel("    ");
+    secondLineRowPanel.add(lineIdLabel);
+    secondLineRowPanel.add(this.lineId);
+    secondLineRowPanel.add(whiteSpace);
+    secondLineRowPanel.add(btnIncrement);
+    secondLineRowPanel.add(btnDecrement);
+    linePanel.add(firstLineRowPanel);
+    linePanel.add(secondLineRowPanel);
+    // Fill the height gap
+    linePanel.add(Box.createVerticalGlue());
+    return linePanel;
+  }
+
+  /**
+   * Init the station panel.
+   *
+   * @return JPanel stationPanel
+   */
+  private JPanel initStationPanel() {
+    // Station panel init
+    JPanel stationPanel = new JPanel();
+    stationPanel.setAlignmentY(Component.TOP_ALIGNMENT);
+    JPanel firstStationRowPanel = new JPanel();
+    firstStationRowPanel.setLayout(new BorderLayout());
+    firstStationRowPanel.setLayout(new BoxLayout(firstStationRowPanel,
+        BoxLayout.X_AXIS));
+    firstStationRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    stationPanel.setLayout(new BoxLayout(stationPanel, BoxLayout.Y_AXIS));
+    TitledBorder stationPanelBorder = new TitledBorder("Station");
+    stationPanel.setBorder(stationPanelBorder);
+
+    // Station panel components
+    JButton addStationBtn = new JButton("ADD");
+    addStationBtn.addActionListener(e -> ActionStation.getInstance()
+        .addStation());
+    addStationBtn.setName(ActionStation.ACTION_NAME);
+    addStationBtn.setFocusable(false);
+
+    JButton deleteStationBtn = new JButton(ToolBarPanel.DELETE_TEXT_BTN);
+    deleteStationBtn.setFocusable(false);
+    JButton mergeStationsBtn = new JButton("MERGE");
+    mergeStationsBtn.setFocusable(false);
+    firstStationRowPanel.add(addStationBtn);
+    firstStationRowPanel.add(deleteStationBtn);
+    firstStationRowPanel.add(mergeStationsBtn);
+    JPanel secondStationRowPanel = new JPanel();
+    secondStationRowPanel.setLayout(new BoxLayout(secondStationRowPanel,
+        BoxLayout.X_AXIS));
+    secondStationRowPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    ButtonGroup buttonGroup = new ButtonGroup();
+    JRadioButton addFromEndOption = new JRadioButton("Add from the end"
+        + " of the line");
+    JRadioButton addFromStartOption = new JRadioButton("Add from the"
+        + " start of the line");
+    addFromEndOption.setSelected(true);
+    buttonGroup.add(addFromEndOption);
+    buttonGroup.add(addFromStartOption);
+    secondStationRowPanel.add(addFromEndOption);
+    secondStationRowPanel.add(addFromStartOption);
+
+    stationPanel.add(firstStationRowPanel);
+    stationPanel.add(secondStationRowPanel);
+    stationPanel.add(Box.createVerticalGlue());
+    return stationPanel;
+  }
 }

@@ -1,69 +1,108 @@
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package view;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-
-import com.formdev.flatlaf.intellijthemes.FlatArcDarkIJTheme;
-import controller.ActionManager;
+import javax.swing.WindowConstants;
 
 /**
- * JFrame of the events edition.
- * @author arthu
+ * JFrame of the {@link model.Event}'s edition.
  *
+ * @see view.ListEventPanel
+ *
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file EventWindow.java
+ * @date N/A
+ * @since 2.0
  */
 public class EventWindow extends JFrame {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	// constantes
-	private final int WINDOW_WIDTH = 800;
-	private final int WINDOW_HEIGHT = 270;
-	private final String TITLE = "Event-editor";
-	// attributes
-	private ListEventPanel listEventPanel;
+  /**
+   * Serial version UID.
+   */
+  private static final long serialVersionUID = 1L;
 
-	
-	/**Constructor.
-	 * @param actionManager ActionManager
-	 */
-	public EventWindow(ActionManager actionManager) {
-    this.listEventPanel = new ListEventPanel(MainPanel.PANEL_WIDTH_DEFAULT,MainPanel.PANEL_HEIGHT_DEFAULT,actionManager);
-		this.getContentPane().add(listEventPanel);
-		this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
-		this.setTitle(TITLE);
-		try {
-			BufferedImage source = ImageIO.read(getClass().getResource("/resources/railwayEditorIcon3.png"));
-			ImageIcon img = new ImageIcon(source);
-			this.setIconImage(img.getImage());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.setAlwaysOnTop (true);
+  /**
+   * Singleton instance.
+   */
+  private static EventWindow instance;
 
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	}
+  /**
+   * Event window width.
+   */
+  private static final int WINDOW_WIDTH = 800;
+
+  /**
+   * Event window height.
+   */
+  private static final int WINDOW_HEIGHT = 270;
+  /**
+   * Event window title.
+   */
+  private static final String TITLE = "Event-editor";
 
 
-	/**get the panel of the available elements.
-	 * @return JPanel ListEventPanel
-	 */
-	public ListEventPanel getListEventPanel() {
-		return listEventPanel;
-	}
+  // attributes
 
+  /**
+   * Constructor, initialize window and panels.
+   */
+  public EventWindow() {
+    ListEventPanel listEventPanel = ListEventPanel.getInstance();
+    this.getContentPane().add(listEventPanel);
+    this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    this.setTitle(TITLE);
+    try {
+      BufferedImage source = ImageIO.read(
+          Objects.requireNonNull(getClass().getResource(
+          "/resources/railwayEditorIcon3.png")));
+      ImageIcon img = new ImageIcon(source);
+      this.setIconImage(img.getImage());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    this.setAlwaysOnTop(true);
 
-	/**set the panel of the available elements.
-	 * @param listEventPanel panel of event editor
-	 */
-	public void setListEventPanel(ListEventPanel listEventPanel) {
-		this.listEventPanel = listEventPanel;
-	}
-	
-	
+    this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+  }
+
+  /**
+   * Create EventWindow Singleton.
+   *
+   * @return EventWindow instance
+   */
+  public static EventWindow getInstance() {
+    if (instance == null) {
+      instance = new EventWindow();
+    }
+    return instance;
+  }
 }

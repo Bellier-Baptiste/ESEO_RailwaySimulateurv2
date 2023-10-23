@@ -71,7 +71,12 @@ func createFile(name string, columns []string, delimiter string) CsvFile {
 		os.Exit(1)
 	}
 	basePath := strings.Replace(currentPath, "src\\main", "", -1)
-	outputFolderPath := filepath.Join(basePath, projectPath, "output/")
+	basePath = strings.Replace(basePath, "\\src", "", -1)
+	basePath = strings.Replace(basePath, "\\configs", "", -1)
+	basePath = strings.Replace(basePath, "\\models", "", -1)
+	basePath = strings.Replace(basePath, "\\simulator", "", -1)
+	basePath = strings.Replace(basePath, "\\tools", "", -1)
+	outputFolderPath := filepath.Join(basePath, "output/")
 
 	outputExists, err := exists(outputFolderPath)
 
