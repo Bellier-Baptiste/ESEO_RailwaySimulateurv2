@@ -125,7 +125,8 @@ class ActionConfigurationTest {
    */
   @Test
   @Order(2)
-  void testReadJsonFileIoException() throws NoSuchFieldException, IllegalAccessException {
+  void testReadJsonFileIoException() throws NoSuchFieldException,
+      IllegalAccessException {
     // Mocking and spying instances
     EditConfigDialog editConfigDialog = Mockito.mock(EditConfigDialog.class);
     ActionConfiguration actionConfiguration =
