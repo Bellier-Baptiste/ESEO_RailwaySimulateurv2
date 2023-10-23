@@ -81,11 +81,12 @@ class ActionConfigurationTest {
     actionConfiguration.readJsonFile();
 
     /* Assertions */
-    Assertions.assertEquals(4, actionConfiguration.getJsonMap().size());
+    Assertions.assertEquals(5, actionConfiguration.getJsonMap().size());
     String key1 = "parameter 1";
     String key2 = "parameter 2";
     String key3 = "parameter 3";
     String key4 = "parameter 4";
+    String key5 = "parameter 5";
     // Assert that the keys names are correct
     Assertions.assertEquals(key1, actionConfiguration.getJsonMap().keySet()
         .toArray()[0]);
@@ -95,6 +96,8 @@ class ActionConfigurationTest {
         .toArray()[2]);
     Assertions.assertEquals(key4, actionConfiguration.getJsonMap().keySet()
         .toArray()[3]);
+    Assertions.assertEquals(key5, actionConfiguration.getJsonMap().keySet()
+        .toArray()[4]);
     // Assert that the values are correct
     Assertions.assertEquals("1", actionConfiguration.getJsonMap()
         .get(key1));
@@ -104,14 +107,50 @@ class ActionConfigurationTest {
         .get(key3));
     Assertions.assertEquals("true", actionConfiguration.getJsonMap()
         .get(key4));
+    Assertions.assertEquals("false", actionConfiguration.getJsonMap()
+        .get(key5));
 
     // Verify that the methods have been called
     Mockito.verify(actionConfiguration).readJsonFile();
-    Mockito.verify(actionConfiguration, Mockito.times(9))
+    Mockito.verify(actionConfiguration, Mockito.times(11))
         .getJsonMap();
     Mockito.verifyNoMoreInteractions(actionConfiguration);
   }
 
+  /**
+   * Test the readJsonFile method when an IOException is thrown.
+   *
+   * @throws NoSuchFieldException   if the field does not exist
+   * @throws IllegalAccessException if the field is not accessible
+   */
+  @Test
+  @Order(2)
+  void testReadJsonFileIoException() throws NoSuchFieldException, IllegalAccessException {
+    // Mocking and spying instances
+    EditConfigDialog editConfigDialog = Mockito.mock(EditConfigDialog.class);
+    ActionConfiguration actionConfiguration =
+        Mockito.spy(new ActionConfiguration(editConfigDialog));
+
+    // Use introspection to get the JSON_FILE_PATH field
+    Field jsonFilePathField = getJsonFilePathField(actionConfiguration);
+    // Set the JSON_FILE_PATH field to a wrong path to create an IOException
+    jsonFilePathField.set(actionConfiguration, "some/wrong/config/path");
+
+    // Use introspection to get jsonMap field
+    Field jsonMapField = actionConfiguration.getClass()
+        .getDeclaredField("jsonMap");
+    jsonMapField.setAccessible(true);
+    jsonMapField.set(actionConfiguration, new LinkedHashMap<>());
+
+    // Running tested method
+    actionConfiguration.readJsonFile();
+    // Check that the thread has been interrupted
+    Assertions.assertTrue(Thread.currentThread().isInterrupted());
+
+    // Verify that the methods have been called
+    Mockito.verify(actionConfiguration).readJsonFile();
+    Mockito.verifyNoMoreInteractions(actionConfiguration);
+  }
 
   /**
    * Test the saveJsonFile method with the configTest.json file.
@@ -121,13 +160,13 @@ class ActionConfigurationTest {
    * This test just checks that the method works and that the jsonMap
    * used to write the file is correct.
    * Testing the file writing is not possible else it would not be a unit
-   * test.</p>
+   * test because it would need to be read.</p>
    *
-   * @throws NoSuchFieldException  if the field does not exist
+   * @throws NoSuchFieldException   if the field does not exist
    * @throws IllegalAccessException if the field is not accessible
    */
   @Test
-  @Order(2)
+  @Order(3)
   void testSaveJsonFile() throws NoSuchFieldException, IllegalAccessException {
     // Mocking and spying instances
     EditConfigDialog editConfigDialog = Mockito.mock(EditConfigDialog.class);
@@ -153,6 +192,8 @@ class ActionConfigurationTest {
         EditConfigParamPanel.class);
     EditConfigParamPanel editConfigParamPanel4 = Mockito.mock(
         EditConfigParamPanel.class);
+    EditConfigParamPanel editConfigParamPanel5 = Mockito.mock(
+        EditConfigParamPanel.class);
 
     // Mocking methods
     Mockito.when(editConfigParamPanel1.getParamName()).thenReturn(
@@ -167,6 +208,9 @@ class ActionConfigurationTest {
     Mockito.when(editConfigParamPanel4.getParamName()).thenReturn(
         "parameter 4");
     Mockito.when(editConfigParamPanel4.getParamValue()).thenReturn("false");
+    Mockito.when(editConfigParamPanel5.getParamName()).thenReturn(
+        "parameter 5");
+    Mockito.when(editConfigParamPanel5.getParamValue()).thenReturn("true");
 
     // Add the panels to the list
     List<EditConfigParamPanel> editConfigParamPanelList = new ArrayList<>();
@@ -174,6 +218,7 @@ class ActionConfigurationTest {
     editConfigParamPanelList.add(editConfigParamPanel2);
     editConfigParamPanelList.add(editConfigParamPanel3);
     editConfigParamPanelList.add(editConfigParamPanel4);
+    editConfigParamPanelList.add(editConfigParamPanel5);
 
     Mockito.when(editConfigDialog.getEditConfigParamPanelList())
         .thenReturn(editConfigParamPanelList);
@@ -182,7 +227,7 @@ class ActionConfigurationTest {
     actionConfiguration.saveJsonFile();
 
     // Assertions
-    Assertions.assertEquals(4, actionConfiguration.getJsonMap().size());
+    Assertions.assertEquals(5, actionConfiguration.getJsonMap().size());
     Assertions.assertEquals("string", actionConfiguration.getJsonMap()
         .get("parameter 1"));
     Assertions.assertEquals(3.14, actionConfiguration.getJsonMap()
@@ -191,6 +236,8 @@ class ActionConfigurationTest {
         .get("parameter 3"));
     Assertions.assertEquals(false, actionConfiguration.getJsonMap()
         .get("parameter 4"));
+    Assertions.assertEquals(true, actionConfiguration.getJsonMap()
+        .get("parameter 5"));
 
 
     /* Verify that the methods have been called */
@@ -205,10 +252,48 @@ class ActionConfigurationTest {
     Mockito.verify(editConfigDialog).dispose();
     Mockito.verifyNoMoreInteractions(editConfigDialog);
     // Verification for the actionConfiguration
-    Mockito.verify(actionConfiguration, Mockito.times(5))
+    Mockito.verify(actionConfiguration, Mockito.times(6))
         .getJsonMap();
     Mockito.verify(actionConfiguration).saveJsonFile();
   }
+
+
+  /**
+   * Test the saveJsonFile method when an IOException is thrown.
+   *
+   * @throws NoSuchFieldException   if the field does not exist
+   * @throws IllegalAccessException if the field is not accessible
+   */
+  @Test
+  @Order(4)
+  void testSaveJsonFileIoException() throws NoSuchFieldException,
+      IllegalAccessException {
+    // Mocking and spying instances
+    EditConfigDialog editConfigDialog = Mockito.mock(EditConfigDialog.class);
+    ActionConfiguration actionConfiguration =
+        Mockito.spy(new ActionConfiguration(editConfigDialog));
+
+    // Use introspection to get the JSON_FILE_PATH field
+    Field jsonFilePathField = getJsonFilePathField(actionConfiguration);
+    // Set the JSON_FILE_PATH field to a wrong path to create an IOException
+    jsonFilePathField.set(actionConfiguration, "some/wrong/config/path");
+
+    // Use introspection to get jsonMap field
+    Field jsonMapField = actionConfiguration.getClass()
+        .getDeclaredField("jsonMap");
+    jsonMapField.setAccessible(true);
+    jsonMapField.set(actionConfiguration, new LinkedHashMap<>());
+
+    // Running tested method
+    actionConfiguration.saveJsonFile();
+    // Check that the thread has been interrupted
+    Assertions.assertTrue(Thread.currentThread().isInterrupted());
+
+    // Verify that the methods have been called
+    Mockito.verify(actionConfiguration).saveJsonFile();
+    Mockito.verifyNoMoreInteractions(actionConfiguration);
+  }
+
 
   /**
    * Update the configTest.json file because it's modified during
@@ -224,6 +309,7 @@ class ActionConfigurationTest {
       jsonMap.put("parameter 2", 2.0);
       jsonMap.put("parameter 3", "string");
       jsonMap.put("parameter 4", true);
+      jsonMap.put("parameter 5", false);
 
       // Path of the configTest.json file
       String filePath = "test/unittests/testcontroller/configTest.json";
@@ -243,9 +329,7 @@ class ActionConfigurationTest {
    * Get the JSON_FILE_PATH field of the ActionConfiguration class.
    *
    * @param actionConfiguration the ActionConfiguration instance
-   *
    * @return the JSON_FILE_PATH field
-   *
    * @throws NoSuchFieldException   if the field does not exist
    * @throws IllegalAccessException if the field is not accessible
    */
