@@ -24,14 +24,27 @@
 
 package unittests.testcontroller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import controller.ActionConfiguration;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mockito;
 import view.EditConfigDialog;
+import view.EditConfigParamPanel;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Test-case of editing the configuration of the simulation from the Java HMI.
@@ -41,41 +54,38 @@ import java.lang.reflect.Modifier;
  * @date 2023-10-23
  * @since 3.0
  */
-public class ActionConfigurationTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+class ActionConfigurationTest {
 
   /**
    * Test the readJsonFile method with the configTest.json file.
    *
-   * @throws NoSuchFieldException if the field does not exist
+   * @throws NoSuchFieldException   if the field does not exist
    * @throws IllegalAccessException if the field is not accessible
    */
   @Test
-  public void testReadJsonFile() throws NoSuchFieldException, IllegalAccessException {
+  @Order(1)
+  void testReadJsonFile() throws NoSuchFieldException,
+      IllegalAccessException {
+    // Mocking and spying instances
     EditConfigDialog editConfigDialog = Mockito.mock(EditConfigDialog.class);
     ActionConfiguration actionConfiguration =
         Mockito.spy(new ActionConfiguration(editConfigDialog));
 
-    Field jsonFilePathField = actionConfiguration.getClass()
-        .getDeclaredField("JSON_FILE_PATH");
+    // Use introspection to get the JSON_FILE_PATH field
+    Field jsonFilePathField = getJsonFilePathField(actionConfiguration);
+    jsonFilePathField.set(actionConfiguration, "test/unittests"
+        + "/testcontroller/configTest.json");
 
-    Field modifiersField = Field.class.getDeclaredField("modifiers");
-    modifiersField.setAccessible(true);
-    modifiersField.setInt(jsonFilePathField, jsonFilePathField.getModifiers()
-        & ~Modifier.FINAL);
-
-    jsonFilePathField.setAccessible(true);
-    jsonFilePathField.set(actionConfiguration, "test/unittests" +
-        "/testcontroller/configTest.json");
-
-    System.out.println(jsonFilePathField.get(actionConfiguration));
+    // Running tested method
     actionConfiguration.readJsonFile();
+
+    /* Assertions */
     Assertions.assertEquals(4, actionConfiguration.getJsonMap().size());
-
-
-    String key1 =  "parameter 1";
-    String key2 =  "parameter 2";
-    String key3 =  "parameter 3";
-    String key4 =  "parameter 4";
+    String key1 = "parameter 1";
+    String key2 = "parameter 2";
+    String key3 = "parameter 3";
+    String key4 = "parameter 4";
     // Assert that the keys names are correct
     Assertions.assertEquals(key1, actionConfiguration.getJsonMap().keySet()
         .toArray()[0]);
@@ -90,7 +100,7 @@ public class ActionConfigurationTest {
         .get(key1));
     Assertions.assertEquals("2.0", actionConfiguration.getJsonMap()
         .get(key2));
-    Assertions.assertEquals("3", actionConfiguration.getJsonMap()
+    Assertions.assertEquals("string", actionConfiguration.getJsonMap()
         .get(key3));
     Assertions.assertEquals("true", actionConfiguration.getJsonMap()
         .get(key4));
@@ -100,5 +110,159 @@ public class ActionConfigurationTest {
     Mockito.verify(actionConfiguration, Mockito.times(9))
         .getJsonMap();
     Mockito.verifyNoMoreInteractions(actionConfiguration);
+  }
+
+
+  /**
+   * Test the saveJsonFile method with the configTest.json file.
+   *
+   * <p>Make sure to go check the configTest.json file after the test
+   * to see if the changes have been made.
+   * This test just checks that the method works and that the jsonMap
+   * used to write the file is correct.
+   * Testing the file writing is not possible else it would not be a unit
+   * test.</p>
+   *
+   * @throws NoSuchFieldException  if the field does not exist
+   * @throws IllegalAccessException if the field is not accessible
+   */
+  @Test
+  @Order(2)
+  void testSaveJsonFile() throws NoSuchFieldException, IllegalAccessException {
+    // Mocking and spying instances
+    EditConfigDialog editConfigDialog = Mockito.mock(EditConfigDialog.class);
+    ActionConfiguration actionConfiguration =
+        Mockito.spy(new ActionConfiguration(editConfigDialog));
+
+    // Use introspection to get the JSON_FILE_PATH field
+    Field jsonFilePathField = getJsonFilePathField(actionConfiguration);
+    jsonFilePathField.set(actionConfiguration, "test/unittests"
+        + "/testcontroller/configTest.json");
+
+    // Use introspection to get jsonMap field
+    Field jsonMapField = actionConfiguration.getClass()
+        .getDeclaredField("jsonMap");
+    jsonMapField.setAccessible(true);
+    jsonMapField.set(actionConfiguration, new LinkedHashMap<>());
+
+    EditConfigParamPanel editConfigParamPanel1 = Mockito.mock(
+        EditConfigParamPanel.class);
+    EditConfigParamPanel editConfigParamPanel2 = Mockito.mock(
+        EditConfigParamPanel.class);
+    EditConfigParamPanel editConfigParamPanel3 = Mockito.mock(
+        EditConfigParamPanel.class);
+    EditConfigParamPanel editConfigParamPanel4 = Mockito.mock(
+        EditConfigParamPanel.class);
+
+    // Mocking methods
+    Mockito.when(editConfigParamPanel1.getParamName()).thenReturn(
+        "parameter 1");
+    Mockito.when(editConfigParamPanel1.getParamValue()).thenReturn("string");
+    Mockito.when(editConfigParamPanel2.getParamName()).thenReturn(
+        "parameter 2");
+    Mockito.when(editConfigParamPanel2.getParamValue()).thenReturn("3.14");
+    Mockito.when(editConfigParamPanel3.getParamName()).thenReturn(
+        "parameter 3");
+    Mockito.when(editConfigParamPanel3.getParamValue()).thenReturn("8");
+    Mockito.when(editConfigParamPanel4.getParamName()).thenReturn(
+        "parameter 4");
+    Mockito.when(editConfigParamPanel4.getParamValue()).thenReturn("false");
+
+    // Add the panels to the list
+    List<EditConfigParamPanel> editConfigParamPanelList = new ArrayList<>();
+    editConfigParamPanelList.add(editConfigParamPanel1);
+    editConfigParamPanelList.add(editConfigParamPanel2);
+    editConfigParamPanelList.add(editConfigParamPanel3);
+    editConfigParamPanelList.add(editConfigParamPanel4);
+
+    Mockito.when(editConfigDialog.getEditConfigParamPanelList())
+        .thenReturn(editConfigParamPanelList);
+
+    // Running tested method
+    actionConfiguration.saveJsonFile();
+
+    // Assertions
+    Assertions.assertEquals(4, actionConfiguration.getJsonMap().size());
+    Assertions.assertEquals("string", actionConfiguration.getJsonMap()
+        .get("parameter 1"));
+    Assertions.assertEquals(3.14, actionConfiguration.getJsonMap()
+        .get("parameter 2"));
+    Assertions.assertEquals(8, actionConfiguration.getJsonMap()
+        .get("parameter 3"));
+    Assertions.assertEquals(false, actionConfiguration.getJsonMap()
+        .get("parameter 4"));
+
+
+    /* Verify that the methods have been called */
+    // Verification for each mocked panel
+    for (EditConfigParamPanel editConfigParamPanel : editConfigParamPanelList) {
+      Mockito.verify(editConfigParamPanel).getParamName();
+      Mockito.verify(editConfigParamPanel).getParamValue();
+      Mockito.verifyNoMoreInteractions(editConfigParamPanel);
+    }
+    // Verification for the editConfigDialog
+    Mockito.verify(editConfigDialog).getEditConfigParamPanelList();
+    Mockito.verify(editConfigDialog).dispose();
+    Mockito.verifyNoMoreInteractions(editConfigDialog);
+    // Verification for the actionConfiguration
+    Mockito.verify(actionConfiguration, Mockito.times(5))
+        .getJsonMap();
+    Mockito.verify(actionConfiguration).saveJsonFile();
+  }
+
+  /**
+   * Update the configTest.json file because it's modified during
+   * the testSaveJsonFile test so the testReadJsonFile method will fail
+   * at the next execution if the file is not updated.
+   */
+  @AfterEach
+  public void updateConfigTestFile() {
+    try {
+      // Map creation to represent the JSON
+      Map<String, Object> jsonMap = new LinkedHashMap<>();
+      jsonMap.put("parameter 1", 1);
+      jsonMap.put("parameter 2", 2.0);
+      jsonMap.put("parameter 3", "string");
+      jsonMap.put("parameter 4", true);
+
+      // Path of the configTest.json file
+      String filePath = "test/unittests/testcontroller/configTest.json";
+
+      // ObjectMapper configuration
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+      // Write in the JSON file
+      objectMapper.writeValue(new File(filePath), jsonMap);
+    } catch (IOException e) {
+      Thread.currentThread().interrupt();
+    }
+  }
+
+  /**
+   * Get the JSON_FILE_PATH field of the ActionConfiguration class.
+   *
+   * @param actionConfiguration the ActionConfiguration instance
+   *
+   * @return the JSON_FILE_PATH field
+   *
+   * @throws NoSuchFieldException   if the field does not exist
+   * @throws IllegalAccessException if the field is not accessible
+   */
+  private static Field getJsonFilePathField(
+      final ActionConfiguration actionConfiguration)
+      throws NoSuchFieldException, IllegalAccessException {
+    Field jsonFilePathField = actionConfiguration.getClass()
+        .getDeclaredField("JSON_FILE_PATH");
+
+    // Remove the final modifier
+    Field modifiersField = Field.class.getDeclaredField("modifiers");
+    modifiersField.setAccessible(true);
+    modifiersField.setInt(jsonFilePathField, jsonFilePathField.getModifiers()
+        & ~Modifier.FINAL);
+
+    // Set the JSON_FILE_PATH field to the test file
+    jsonFilePathField.setAccessible(true);
+    return jsonFilePathField;
   }
 }
