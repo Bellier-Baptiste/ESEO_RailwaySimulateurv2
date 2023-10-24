@@ -75,7 +75,8 @@ public class EditConfigParamPanel extends JPanel {
    */
   public EditConfigParamPanel(final Map.Entry<String, Object> entry) {
     // label properties
-    this.label = new JLabel(entry.getKey());
+    this.label = new JLabel(entry.getKey().substring(0, 1).toUpperCase()
+      + entry.getKey().substring(1));
     this.label.setPreferredSize(new Dimension(
         EDIT_CONFIG_PARAM_PANEL_LABEL_WIDTH,
         EDIT_CONFIG_PARAM_PANEL_LABEL_HEIGHT));
@@ -102,7 +103,7 @@ public class EditConfigParamPanel extends JPanel {
    * @return the parameter name
    */
   public String getParamName() {
-    return this.label.getText();
+    return this.label.getText().toLowerCase();
   }
 
   /**
