@@ -22,60 +22,39 @@
  * SOFTWARE.
  */
 
-package view;
+package unittests.testmodel;
 
-import java.awt.Graphics2D;
+import model.Line;
+import model.Station;
+import org.junit.Test;
 
-import model.Area;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
- * View class which describes {@link Area} shape.
+ * Test-case of {@link Line} model.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @file AreaView.java
+ * @file LineTest.java
  * @date N/A
  * @since 2.0
  */
-public class AreaView {
-  /** Area bound to the view. */
-  private Area area;
+public class LineTest {
 
-  /**
-   * Constructor.
-   *
-   * @param areaOfTheView area bound to the view
-   */
-  public AreaView(final Area areaOfTheView) {
-    this.area = areaOfTheView;
-  }
+  public static final String NAME = "eglantine";
 
-  /**
-   * get the area model linked to the view.
-   *
-   * @return Area bound to the view
-   */
-  public Area getArea() {
-    return area;
-  }
-
-  /**
-   * link and area model to the view.
-   *
-   * @param areaOfTheView area to bind
-   */
-  public void setArea(final Area areaOfTheView) {
-    this.area = areaOfTheView;
-  }
-
-  /**
-   * display the area shape.
-   *
-   * @param g2D graphics component
-   */
-  public void display(final Graphics2D g2D) {
-    g2D.setColor(this.area.getColor());
-    g2D.fillRect(this.area.getPosX(), this.area.getPosY(), this.area.getWidth(),
-        this.area.getHeight());
+  @Test
+  public void testLine() {
+    Station station = new Station(0, 5, 5, NAME);
+    List<Station> stations = new ArrayList<>();
+    Line line = new Line(0, stations);
+    assertEquals(0, line.getId());
+    assertTrue(line.getStations().isEmpty());
+    line.addStation(station);
+    assertEquals(1, line.getStations().size());
   }
 }

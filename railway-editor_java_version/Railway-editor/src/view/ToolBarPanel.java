@@ -31,11 +31,6 @@ import controller.ActionRunSimulation;
 import controller.ActionStation;
 import data.Data;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.util.Objects;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -46,6 +41,12 @@ import javax.swing.JRadioButton;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.border.TitledBorder;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.io.IOException;
+import java.util.Objects;
 
 /**
  * ToolBar panel that extends {@link JToolBar} which contains all the action
@@ -160,8 +161,14 @@ public class ToolBarPanel extends JToolBar {
     runSimulationPanel.setBorder(runSimulationPanelBorder);
     JButton runSimulationBtn = new JButton("RUN");
     runSimulationBtn.setName(ActionRunSimulation.ACTION_NAME);
-    runSimulationBtn.addActionListener(e -> ActionRunSimulation.getInstance()
-        .runSimulation());
+    runSimulationBtn.addActionListener(e -> {
+      try {
+        ActionRunSimulation.getInstance()
+            .runSimulation();
+      } catch (InterruptedException | IOException ex) {
+        Thread.currentThread().interrupt();
+      }
+    });
     runSimulationBtn.setFocusable(false);
     runSimulationBtn.setPreferredSize(new Dimension(RUN_SIMULATION_BTN_WIDTH,
         RUN_SIMULATION_BTN_HEIGHT));

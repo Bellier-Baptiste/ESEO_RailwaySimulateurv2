@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package testmodel;
+package unittests.testmodel;
 
 import data.Data;
 import model.Area;

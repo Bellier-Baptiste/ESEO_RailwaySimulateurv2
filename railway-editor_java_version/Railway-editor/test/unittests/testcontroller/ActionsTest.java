@@ -22,9 +22,7 @@
  * SOFTWARE.
  */
 
-package testcontroller;
-
-import controller.ActionArea;
+package unittests.testcontroller;import controller.ActionArea;
 import controller.ActionLine;
 import controller.ActionStation;
 import model.Line;
