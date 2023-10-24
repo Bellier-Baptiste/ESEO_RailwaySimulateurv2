@@ -150,6 +150,5 @@ public class ActionConfiguration {
     } catch (IOException e) {
       Thread.currentThread().interrupt();
     }
-    this.editConfigDialog.dispose();
   }
 }
