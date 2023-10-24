@@ -250,7 +250,6 @@ class ActionConfigurationTest {
     }
     // Verification for the editConfigDialog
     Mockito.verify(editConfigDialog).getEditConfigParamPanelList();
-    Mockito.verify(editConfigDialog).dispose();
     Mockito.verifyNoMoreInteractions(editConfigDialog);
     // Verification for the actionConfiguration
     Mockito.verify(actionConfiguration, Mockito.times(6))

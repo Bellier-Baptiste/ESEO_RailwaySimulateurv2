@@ -27,12 +27,11 @@ package view;
 import controller.ActionConfiguration;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.Component;
-import java.awt.FlowLayout;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +45,7 @@ import java.util.Map;
  * @see EditConfigParamPanel
  * @since 3.0
  */
-public class EditConfigDialog extends JDialog {
+public class EditConfigDialog extends JScrollPane {
   // constants
   /**
    * Width of the dialog.
@@ -55,12 +54,15 @@ public class EditConfigDialog extends JDialog {
   /**
    * Height of the dialog.
    */
-  private static final int EDIT_CONFIG_DIALOG_HEIGHT = 600;
+  private static final int EDIT_CONFIG_DIALOG_HEIGHT = 500;
   /**
    * Unit increment of the scrollbar.
    */
   private static final int EDIT_CONFIG_DIALOG_SCROLL_PANE_UNIT_INCREMENT = 13;
-
+  /**
+   * Scroll bar increment.
+   */
+  private static final int EDIT_CONFIG_DIALOG_SCROLL_BAR_INCREMENT = 14;
   // attributes
   /**
    * List of the panels to edit the configuration parameters.
@@ -82,29 +84,19 @@ public class EditConfigDialog extends JDialog {
    */
   public EditConfigDialog() {
     this.actionConfiguration = new ActionConfiguration(this);
-
-    // Dialog properties
-    this.setTitle("Edit Configuration");
-    this.setSize(EDIT_CONFIG_DIALOG_WIDTH, EDIT_CONFIG_DIALOG_HEIGHT);
-    this.setLocationRelativeTo(MainWindow.getInstance());
-    this.setResizable(false);
-    this.setModal(true);
-    this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
     // Panel properties
     this.editConfigParamPanelsContainer = new JPanel();
     this.editConfigParamPanelsContainer.setLayout(new BoxLayout(
         this.editConfigParamPanelsContainer, BoxLayout.PAGE_AXIS));
     this.editConfigParamPanelsContainer.setAlignmentY(Component.TOP_ALIGNMENT);
-
     // Scroll pane properties
-    JScrollPane scrollPane = new JScrollPane();
-    scrollPane.getVerticalScrollBar().setUnitIncrement(
+    this.setPreferredSize(new Dimension(EDIT_CONFIG_DIALOG_WIDTH,
+        EDIT_CONFIG_DIALOG_HEIGHT));
+    this.getVerticalScrollBar().setUnitIncrement(
         EDIT_CONFIG_DIALOG_SCROLL_PANE_UNIT_INCREMENT);
-    scrollPane.setViewportView(this.editConfigParamPanelsContainer);
-
-    // Add the scroll pane to the dialog
-    this.add(scrollPane);
+    this.setViewportView(this.editConfigParamPanelsContainer);
+    this.getVerticalScrollBar().setUnitIncrement(
+        EDIT_CONFIG_DIALOG_SCROLL_BAR_INCREMENT);
     this.initComponents();
     this.setVisible(true);
   }
@@ -126,20 +118,14 @@ public class EditConfigDialog extends JDialog {
     if (editConfigParamPanel != null) {
       editConfigParamPanel.setBorder(null);
     }
-    // Add the button panel to save or cancel the changes
-    JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-    // Button to save the changes
-    JButton okButton = new JButton("OK");
-    okButton.addActionListener(e -> this.actionConfiguration.saveJsonFile());
-    okButton.setLayout(new FlowLayout(FlowLayout.RIGHT));
-    buttonPanel.add(okButton);
-    this.editConfigParamPanelsContainer.add(buttonPanel);
-    // Button to cancel the changes
-    JButton cancelButton = new JButton("CANCEL");
-    cancelButton.setLayout(new FlowLayout(FlowLayout.RIGHT));
-    cancelButton.addActionListener(e -> this.dispose());
-    buttonPanel.add(cancelButton);
-    this.editConfigParamPanelsContainer.add(buttonPanel);
+    // Display the dialog
+    int optionPane = JOptionPane.showConfirmDialog(MainWindow.getInstance(),
+        this, "Edit configuration", JOptionPane.OK_CANCEL_OPTION,
+        JOptionPane.PLAIN_MESSAGE);
+    // Save the json file if the user clicks on "OK"
+    if (optionPane == JOptionPane.OK_OPTION) {
+      this.actionConfiguration.saveJsonFile();
+    }
   }
 
   /**
