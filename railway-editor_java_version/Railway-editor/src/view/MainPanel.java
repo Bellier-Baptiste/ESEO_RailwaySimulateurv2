@@ -24,16 +24,12 @@
 
 package view;
 
-import controller.CustomMapController;
 import controller.MovingAdapter;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -67,8 +63,6 @@ public final class MainPanel extends JMapViewer {
   private static MainPanel instance;
   /** MainPanel HUD. */
   private final transient MainPanelHud mainPanelHud;
-  /** MovingAdapter. */
-  private final transient MovingAdapter movingAdapter;
   /** List of lineViews. */
   private transient List<LineView> lineViews;
   /** List of areaViews. */
@@ -80,24 +74,12 @@ public final class MainPanel extends JMapViewer {
    * MainPanel constructor.
    */
   private MainPanel() {
-    super();
-    for (MouseListener mouseListener : this.getMouseListeners()) {
-      this.removeMouseListener(mouseListener);
-    }
-    for (MouseMotionListener motionListener : this.getMouseMotionListeners()) {
-      this.removeMouseMotionListener(motionListener);
-    }
-    for (MouseWheelListener wheelListener : this.getMouseWheelListeners()) {
-      this.removeMouseWheelListener(wheelListener);
-    }
-    new CustomMapController(this);
     Dimension dim = new Dimension(MainPanel.PANEL_WIDTH_DEFAULT,
         MainPanel.PANEL_HEIGHT_DEFAULT);
     this.setPreferredSize(dim);
     this.lineViews = new ArrayList<>();
     this.areaViews = new ArrayList<>();
     MovingAdapter ma = new MovingAdapter();
-    this.movingAdapter = ma;
     addMouseMotionListener(ma);
     addMouseWheelListener(ma);
     addMouseListener(ma);
@@ -182,15 +164,6 @@ public final class MainPanel extends JMapViewer {
    */
   public MainPanelHud getMainPanelHud() {
     return mainPanelHud;
-  }
-
-  /**
-   * get the movingAdapter.
-   *
-   * @return movingAdapter
-   */
-  public MovingAdapter getMovingAdapter() {
-    return movingAdapter;
   }
 
 
