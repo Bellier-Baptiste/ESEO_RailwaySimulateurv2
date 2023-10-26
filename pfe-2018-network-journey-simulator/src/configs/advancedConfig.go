@@ -3,11 +3,17 @@ Package configs
 
 File : advancedConfig.go
 
-Brief :
+Brief : This file contains the advanced configuration of the map.
+It is used to define the map, the lines, the stations, the events, etc.
+It is loaded from a xml file.
+It is also used to save the map configuration to a xml file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -43,6 +49,19 @@ import (
 	"strings"
 )
 
+/*
+ConfigMap is the structure that contains the map configuration.
+
+Attributes :
+  - XMLName xml.Name : the name of the xml file
+  - Stations []ConfigStation : the stations of the map
+  - Lines []ConfigLine : the lines of the map
+  - EventsStationClosed []ConfigStationClosedEvent : the events of station
+    closed
+  - EventsLineDelay []ConfigLineDelayEvent : the events of line delay
+  - EventsLineClosed []ConfigLineClosedEvent : the events of line closed
+  - EventsAttendancePeak []ConfigAttendancePeakEvent : the events of attendance
+*/
 type ConfigMap struct {
 	XMLName              xml.Name                    `xml:"map"`
 	Stations             []ConfigStation             `xml:"stations>station"`
@@ -53,6 +72,16 @@ type ConfigMap struct {
 	EventsAttendancePeak []ConfigAttendancePeakEvent `xml:"events>attendancePeak"`
 }
 
+/*
+ConfigStation is the structure that contains the configuration of a station.
+
+Attributes :
+  - XMLName xml.Name
+  - Id int
+  - Name string
+  - Position Pos
+  - Lines []Line
+*/
 type ConfigStation struct {
 	XMLName  xml.Name `xml:"station"`
 	Id       int      `xml:"id"`
@@ -61,16 +90,40 @@ type ConfigStation struct {
 	Lines    []Line   `xml:"lines>line"`
 }
 
+/*
+Pos is the structure that contains the position of a station.
+
+Attributes :
+  - Latitude float64
+  - Longitude float64
+*/
 type Pos struct {
 	Latitude  float64 `xml:"latitude"`
 	Longitude float64 `xml:"longitude"`
 }
 
+/*
+Line is the structure that contains the configuration of a line.
+
+Attributes :
+  - Id int
+  - Platform string
+*/
 type Line struct {
 	Id       int    `xml:"id,attr"`
 	Platform string `xml:"platform,attr"`
 }
 
+/*
+ConfigLine is the structure that contains the configuration of a line.
+
+Attributes :
+  - XMLName xml.Name
+  - Id int
+  - Name string
+  - NumberOfTrain int
+  - Stations []Station
+*/
 type ConfigLine struct {
 	XMLName       xml.Name  `xml:"line"`
 	Id            int       `xml:"id"`
@@ -79,11 +132,28 @@ type ConfigLine struct {
 	Stations      []Station `xml:"stations>station"`
 }
 
+/*
+Station is the structure that contains the configuration of a station.
+
+Attributes :
+  - Id int
+  - Order int
+*/
 type Station struct {
 	Id    int `xml:"id,attr"`
 	Order int `xml:"order,attr"`
 }
 
+/*
+ConfigStationClosedEvent is the structure that contains the configuration of
+a station closed event.
+
+Attributes :
+  - XMLName xml.Name
+  - StartString string
+  - EndString string
+  - IdStation int
+*/
 type ConfigStationClosedEvent struct {
 	XMLName     xml.Name `xml:"stationClosed"`
 	StartString string   `xml:"start"`
@@ -91,6 +161,18 @@ type ConfigStationClosedEvent struct {
 	IdStation   int      `xml:"idStation"`
 }
 
+/*
+ConfigLineDelayEvent is the structure that contains the configuration of
+a line delay event.
+
+Attributes :
+  - XMLName xml.Name
+  - StartString string
+  - EndString string
+  - StationIdStart int
+  - StationIdEnd int
+  - Delay int
+*/
 type ConfigLineDelayEvent struct {
 	XMLName        xml.Name `xml:"lineDelay"`
 	StartString    string   `xml:"start"`
@@ -100,6 +182,17 @@ type ConfigLineDelayEvent struct {
 	Delay          int      `xml:"delay"`
 }
 
+/*
+ConfigLineClosedEvent is the structure that contains the configuration of
+a line closed event.
+
+Attributes :
+  - XMLName xml.Name
+  - StartString string
+  - EndString string
+  - StationIdStart int
+  - StationIdEnd int
+*/
 type ConfigLineClosedEvent struct {
 	XMLName        xml.Name `xml:"lineClosed"`
 	StartString    string   `xml:"start"`
@@ -108,6 +201,19 @@ type ConfigLineClosedEvent struct {
 	StationIdEnd   int      `xml:"stationIdEnd"`
 }
 
+/*
+ConfigAttendancePeakEvent is the structure that contains the configuration of
+an attendance peak event.
+
+Attributes :
+  - XMLName xml.Name
+  - TimeString string
+  - StationId int
+  - Size int
+
+Methods :
+  - None
+*/
 type ConfigAttendancePeakEvent struct {
 	XMLName    xml.Name `xml:"attendancePeak"`
 	TimeString string   `xml:"time"`
@@ -115,12 +221,50 @@ type ConfigAttendancePeakEvent struct {
 	Size       int      `xml:"size"`
 }
 
+/*
+AdvancedConfig is the structure that contains the advanced configuration of
+the map.
+
+Attributes :
+  - MapC ConfigMap
+
+Methods :
+  - NumberOfTrains() int
+  - loadXML(filename string) error
+  - CheckRelationsStationsId(i int, station ConfigStation) error
+  - CheckRelationsStationsLinesDouble(a int, line Line,
+    station ConfigStation) error
+  - CheckRelationsStations() error
+  - CheckRelationsLinesId(i int, line ConfigLine) error
+  - CheckRelationsLinesStationsDouble(a int, station Station,
+    line ConfigLine) error
+  - CheckRelationsLines() error
+  - CheckRelations() error
+  - ReattributeIdsStationGoodEvents(previousId, newId int)
+  - ReattributeIdsStationGood(init bool)
+  - ReattributeIdsLineGood(init bool)
+  - ReattributeIds()
+  - SaveXML(path string) error
+*/
 type AdvancedConfig struct {
 	MapC ConfigMap
 }
 
+/*
+advancedConfig is the instance of the advanced configuration of the map.
+
+Param :
+  - advancedConfig *AdvancedConfig
+*/
 var advancedConfig *AdvancedConfig
 
+/*
+InitAdvancedConfigInstance is the function that initializes the advanced
+configuration of the map.
+
+Param :
+  - filename string
+*/
 func InitAdvancedConfigInstance(filename string) {
 	advancedConfig = &AdvancedConfig{}
 	var err = advancedConfig.loadXML(filename)
@@ -132,11 +276,16 @@ func InitAdvancedConfigInstance(filename string) {
 		log.Fatal("error in advanced config checking - ", err)
 	}
 
-	println("Here")
 	advancedConfig.ReattributeIds()
-	println("Here")
 }
 
+/*
+GetAdvancedConfigInstance is the function that returns the instance of the
+advanced configuration of the map.
+
+Return :
+  - *AdvancedConfig : the instance of the advanced configuration of the map
+*/
 func GetAdvancedConfigInstance() *AdvancedConfig {
 	if advancedConfig == nil {
 		InitAdvancedConfigInstance("map_config.xml")
@@ -145,7 +294,13 @@ func GetAdvancedConfigInstance() *AdvancedConfig {
 	return advancedConfig
 }
 
-// return the total number of trains
+/*
+NumberOfTrains is the function that returns the total number of trains.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - int : the total number of trains
+*/
 func (aConfig *AdvancedConfig) NumberOfTrains() int {
 	var output = 0
 
@@ -156,16 +311,30 @@ func (aConfig *AdvancedConfig) NumberOfTrains() int {
 	return output
 }
 
+/*
+closeConfigFile is the function that closes the configuration file.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - xmlFile *os.File : the configuration file
+
+Return :
+  - err error : an error if there is one
+*/
 func closeConfigFile(xmlFile *os.File) error {
 	err := xmlFile.Close()
 	return err
 }
 
 /*
-*
-loadXML
-Open the mag configuration file that will be used.
-This file is a xml.
+loadXML is the function that loads the configuration file.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - filename string : the name of the configuration file
+
+Return :
+  - err error : an error if there is one
 */
 func (aConfig *AdvancedConfig) loadXML(filename string) error {
 	// open XML file
@@ -212,6 +381,17 @@ func (aConfig *AdvancedConfig) loadXML(filename string) error {
 	return nil
 }
 
+/*
+CheckRelationsStationsId verify that only one station with this id exist.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - i int : the index of the station in the array
+  - station ConfigStation : the station to check
+
+Return :
+  - err error : an error if there is one
+*/
 func (aConfig *AdvancedConfig) CheckRelationsStationsId(i int,
 	station ConfigStation) error {
 	for j, station2 := range aConfig.MapC.Stations {
@@ -226,6 +406,19 @@ func (aConfig *AdvancedConfig) CheckRelationsStationsId(i int,
 	return nil
 }
 
+/*
+CheckRelationsStationsLinesDouble verify that all lines from station exists
+and aren't in double.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - a int : the index of the line in the array
+  - line Line : the line to check
+  - station ConfigStation : the station to check
+
+Return :
+  - err error : an error if there is one
+*/
 func (aConfig *AdvancedConfig) CheckRelationsStationsLinesDouble(a int,
 	line Line, station ConfigStation) error {
 	for b, line2 := range station.Lines {
@@ -241,6 +434,14 @@ func (aConfig *AdvancedConfig) CheckRelationsStationsLinesDouble(a int,
 	return nil
 }
 
+/*
+CheckRelationsStations verify that the relations (stations <-> lines) are
+good, e.g. they don't refer to a non-existing id.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - err error : an error if there is one
+*/
 func (aConfig *AdvancedConfig) CheckRelationsStations() error {
 	var err error = nil
 	for i, station := range aConfig.MapC.Stations {
@@ -267,6 +468,17 @@ func (aConfig *AdvancedConfig) CheckRelationsStations() error {
 	return err
 }
 
+/*
+CheckRelationsLinesId verify that only one line with this id exist.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - i int : the index of the line in the array
+  - line ConfigLine : the line to check
+
+Return :
+err error : an error if there is one
+*/
 func (aConfig *AdvancedConfig) CheckRelationsLinesId(i int,
 	line ConfigLine) error {
 	for j, line2 := range aConfig.MapC.Lines {
@@ -281,6 +493,19 @@ func (aConfig *AdvancedConfig) CheckRelationsLinesId(i int,
 	return nil
 }
 
+/*
+CheckRelationsLinesStationsDouble verify that all stations from line exists
+and aren't in double.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - a int : the index of the station in the array
+  - station Station : the station to check
+  - line ConfigLine : the line to check
+
+Return :
+  - err error : an error if there is one
+*/
 func (aConfig *AdvancedConfig) CheckRelationsLinesStationsDouble(a int,
 	station Station, line ConfigLine) error {
 	for b, station2 := range line.Stations {
@@ -296,6 +521,16 @@ func (aConfig *AdvancedConfig) CheckRelationsLinesStationsDouble(a int,
 	return nil
 }
 
+/*
+CheckRelationsLines verify that the relations (stations <-> lines) are good,
+e.g. they don't refer to a non-existing id.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+
+Return :
+  - err error : an error if there is one
+*/
 func (aConfig *AdvancedConfig) CheckRelationsLines() error {
 	var err error = nil
 	for i, line := range aConfig.MapC.Lines {
@@ -324,13 +559,13 @@ func (aConfig *AdvancedConfig) CheckRelationsLines() error {
 
 /*
 CheckRelations verify that the relations (stations <-> lines) are good, e.g.
-they don't refer to a non-existing id
+they don't refer to a non-existing id.
 
 Param :
-aConfig *AdvancedConfig
+  - aConfig *AdvancedConfig : the advanced configuration of the map
 
 Return :
-err error
+  - err error : an error if there is one
 */
 func (aConfig *AdvancedConfig) CheckRelations() error {
 	//TODO verify line € station <=> station € line
@@ -349,11 +584,13 @@ func (aConfig *AdvancedConfig) CheckRelations() error {
 }
 
 /*
-ReattributeIdsStationGoodEvents
+ReattributeIdsStationGoodEvents is the function that reattribute the ids of
+the stations in the events.
 
-IDs so they all start at 0 and don't have any missing number.
-we do this because the run part uses the Ids to search in arrays, but it's a
-hassle for the user to check in the xml
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - previousId int : the previous id of the station
+  - newId int : the new id of the station
 */
 func (aConfig *AdvancedConfig) ReattributeIdsStationGoodEvents(previousId,
 	newId int) {
@@ -372,6 +609,15 @@ func (aConfig *AdvancedConfig) ReattributeIdsStationGoodEvents(previousId,
 	}
 }
 
+/*
+ReattributeIdsStationGood is the function that reattribute the ids of the
+stations.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - init bool : true if it is the first time we attribute the ids,
+    false otherwise
+*/
 func (aConfig *AdvancedConfig) ReattributeIdsStationGood(init bool) {
 	for a, station := range aConfig.MapC.Stations {
 		var previousId = station.Id
@@ -391,6 +637,14 @@ func (aConfig *AdvancedConfig) ReattributeIdsStationGood(init bool) {
 	}
 }
 
+/*
+ReattributeIdsLineGood is the function that reattribute the ids of the lines.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - init bool : true if it is the first time we attribute the ids, false
+    otherwise
+*/
 func (aConfig *AdvancedConfig) ReattributeIdsLineGood(init bool) {
 	for a, line := range aConfig.MapC.Lines {
 		var previousId = line.Id
@@ -409,6 +663,13 @@ func (aConfig *AdvancedConfig) ReattributeIdsLineGood(init bool) {
 	}
 }
 
+/*
+ReattributeIds is the function that reattribute the ids of the stations and
+the lines.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+*/
 func (aConfig *AdvancedConfig) ReattributeIds() {
 	/*
 		--- Stations
@@ -429,6 +690,17 @@ func (aConfig *AdvancedConfig) ReattributeIds() {
 	aConfig.ReattributeIdsLineGood(false)
 }
 
+/*
+SaveXML is the function that saves the advanced configuration of the map to
+a xml file.
+
+Param :
+  - aConfig *AdvancedConfig : the advanced configuration of the map
+  - path string : the path to the xml file
+
+Return :
+  - err error : an error if there is one
+*/
 func (aConfig *AdvancedConfig) SaveXML(path string) error {
 	basePath = strings.Replace(currentPath, "src\\models", "", -1)
 

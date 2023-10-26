@@ -1,11 +1,14 @@
 /*
 File : config_test.go
 
-Brief :
+Brief : config_test.go runs tests on the config.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -36,6 +39,15 @@ import (
 )
 import "github.com/stretchr/testify/assert"
 
+/*
+TestGetConfigInstance tests the GetConfigInstance function.
+
+# It tests if the function returns a non-nil pointer to a Config struct
+
+Input : t *testing.Ts
+
+Expected : The function returns a non-nil pointer to a Config struct
+*/
 func TestConfig_changeParam(t *testing.T) {
 	config := GetInstance()
 
@@ -44,13 +56,3 @@ func TestConfig_changeParam(t *testing.T) {
 	config.ChangeParam("population", before+10)
 	assert.Equal(t, config.Population(), before+10)
 }
-
-//Commented this out, since the config is being checked on the first getInstance
-//func TestConfig_Check(t *testing.T) {
-//
-//	correct, err := configuration.Check()
-//	if !correct {
-//		assert.EqualError(t, err, " Not enough names for lines Not enough names for stations There is zero train per lines")
-//	}
-//
-//}

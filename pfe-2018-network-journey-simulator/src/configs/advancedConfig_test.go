@@ -1,11 +1,14 @@
 /*
 File : advancedConfig_test.go
 
-Brief :
+Brief : advancedConfig_test.go runs tests on the advancedConfig.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -37,6 +40,15 @@ import (
 	"testing"
 )
 
+/*
+TestGetAdvancedConfigInstance tests the GetAdvancedConfigInstance function.
+
+# It tests if the function returns a non-nil pointer to an AdvancedConfig struct
+
+Input : t *testing.Ts
+
+Expected : The function returns a non-nil pointer to an AdvancedConfig struct
+*/
 func TestGetAdvancedConfigInstance(t *testing.T) {
 	var config = GetAdvancedConfigInstance()
 	assert.NotNil(t, config)
@@ -53,6 +65,15 @@ func TestGetAdvancedConfigInstance(t *testing.T) {
 	}
 }
 
+/*
+TestAdvancedConfig_CheckRelations tests the CheckRelations function.
+
+# It tests if the function returns nil
+
+Input : t *testing.Ts
+
+Expected : The function returns nil
+*/
 func TestAdvancedConfig_CheckRelations(t *testing.T) {
 	var config = GetAdvancedConfigInstance()
 	assert.NotNil(t, config)
@@ -60,6 +81,15 @@ func TestAdvancedConfig_CheckRelations(t *testing.T) {
 	assert.Nil(t, config.CheckRelations())
 }
 
+/*
+TestAdvancedConfig_ReattributeIds tests the ReattributeIds function.
+
+# It tests if the function returns nil
+
+Input : t *testing.Ts
+
+Expected : The function returns nil
+*/
 func TestAdvancedConfig_ReattributeIds(t *testing.T) {
 	var config = GetAdvancedConfigInstance()
 	assert.NotNil(t, config)

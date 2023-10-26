@@ -5,7 +5,7 @@ Brief :
 
 Date : N/A
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author : Team v1, Team v2, Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 

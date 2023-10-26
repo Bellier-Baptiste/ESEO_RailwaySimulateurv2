@@ -7,7 +7,7 @@ Brief :
 
 Date : N/A
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author : Team v1, Team v2, Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -339,7 +339,6 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	s.config.ChangeParam("day type", dayType)
 	fmt.Println("dayType changed in : ", s.config["day type"], "-> ok !")
 
-	println("Here")
 	//generate events
 	s.CreateEventsStationClose()
 
