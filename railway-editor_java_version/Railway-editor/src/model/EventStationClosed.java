@@ -24,8 +24,6 @@
 
 package model;
 
-import controller.EventName;
-
 /**
  * Model class extending event which describes a station closing.
  *

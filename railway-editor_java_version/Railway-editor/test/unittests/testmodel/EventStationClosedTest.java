@@ -21,11 +21,22 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package testmodel;
+package unittests.testmodel;
 
 import static org.junit.Assert.assertEquals;
+
+import model.Line;
 import org.junit.Test;
 import model.EventStationClosed;
+
+/**
+ * Test-case of {@link Line} model.
+ *
+ * @author Benoît Vavasseur
+ * @file EventStationClosedTest.java
+ * @date N/A
+ * @since 2.0
+ */
 
 public class EventStationClosedTest {
 
@@ -36,12 +47,22 @@ public class EventStationClosedTest {
         assertEquals("2018/12/12-12:00", event.getStartTime());
         assertEquals("2018/12/12-13:00", event.getEndTime());
         assertEquals(EventStationClosed.EventType.STATION, event.getType());
-        assertEquals(0, event.getIdStation()); // Assuming default initialization is 0
+        assertEquals(0, event.getIdStation());
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testConstructorException() {
+    public void testConstructorStartTimeAfterEndTimeException() {
         new EventStationClosed(1, "2018/12/12_13:00", "2018/12/12_12:00", EventStationClosed.EventType.STATION);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorStartTimeException() {
+        new EventStationClosed(1, "test", "2018/12/12_12:00", EventStationClosed.EventType.STATION);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorEndTimeException() {
+        new EventStationClosed(1, "2018/12/12_13:00", "test", EventStationClosed.EventType.STATION);
     }
 
     @Test

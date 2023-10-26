@@ -209,12 +209,12 @@ func TestSimulator_EventLineClosed(t *testing.T) {
 func TestSimulator_EventStationClosed(t *testing.T) {
 	println("TestSimulator_EventStationClosed")
 	sim := NewSimulator()
-	sim.Init("working day")
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
 	eventsStationClosed := sim.GetAllEventsStationClosed()
 
-	//	println("len : ", len(eventsStationClosed))
-
-	assert.True(t, (len(eventsStationClosed) != 0), "Array of events (station closed) not initialized")
+	assert.True(t, len(eventsStationClosed) != 0, "Array of events (station closed) not initialized")
 
 	assert.Equal(t, timeStart, eventsStationClosed[0].Start().Format(time.RFC3339), "Bad Start time")
 	assert.Equal(t, timeEnd, eventsStationClosed[0].End().Format(time.RFC3339), "Bad End time")

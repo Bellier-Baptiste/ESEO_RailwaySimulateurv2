@@ -34,6 +34,7 @@ import model.EventLineDelay;
 import model.EventStationClosed;
 import model.Line;
 import model.Station;
+import model.EventName;
 import view.EventRecap;
 import view.EventWindow;
 import view.LineView;

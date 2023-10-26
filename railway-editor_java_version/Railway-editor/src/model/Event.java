@@ -24,7 +24,6 @@
 
 package model;
 
-import controller.EventName;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -57,7 +56,7 @@ public abstract class Event {
   /**
    * Enum of the event types.
    */
-  public enum EventType { LINE, STATION, AREA }
+  public enum EventType { LINE, STATION, /*AREA*/ }
 
   /**
    * Event type.
@@ -81,7 +80,7 @@ public abstract class Event {
                   final String eventEndTime, final EventType eventType) {
       super();
       if (isTimeValid(eventStartTime) && isTimeValid(eventEndTime)
-              && !isStartTimeAfterEndTime(eventStartTime, eventEndTime)) {
+              && isStartTimeAfterEndTime(eventStartTime, eventEndTime)) {
           this.startTime = eventStartTime;
           this.endTime = eventEndTime;
           this.type = eventType;
@@ -111,7 +110,7 @@ public abstract class Event {
      *                                  endTime
      */
     public void setStartTime(String startTime) {
-        if (isTimeValid(startTime) && !isStartTimeAfterEndTime(startTime,
+        if (isTimeValid(startTime) && isStartTimeAfterEndTime(startTime,
                 this.endTime)) {
             this.startTime = startTime;
         } else {
@@ -138,7 +137,7 @@ public abstract class Event {
      *                                  or before startTime
      */
     public void setEndTime(String endTime) {
-        if (isTimeValid(endTime) && !isStartTimeAfterEndTime(this.startTime,
+        if (isTimeValid(endTime) && isStartTimeAfterEndTime(this.startTime,
                 endTime)) {
             this.endTime = endTime;
         } else {
@@ -194,6 +193,15 @@ public abstract class Event {
   }
 
     /**
+     * Get the name of the event.
+     *
+     * @return String eventName
+     */
+    public EventName getEventName() {
+        return eventName;
+    }
+
+    /**
      * Parses a given string to a LocalDateTime using the custom format
      * "yyyy/MM/dd_HH:mm".
      *
@@ -234,15 +242,8 @@ public abstract class Event {
     private boolean isStartTimeAfterEndTime(String startTime, String endTime) {
         LocalDateTime start = parseTime(startTime);
         LocalDateTime end = parseTime(endTime);
-        return start != null && end != null && start.isAfter(end);
+        return start == null || end == null || !start.isAfter(end);
     }
-    /**
-     * Get the name of the event.
-     *
-     * @return String eventName
-     */
-    public EventName getEventName() {
-        return eventName;
-    }
+
 
 }
