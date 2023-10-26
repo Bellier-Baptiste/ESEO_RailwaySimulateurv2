@@ -152,6 +152,23 @@ public final class ActionStation {
   }
 
   /**
+   * Delete selected station (remove it in the correct line stations list).
+   *
+   * @param stationToDeleteView station to delete
+   */
+  void deleteStation(final StationView stationToDeleteView,
+                     LineView selectedStationLineView) {
+    int stationIndex = selectedStationLineView.getLine().getStations()
+        .indexOf(stationToDeleteView.getStation());
+    int stationViewIndex = selectedStationLineView.getStationViews()
+        .indexOf(stationToDeleteView);
+    // remove in station list
+    selectedStationLineView.getLine().getStations().remove(stationIndex);
+    // remove in stationView list
+    selectedStationLineView.getStationViews().remove(stationViewIndex);
+  }
+
+  /**
    * Get the current station id.
    *
    * @return stationId

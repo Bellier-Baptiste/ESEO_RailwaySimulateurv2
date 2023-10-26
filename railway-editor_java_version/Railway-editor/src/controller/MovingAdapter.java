@@ -284,9 +284,11 @@ public class MovingAdapter extends MouseAdapter {
 
     StationView clickedStation = this.getClickedStation(e.getX(), e.getY());
     // if we want to delete the selected station
-    if (e.getButton() == MouseEvent.BUTTON3 && !selectSecStation
-          && clickedStation != null) {
-          deleteStation(clickedStation);
+    if (e.getButton() == MouseEvent.BUTTON1
+          && MainWindow.getInstance().getToolBarPanel().getCanDeleteStation()
+          && !selectSecStation && clickedStation != null) {
+      ActionStation.getInstance().deleteStation(clickedStation,
+          this.selectedStationLineView);
       MainWindow.getInstance().getMainPanel().repaint();
     }
   }
