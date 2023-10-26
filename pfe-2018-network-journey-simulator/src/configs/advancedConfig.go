@@ -3,7 +3,6 @@ package configs
 import (
 	"encoding/xml"
 	"fmt"
-	"go/build"
 	"io/ioutil"
 	"log"
 	"os"
@@ -11,12 +10,12 @@ import (
 )
 
 type ConfigMap struct {
-	XMLName             xml.Name                   `xml:"map"`
-	Stations            []ConfigStation            `xml:"stations>station"`
-	Lines               []ConfigLine               `xml:"lines>line"`
-	EventsStationClosed []ConfigStationClosedEvent `xml:"events>stationClosed"`
-	EventsLineDelay     []ConfigLineDelayEvent     `xml:"events>lineDelay"`
-	EventsLineClosed    []ConfigLineClosedEvent    `xml:"events>lineClosed"`
+	XMLName              xml.Name                    `xml:"map"`
+	Stations             []ConfigStation             `xml:"stations>station"`
+	Lines                []ConfigLine                `xml:"lines>line"`
+	EventsStationClosed  []ConfigStationClosedEvent  `xml:"events>stationClosed"`
+	EventsLineDelay      []ConfigLineDelayEvent      `xml:"events>lineDelay"`
+	EventsLineClosed     []ConfigLineClosedEvent     `xml:"events>lineClosed"`
 	EventsAttendancePeak []ConfigAttendancePeakEvent `xml:"events>attendancePeak"`
 }
 
@@ -70,10 +69,10 @@ type ConfigLineClosedEvent struct {
 }
 
 type ConfigAttendancePeakEvent struct {
-	XMLName        xml.Name `xml:"attendancePeak"`
-	TimeString     string   `xml:"time"`
-	StationId      int      `xml:"stationId"`
-	Size	       int      `xml:"size"`
+	XMLName    xml.Name `xml:"attendancePeak"`
+	TimeString string   `xml:"time"`
+	StationId  int      `xml:"stationId"`
+	Size       int      `xml:"size"`
 }
 
 type AdvancedConfig struct {
@@ -104,7 +103,7 @@ func GetAdvancedConfigInstance() *AdvancedConfig {
 	return advancedConfig
 }
 
-//return the total number of trains
+// return the total number of trains
 func (aConfig *AdvancedConfig) NumberOfTrains() int {
 	var output = 0
 
@@ -117,10 +116,6 @@ func (aConfig *AdvancedConfig) NumberOfTrains() int {
 
 func (aConfig *AdvancedConfig) loadXML(filename string) error {
 	// open XML file
-	if basePath == "" {
-		basePath = build.Default.GOPATH
-	}
-
 	configPath = filepath.Join(basePath, projectPath, "configs/", filename)
 	xmlFile, err := os.Open(configPath)
 	if err != nil {
@@ -145,7 +140,7 @@ func (aConfig *AdvancedConfig) loadXML(filename string) error {
 	return nil
 }
 
-//verify that the relations (stations <-> lines) are good, e.g. they don't refer to a non-existing id
+// verify that the relations (stations <-> lines) are good, e.g. they don't refer to a non-existing id
 func (aConfig *AdvancedConfig) CheckRelations() error { //TODO verify line € station <=> station € line
 	for i, station := range aConfig.MapC.Stations {
 		//verify only one station with this id
@@ -219,7 +214,7 @@ func (aConfig *AdvancedConfig) CheckRelations() error { //TODO verify line € s
 	return nil
 }
 
-//reattribute IDs so they all start at 0 and don't have any missing number. we do this because the run part uses the Ids to search in arrays, but it's a hassle for the user to check in the xml
+// reattribute IDs so they all start at 0 and don't have any missing number. we do this because the run part uses the Ids to search in arrays, but it's a hassle for the user to check in the xml
 func (aConfig *AdvancedConfig) ReattributeIds() {
 	//--- Stations
 	//gives an impossible ID to rearrange them (e.g. avoid to affect twice the same id)

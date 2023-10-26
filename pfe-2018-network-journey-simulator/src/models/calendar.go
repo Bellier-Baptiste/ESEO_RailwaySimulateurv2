@@ -2,7 +2,7 @@ package models
 
 import (
 	"log"
-	"configs"
+	"pfe-2018-network-journey-simulator/src/configs"
 	"time"
 )
 

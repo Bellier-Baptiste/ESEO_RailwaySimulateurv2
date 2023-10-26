@@ -6,8 +6,8 @@ import (
 	"log"
 	"math"
 	"math/rand"
-	"configs"
-	"tools"
+	"pfe-2018-network-journey-simulator/src/configs"
+	"pfe-2018-network-journey-simulator/src/tools"
 	"sort"
 	"strconv"
 	"strings"
@@ -26,8 +26,8 @@ type Map struct {
 	lines                   []*MetroLine
 	stations                []*MetroStation
 	graph                   [][]*pathStation
-	eventsLineClosed		[]*EventLineClosed
-	eventsAttendancePeak	[]*EventAttendancePeak
+	eventsLineClosed        []*EventLineClosed
+	eventsAttendancePeak    []*EventAttendancePeak
 }
 
 func check(e error) {
@@ -103,7 +103,7 @@ func (mapPointer *Map) GraphDelay() [][]int {
 }
 
 // /!\ for create map from scratch and save it only - use CreateMapAdvanced for the run
-//deprecated - use CreateMapAdvanced now
+// deprecated - use CreateMapAdvanced now
 func CreateMap() (Map, error) {
 
 	/**
@@ -298,7 +298,7 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 		mapC.Stations = append(mapC.Stations, stationC)
 	}
 
-//	println("stations ", len(mapPointer.stations), " -- ", len(mapC.Stations))
+	//	println("stations ", len(mapPointer.stations), " -- ", len(mapC.Stations))
 
 	//add lines
 	var lineC configs.ConfigLine
@@ -320,25 +320,25 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 		}
 		mapC.Lines = append(mapC.Lines, lineC)
 	}
-	
+
 	//add events
 	var lineclosedeventsC configs.ConfigLineClosedEvent
 	for _, eventLineClosed := range mapPointer.eventsLineClosed {
-		lineclosedeventsC = configs.ConfigLineClosedEvent {
-			StartString:		eventLineClosed.start.String(),
-			EndString:			eventLineClosed.end.String(),
-			StationIdStart:		eventLineClosed.idStationStart,
-			StationIdEnd:		eventLineClosed.idStationEnd,
+		lineclosedeventsC = configs.ConfigLineClosedEvent{
+			StartString:    eventLineClosed.start.String(),
+			EndString:      eventLineClosed.end.String(),
+			StationIdStart: eventLineClosed.idStationStart,
+			StationIdEnd:   eventLineClosed.idStationEnd,
 		}
 		mapC.EventsLineClosed = append(mapC.EventsLineClosed, lineclosedeventsC)
 	}
-	
+
 	var attendancepeakeventsC configs.ConfigAttendancePeakEvent
 	for _, eventAttendancePeak := range mapPointer.eventsAttendancePeak {
-		attendancepeakeventsC = configs.ConfigAttendancePeakEvent {
-			TimeString:			eventAttendancePeak.time.String(),
-			StationId:			eventAttendancePeak.idStation,
-			Size:				eventAttendancePeak.size,
+		attendancepeakeventsC = configs.ConfigAttendancePeakEvent{
+			TimeString: eventAttendancePeak.time.String(),
+			StationId:  eventAttendancePeak.idStation,
+			Size:       eventAttendancePeak.size,
 		}
 		mapC.EventsAttendancePeak = append(mapC.EventsAttendancePeak, attendancepeakeventsC)
 	}
@@ -549,9 +549,9 @@ func computeNextPosition(X float64, Y float64, direction int) (newX, newY float6
 	return newX, newY
 }
 
-//generate the graph enabling a passenger to determine to which station he should go next to arrive to destination
-//this function needs the metroLines and metroStation to be finished
-//deprecated
+// generate the graph enabling a passenger to determine to which station he should go next to arrive to destination
+// this function needs the metroLines and metroStation to be finished
+// deprecated
 func (mapPointer *Map) GenerateGraphOld() {
 
 	//attribute new ids to the elements
@@ -648,8 +648,8 @@ func (mapPointer *Map) GenerateGraphOld() {
 
 }
 
-//generate the graph enabling a passenger to determine to which station he should go next to arrive to destination
-//this function needs the metroLines and metroStation to be finished
+// generate the graph enabling a passenger to determine to which station he should go next to arrive to destination
+// this function needs the metroLines and metroStation to be finished
 func (mapPointer *Map) GenerateGraph() {
 	//attribute new ids to the elements
 	mapPointer.attributeIDs()
@@ -811,7 +811,7 @@ func (mapPointer *Map) writeCsv() {
 	}
 }
 
-//calculate the time to travel between two directly lined stations (no stations between them on a direct line)
+// calculate the time to travel between two directly lined stations (no stations between them on a direct line)
 func timeBetweenDirectStations(station1 *MetroStation, station2 *MetroStation) int {
 	conf := configs.GetInstance()
 
@@ -833,7 +833,7 @@ func timeBetweenDirectStations(station1 *MetroStation, station2 *MetroStation) i
 	return output
 }
 
-//generate the time between each station using some maths
+// generate the time between each station using some maths
 // T(a,b) = D(a,b) if Distance(a,b) *
 func (mapPointer *Map) generateGraphTimeBetweenStation() {
 
@@ -858,7 +858,7 @@ func (mapPointer *Map) generateGraphTimeBetweenStation() {
 	mapPointer.setGraphTimeBetweenStation(graph)
 }
 
-//return the stations sorted by how near they are from the point.
+// return the stations sorted by how near they are from the point.
 func (mapPointer *Map) GetNearestStations(point Point) []*MetroStation {
 	var output = make([]*MetroStation, len(mapPointer.stations))
 	for i := range mapPointer.stations {
@@ -885,7 +885,7 @@ func (mapPointer *Map) GetNearestStationOpened(point Point) *MetroStation {
 	return nearestStation
 }
 
-//when start->end cannot be done, try to find a path that can be done from the start to the closest point possible of end
+// when start->end cannot be done, try to find a path that can be done from the start to the closest point possible of end
 func (mapPointer *Map) GetNewPathStationMiddleClose(start *MetroStation, end *MetroStation) *pathStation {
 
 	if mapPointer.graph[start.id][end.id] != nil {

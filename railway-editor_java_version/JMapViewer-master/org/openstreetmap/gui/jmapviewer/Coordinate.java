@@ -1,55 +1,80 @@
+// License: GPL. For details, see Readme.txt file.
 package org.openstreetmap.gui.jmapviewer;
 
-//License: GPL. Copyright 2009 by Stefan Zeller
-
-import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Objects;
+
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 
 /**
- * This class encapsulates a Point2D.Double and provide access
- * via <tt>lat</tt> and <tt>lon</tt>.
+ * A geographical coordinate consisting of latitude and longitude.
  *
  * @author Jan Peter Stotz
  *
  */
-public class Coordinate implements Serializable {
-    private transient Point2D.Double data;
+public class Coordinate implements ICoordinate, Serializable {
+  private static final long serialVersionUID = 1L;
+  private double x;
+  private double y;
 
-    public Coordinate(double lat, double lon) {
-        data = new Point2D.Double(lon, lat);
-    }
+  /**
+   * Constructs a new {@code Coordinate}.
+   * @param lat latitude in degrees
+   * @param lon longitude in degrees
+   */
+  public Coordinate(double lat, double lon) {
+    setLat(lat);
+    setLon(lon);
+  }
 
-    public double getLat() {
-        return data.y;
-    }
+  @Override
+  public double getLat() {
+    return y;
+  }
 
-    public void setLat(double lat) {
-        data.y = lat;
-    }
+  @Override
+  public void setLat(double lat) {
+    y = lat;
+  }
 
-    public double getLon() {
-        return data.x;
-    }
+  @Override
+  public double getLon() {
+    return x;
+  }
 
-    public void setLon(double lon) {
-        data.x = lon;
-    }
+  @Override
+  public void setLon(double lon) {
+    x = lon;
+  }
 
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.writeObject(data.x);
-        out.writeObject(data.y);
-    }
+  private void writeObject(ObjectOutputStream out) throws IOException {
+    out.writeObject(x);
+    out.writeObject(y);
+  }
 
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        data = new Point2D.Double();
-        data.x = (Double) in.readObject();
-        data.y = (Double) in.readObject();
-    }
+  private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+    x = (Double) in.readObject();
+    y = (Double) in.readObject();
+  }
 
-    public String toString() {
-        return "Coordinate[" + data.y + ", " + data.x + "]";
-    }
+  @Override
+  public String toString() {
+    return "Coordinate[" + y + ", " + x + ']';
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(x, y);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Coordinate)) return false;
+    Coordinate that = (Coordinate) o;
+    return Double.compare(that.x, x) == 0 && Double.compare(that.y, y) == 0;
+  }
 }

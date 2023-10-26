@@ -1,8 +1,8 @@
 package models
 
 import (
-    "testing"
-    "github.com/stretchr/testify/suite"
+	"github.com/stretchr/testify/suite"
+	"testing"
 )
 
 type ModelsTestSuite struct {
@@ -12,4 +12,3 @@ type ModelsTestSuite struct {
 func TestModelsTestSuite(t *testing.T) {
 	suite.Run(t, new(ModelsTestSuite))
 }
-

@@ -17,6 +17,7 @@ import javax.swing.SwingUtilities;
 
 import controller.KeyboardTool;
 import data.Data;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 /**
  * Class whiche creates a custom comboBox with integrated research function.
@@ -55,8 +56,8 @@ public class FilterComboBox extends JComboBox {
 						double[] coords = findCoordinates(Data.getInstance().getCurrentCity());
 						MainWindow.getInstance().getMainPanel().getLineViews().clear();
 						MainWindow.getInstance().getMainPanel().getAreaViews().clear();
-						MainWindow.getInstance().getMainPanel().setDisplayPositionByLatLon(coords[1], coords[0], 13);
-
+            Coordinate point = new Coordinate(coords[1], coords[0]);
+            MainWindow.getInstance().getMainPanel().setDisplayPosition(point, 13);
 					}
 				}
 			}
