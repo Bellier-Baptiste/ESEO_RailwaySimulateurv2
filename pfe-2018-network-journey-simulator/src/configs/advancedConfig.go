@@ -173,7 +173,8 @@ func (aConfig *AdvancedConfig) loadXML(filename string) error {
 	fmt.Println("base path : ", basePath)
 	fmt.Println("current path : ", currentPath)
 	fmt.Println("base path : ", basePath)
-	if basePath == currentPath && strings.Contains(basePath, "src") && !strings.Contains(basePath, "configs") {
+	if basePath == currentPath && strings.Contains(basePath, "src") &&
+		!strings.Contains(basePath, "configs") {
 		configPath = filepath.Join(basePath, "/configs/", filename)
 	} else if strings.Contains(basePath, "configs") {
 		configPath = filepath.Join(basePath, filename)

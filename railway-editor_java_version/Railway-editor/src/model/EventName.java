@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package controller;
+package model;
 
 /**
  * Enum of the {@link model.Event} names.

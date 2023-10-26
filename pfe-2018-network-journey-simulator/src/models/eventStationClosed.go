@@ -42,8 +42,8 @@ type EventStationClosed struct {
 	finished  bool
 }
 
-func NewEventStationClosed(idStation int,
-	start, end time.Time) EventStationClosed {
+func NewEventStationClosed(idStation int, start time.Time,
+	end time.Time) EventStationClosed {
 	return EventStationClosed{
 		end:       end,
 		start:     start,
@@ -74,4 +74,8 @@ func (esc *EventStationClosed) Start() time.Time {
 
 func (esc *EventStationClosed) End() time.Time {
 	return esc.end
+}
+
+func (esc *EventStationClosed) SetidStation(id int) {
+	esc.idStation = id
 }

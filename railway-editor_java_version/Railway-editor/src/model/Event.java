@@ -24,13 +24,17 @@
 
 package model;
 
-import controller.EventName;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 
 /**
  * Model Class to describe a generic Event.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Benoît Vavasseur
  * @file Event.java
  * @date N/A
  * @since 2.0
@@ -52,7 +56,7 @@ public abstract class Event {
   /**
    * Enum of the event types.
    */
-  public enum EventType { LINE, STATION, AREA }
+  public enum EventType { LINE, STATION, /*AREA*/ }
 
   /**
    * Event type.
@@ -74,11 +78,17 @@ public abstract class Event {
    */
   protected Event(final int eventId, final String eventStartTime,
                   final String eventEndTime, final EventType eventType) {
-    super();
-    this.id = eventId;
-    this.startTime = eventStartTime;
-    this.endTime = eventEndTime;
-    this.type = eventType;
+      super();
+      if (isTimeValid(eventStartTime) && isTimeValid(eventEndTime)
+              && isStartTimeAfterEndTime(eventStartTime, eventEndTime)) {
+          this.startTime = eventStartTime;
+          this.endTime = eventEndTime;
+          this.type = eventType;
+          this.id = eventId;
+      } else {
+          throw new IllegalArgumentException("Invalid start time or end " +
+                  "time.");
+      }
   }
 
 
@@ -92,14 +102,21 @@ public abstract class Event {
   }
 
 
-  /**
-   * set the startTime of the event.
-   *
-   * @param eventStartTime event startTime
-   */
-  public void setStartTime(final String eventStartTime) {
-    this.startTime = eventStartTime;
-  }
+    /**
+     * Set the startTime of the event.
+     *
+     * @param startTime event startTime in format "yyyy/MM/dd_HH:mm"
+     * @throws IllegalArgumentException if the provided time is invalid or after
+     *                                  endTime
+     */
+    public void setStartTime(String startTime) {
+        if (isTimeValid(startTime) && isStartTimeAfterEndTime(startTime,
+                this.endTime)) {
+            this.startTime = startTime;
+        } else {
+            throw new IllegalArgumentException("Invalid start time.");
+        }
+    }
 
 
   /**
@@ -112,14 +129,21 @@ public abstract class Event {
   }
 
 
-  /**
-   * set the endTime of the event.
-   *
-   * @param eventEndTime event endTime
-   */
-  public void setEndTime(final String eventEndTime) {
-    this.endTime = eventEndTime;
-  }
+    /**
+     * Set the endTime of the event.
+     *
+     * @param endTime event endTime in format "yyyy/MM/dd_HH:mm"
+     * @throws IllegalArgumentException if the provided time is invalid
+     *                                  or before startTime
+     */
+    public void setEndTime(String endTime) {
+        if (isTimeValid(endTime) && isStartTimeAfterEndTime(this.startTime,
+                endTime)) {
+            this.endTime = endTime;
+        } else {
+            throw new IllegalArgumentException("Invalid end time.");
+        }
+    }
 
 
   /**
@@ -168,12 +192,58 @@ public abstract class Event {
     this.eventName = eventNameToSet;
   }
 
-  /**
-   * Get the event name.
-   *
-   * @return event name
-   */
-  public EventName getEventName() {
-    return eventName;
-  }
+    /**
+     * Get the name of the event.
+     *
+     * @return String eventName
+     */
+    public EventName getEventName() {
+        return eventName;
+    }
+
+    /**
+     * Parses a given string to a LocalDateTime using the custom format
+     * "yyyy/MM/dd_HH:mm".
+     *
+     * @param time The date-time string to be parsed.
+     * @return LocalDateTime representation of the provided string or null if
+     * parsing fails.
+     */
+    private LocalDateTime parseTime(String time) {
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm");
+        try {
+            return LocalDateTime.parse(time, formatter);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Checks if the provided date-time string is valid according to the custom
+     * format "yyyy/MM/dd_HH:mm".
+     *
+     * @param time The date-time string to be validated.
+     * @return true if the string is a valid date-time, false otherwise.
+     */
+    private boolean isTimeValid(String time) {
+        return parseTime(time) != null;
+    }
+
+    /**
+     * Checks if the provided startTime is after the provided endTime using
+     * the custom format "yyyy/MM/dd_HH:mm".
+     *
+     * @param startTime The start date-time string to be compared.
+     * @param endTime   The end date-time string to be compared.
+     * @return true if the startTime is after endTime, false otherwise or if
+     * either time is invalid.
+     */
+    private boolean isStartTimeAfterEndTime(String startTime, String endTime) {
+        LocalDateTime start = parseTime(startTime);
+        LocalDateTime end = parseTime(endTime);
+        return start == null || end == null || !start.isAfter(end);
+    }
+
+
 }
