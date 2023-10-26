@@ -24,15 +24,17 @@
 
 package controller;
 
-import data.Data;
 import model.Area;
 import model.Station;
+import data.Data;
 import view.AreaSetDistribution;
 import view.AreaView;
 import view.LineView;
+import view.MainPanel;
 import view.MainWindow;
 import view.Popup;
 import view.StationView;
+import view.ToolBarPanel;
 
 import java.awt.Cursor;
 import java.awt.Point;
@@ -240,7 +242,6 @@ public class MovingAdapter extends MouseAdapter {
       MainWindow.getInstance().getMainPanel().repaint();
       this.selectSecStation = false;
     }
-    this.getClickedStation(e.getX(), e.getY());
     this.getClickedArea(e.getX(), e.getY());
     if (e.getClickCount() == 2) {
       stationZoomUpdatePos();
@@ -405,7 +406,7 @@ public class MovingAdapter extends MouseAdapter {
    * @param clickedCoordY y click coordinates
    * @return the station we clicked on
    */
-  protected StationView getClickedStation(final int clickedCoordX,
+  private StationView getClickedStation(final int clickedCoordX,
                                         final int clickedCoordY) {
     List<LineView> lineViews = MainWindow.getInstance().getMainPanel()
         .getLineViews();
@@ -433,7 +434,7 @@ public class MovingAdapter extends MouseAdapter {
    * @param clickedCoordY y click coordinates
    * @return the area we clicked on
    */
-  protected AreaView getClickedArea(final int clickedCoordX,
+  private AreaView getClickedArea(final int clickedCoordX,
                                   final int clickedCoordY) {
 
     List<AreaView> areaViews = MainWindow.getInstance().getMainPanel()

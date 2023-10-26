@@ -106,7 +106,16 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../libraries/jackson-databind-2.15.3.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../libraries/jackson-annotations-2.15.3.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../libraries/jackson-core-2.15.3.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
