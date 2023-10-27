@@ -91,10 +91,6 @@ public class ToolBarPanel extends JToolBar {
 
   /** Editable combo box to choose destination. */
   private FilterComboBox filterComboBox;
-  /**
-   * Can delete station ? Yes if the right delete toggle button is activated.
-   */
-  private boolean canDeleteStation = false;
 
   /**
    * ToolBarPanelIdea2's constructor.
@@ -226,11 +222,6 @@ public class ToolBarPanel extends JToolBar {
         .addEvent());
     addEventBtn.setFocusable(false);
     JToggleButton showEventsBtn = new JToggleButton("HIDE LIST");
-    showEventsBtn.addActionListener(e -> {
-          EventRecap.getInstance().setVisible(
-              !EventRecap.getInstance().isVisible());
-          MainWindow.getInstance().pack();
-    });
     showEventsBtn.setFocusable(false);
 
     firstEventRowPanel.add(addEventBtn);
@@ -348,6 +339,8 @@ public class ToolBarPanel extends JToolBar {
   /**
    * Init the station panel.
    *
+   * @param actionButtonGroup action button group shared with other panels
+   *
    * @return JPanel stationPanel
    */
   private JPanel initStationPanel(NoneSelectedButtonGroup actionButtonGroup) {
@@ -373,11 +366,6 @@ public class ToolBarPanel extends JToolBar {
     JToggleButton deleteStationBtn = new JToggleButton(
         ToolBarPanel.DELETE_TEXT_BTN);
     deleteStationBtn.setName(ActionStation.DELETE_STATION);
-    deleteStationBtn.addActionListener(e ->
-    {
-      this.canDeleteStation = !this.canDeleteStation;
-      System.out.println(this.canDeleteStation);
-    });
     deleteStationBtn.setFocusable(false);
     actionButtonGroup.add(deleteStationBtn);
     JButton mergeStationsBtn = new JButton("MERGE");
@@ -404,9 +392,5 @@ public class ToolBarPanel extends JToolBar {
     stationPanel.add(secondStationRowPanel);
     stationPanel.add(Box.createVerticalGlue());
     return stationPanel;
-  }
-
-  public boolean getCanDeleteStation() {
-    return this.canDeleteStation;
   }
 }
