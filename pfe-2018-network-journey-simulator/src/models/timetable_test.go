@@ -1,11 +1,14 @@
 /*
 File : timetable_test.go
 
-Brief :
+Brief : timetable_test.go runs tests on the timetable.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v1, Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 

@@ -1,11 +1,14 @@
 /*
 File : populationManager_test.go
 
-Brief :
+Brief :	This file runs tests on the populationManager.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v1, Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -38,6 +41,15 @@ import (
 	"time"
 )
 
+/*
+TestCreatePopulation tests the NewPopulation function.
+
+# It tests if the function works properly
+
+Input : t *testing.T
+
+Expected : The function works properly
+*/
 func TestCreatePopulation(t *testing.T) {
 	aMap, _ := CreateMap()
 	population := NewPopulation(10, 0.5, 0.5, aMap)
@@ -46,6 +58,15 @@ func TestCreatePopulation(t *testing.T) {
 
 }
 
+/*
+TestPopulation_GetPassengersWaitingForTrain tests the GetPassengersWaitingForTrain function.
+
+# It tests if the function works properly
+
+Input : t *testing.T
+
+Expected : The function works properly
+*/
 func TestPopulation_GetPassengersWaitingForTrain(t *testing.T) {
 	aMap, _ := CreateMap()
 	population := NewPopulation(3000, 0, 1, aMap)
@@ -57,6 +78,15 @@ func TestPopulation_GetPassengersWaitingForTrain(t *testing.T) {
 	assert.NotNil(t, waiting)
 }
 
+/*
+TestPopulation_SortOutside tests the SortOutside function.
+
+# It tests if the function works properly
+
+Input : t *testing.T
+
+Expected : The function works properly
+*/
 func TestPopulation_SortOutside(t *testing.T) {
 	aMap, _ := CreateMap()
 	population := NewPopulation(10, 0, 1, aMap)
@@ -69,6 +99,15 @@ func TestPopulation_SortOutside(t *testing.T) {
 	}
 }
 
+/*
+TestPopulation_OutsideSortedInsertPassenger tests the OutsideSortedInsertPassenger function.
+
+# It tests if the function works properly
+
+Input : t *testing.T
+
+Expected : The function works properly
+*/
 func TestPopulation_OutsideSortedInsertPassenger(t *testing.T) {
 	aMap, _ := CreateMap()
 	population := NewPopulation(10, 0, 1, aMap)
@@ -96,6 +135,15 @@ func TestPopulation_OutsideSortedInsertPassenger(t *testing.T) {
 	assert.True(t, population.OutsideSortedCheckSorted())
 }
 
+/*
+TestPopulation_OutsideSortedPopAllBefore tests the OutsideSortedPopAllBefore function.
+
+# It tests if the function works properly
+
+Input : t *testing.T
+
+Expected : The function works properly
+*/
 func TestPopulation_OutsideSortedPopAllBefore(t *testing.T) {
 	aMap, _ := CreateMap()
 	population := NewPopulation(10, 0, 1, aMap)
