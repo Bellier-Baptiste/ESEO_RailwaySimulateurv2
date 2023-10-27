@@ -24,17 +24,10 @@
 
 package controller;
 
+import data.Data;
 import model.Area;
 import model.Station;
-import data.Data;
-import view.AreaSetDistribution;
-import view.AreaView;
-import view.LineView;
-import view.MainPanel;
-import view.MainWindow;
-import view.Popup;
-import view.StationView;
-import view.ToolBarPanel;
+import view.*;
 
 import java.awt.Cursor;
 import java.awt.Point;
@@ -285,11 +278,9 @@ public class MovingAdapter extends MouseAdapter {
 
     StationView clickedStation = this.getClickedStation(e.getX(), e.getY());
     // if we want to delete the selected station
-    if (e.getButton() == MouseEvent.BUTTON1
-          && MainWindow.getInstance().getToolBarPanel().getCanDeleteStation()
-          && !selectSecStation && clickedStation != null) {
-      ActionStation.getInstance().deleteStation(clickedStation,
-          this.selectedStationLineView);
+    if (e.getButton() == MouseEvent.BUTTON3 && !selectSecStation
+      && clickedStation != null) {
+      deleteStation(clickedStation);
       MainWindow.getInstance().getMainPanel().repaint();
     }
   }
