@@ -3,11 +3,14 @@ Package models
 
 File : metroLine.go
 
-Brief :
+Brief : This file contains the MetroLine struct and its methods.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v1, Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -35,6 +38,51 @@ package models
 
 import "strconv"
 
+/*
+MetroLine is the structure that manage the metro lines.
+
+Attributes :
+  - id int : the id of the line
+  - number int : the number of the line
+  - code string : the code of the line
+  - name string : the name of the line
+  - stations []*MetroStation : the stations of the line
+  - trainNumber int : the number of train of the line
+  - passengersMaxPerTrain int : the number of passengers max per train of
+    the line
+
+Methods :
+  - PassengersMaxPerTrain() int : return the number of passengers max per
+    train of the line
+  - setPassengersMaxPerTrain(passengersMaxPerTrain int) : set the number of
+    passengers max per train of the line
+  - TrainNumber() int : return the number of train of the line
+  - setTrainNumber(trainNumber int) : set the number of train of the line
+  - Code() string : return the code of the line
+  - Stations() []*MetroStation : return the stations of the line
+  - setCode(code string) : set the code of the line
+  - Number() int : return the number of the line
+  - setNumber(number int) : set the number of the line
+  - Id() int : return the id of the line
+  - setId(id int) : set the id of the line
+  - Name() string : return the name of the line
+  - setName(name string) : set the name of the line
+  - AddMetroStation(station *MetroStation) : add a station to the line
+  - removeMetroStation(station *MetroStation) : remove a station to the line
+  - GetPath(station1, station2 *MetroStation) []*MetroStation : return the
+    path between two stations of the line
+  - isReverseOrder(i int, reverseOrder bool, output []*MetroStation)
+    []*MetroStation : return the path between two stations of the line
+  - Equals(line2 MetroLine) bool : return true if the line is equal to
+    line2, false otherwise
+  - equalsNoRecurrence(line2 *MetroLine) bool : return true if the line is
+    equal to line2, false otherwise
+  - PositionInLine(station *MetroStation) int : return the position of the
+    station in the line
+  - String() string : return the string representation of the line
+  - DurationOfLine(graph [][]int, graphDelay [][]int) int : return the
+    duration of the line
+*/
 type MetroLine struct {
 	id                    int
 	number                int
@@ -59,58 +107,173 @@ func NewLine(id, number, trainNumber, passengersMaxPerTrain int,
 }
 */
 
+/*
+PassengersMaxPerTrain return the number of passengers max per train of the
+line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+
+Return :
+  - int : the number of passengers max per train of the line
+*/
 func (ml *MetroLine) PassengersMaxPerTrain() int {
 	return ml.passengersMaxPerTrain
 }
 
+/*
+setPassengersMaxPerTrain set the number of passengers max per train of the
+line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - passengersMaxPerTrain int : the number of passengers max per train
+    of the line
+*/
 func (ml *MetroLine) setPassengersMaxPerTrain(passengersMaxPerTrain int) {
 	ml.passengersMaxPerTrain = passengersMaxPerTrain
 }
 
+/*
+TrainNumber return the number of train of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+
+Return :
+  - int : the number of train of the line
+*/
 func (ml *MetroLine) TrainNumber() int {
 	return ml.trainNumber
 }
 
+/*
+setTrainNumber set the number of train of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - trainNumber int : the number of train of the line
+*/
 func (ml *MetroLine) setTrainNumber(trainNumber int) {
 	ml.trainNumber = trainNumber
 }
 
+/*
+Code return the code of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+
+Return :
+  - string : the code of the line
+*/
 func (ml *MetroLine) Code() string {
 	return ml.code
 }
 
+/*
+Stations return the stations of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+
+Return :
+  - []*MetroStation : the stations of the line
+*/
 func (ml *MetroLine) Stations() []*MetroStation {
 	return ml.stations
 }
 
+/*
+setCode set the code of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - code string : the code of the line
+*/
 func (ml *MetroLine) setCode(code string) {
 	ml.code = code
 }
 
+/*
+Number return the number of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+
+Return :
+  - int : the number of the line
+*/
 func (ml *MetroLine) Number() int {
 	return ml.number
 }
 
+/*
+setNumber set the number of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - number int : the number of the line
+*/
 func (ml *MetroLine) setNumber(number int) {
 	ml.number = number
 }
 
+/*
+Id return the id of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+
+Return :
+  - int : the id of the line
+*/
 func (ml *MetroLine) Id() int {
 	return ml.id
 }
 
+/*
+setId set the id of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - id int : the id of the line
+*/
 func (ml *MetroLine) setId(id int) {
 	ml.id = id
 }
 
+/*
+Name return the name of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+
+Return :
+  - string : the name of the line
+*/
 func (ml *MetroLine) Name() string {
 	return ml.name
 }
 
+/*
+setName set the name of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - name string : the name of the line
+*/
 func (ml *MetroLine) setName(name string) {
 	ml.name = name
 }
 
+/*
+AddMetroStation add a station to the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - station *MetroStation : the station to add to the line
+*/
 func (ml *MetroLine) AddMetroStation(station *MetroStation) {
 	//verify if the line is in the station
 	for i := 0; i < len(ml.stations); i++ {
@@ -123,6 +286,13 @@ func (ml *MetroLine) AddMetroStation(station *MetroStation) {
 
 //TODO: getStationNumber
 
+/*
+removeMetroStation remove a station to the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - station *MetroStation : the station to remove to the line
+*/
 func (ml *MetroLine) removeMetroStation(station *MetroStation) {
 	var index = -1
 	//verify if the line is in the station
@@ -144,15 +314,16 @@ func (ml *MetroLine) removeMetroStation(station *MetroStation) {
 }
 
 /*
-isReverseOrder
+isReverseOrder return the path between two stations of the line.
 
 Param :
-i int
-reverseOrder bool
-output []*MetroStation
+  - ml *MetroLine : the MetroLine struct
+  - i int : the index of the station
+  - reverseOrder bool : true if the order is reversed, false otherwise
+  - output []*MetroStation : the output
 
 Return :
-[]*MetroStation
+  - []*MetroStation : the path between two stations of the line
 */
 func (ml *MetroLine) isReverseOrder(i int, reverseOrder bool,
 	output []*MetroStation) []*MetroStation {
@@ -164,6 +335,17 @@ func (ml *MetroLine) isReverseOrder(i int, reverseOrder bool,
 	return output
 }
 
+/*
+GetPath return the path between two stations of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - station1 *MetroStation : the first station
+  - station2 *MetroStation : the second station
+
+Return :
+  - []*MetroStation : the path between two stations of the line
+*/
 func (ml *MetroLine) GetPath(station1,
 	station2 *MetroStation) []*MetroStation {
 	var output []*MetroStation
@@ -205,6 +387,16 @@ func (ml *MetroLine) GetPath(station1,
 	return output
 }
 
+/*
+Equals return true if the line is equal to line2, false otherwise.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - line2 MetroLine : the line to compare with
+
+Return :
+  - bool : true if the line is equal to line2, false otherwise
+*/
 func (ml *MetroLine) Equals(line2 MetroLine) bool {
 	if !ml.equalsNoRecurrence(&line2) {
 		return false
@@ -219,6 +411,16 @@ func (ml *MetroLine) Equals(line2 MetroLine) bool {
 	return true
 }
 
+/*
+equalsNoRecurrence return true if the line is equal to line2, false otherwise.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - line2 *MetroLine : the line to compare with
+
+Return :
+  - bool : true if the line is equal to line2, false otherwise
+*/
 func (ml *MetroLine) equalsNoRecurrence(line2 *MetroLine) bool {
 	return line2 != nil &&
 		ml.id == line2.id &&
@@ -230,8 +432,15 @@ func (ml *MetroLine) equalsNoRecurrence(line2 *MetroLine) bool {
 }
 
 /*
-PositionInLine
+PositionInLine return the position of the station in the line.
 return n+1 /!\
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - station *MetroStation : the station
+
+Return :
+  - int : the position of the station in the line
 */
 func (ml *MetroLine) PositionInLine(station *MetroStation) int {
 	var position = -1
@@ -243,6 +452,15 @@ func (ml *MetroLine) PositionInLine(station *MetroStation) int {
 	return position
 }
 
+/*
+String return the string representation of the line.
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+
+Return :
+  - string : the string representation of the line
+*/
 func (ml *MetroLine) String() string {
 	var out = "[MetroLine"
 
@@ -258,7 +476,15 @@ func (ml *MetroLine) String() string {
 }
 
 /*
-DurationOfLine sum of all timeBetweenStation of the line
+DurationOfLine sum of all timeBetweenStation of the line (in minutes).
+
+Param :
+  - ml *MetroLine : the MetroLine struct
+  - graph [][]int : the graph of the metro
+  - graphDelay [][]int : the graph of the metro with the delay
+
+Return :
+  - int : the duration of the line
 */
 func (ml *MetroLine) DurationOfLine(graph [][]int, graphDelay [][]int) int {
 	var sum int

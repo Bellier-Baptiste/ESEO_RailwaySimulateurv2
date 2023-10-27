@@ -1,11 +1,14 @@
 /*
 File : metroTrain_test.go
 
-Brief :
+Brief : metroTrain_test.go runs tests on the metroTrain.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v1, Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -36,6 +39,12 @@ import (
 	"testing"
 )
 
+/*
+generateTrain generates a MetroTrain struct.
+
+Return :
+  - *MetroTrain : the generated MetroTrain struct
+*/
 func generateTrain() *MetroTrain {
 	return &MetroTrain{
 		id:       1,
@@ -44,6 +53,16 @@ func generateTrain() *MetroTrain {
 	}
 }
 
+/*
+TestMetroTrain_StationsBeforeReturn tests the StationsBeforeReturn method of
+the MetroTrain struct.
+
+# It tests if the method works properly
+
+Input : t *testing.T
+
+Expected : The method works properly
+*/
 func TestMetroTrain_StationsBeforeReturn(t *testing.T) {
 	mapTest := generateMapSimpleLine()
 

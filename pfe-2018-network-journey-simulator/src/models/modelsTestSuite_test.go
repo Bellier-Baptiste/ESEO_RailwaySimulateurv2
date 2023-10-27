@@ -1,11 +1,13 @@
 /*
 File : modelsTestSuite_test.go
 
-Brief :
+Brief : modelsTestSuite_test.go tests the models package.
 
-Date : N/A
+Date : 10/02/2020
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -36,10 +38,25 @@ import (
 	"testing"
 )
 
+/*
+ModelsTestSuite tests the models package.
+
+Attributes :
+  - suite.Suite : the testify suite
+*/
 type ModelsTestSuite struct {
 	suite.Suite
 }
 
+/*
+TestModelsTestSuite tests the ModelsTestSuite struct and its methods.
+
+# It tests if the struct and its methods work properly
+
+Input : t *testing.T
+
+Expected : The struct and its methods work properly
+*/
 func TestModelsTestSuite(t *testing.T) {
 	suite.Run(t, new(ModelsTestSuite))
 }

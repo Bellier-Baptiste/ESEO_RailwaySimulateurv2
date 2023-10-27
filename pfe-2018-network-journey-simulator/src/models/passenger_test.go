@@ -1,11 +1,14 @@
 /*
 File : passenger_test.go
 
-Brief :
+Brief : passenger_test.go runs tests on the passenger.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v1, Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -45,12 +48,30 @@ func generate_passenger() *Passenger {
 }
 */
 
+/*
+TestCreatePassenger tests the NewPassenger function.
+
+# It tests if the function works properly
+
+Input : t *testing.T
+
+Expected : The function works properly
+*/
 func TestCreatePassenger(t *testing.T) {
 	someone := NewPassenger("abcd", ADL)
 	assert.Equal(t, "abcd", someone.Id())
 	assert.Nil(t, someone.Trips())
 }
 
+/*
+TestPassenger_GetTrips tests the GetTrips function.
+
+# It tests if the function works properly
+
+Input : t *testing.T
+
+Expected : The function works properly
+*/
 func TestPassenger_GetTrips(t *testing.T) {
 	someone := NewPassenger("abcd", ADL)
 	var n = NewTrip(time.Time{}, PathStation{})
@@ -60,6 +81,15 @@ func TestPassenger_GetTrips(t *testing.T) {
 	assert.Equal(t, &trips, &someone.trips)
 }
 
+/*
+TestPassenger_CalculateNextTrip tests the CalculateNextTrip function.
+
+# It tests if the function works properly
+
+Input : t *testing.T
+
+Expected : The function works properly
+*/
 func TestPassenger_CalculateNextTrip(t *testing.T) {
 	someone := NewPassenger("abcd", ADL)
 	var n1 = NewTrip(time.Now(), PathStation{})

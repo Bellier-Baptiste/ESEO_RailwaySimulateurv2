@@ -3,11 +3,14 @@ Package models
 
 File : pathStation.go
 
-Brief :
+Brief : This file contains the PathStation struct and its methods.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v1, Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -35,6 +38,43 @@ package models
 
 import "strconv"
 
+/*
+PathStation is a struct that represent a path between two stations. It contains
+the stations and the lines between the two stations.
+
+Attributes :
+  - stations []*MetroStation : the stations between the two stations
+  - lines []*MetroLine : the lines between the two stations
+  - minDuration int : the min duration of the path
+  - maxDuration int : the max duration of the path
+
+Methods :
+  - PathStationCreate(line *MetroLine, stations ...*MetroStation) *PathStation
+    : create a path between all stations
+  - PathStationInverse(line *MetroLine, stations ...*MetroStation) *PathStation
+    : create a path between all stations in reverse side
+  - Lines() []*MetroLine : return the lines attribute
+  - Stations() []*MetroStation : return the stations attribute
+  - EndStation() *MetroStation : return the last station of the path
+  - Inverse() : inverse the path
+  - HasStation(station *MetroStation) bool : return true if the path contains
+    the station, false otherwise
+  - HaveSameLineAs(ps2 *PathStation) bool : return true if the path contains the
+    same line as ps2, false otherwise
+  - GetSegment(start *MetroStation, end *MetroStation) *PathStation : return a
+    path between the two stations
+  - String() string : return a string representation of the path
+  - toString() string : return a string representation of the path
+  - append(ps2 *PathStation) *PathStation : append a path to the other
+  - TakeTrain(train *MetroTrain) bool : return true if the passenger should take
+    this train, false otherwise
+  - ExitTrain(train *MetroTrain) bool : return true if the passenger should exit
+    this train, false otherwise
+  - StartStation() *MetroStation : return the first station of the path
+  - PositionStation(station MetroStation) int : return the position of the
+    station in the path
+  - Reroute(ps2 PathStation) *PathStation : reroute the path
+*/
 type PathStation struct {
 	stations []*MetroStation
 	//stations between A and B (including A and B)
@@ -53,8 +93,16 @@ type PathStation struct {
 //--- Constructors
 
 /*
-PathStationCreate creates a path between all stations.
-They should all use the same line (use methods to add multi lines)
+PathStationCreate creates a path between all stations. They should all use the
+same line (use methods to add multi lines). The stations should be in the order
+they are in the line.
+
+Param :
+  - line *MetroLine : the line used
+  - stations ...*MetroStation : the stations used
+
+Return :
+  - *PathStation : the path created
 */
 func PathStationCreate(line *MetroLine,
 	stations ...*MetroStation) *PathStation {
@@ -65,6 +113,18 @@ func PathStationCreate(line *MetroLine,
 	return &out
 }
 
+/*
+PathStationInverse creates a path between all stations in reverse side. They
+should all use the same line (use methods to add multi lines). The stations
+should be in the order they are in the line.
+
+Param :
+  - line *MetroLine : the line used
+  - stations ...*MetroStation : the stations used
+
+Return :
+  - *PathStation : the path created
+*/
 func PathStationInverse(line *MetroLine,
 	stations ...*MetroStation) *PathStation {
 	var stations2 []*MetroStation
@@ -76,14 +136,41 @@ func PathStationInverse(line *MetroLine,
 
 //--- Getters & Setters
 
+/*
+Lines returns the lines attribute of the PathStation struct.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - []*MetroLine : the lines attribute of the PathStation struct
+*/
 func (ps *PathStation) Lines() []*MetroLine {
 	return ps.lines
 }
 
+/*
+Stations returns the stations attribute of the PathStation struct.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - []*MetroStation : the stations attribute of the PathStation struct
+*/
 func (ps *PathStation) Stations() []*MetroStation {
 	return ps.stations
 }
 
+/*
+EndStation returns the last station of the PathStation struct.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - *MetroStation : the last station of the PathStation struct
+*/
 func (ps *PathStation) EndStation() *MetroStation {
 	if len(ps.stations) == 0 {
 		return nil
@@ -92,8 +179,17 @@ func (ps *PathStation) EndStation() *MetroStation {
 }
 
 // --- Methods
-// verify if the PathStation is not wrongly formed
-// (as in, a station appears twice)
+
+/*
+CheckValidity verify if the PathStation is not wrongly formed (as in, a station
+appears twice).
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - bool : true if the PathStation is valid, false otherwise
+*/
 func (ps *PathStation) checkValidity() bool {
 	for i := 0; i < len(ps.stations); i++ {
 		for j := i + 1; j < len(ps.stations); j++ {
@@ -107,9 +203,14 @@ func (ps *PathStation) checkValidity() bool {
 }
 
 /*
-Inverse
+Inverse the PathStation (eg A->B->C becomes C->B->A). The stations and lines
+attributes are reversed. The minDuration and maxDuration attributes are not yet
+reversed.
 Deprecated : should not be used, try to find the correct pathStation
-in Map object instead
+in Map object instead.
+
+Param :
+  - ps *PathStation : the PathStation struct
 */
 func (ps *PathStation) Inverse() {
 	var stations = ps.Stations()
@@ -120,6 +221,16 @@ func (ps *PathStation) Inverse() {
 	ps.stations = stationsReversed
 }
 
+/*
+HasStation return true if the PathStation contains the station, false otherwise.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - station *MetroStation : the station to check
+
+Return :
+  - bool : true if the PathStation contains the station, false otherwise
+*/
 func (ps *PathStation) HasStation(station *MetroStation) bool {
 	for i := 0; i < len(ps.stations); i++ {
 		if ps.stations[i].id == station.id {
@@ -130,8 +241,17 @@ func (ps *PathStation) HasStation(station *MetroStation) bool {
 	return false
 }
 
-// compare the two PathStation to verify they don't have the same line in them.
-// Used to prevent errors while doing multi-lines path
+/*
+HaveSameLineAs compare the two PathStation to verify they don't have the same
+line in them. Used to prevent errors while doing multi-lines path.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - ps2 *PathStation : the PathStation struct
+
+Return :
+  - bool : true if the PathStation contains the station, false otherwise
+*/
 func (ps *PathStation) haveSameLineAs(ps2 *PathStation) bool {
 	for i := 0; i < len(ps.lines); i++ {
 		for j := 0; j < len(ps2.lines); j++ {
@@ -143,6 +263,19 @@ func (ps *PathStation) haveSameLineAs(ps2 *PathStation) bool {
 	return false
 }
 
+/*
+GetSegment return a PathStation between the two stations. The stations should
+be in the PathStation. If the stations are not in the PathStation, the function
+will return nil.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - start *MetroStation : the start station
+  - end *MetroStation : the end station
+
+Return :
+  - *PathStation : the PathStation between the two stations
+*/
 func (ps *PathStation) GetSegment(start *MetroStation,
 	end *MetroStation) *PathStation {
 	var output = PathStation{}
@@ -164,6 +297,15 @@ func (ps *PathStation) GetSegment(start *MetroStation,
 	return &output
 }
 
+/*
+String return a string representation of the PathStation struct.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - string : the string representation of the PathStation struct
+*/
 func (ps *PathStation) String() string {
 	var out = ""
 	out += "stations=\t["
@@ -180,6 +322,16 @@ func (ps *PathStation) String() string {
 	return out
 }
 
+/*
+toString return a string representation of the PathStation struct. The string
+representation is a list of the stations id.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - string : the string representation of the PathStation struct
+*/
 func (ps *PathStation) toString() string {
 	var out = "("
 	for i := 0; i < len(ps.stations); i++ {
@@ -191,10 +343,18 @@ func (ps *PathStation) toString() string {
 	return out + ")"
 }
 
-// append a PathStation to the other and return a third object
-// (note: the two objects won't be altered by this function)
-// if ps.station[-1] == ps2.stations[0] (ps.append(ps2))
-// then the station in double is removed
+/*
+append a PathStation to the other and return a third object (note: the two
+objects won't be altered by this function). If ps.station[-1] == ps2.stations[0]
+(ps.append(ps2)) then the station in double is removed.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - ps2 *PathStation : the PathStation struct
+
+Return :
+  - *PathStation : the PathStation struct
+*/
 func (ps *PathStation) append(ps2 *PathStation) *PathStation {
 	var output = PathStation{}
 	//stations from ps1
@@ -225,8 +385,17 @@ func (ps *PathStation) append(ps2 *PathStation) *PathStation {
 }
 
 /*
-TakeTrain return if the passenger should take this train.
-The passenger should be in the train.currentStation
+TakeTrain return if the passenger should take this train. The passenger should
+be in the train.currentStation. The train should be in the same line as the
+PathStation. The train should go to one of the stations of the PathStation.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - train *MetroTrain : the train
+
+Return :
+  - bool : true if the passenger should take this train, false otherwise
+
 TODO test
 */
 func (ps *PathStation) TakeTrain(train *MetroTrain) bool {
@@ -259,7 +428,17 @@ func (ps *PathStation) TakeTrain(train *MetroTrain) bool {
 }
 
 /*
-ExitTrain
+ExitTrain return if the passenger should exit this train. The passenger should
+be in the train.currentStation. The train should be in the same line as the
+PathStation. The train should go to one of the stations of the PathStation.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - train *MetroTrain : the train
+
+Return :
+  - bool : true if the passenger should exit this train, false otherwise
+
 TODO test
 */
 func (ps *PathStation) ExitTrain(train *MetroTrain) bool {
@@ -294,6 +473,15 @@ func (ps *PathStation) ExitTrain(train *MetroTrain) bool {
 	return ps.lines[index].id != train.line.id
 }
 
+/*
+StartStation return the first station of the PathStation struct.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - *MetroStation : the first station of the PathStation struct
+*/
 func (ps *PathStation) StartStation() *MetroStation {
 	if len(ps.stations) == 0 {
 		return nil
@@ -301,6 +489,17 @@ func (ps *PathStation) StartStation() *MetroStation {
 	return ps.stations[0]
 }
 
+/*
+PositionStation return the position of the station in the PathStation struct.
+If the station is not in the PathStation, the function will return -1.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - station MetroStation : the station
+
+Return :
+  - int : the position of the station in the PathStation struct
+*/
 func (ps *PathStation) PositionStation(station MetroStation) int {
 	for i := range ps.stations {
 		if ps.stations[i].id == station.id {
@@ -311,8 +510,15 @@ func (ps *PathStation) PositionStation(station MetroStation) int {
 }
 
 /*
-Reroute the pathStation, meaning that the start of
-ps2 will be added at the similar station in ps
+Reroute the pathStation, meaning that the start of ps2 will be added at the
+similar station in ps.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - ps2 *PathStation : the PathStation struct
+
+Return :
+  - *PathStation : the PathStation struct
 */
 func (ps *PathStation) Reroute(ps2 PathStation) *PathStation {
 	var pos = ps.PositionStation(*ps2.StartStation())
