@@ -56,7 +56,7 @@ public abstract class Event {
   /**
    * Enum of the event types.
    */
-  public enum EventType { LINE, STATION, /*AREA*/ }
+  public enum EventType { LINE, STATION /*, AREA*/ }
 
   /**
    * Event type.
