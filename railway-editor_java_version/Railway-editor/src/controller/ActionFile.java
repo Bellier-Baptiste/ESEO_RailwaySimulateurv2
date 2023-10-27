@@ -199,13 +199,13 @@ public class ActionFile {
     for (Event event : eventList) {
       // Name of the event
       String timeStart = event.getStartTime();
+      timeStart = timeStart.replace("-", "T");
       timeStart = timeStart.replace("/", "-");
-      timeStart = timeStart.replace("_", "T");
       timeStart = timeStart + ":00.000Z";
 
       String timeEnd = event.getEndTime();
+      timeEnd = timeEnd.replace("-", "T");
       timeEnd = timeEnd.replace("/", "-");
-      timeEnd = timeEnd.replace("_", "T");
       timeEnd = timeEnd + ":00.000Z";
 
       Element eventName = document.createElement(event.getEventName()

@@ -98,9 +98,6 @@ func (s *Simulator) GetAllEventsLineClosed() []models.EventLineClosed {
 	return s.eventsLineClosed
 }
 
-func (s *Simulator) GetAllEventsStationClosed() []models.EventStationClosed {
-	return s.eventsStationClosed
-}
 func (s *Simulator) GetAllEventsAttendancePeak() []models.EventAttendancePeak {
 	return s.eventsAttendancePeak
 }
@@ -621,6 +618,9 @@ Return :
 func (s *Simulator) executeESCStartEventROSetPath(trip *models.Trip,
 	pass *models.Passenger, i string) *models.Trip {
 	trip = pass.NextTrip()
+	if trip == nil {
+		return nil
+	}
 	var j = trip.Path().StartStation().Id()
 	var k = trip.Path().EndStation().Id()
 	path := s.mapObject.Graph()[j][k]
