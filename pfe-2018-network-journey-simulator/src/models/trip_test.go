@@ -1,7 +1,7 @@
 /*
 File : trip_test.go
 
-Brief :
+Brief :	Tests for the Trip struct and its methods.
 
 Date : 24/01/2019
 

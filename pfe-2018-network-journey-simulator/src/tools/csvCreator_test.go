@@ -1,11 +1,14 @@
 /*
 File : csvCreator_test.go
 
-Brief :
+Brief : Tests for the CsvCreator struct and its methods.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v1, Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -35,6 +38,15 @@ import (
 	"testing"
 )
 
+/*
+TestCsvCreator tests the CsvCreator struct and its methods.
+
+# It tests if the struct and its methods work properly
+
+Input : t *testing.T
+
+Expected : The struct and its methods work properly
+*/
 func TestCsvCreator(t *testing.T) {
 
 	testCsv := NewFile("test", []string{"test1", "test2"})
