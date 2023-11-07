@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$" dumb="true">
+      <sourceFolder url="file://$MODULE_DIR$/JMapViewer-master" isTestSource="false" />
+    </content>
+  </component>
+  <component name="CheckStyle-IDEA-Module" serialisationVersion="2">
+    <option name="activeLocationsIds" />
+  </component>
+  <component name="Go" enabled="true" />
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="d3e27160-865b-481c-a7e3-0bf4a2f33bca" />
+  </component>
+</module>
