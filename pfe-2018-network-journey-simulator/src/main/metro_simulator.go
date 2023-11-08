@@ -212,10 +212,14 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	// Delete "src\main" if there (when launching newSimulator with command line)
 	basePath := strings.Replace(currentPath, "src\\main", "", -1)
 
-	var advancedConfigPath = filepath.Join(basePath, "src\\configs\\", *configName)
+	basePath = strings.Replace(basePath, "\\src", "", -1)
+	basePath = strings.Replace(basePath, "\\configs", "", -1)
+	basePath = strings.Replace(basePath, "\\models", "", -1)
+	basePath = strings.Replace(basePath, "\\simulator", "", -1)
+	basePath = strings.Replace(basePath, "\\tools", "", -1)
+	advancedConfigPath := filepath.Join(basePath, "src\\configs\\", *configName)
 
 	printHeader("Verifying Config")
 	if *regenerateConfig {

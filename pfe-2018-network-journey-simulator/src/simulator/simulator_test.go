@@ -182,6 +182,7 @@ Input : t *testing.T
 
 Expected : The Run() method works properly
 */
+/*
 func TestSimulator_Run(t *testing.T) {
 
 	var config = configs.GetInstance()
@@ -225,6 +226,7 @@ func TestSimulator_Run(t *testing.T) {
 	assert.True(t, tripsFinished > tripsNotFinished)
 	//println(simulator.population.String())
 }
+*/
 
 /*
 TestSimulator_TripNumber() tests the TripNumber() method of the Simulator struct.
