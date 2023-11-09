@@ -2070,13 +2070,13 @@ func (s *Simulator) WriteInTimetableReal(train *models.MetroTrain,
 	nextArrival := departure.Add(time.Duration(timeBetweenStation+delay) *
 		time.Second)
 	nextDeparture := nextArrival.Add(time.Duration(timeInStation) * time.Second)
-	isRevenue := true
+	//isRevenue := true
 	//TODO is there people on the train ?
 
 	metroStationTab := [2]models.MetroStation{*station, *nextStation}
 	timeTab := [4]time.Time{timeArrival, nextArrival, departure, nextDeparture}
 	event := models.NewEventTimetableTrain(line, metroStationTab, train,
-		direction, timeTab, isRevenue, train.GetTripNumber())
+		direction, timeTab, true /*isRevenue*/, train.GetTripNumber())
 	s.timetableReal.AddEventsTrain(event)
 }
 
