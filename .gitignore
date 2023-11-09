@@ -54,6 +54,9 @@
  .idea/*.iml
 # .idea/modules
 
+# target
+target/
+
 # Sonar
 .scannerwork/
 

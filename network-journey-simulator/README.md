@@ -25,7 +25,7 @@ At the current state of the project, dependencies are only used in tests,
 So if you just want to run the project without the test you can directly go
 to the part "How to run it"
 
-* In a terminal go to $GOPATH/src/pfe-2018-network-journey-simulator
+* In a terminal go to $GOPATH/src/network-journey-simulator
 * Do a `go get -t ./...`
 * Go should download for you all the dependencies of the project
 
@@ -37,24 +37,24 @@ There is two way you can generate an executable from Go code.
 
 The go build command will build the whole project
 
-* In a terminal go to $GOPATH/src/pfe-2018-network-journey-simulator/src/main
+* In a terminal go to $GOPATH/src/network-journey-simulator/src/main
 * build the program with a `go build metro_simulator.go` (use `go mod tidy` and `go mod vendor` if necessary before)
 * mark the file as executable thanks to the command `chmod +x metro_simulator.go` if necessary
 * execute it with `./metro_simulator` or `./metro_simulator.exe` 
-* You should get all the output in $GOPATH/src/pfe-2018-network-journey-simulator/output
+* You should get all the output in $GOPATH/src/network-journey-simulator/output
 
 ### With go install
 
 The go install command will build the whole project and also cache packages (except the main package) in $GOPATH/bin. The install command will also create the executable in $GOPATH/bin
 
-e.g after a go install we have the files : models.a, configs.a, simulator.a, tools.a. In$GOPATH/bin/pfe-2018-network-journey-simulator/linux_amd64/ 
+e.g after a go install we have the files : models.a, configs.a, simulator.a, tools.a. In$GOPATH/bin/network-journey-simulator/linux_amd64/ 
 if a change is made on models go install will only rebuild the package models.a
 
-* In a terminal go to $GOPATH/src/pfe-2018-network-journey-simulator/main
+* In a terminal go to $GOPATH/src/network-journey-simulator/main
 * build the program with a `go install metro_simulator.go`
 * cd to $GOPATH/bin/
 * execute it with `./metro_simulator`
-* You should get all the output in $GOPATH/src/pfe-2018-network-journey-simulator/output
+* You should get all the output in $GOPATH/src/network-journey-simulator/output
 
 
 ## How to run the tests

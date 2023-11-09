@@ -36,7 +36,7 @@ package models
 import (
 	"log"
 	"math/rand"
-	"pfe-2018-network-journey-simulator/src/configs"
+	"network-journey-simulator/src/configs"
 	"time"
 )
 

@@ -78,6 +78,7 @@ public final class ActionRunSimulation {
    *
    * @return the exit value of the process
    */
+  //TODO change root directory of java and go
   public int runSimulation() throws InterruptedException, IOException {
     // Check if simulator.exe is already running
     if (this.isSimulatorRunning()) {

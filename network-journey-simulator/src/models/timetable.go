@@ -3,8 +3,8 @@ package models
 import (
 	"fmt"
 	"log"
-	"pfe-2018-network-journey-simulator/src/configs"
-	"pfe-2018-network-journey-simulator/src/tools"
+	"network-journey-simulator/src/configs"
+	"network-journey-simulator/src/tools"
 	"strconv"
 	"time"
 )

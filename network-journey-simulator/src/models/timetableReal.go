@@ -34,7 +34,7 @@ SOFTWARE.
 package models
 
 import (
-	"pfe-2018-network-journey-simulator/src/tools"
+	"network-journey-simulator/src/tools"
 	"strconv"
 )
 

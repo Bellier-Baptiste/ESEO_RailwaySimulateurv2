@@ -35,9 +35,9 @@ package tools
 
 import (
 	"fmt"
+	"network-journey-simulator/src/configs"
 	"os"
 	"path/filepath"
-	"pfe-2018-network-journey-simulator/src/configs"
 	"strings"
 )
 

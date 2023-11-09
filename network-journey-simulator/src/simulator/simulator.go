@@ -36,8 +36,8 @@ package simulator
 import (
 	"fmt"
 	"math/rand"
-	"pfe-2018-network-journey-simulator/src/configs"
-	"pfe-2018-network-journey-simulator/src/models"
+	"network-journey-simulator/src/configs"
+	"network-journey-simulator/src/models"
 	"strconv"
 	"sync"
 	"time"
