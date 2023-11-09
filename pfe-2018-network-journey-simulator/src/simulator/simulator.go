@@ -196,6 +196,16 @@ func (s *Simulator) GetAllEventsLineClosed() []models.EventLineClosed {
 	return s.eventsLineClosed
 }
 
+/*
+GetAllEventsStationClosed is used to get the station closed events of the
+simulator.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []models.EventStationClosed : the events of the simulator
+*/
 func (s *Simulator) GetAllEventsStationClosed() []models.EventStationClosed {
 	return s.eventsStationClosed
 }
@@ -2091,6 +2101,12 @@ func (s *Simulator) GetTrainsPerLine(
 	return listTrains
 }
 
+/*
+ToCSV is used to write in a CSV file.
+
+Param :
+  - s *Simulator : the simulator
+*/
 func (s *Simulator) ToCSV() {
 	s.timetableReal.ToCSV()
 	//TODO CSV output writing should be here

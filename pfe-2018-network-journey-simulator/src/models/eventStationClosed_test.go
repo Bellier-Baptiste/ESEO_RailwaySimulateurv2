@@ -31,6 +31,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+/*
+TestEventStationClosed tests the EventStationClosed struct and its methods.
+
+# It tests if the struct and its methods work properly
+
+Input : t *testing.T
+
+Expected : The struct and its methods work properly
+*/
 func TestEventStationClosed(t *testing.T) {
 	println("*** eventStationClosed_test.go ***")
 	start, err := time.Parse("15:04", "00:01")
