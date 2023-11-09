@@ -1,30 +1,50 @@
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package controller;
 
-import Model.Line;
 import view.LineView;
 import view.MainWindow;
 
 /**
- * Controlller to add lineView to the mainPanel.
- * @author arthu
+ * Controller to add {@link LineView} to the {@link MainWindow}.
  *
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file LineController.java
+ * @date N/A
+ * @since 2.0
  */
 public class LineController {
-	
-	//attributes
-	Line line;
-	LineView lineview;
-	
-	//constructor
-	/**Construcor add lineView to the MainPanel.
-	 * @param line line to add
-	 * @param lineview lineView binded to line
-	 */
-	public LineController(Line line, LineView lineview) {
-		this.line = line;
-		this.lineview = lineview;
-		MainWindow.getInstance().getMainPanel().addLineView(lineview);
-	}
-	
-	
+  //attributes
+
+  /**
+   * Constructor add lineView to the MainPanel.
+   *
+   * @param lineViewToAdd lineView bound to line
+   */
+  public LineController(final LineView lineViewToAdd) {
+    MainWindow.getInstance().getMainPanel().addLineView(lineViewToAdd);
+  }
 }

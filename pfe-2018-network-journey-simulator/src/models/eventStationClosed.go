@@ -159,3 +159,7 @@ Return :
 func (esc *EventStationClosed) End() time.Time {
 	return esc.end
 }
+
+func (esc *EventStationClosed) SetidStation(id int) {
+	esc.idStation = id
+}

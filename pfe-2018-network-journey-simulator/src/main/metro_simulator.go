@@ -213,7 +213,6 @@ func main() {
 		os.Exit(1)
 	}
 	basePath := strings.Replace(currentPath, "src\\main", "", -1)
-
 	basePath = strings.Replace(basePath, "\\src", "", -1)
 	basePath = strings.Replace(basePath, "\\configs", "", -1)
 	basePath = strings.Replace(basePath, "\\models", "", -1)

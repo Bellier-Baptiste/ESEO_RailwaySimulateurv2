@@ -196,6 +196,10 @@ func (s *Simulator) GetAllEventsLineClosed() []models.EventLineClosed {
 	return s.eventsLineClosed
 }
 
+func (s *Simulator) GetAllEventsStationClosed() []models.EventStationClosed {
+	return s.eventsStationClosed
+}
+
 /*
 GetAllEventsAttendancePeak is used to get the attendance peak events of the
 simulator.

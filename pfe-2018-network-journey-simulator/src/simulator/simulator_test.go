@@ -8,6 +8,7 @@ Date : 24/01/2019
 Author :
   - Team v1
   - Team v2
+	- Benoît VAVASSEUR
   - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
@@ -278,6 +279,21 @@ func TestSimulator_EventLineClosed(t *testing.T) {
 	assert.Equal(t, timeEnd, eventsLineClosed[0].End().Format(time.RFC3339), "Bad End time")
 	assert.Equal(t, elc_stationStart, eventsLineClosed[0].IdStationStart(), "Bad Start station id")
 	assert.Equal(t, elc_stationEnd, eventsLineClosed[0].IdStationEnd(), "Bad End station id")
+}
+
+func TestSimulator_EventStationClosed(t *testing.T) {
+	println("TestSimulator_EventStationClosed")
+	sim := NewSimulator()
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
+	eventsStationClosed := sim.GetAllEventsStationClosed()
+
+	assert.True(t, len(eventsStationClosed) != 0, "Array of events (station closed) not initialized")
+
+	assert.Equal(t, timeStart, eventsStationClosed[0].Start().Format(time.RFC3339), "Bad Start time")
+	assert.Equal(t, timeEnd, eventsStationClosed[0].End().Format(time.RFC3339), "Bad End time")
+	assert.Equal(t, 2, eventsStationClosed[0].IdStation(), "Bad station id")
 }
 
 /*

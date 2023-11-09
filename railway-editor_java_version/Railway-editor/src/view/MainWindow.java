@@ -1,176 +1,171 @@
+/*
+ * License : MIT License
+ *
+ * Copyright (c) 2023 Team PFE_2023_16
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package view;
 
-import controller.ActionManager;
 import controller.KeyboardTool;
-import data.Data;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JMenuBar;
+import javax.swing.WindowConstants;
+import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.logging.Filter;
+import java.util.Objects;
 
-/**Main windows Singleton which contain all the different panels
- * @author arthu
+/**
+ * Main window's Singleton which contain all the different panels.
  *
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file MainWindow.java
+ * @date N/A
+ * @since 2.0
  */
-@SuppressWarnings("serial")
-public class MainWindow extends JFrame {
+public final class MainWindow extends JFrame {
 
-	// constantes
-	public static final int WINDOW_WIDTH = 1000;
-	public static final int WINDOW_HEIGHT = 600;
-	private final String TITLE = "Railway-editor";
-  private boolean isDarkMode = true;
-	
-	// attributes
-	private static MainWindow instance;
-	private MainPanel mainPanel;
-	private ToolBarPanel toolBarPanel;
-  private ToolBarPanelIdea2 toolBarPanelIdea2;
-	private IntroPanel introPanel;
-	private EventRecap eventRecapPanel;
-	public boolean intro = true;
-	private ActionManager actionManager;
-	private JMenuBar menuBar;
-//  private FilterComboBox filterComboBox;
-//  private JPanel filterComboPanel;
+  // constants
+  /** Width of the window. */
+  public static final int WINDOW_WIDTH = 1000;
+  /** Height of the window. */
+  public static final int WINDOW_HEIGHT = 600;
+  /** Title of the window. */
+  private static final String TITLE = "Railway-editor";
 
-	/**
-	 * Constructor, initialize window and panels
-	 */
-	private MainWindow() {
-		this.mainPanel = new MainPanel(MainPanel.PANEL_WIDTH_DEFAULT,MainPanel.PANEL_HEIGHT_DEFAULT);
-		this.setLayout(new BorderLayout());
-		this.actionManager = new ActionManager();
-		this.menuBar = MenuBar.getInstance(this, this.mainPanel, this.actionManager);
+  // attributes
+  /** Singleton instance of the class. */
+  private static MainWindow instance;
+  /** Main panel of the application. */
+  private MainPanel mainPanel;
+  /** ToolBar panel of the application. */
+  private final ToolBarPanel toolBarPanel;
+  /** Event recap panel of the application. */
+  private EventRecap eventRecapPanel;
 
-		this.setJMenuBar(this.menuBar);
-		this.toolBarPanelIdea2 = new ToolBarPanelIdea2(this.mainPanel, this, this.actionManager);
-    this.toolBarPanelIdea2.setVisible(true);
-		this.getContentPane().add(this.toolBarPanelIdea2, BorderLayout.NORTH);
-
-//    this.filterComboPanel = new JPanel(new FlowLayout());
-//    this.filterComboBox = new FilterComboBox(FilterComboBox.populateArray());
-//    filterComboBox.addActionListener(new ActionListener() {
-//      public void actionPerformed(ActionEvent e) {
-//
-//        Data.getInstance().setCurrentCity(filterComboBox.getSelectedItem().toString());
-//      }
-//
-//    });
-//    this.filterComboPanel.add(this.filterComboBox);
-//    this.filterComboPanel.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-//    this.mainPanel.add(filterComboPanel, BorderLayout.SOUTH);
-
-
-// Ajoute en haut
-//		this.toolBarPanel = new ToolBarPanel();
-//		this.toolBarPanel.setVisible(true);
-//		this.eventRecapPanel = new EventRecap();
-		this.setResizable(true);
+  /**
+   * Constructor, initialize window and panels.
+   */
+  private MainWindow() {
+    this.setResizable(true);
+    this.setLayout(new BorderLayout());
+    this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    this.setTitle(TITLE);
     this.setLocationRelativeTo(null);
-    KeyboardTool  kbt  =new KeyboardTool(this.getMainPanel());
+    KeyboardTool kbt = new KeyboardTool(this.getMainPanel());
     this.addKeyListener(kbt);
 
+    this.mainPanel = MainPanel.getInstance();
     this.getContentPane().add(this.mainPanel,
         BorderLayout.CENTER);
-    //this.getContentPane().add(this.toolBarPanelIdea2,
-      //  BorderLayout.NORTH);
-//		this.getContentPane().add(this.toolBarPanel, BorderLayout.EAST);
-//    this.getContentPane().add(this.eventRecapPanel,BorderLayout.WEST);
-    //this.revalidate();
-		this.setSize(WINDOW_WIDTH,WINDOW_HEIGHT);
-		this.setTitle(TITLE);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setLocationRelativeTo(null);
+
+    JMenuBar appMenuBar = MenuBar.getInstance();
+    this.setJMenuBar(appMenuBar);
+
+    this.toolBarPanel = new ToolBarPanel();
+    this.toolBarPanel.setVisible(true);
+    this.getContentPane().add(this.toolBarPanel, BorderLayout.NORTH);
+
+    this.eventRecapPanel = EventRecap.getInstance();
+    this.getContentPane().add(this.eventRecapPanel, BorderLayout.WEST);
+
+    this.revalidate();
 
     BufferedImage source;
-		try {
-			source = ImageIO.read(getClass().getResource("/resources/railwayEditorIcon3.png"));
-			ImageIcon img = new ImageIcon(source);
-			this.setIconImage(img.getImage());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    try {
+      source = ImageIO.read(Objects.requireNonNull(getClass().getResource(
+          "/resources/railwayEditorIcon3.png")));
+      ImageIcon img = new ImageIcon(source);
+      this.setIconImage(img.getImage());
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
     this.pack();
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     this.mainPanel.requestFocusInWindow();
   }
 
-	//accessors
-	/**get the main panel.
-	 * @return MainPanel mainPanel
-	 */
-	public MainPanel getMainPanel() {
-		return mainPanel;
-	}
+  //accessors
 
-	/**set the MainPanel
-	 * @param mainPanel Map panel
-	 */
-	public void setMainPanel(MainPanel mainPanel) {
-		this.mainPanel = mainPanel;
-	}
-	
-	/**get the intro panel
-	 * @return IntroPanel introPanel
-	 */
-	public IntroPanel getIntroPanel() {
-		return introPanel;
-	}
-	
-	/**get the eventRecapPanel.
-	 * @return EventRecapPanel eventRecapPanel.
-	 */
-	public EventRecap getEventRecapPanel() {
-		return eventRecapPanel;
-	}
-
-	/**set the eventRecapPanel.
-	 * @param eventRecapPanel panel which recap the added events
-	 */
-	public void setEventRecapPanel(EventRecap eventRecapPanel) {
-		this.eventRecapPanel = eventRecapPanel;
-	}
-
-	/**get the toolbar panel.
-	 * @return ToolbarPane toolbarPanel
-	 */
-	public ToolBarPanel getToolBarPanel() {
-		return toolBarPanel;
-	}
-
-	/**set the toolBar panel.
-	 * @param toolBarPanel panel with the actions buttons
-	 */
-	public void setToolBarPanel(ToolBarPanel toolBarPanel) {
-		this.toolBarPanel = toolBarPanel;
-	}
-	
-	
-
-
-
-	/**Create Singleton
-	 * @return MainWindos instance
-	 */
-	public static MainWindow getInstance() {
-		if (instance == null) {
-			instance = new MainWindow();
-		}
-		return instance;
-	}
-
-  public ToolBarPanelIdea2 getToolBarPanelIdea2() {
-    return toolBarPanelIdea2;
+  /**
+   * get the main panel.
+   *
+   * @return MainPanel mainPanel
+   */
+  public MainPanel getMainPanel() {
+    return mainPanel;
   }
 
-	public ActionManager getActionManager() {
-		return this.actionManager;
-	}
+  /**
+   * set the MainPanel.
+   *
+   * @param mainPanelToSet Map panel
+   */
+  public void setMainPanel(final MainPanel mainPanelToSet) {
+    this.mainPanel = mainPanelToSet;
+  }
+
+
+  /**
+   * get the eventRecapPanel.
+   *
+   * @return EventRecapPanel eventRecapPanel.
+   */
+  public EventRecap getEventRecapPanel() {
+    return eventRecapPanel;
+  }
+
+  /**
+   * set the eventRecapPanel.
+   *
+   * @param eventRecapPaneToSet panel which recap the added events
+   */
+  public void setEventRecapPanel(final EventRecap eventRecapPaneToSet) {
+    this.eventRecapPanel = eventRecapPaneToSet;
+  }
+
+  /**
+   * Return Singleton.
+   *
+   * @return MainWindow's instance
+   */
+  public static MainWindow getInstance() {
+    if (instance == null) {
+      instance = new MainWindow();
+    }
+    return instance;
+  }
+
+  /**
+   * Get the toolbar panel.
+   *
+   * @return the toolbar panel
+   */
+  public ToolBarPanel getToolBarPanel() {
+    return toolBarPanel;
+  }
+
 }
