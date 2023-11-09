@@ -8,7 +8,7 @@ Date : 24/01/2019
 Author :
   - Team v1
   - Team v2
-	- Benoît VAVASSEUR
+  - Benoît VAVASSEUR
   - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
@@ -281,6 +281,15 @@ func TestSimulator_EventLineClosed(t *testing.T) {
 	assert.Equal(t, elc_stationEnd, eventsLineClosed[0].IdStationEnd(), "Bad End station id")
 }
 
+/*
+TestSimulator_EventStationClosed() tests the GetAllEventsStationClosed() method of the Simulator struct.
+
+# It tests if the GetAllEventsStationClosed() method works properly
+
+Input : t *testing.T
+
+Expected : The GetAllEventsStationClosed() method works properly
+*/
 func TestSimulator_EventStationClosed(t *testing.T) {
 	println("TestSimulator_EventStationClosed")
 	sim := NewSimulator()

@@ -10,6 +10,7 @@ Date : 24/01/2019
 Author :
   - Team v1
   - Team v2
+  - Benoît VAVASSEUR
   - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
@@ -160,6 +161,13 @@ func (esc *EventStationClosed) End() time.Time {
 	return esc.end
 }
 
+/*
+SetidStation is a method that set the id of the station concerned by the event.
+
+Param :
+  - esc *EventStationClosed : the EventStationClosed
+  - id int : the new id of the station concerned by the event
+*/
 func (esc *EventStationClosed) SetidStation(id int) {
 	esc.idStation = id
 }
