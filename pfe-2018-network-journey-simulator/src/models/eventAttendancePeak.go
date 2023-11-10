@@ -3,11 +3,13 @@ Package models
 
 File : eventAttendancePeak.go
 
-Brief :
+Brief : This file contains the EventAttendancePeak struct and its methods.
 
-Date : N/A
+Date : 10/02/2020
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -37,6 +39,25 @@ import (
 	"time"
 )
 
+/*
+EventAttendancePeak is the structure that manage the event of a peak of
+attendance.
+
+Attributes :
+  - time time.Time : the time of the peak
+  - idStation int : the id of the station concerned by the peak
+  - size int : the size of the peak
+  - finished bool : true if the event is finished, false otherwise
+
+Methods :
+  - Finished() bool : return true if the event is finished, false otherwise
+  - SetFinished(f bool) : set the finished attribute to f
+  - Time() time.Time : return the time of the peak
+  - IdStation() int : return the id of the station concerned by the peak
+  - SetIdStation(id int) : set the id of the station concerned by the peak
+  - Size() int : return the size of the peak
+  - SetSize(s int) : set the size of the peak
+*/
 type EventAttendancePeak struct {
 	time      time.Time
 	idStation int
@@ -44,6 +65,17 @@ type EventAttendancePeak struct {
 	finished  bool
 }
 
+/*
+NewEventAttendancePeak creates a new EventAttendancePeak struct.
+
+Param :
+  - idStation int : the id of the station
+  - size int : the size of the peak
+  - time time.Time : the time of the peak
+
+Return :
+  - EventAttendancePeak : the new EventAttendancePeak struct
+*/
 func NewEventAttendancePeak(idStation, size int,
 	time time.Time) EventAttendancePeak {
 	return EventAttendancePeak{
@@ -54,30 +86,87 @@ func NewEventAttendancePeak(idStation, size int,
 	}
 }
 
+/*
+Finished returns the finished attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+
+Return :
+  - bool : the finished attribute of the EventAttendancePeak struct
+*/
 func (eap *EventAttendancePeak) Finished() bool {
 	return eap.finished
 }
 
+/*
+SetFinished sets the finished attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - f bool : the new value of the finished attribute
+*/
 func (eap *EventAttendancePeak) SetFinished(f bool) {
 	eap.finished = f
 }
 
+/*
+Time returns the time attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+
+Return :
+  - time.Time : the time attribute of the EventAttendancePeak struct
+*/
 func (eap *EventAttendancePeak) Time() time.Time {
 	return eap.time
 }
 
+/*
+IdStation returns the idStation attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+
+Return :
+  - int : the idStation attribute of the EventAttendancePeak struct
+*/
 func (eap *EventAttendancePeak) IdStation() int {
 	return eap.idStation
 }
 
-func (eap *EventAttendancePeak) SetidStation(id int) {
+/*
+SetIdStation sets the idStation attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - id int : the new value of the idStation attribute
+*/
+func (eap *EventAttendancePeak) SetIdStation(id int) {
 	eap.idStation = id
 }
 
+/*
+Size returns the size attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+
+Return :
+  - int : the size attribute of the EventAttendancePeak struct
+*/
 func (eap *EventAttendancePeak) Size() int {
 	return eap.size
 }
 
+/*
+SetSize sets the size attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - s int : the new value of the size attribute
+*/
 func (eap *EventAttendancePeak) SetSize(s int) {
 	eap.size = s
 }

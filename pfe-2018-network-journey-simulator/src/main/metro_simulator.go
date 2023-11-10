@@ -3,11 +3,14 @@ Package main
 
 File : metro_simulator.go
 
-Brief :
+Brief : This is the main file of the metro simulator.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -55,6 +58,12 @@ const (
 	dayTypeHD string = "holidays"
 )
 
+/*
+printHeader is used to print a header with a text in the middle.
+
+Param :
+  - text string : the text to print in the middle of the header
+*/
 func printHeader(text string) {
 	var charFiller = "-"
 	var length = 51
@@ -74,6 +83,13 @@ func printHeader(text string) {
 	}
 }
 
+/*
+createAdvancedConfig is used to create a new advanced config file from the
+config.json file.
+
+Param :
+  - name string : the name of the new config file
+*/
 func createAdvancedConfig(name string) {
 	var mapObject, err = models.CreateMap()
 	if err != nil {
@@ -90,17 +106,18 @@ func createAdvancedConfig(name string) {
 }
 
 /*
-dayTyperAttribution return a dayType depending on the value of the parameter
+dayTyperAttribution is used to return a dayType depending on the value of the
+parameter ans.
 
 Param :
-ans string : input of the user
+  - ans string : input of the user
 
 Return :
-string : the dayType corresponding to ans
-  - week-day if 1
-  - weekend if 2
-  - bank holiday if 3
-  - holiday if 4
+  - string : the dayType corresponding to ans
+    -- week-day if 1
+    -- weekend if 2
+    -- bank holiday if 3
+    -- holiday if 4
 */
 func dayTypeAttribution(ans string) string {
 	if len(ans) > 0 {
@@ -128,14 +145,14 @@ func dayTypeAttribution(ans string) string {
 
 /*
 checkFinishedTrips is used to check how many trips are finished or not
-in the simulation
+in the simulation.
 
 Param :
-sim *simulator.Simulator : the current simulation
+  - sim *simulator.Simulator : the current simulation
 
 Return :
-int : the number of trips not finished (tripsNotFinished)
-int : the number of trips finished (tripsFinished)
+  - int : the number of trips not finished (tripsNotFinished)
+  - int : the number of trips finished (tripsFinished)
 */
 func checkFinishedTrips(sim *simulator.Simulator) (int, int) {
 	var tripsNotFinished = 0
@@ -152,6 +169,20 @@ func checkFinishedTrips(sim *simulator.Simulator) (int, int) {
 	return tripsNotFinished, tripsFinished
 }
 
+/*
+main is the main function of the metro simulator.
+
+It is used to launch the simulation.
+
+Flags :
+  - regenconfig : use it to generate the map_config.xml from the config.json
+    file.
+  - configname : name of the config to create / use. the file must be in
+    ./configs
+  - maxruns : number of singular events (train arriving in station) to execute.
+    -1 to run until the end
+  - verbose : to have details printed during the run
+*/
 func main() {
 	//flags
 	reader := bufio.NewReader(os.Stdin)

@@ -3,11 +3,14 @@ Package simulator
 
 File : simulator.go
 
-Brief :
+Brief : Simulator is the struct that represents the simulator.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -43,6 +46,59 @@ import (
 	"time"
 )
 
+/*
+Simulator is the struct that represents the simulator.
+
+Attributes :
+  - config configs.ConfigurationObject : the config object of the simulator
+  - adConfig *configs.AdvancedConfig : the advanced config object of the
+    simulator
+  - mapObject models.Map : the map of the simulator
+  - population *models.Population : the population of the simulator
+  - trains []*models.MetroTrain : the trains of the simulator
+  - currentTime time.Time : the current time of the simulator
+  - timetable models.Timetable : the timetable of the simulator
+  - timetableReal models.TimetableReal : the real timetable of the simulator
+  - eventsStationClosed []models.EventStationClosed : the events of the
+    simulator
+  - eventsLineDelay []models.EventLineDelay : the events of the simulator
+  - eventsLineClosed []models.EventLineClosed : the events of the simulator
+  - eventsAttendancePeak []models.EventAttendancePeak : the events of the
+    simulator
+  - tripNumberCounter int : the trip number counter of the simulator
+
+Methods :
+  - Config() configs.ConfigurationObject : get the config object of the
+    simulator
+  - GetTrains() []*models.MetroTrain : get the trains of the simulator
+  - Population() *models.Population : get the population of the simulator
+  - GetAllEventsLineClosed() []models.EventLineClosed : get the line closed
+    events of the simulator
+  - GetAllEventsAttendancePeak() []models.EventAttendancePeak : get the
+    attendance peak events of the simulator
+  - CreateEventsStationClose() : create "station close" event of the
+    simulator
+  - CreateEventsLineDelay() : create "line delay" event of the simulator
+  - CreateEventsLineClose() : create "line close" event of the simulator
+  - CreateEventsAttendancePeak() : create "attendance peak" event of the
+    simulator
+  - AddTrainLinePeer(line *models.MetroLine, shift, count, aux1, aux2 int)
+    (*models.MetroLine, int, int, int, int) : add train to line (peer train
+    number) and return it
+  - AddTrainLineOdd(line *models.MetroLine, shift, count, aux1, aux2, j int)
+    (*models.MetroLine, int, int, int, int) : add train to line (peer train
+    number) and return it
+  - Init(dayType string) (bool, error) : initialise the simulator
+  - Run(n int) : run n loops (one loop == one event)
+  - RunOnce() : run one loop (one loop == one event)
+  - NextEventsTrain() ([]*models.MetroTrain, time.Time) : get the next event
+    of the simulator
+  - WriteInTimetableReal(train *models.MetroTrain, aTime time.Time) : write
+    in the real timetable of the simulator
+  - GetTrainPerLine() map[int][]*models.MetroTrain : get the trains per line
+    of the simulator
+  - ToCSV() : save the timetable and timetableReal as CSV
+*/
 type Simulator struct {
 	config               configs.ConfigurationObject
 	adConfig             *configs.AdvancedConfig
@@ -63,14 +119,38 @@ const (
 	strErr = " error : "
 )
 
+/*
+Config is used to get the config object of the simulator.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - configs.ConfigurationObject : the config object of the simulator
+*/
 func (s *Simulator) Config() configs.ConfigurationObject {
 	return s.config
 }
 
+/*
+GetTrains is used to get the trains of the simulator.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []*models.MetroTrain : the trains of the simulator
+*/
 func (s *Simulator) GetTrains() []*models.MetroTrain {
 	return s.trains
 }
 
+/*
+NewSimulator is used to create a new simulator.
+
+Return :
+  - *Simulator : the new simulator
+*/
 func NewSimulator() *Simulator {
 	simulator := &Simulator{
 		config:               configs.GetInstance(),
@@ -90,14 +170,56 @@ func NewSimulator() *Simulator {
 	return simulator
 }
 
+/*
+Population is used to get the population of the simulator.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - *models.Population : the population of the simulator
+*/
 func (s *Simulator) Population() *models.Population {
 	return s.population
 }
 
+/*
+GetAllEventsLineClosed is used to get the line closed events of the simulator.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []models.EventLineClosed : the events of the simulator
+*/
 func (s *Simulator) GetAllEventsLineClosed() []models.EventLineClosed {
 	return s.eventsLineClosed
 }
 
+/*
+GetAllEventsStationClosed is used to get the station closed events of the
+simulator.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []models.EventStationClosed : the events of the simulator
+*/
+func (s *Simulator) GetAllEventsStationClosed() []models.EventStationClosed {
+	return s.eventsStationClosed
+}
+
+/*
+GetAllEventsAttendancePeak is used to get the attendance peak events of the
+simulator.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []models.EventAttendancePeak : the events of the simulator
+*/
 func (s *Simulator) GetAllEventsAttendancePeak() []models.EventAttendancePeak {
 	return s.eventsAttendancePeak
 }
@@ -107,7 +229,11 @@ func (s *Simulator) GetAllEventsStationClosed() []models.EventStationClosed {
 }
 
 /*
-CreateEventsStationClose is used to create "station close" event
+CreateEventsStationClose is used to create "station close" event of the
+simulator.
+
+Param :
+  - s *Simulator : the simulator
 */
 func (s *Simulator) CreateEventsStationClose() {
 	s.eventsStationClosed = make([]models.EventStationClosed,
@@ -132,7 +258,10 @@ func (s *Simulator) CreateEventsStationClose() {
 }
 
 /*
-CreateEventsLineDelay is used to create "line delay" event
+CreateEventsLineDelay is used to create "line delay" event of the simulator.
+
+Param :
+  - s *Simulator : the simulator
 */
 func (s *Simulator) CreateEventsLineDelay() {
 	s.eventsLineDelay = make([]models.EventLineDelay,
@@ -158,7 +287,10 @@ func (s *Simulator) CreateEventsLineDelay() {
 }
 
 /*
-CreateEventsLineClose is used to create "line close" event
+CreateEventsLineClose is used to create "line close" event of the simulator.
+
+Param :
+  - s *Simulator : the simulator
 */
 func (s *Simulator) CreateEventsLineClose() {
 	s.eventsLineClosed = make([]models.EventLineClosed,
@@ -183,7 +315,11 @@ func (s *Simulator) CreateEventsLineClose() {
 }
 
 /*
-CreateEventsAttendancePeak is used to create "attendance peak" event
+CreateEventsAttendancePeak is used to create "attendance peak" event of the
+simulator.
+
+Param :
+  - s *Simulator : the simulator
 */
 func (s *Simulator) CreateEventsAttendancePeak() {
 	s.eventsAttendancePeak = make([]models.EventAttendancePeak,
@@ -201,21 +337,22 @@ func (s *Simulator) CreateEventsAttendancePeak() {
 }
 
 /*
-AddTrainLinePeer is used to add train to line (peer train number)
+AddTrainLinePeer is used to add train to line (peer train number) and return it.
 
 Param :
-line *models.MetroLine
-shift int
-count int
-aux1 int
-aux2 int
+  - s *Simulator : the simulator
+  - line *models.MetroLine : the line
+  - shift int : the shift
+  - count int : the count
+  - aux1 int : the aux1
+  - aux2 int : the aux2
 
 Return :
-*models.MetroLine : line
-int : shift
-int : count
-int : aux1
-int : aux2
+  - *models.MetroLine : the line
+  - int : the shift
+  - int : the count
+  - int : the aux1
+  - int : the aux2
 */
 func (s *Simulator) AddTrainLinePeer(line *models.MetroLine,
 	shift, count, aux1, aux2 int) (*models.MetroLine, int, int, int, int) {
@@ -262,22 +399,23 @@ func (s *Simulator) AddTrainLinePeer(line *models.MetroLine,
 }
 
 /*
-AddTrainLineOdd is used to add train to line (peer train number)
+AddTrainLineOdd is used to add train to line (peer train number) and return it.
 
 Param :
-line *models.MetroLine
-shift int
-count int
-aux1 int
-aux2 int
-j int
+  - s *Simulator : the simulator
+  - line *models.MetroLine : the line
+  - shift int : the shift
+  - count int : the count
+  - aux1 int : the aux1
+  - aux2 int : the aux2
+  - j int : the j
 
 Return :
-*models.MetroLine : line
-int : shift
-int : count
-int : aux1
-int : aux2
+  - *models.MetroLine : the line
+  - int : the shift
+  - int : the count
+  - int : the aux1
+  - int : the aux2
 */
 func (s *Simulator) AddTrainLineOdd(line *models.MetroLine,
 	shift, count, aux1, aux2, j int) (*models.MetroLine, int, int, int, int) {
@@ -332,6 +470,17 @@ func (s *Simulator) AddTrainLineOdd(line *models.MetroLine,
 	return line, shift, count, aux1, aux2
 }
 
+/*
+Init is used to initialise the simulator.
+
+Param :
+  - s *Simulator : the simulator
+  - dayType string : the day type
+
+Return :
+  - bool : true if the initialisation is a success, false otherwise
+  - error : an error if the initialisation is a failure
+*/
 func (s *Simulator) Init(dayType string) (bool, error) {
 
 	// load config
@@ -343,7 +492,6 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	s.config.ChangeParam("day type", dayType)
 	fmt.Println("dayType changed in : ", s.config["day type"], "-> ok !")
 
-	println("Here")
 	//generate events
 	s.CreateEventsStationClose()
 
@@ -410,8 +558,13 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 // -------- FUNCTIONS & METHODS
 
 /*
-Run	is used to run n loops (one loop == one event).
-put n < 0 in order to run until the end of the period defined in config.json
+Run is used to run n loops (one loop == one event). Put n < 0 in order to run
+until the end of the period defined in config.json. If n == 0, the function
+will do nothing.
+
+Param :
+  - s *Simulator : the simulator
+  - n int : the number of loops
 */
 func (s *Simulator) Run(n int) {
 	var conf = configs.GetInstance()
@@ -439,14 +592,12 @@ func (s *Simulator) Run(n int) {
 	s.ToCSV()
 }
 
-// run to the next event and execute it. if multiple events occur at the same
-// time, they will be done.
-
 /*
-RunOnce
+RunOnce is used to run one loop (one loop == one event). It will run until the
+next event. If multiple events occur at the same time, they will be done.
 
-Run to the next event and execute it. if multiple events occur at the same
-time, they will be done.
+Param :
+  - s *Simulator : the simulator
 */
 func (s *Simulator) RunOnce() {
 
@@ -573,12 +724,14 @@ func (s *Simulator) RunOnce() {
 }
 
 /*
-executeESCStartEventROSetPassengerStart is used to set the path
+executeESCStartEventROSetPassengerStart is used to set the path of a passenger
+that starts at a closed station (if possible) or remove the trip.
 
 Param :
-trip *models.Trip
-nearestStation *models.MetroStation
-i string
+  - s *Simulator : the simulator
+  - trip *models.Trip : the trip
+  - nearestStation *models.MetroStation : the nearest station
+  - i string : the id of the passenger
 */
 func (s *Simulator) executeESCStartEventROSetPassengerStart(trip *models.Trip,
 	nearestStation *models.MetroStation, i string) {
@@ -609,15 +762,17 @@ func (s *Simulator) executeESCStartEventROSetPassengerStart(trip *models.Trip,
 }
 
 /*
-executeESCStartEventROSetPath is used to set the path
+executeESCStartEventROSetPath is used to set the path of a passenger that starts
+at a closed station (if possible) or remove the trip.
 
 Param :
-trip *models.Trip
-pass *models.Passenger
-i string
+  - s *Simulator : the simulator
+  - trip *models.Trip : the trip
+  - pass *models.Passenger : the passenger
+  - i string : the id of the passenger
 
 Return :
-*models.Trip
+  - *models.Trip : the trip
 */
 func (s *Simulator) executeESCStartEventROSetPath(trip *models.Trip,
 	pass *models.Passenger, i string) *models.Trip {
@@ -657,13 +812,14 @@ func (s *Simulator) executeESCStartEventROSetPath(trip *models.Trip,
 }
 
 /*
-executeESCStartEventRerouteOutside is used to reroute passengers
-in population outside
+executeESCStartEventRerouteOutside is used to reroute passengers in population
+outside.
 
 Param :
-event *models.EventStationClosed
-stationEvent models.MetroStation
-nearestStation *models.MetroStation
+  - s *Simulator : the simulator
+  - event *models.EventStationClosed : the event
+  - stationEvent models.MetroStation : the station
+  - nearestStation *models.MetroStation : the nearest station
 */
 func (s *Simulator) executeESCStartEventRerouteOutside(
 	event *models.EventStationClosed, stationEvent models.MetroStation,
@@ -690,14 +846,15 @@ func (s *Simulator) executeESCStartEventRerouteOutside(
 }
 
 /*
-executeESCStartEventRerouteCloseStation is used to reroute passengers
-in closed station
+executeESCStartEventRerouteCloseStation is used to reroute passengers in closed
+station.
 
 Param :
-event *models.EventStationClosed
-stationEvent models.MetroStation
-nearestStation *models.MetroStation
-currentTime time.Time
+  - s *Simulator : the simulator
+  - event *models.EventStationClosed : the event
+  - stationEvent models.MetroStation : the station
+  - nearestStation *models.MetroStation : the nearest station
+  - currentTime time.Time : the current time
 */
 func (s *Simulator) executeESCStartEventRerouteCloseStation(
 	event *models.EventStationClosed, stationEvent models.MetroStation,
@@ -745,13 +902,14 @@ func (s *Simulator) executeESCStartEventRerouteCloseStation(
 }
 
 /*
-executeESCStartEventRerouteWaitingLoop is used to reroute passengers
-in stations waiting for train (loop)
+executeESCStartEventRerouteWaitingLoop is used to reroute passengers in stations
+waiting for train (loop).
 
 Param :
-stationId int
-stationEvent *models.MetroStation
-station map[string]*models.Passenger
+  - s *Simulator : the simulator
+  - stationId int : the station id
+  - stationEvent models.MetroStation : the station
+  - station map[string]*models.Passenger : the station
 */
 func (s *Simulator) executeESCStartEventRerouteWaitingLoop(stationId int,
 	stationEvent models.MetroStation, station map[string]*models.Passenger) {
@@ -783,12 +941,13 @@ func (s *Simulator) executeESCStartEventRerouteWaitingLoop(stationId int,
 }
 
 /*
-executeESCStartEventRerouteWaiting is used to reroute passengers
-in stations waiting for train
+executeESCStartEventRerouteWaiting is used to reroute passengers in stations
+waiting for train.
 
 Param :
-event *models.EventStationClosed
-stationEvent models.MetroStation
+  - s *Simulator : the simulator
+  - event *models.EventStationClosed : the event
+  - stationEvent models.MetroStation : the station
 */
 func (s *Simulator) executeESCStartEventRerouteWaiting(
 	event *models.EventStationClosed, stationEvent models.MetroStation) {
@@ -802,17 +961,18 @@ func (s *Simulator) executeESCStartEventRerouteWaiting(
 }
 
 /*
-executeESCStartEventRIEndStationClosed is used to reroute passengers
-in train (end station closed)
+executeESCStartEventRIEndStationClosed is used to reroute passengers in train
+(end station closed).
 
 Param :
-trip *models.Trip
-nearestStation *models.MetroStation
-nextStationTrain *models.MetroStation
-nextStationOpenedTrain *models.MetroStation
+  - s *Simulator : the simulator
+  - trip *models.Trip : the trip
+  - nearestStation *models.MetroStation : the nearest station
+  - nextStationTrain *models.MetroStation : the next station
+  - nextStationOpenedTrain *models.MetroStation : the next opened station
 
 Return :
-*models.Trip : trip
+  - *models.Trip : the trip
 */
 func (s *Simulator) executeESCStartEventRIEndStationClosed(trip *models.Trip,
 	nearestStation, nextStationTrain,
@@ -849,17 +1009,18 @@ func (s *Simulator) executeESCStartEventRIEndStationClosed(trip *models.Trip,
 }
 
 /*
-executeESCStartEventRIEventStation is used to reroute passengers
-in train (event station on path)
+executeESCStartEventRIEventStation is used to reroute passengers in train (event
+station on path).
 
 Param :
-trip *models.Trip
-stationEvent models.MetroStation
-nextStationTrain *models.MetroStation
-nextStationOpenedTrain *models.MetroStation
+  - s *Simulator : the simulator
+  - trip *models.Trip : the trip
+  - stationEvent models.MetroStation : the station
+  - nextStationTrain *models.MetroStation : the next station
+  - nextStationOpenedTrain *models.MetroStation : the next opened station
 
 Return :
-*models.Trip : trip
+  - *models.Trip : the trip
 */
 func (s *Simulator) executeESCStartEventRIEventStation(trip *models.Trip,
 	stationEvent models.MetroStation, nextStationTrain,
@@ -886,12 +1047,12 @@ func (s *Simulator) executeESCStartEventRIEventStation(trip *models.Trip,
 }
 
 /*
-executeESCStartEventRerouteInside is used to reroute passengers
-in train
+executeESCStartEventRerouteInside is used to reroute passengers in train.
 
 Param :
-stationEvent models.MetroStation
-nearestStation *models.MetroStation
+  - s *Simulator : the simulator
+  - stationEvent models.MetroStation : the station
+  - nearestStation *models.MetroStation : the nearest station
 */
 func (s *Simulator) executeESCStartEventRerouteInside(
 	stationEvent models.MetroStation, nearestStation *models.MetroStation) {
@@ -919,13 +1080,14 @@ func (s *Simulator) executeESCStartEventRerouteInside(
 }
 
 /*
-executeESCStartEvent is used to start the event "line close"
+executeESCStartEvent is used to start the event "line close".
 
 Param :
-lineEvent []*models.MetroStation
-event *models.EventLineClosed
-oldTime time.Time
-currentTime time.Time
+  - s *Simulator : the simulator
+  - stationEvent models.MetroStation : the station
+  - event *models.EventStationClosed : the event
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
 */
 func (s *Simulator) executeESCStartEvent(stationEvent models.MetroStation,
 	event *models.EventStationClosed, oldTime, currentTime time.Time) {
@@ -962,12 +1124,13 @@ func (s *Simulator) executeESCStartEvent(stationEvent models.MetroStation,
 }
 
 /*
-executeESCEndEvent is used to start the event "line close"
+executeESCEndEvent is used to start the event "line close".
 
 Param :
-event *models.EventLineClosed
-oldTime time.Time
-currentTime time.Time
+  - s *Simulator : the simulator
+  - event *models.EventStationClosed : the event
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
 */
 func (s *Simulator) executeESCEndEvent(event *models.EventStationClosed,
 	oldTime, currentTime time.Time) {
@@ -982,12 +1145,13 @@ func (s *Simulator) executeESCEndEvent(event *models.EventStationClosed,
 }
 
 /*
-executeESCReroutePassenger is used to reroute passenger
+executeESCReroutePassenger is used to reroute passenger.
 
 Param :
-event *models.EventLineClosed
-oldTime time.Time
-currentTime time.Time
+  - s *Simulator : the simulator
+  - events []*models.EventStationClosed : the events
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
 */
 func (s *Simulator) executeESCReroutePassenger(
 	events []*models.EventStationClosed,
@@ -1005,6 +1169,15 @@ func (s *Simulator) executeESCReroutePassenger(
 	return events
 }
 
+/*
+executeEventsStationClosed is used to start the event "line close".
+
+Param :
+  - s *Simulator : the simulator
+  - events []*models.EventStationClosed : the events
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
+*/
 func (s *Simulator) executeEventsStationClosed(
 	events []*models.EventStationClosed, oldTime, currentTime time.Time) {
 
@@ -1031,15 +1204,16 @@ func (s *Simulator) executeEventsStationClosed(
 }
 
 /*
-timeArrivalUpdate is used to update time arrival next station for trains
-on this part of line
+timeArrivalUpdate is used to update time arrival next station for trains on this
+part of line.
 
 Param :
-event *models.EventLineDelay
-lineDelay *models.MetroLine
+  - s *Simulator : the simulator
+  - event *models.EventLineDelay
+  - lineDelay *models.MetroLine
 
 Return :
-*models.MetroLine : lineDelay
+  - *models.MetroLine : lineDelay
 */
 func (s *Simulator) timeArrivalUpdate(event *models.EventLineDelay,
 	lineDelay *models.MetroLine) *models.MetroLine {
@@ -1058,16 +1232,14 @@ func (s *Simulator) timeArrivalUpdate(event *models.EventLineDelay,
 
 /*
 eventsLineDelayUpdateBeforeStation is used to update time arrival next station
-for trains on this part of line
+for trains on this part of line.
 
 Param :
-event *models.EventLineDelay
-lineDelay *models.MetroLine
-direction string
-currentTime time.Time
-
-Return :
-*models.MetroLine : lineDelay
+  - s *Simulator : the simulator
+  - event *models.EventLineDelay : the event
+  - lineDelay *models.MetroLine : the line
+  - direction string : the direction
+  - currentTime time.Time : the current time
 */
 func (s *Simulator) eventsLineDelayUpdateBeforeStation(
 	event *models.EventLineDelay, lineDelay *models.MetroLine,
@@ -1099,16 +1271,14 @@ func (s *Simulator) eventsLineDelayUpdateBeforeStation(
 
 /*
 eventsLineDelayUpdateAfterStation is used to update time arrival next station
-for trains on this part of line
+for trains on this part of line.
 
 Param :
-event *models.EventLineDelay
-lineDelay *models.MetroLine
-direction string
-currentTime time.Time
-
-Return :
-*models.MetroLine : lineDelay
+  - s *Simulator : the simulator
+  - event *models.EventLineDelay : the event
+  - lineDelay *models.MetroLine : the line
+  - direction string : the direction
+  - currentTime time.Time : the current time
 */
 func (s *Simulator) eventsLineDelayUpdateAfterStation(
 	event *models.EventLineDelay, lineDelay *models.MetroLine,
@@ -1140,14 +1310,15 @@ func (s *Simulator) eventsLineDelayUpdateAfterStation(
 }
 
 /*
-checkDirection is used to affect the direction
+checkDirection is used to affect the direction.
 
 Param :
-event *models.EventLineDelay
-direction string
+  - s *Simulator : the simulator
+  - event *models.EventLineDelay : the event
+  - direction string : the direction
 
 Return :
-string : direction
+  - string : direction
 */
 func (s *Simulator) checkDirection(event *models.EventLineDelay,
 	direction string) string {
@@ -1159,6 +1330,18 @@ func (s *Simulator) checkDirection(event *models.EventLineDelay,
 	return direction
 }
 
+/*
+executeEventsLineDelay is used to start the event "line delay".
+
+Param :
+  - s *Simulator : the simulator
+  - events []*models.EventLineDelay : the events
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
+
+Return :
+  - []*models.EventLineDelay : the events
+*/
 func (s *Simulator) executeEventsLineDelay(events []*models.EventLineDelay,
 	oldTime, currentTime time.Time) []*models.EventLineDelay {
 	fmt.Println("exeEventsLineDelay")
@@ -1204,12 +1387,13 @@ func (s *Simulator) executeEventsLineDelay(events []*models.EventLineDelay,
 }
 
 /*
-executeELCStartEventROSetPassengerStart is used to set the path
+executeELCStartEventROSetPassengerStart is used to set the path of a passenger.
 
 Param :
-trip *models.Trip
-nearestStation *models.MetroStation
-i string
+  - s *Simulator : the simulator
+  - trip *models.Trip : the trip
+  - nearestStation *models.MetroStation : the nearest station
+  - i string : the id of the passenger
 */
 func (s *Simulator) executeELCStartEventROSetPassengerStart(trip *models.Trip,
 	nearestStation *models.MetroStation, i string) {
@@ -1239,15 +1423,16 @@ func (s *Simulator) executeELCStartEventROSetPassengerStart(trip *models.Trip,
 }
 
 /*
-executeELCStartEventROSetPath is used to set the path
+executeELCStartEventROSetPath is used to set the path of a passenger.
 
 Param :
-trip *models.Trip
-pass *models.Passenger
-i string
+  - s *Simulator : the simulator
+  - trip *models.Trip : the trip
+  - pass *models.Passenger : the passenger
+  - i string : the id of the passenger
 
 Return :
-*models.Trip
+  - *models.Trip : the trip
 */
 func (s *Simulator) executeELCStartEventROSetPath(trip *models.Trip,
 	pass *models.Passenger, i string) *models.Trip {
@@ -1279,13 +1464,14 @@ func (s *Simulator) executeELCStartEventROSetPath(trip *models.Trip,
 }
 
 /*
-executeELCStartEventRerouteOutside is used to reroute passengers
-in population outside
+executeELCStartEventRerouteOutside is used to reroute passengers in population
+outside.
 
 Param :
-event *models.EventLineClosed
-stationEvent *models.MetroStation
-nearestStation *models.MetroStation
+  - s *Simulator : the simulator
+  - event *models.EventLineClosed : the event
+  - stationEvent *models.MetroStation : the station
+  - nearestStation *models.MetroStation : the nearest station
 */
 func (s *Simulator) executeELCStartEventRerouteOutside(
 	event *models.EventLineClosed,
@@ -1311,13 +1497,14 @@ func (s *Simulator) executeELCStartEventRerouteOutside(
 }
 
 /*
-executeELCStartEventRerouteCloseLine is used to reroute passengers
-in closed line
+executeELCStartEventRerouteCloseLine is used to reroute passengers in closed
+line.
 
 Param :
-currentTime time.Time
-stationEvent *models.MetroStation
-nearestStation *models.MetroStation
+  - s *Simulator : the simulator
+  - currentTime time.Time : the current time
+  - stationEvent *models.MetroStation : the station
+  - nearestStation *models.MetroStation : the nearest station
 */
 func (s *Simulator) executeELCStartEventRerouteCloseLine(currentTime time.Time,
 	stationEvent, nearestStation *models.MetroStation) {
@@ -1352,13 +1539,14 @@ func (s *Simulator) executeELCStartEventRerouteCloseLine(currentTime time.Time,
 }
 
 /*
-executeELCStartEventRerouteWaitingLoop is used to reroute passengers
-in stations waiting for train (loop)
+executeELCStartEventRerouteWaitingLoop is used to reroute passengers in stations
+waiting for train (loop).
 
 Param :
-id int
-stationEvent *models.MetroStation
-station map[string]*models.Passenger
+  - s *Simulator : the simulator
+  - id int : the id of the station
+  - stationEvent *models.MetroStation : the station
+  - station map[string]*models.Passenger : the station
 */
 func (s *Simulator) executeELCStartEventRerouteWaitingLoop(id int,
 	stationEvent *models.MetroStation, station map[string]*models.Passenger) {
@@ -1383,11 +1571,12 @@ func (s *Simulator) executeELCStartEventRerouteWaitingLoop(id int,
 }
 
 /*
-executeELCStartEventRerouteWaiting is used to reroute passengers
-in stations waiting for train
+executeELCStartEventRerouteWaiting is used to reroute passengers in stations
+waiting for train.
 
 Param :
-stationEvent *models.MetroStation
+  - s *Simulator : the simulator
+  - stationEvent *models.MetroStation : the station
 */
 func (s *Simulator) executeELCStartEventRerouteWaiting(
 	stationEvent *models.MetroStation) {
@@ -1400,17 +1589,18 @@ func (s *Simulator) executeELCStartEventRerouteWaiting(
 }
 
 /*
-executeELCStartEventRIEndStationClosed is used to reroute passengers
-in train (end station closed)
+executeELCStartEventRIEndStationClosed is used to reroute passengers in train
+(end station closed).
 
 Param :
-trip *models.Trip
-nearestStation *models.MetroStation
-nextStationTrain *models.MetroStation
-nextStationOpenedTrain *models.MetroStation
+  - s *Simulator : the simulator
+  - trip *models.Trip : the trip
+  - nearestStation *models.MetroStation : the nearest station
+  - nextStationTrain *models.MetroStation : the next station
+  - nextStationOpenedTrain *models.MetroStation : the next opened station
 
 Return :
-*models.Trip : trip
+  - *models.Trip : trip
 */
 func (s *Simulator) executeELCStartEventRIEndStationClosed(trip *models.Trip,
 	nearestStation, nextStationTrain,
@@ -1443,17 +1633,18 @@ func (s *Simulator) executeELCStartEventRIEndStationClosed(trip *models.Trip,
 }
 
 /*
-executeELCStartEventRIEventStation is used to reroute passengers
-in train (event station on path)
+executeELCStartEventRIEventStation is used to reroute passengers in train (event
+station on path).
 
 Param :
-trip *models.Trip
-stationEvent *models.MetroStation
-nextStationTrain *models.MetroStation
-nextStationOpenedTrain *models.MetroStation
+  - s *Simulator : the simulator
+  - trip *models.Trip : the trip
+  - stationEvent *models.MetroStation : the station
+  - nextStationTrain *models.MetroStation : the next station
+  - nextStationOpenedTrain *models.MetroStation : the next opened station
 
 Return :
-*models.Trip : trip
+  - *models.Trip : trip
 */
 func (s *Simulator) executeELCStartEventRIEventStation(trip *models.Trip,
 	stationEvent, nextStationTrain,
@@ -1479,12 +1670,12 @@ func (s *Simulator) executeELCStartEventRIEventStation(trip *models.Trip,
 }
 
 /*
-executeELCStartEventRerouteInside is used to reroute passengers
-in train
+executeELCStartEventRerouteInside is used to reroute passengers in train.
 
 Param :
-stationEvent *models.MetroStation
-nearestStation *models.MetroStation
+  - s *Simulator : the simulator
+  - stationEvent *models.MetroStation : the station
+  - nearestStation *models.MetroStation : the nearest station
 */
 func (s *Simulator) executeELCStartEventRerouteInside(
 	stationEvent, nearestStation *models.MetroStation) {
@@ -1508,13 +1699,17 @@ func (s *Simulator) executeELCStartEventRerouteInside(
 }
 
 /*
-executeELCStartEvent is used to start the event "line close"
+executeELCStartEvent is used to start the event "line close".
 
 Param :
-lineEvent []*models.MetroStation
-event *models.EventLineClosed
-oldTime time.Time
-currentTime time.Time
+  - s *Simulator : the simulator
+  - lineEvent []*models.MetroStation : the line
+  - event *models.EventLineClosed : the event
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
+
+Return :
+  - []*models.MetroStation : the line
 */
 func (s *Simulator) executeELCStartEvent(lineEvent []*models.MetroStation,
 	event *models.EventLineClosed,
@@ -1557,13 +1752,14 @@ func (s *Simulator) executeELCStartEvent(lineEvent []*models.MetroStation,
 }
 
 /*
-executeELCEndEvent is used to start the event "line close"
+executeELCEndEvent is used to start the event "line close".
 
 Param :
-lineEvent []*models.MetroStation
-event *models.EventLineClosed
-oldTime time.Time
-currentTime time.Time
+  - s *Simulator : the simulator
+  - lineEvent []*models.MetroStation : the line
+  - event *models.EventLineClosed : the event
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
 */
 func (s *Simulator) executeELCEndEvent(lineEvent []*models.MetroStation,
 	event *models.EventLineClosed, oldTime, currentTime time.Time) {
@@ -1580,12 +1776,16 @@ func (s *Simulator) executeELCEndEvent(lineEvent []*models.MetroStation,
 }
 
 /*
-executeELCReroutePassenger is used to reroute passenger
+executeELCReroutePassenger is used to reroute passenger.
 
 Param :
-event *models.EventLineClosed
-oldTime time.Time
-currentTime time.Time
+  - s *Simulator : the simulator
+  - events []*models.EventLineClosed : the events
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
+
+Return :
+  - []*models.EventLineClosed : the events
 */
 func (s *Simulator) executeELCReroutePassenger(events []*models.EventLineClosed,
 	oldTime, currentTime time.Time) []*models.EventLineClosed {
@@ -1610,12 +1810,14 @@ func (s *Simulator) executeELCReroutePassenger(events []*models.EventLineClosed,
 }
 
 /*
-executeELCAffectES is used to affect "close" or "open" to station
+executeELCAffectES is used to affect "close" or "open" to station status.
 
 Param :
-event *models.EventLineClosed
-oldTime time.Time
-currentTime time.Time
+  - s *Simulator : the simulator
+  - eventStations []*models.MetroStation : the stations
+  - event *models.EventLineClosed : the event
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
 */
 func (s *Simulator) executeELCAffectES(eventStations []*models.MetroStation,
 	event *models.EventLineClosed, oldTime, currentTime time.Time) {
@@ -1638,6 +1840,18 @@ func (s *Simulator) executeELCAffectES(eventStations []*models.MetroStation,
 	}
 }
 
+/*
+executeEventsLineClosed is used to start the event "line close".
+
+Param :
+  - s *Simulator : the simulator
+  - events []*models.EventLineClosed : the events
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
+
+Return :
+  - []*models.EventLineClosed : the events
+*/
 func (s *Simulator) executeEventsLineClosed(events []*models.EventLineClosed,
 	oldTime, currentTime time.Time) []*models.EventLineClosed {
 	//apply the change to the map
@@ -1662,6 +1876,15 @@ func (s *Simulator) executeEventsLineClosed(events []*models.EventLineClosed,
 	return events
 }
 
+/*
+executeEventsAttendancePeak is used to start the event "attendance peak".
+
+Param :
+  - s *Simulator : the simulator
+  - events []*models.EventAttendancePeak : the events
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
+*/
 func (s *Simulator) executeEventsAttendancePeak(
 	events []*models.EventAttendancePeak, oldTime, currentTime time.Time) {
 	var totalPopulation = len(s.Population().Outside()) +
@@ -1686,6 +1909,17 @@ func (s *Simulator) executeEventsAttendancePeak(
 	}
 }
 
+/*
+getEventsStationClosed is used to get the events "station close".
+
+Param :
+  - s *Simulator : the simulator
+  - start time.Time : the start time
+  - end time.Time : the end time
+
+Return :
+  - []*models.EventStationClosed : the events
+*/
 func (s *Simulator) getEventsStationClosed(start,
 	end time.Time) []*models.EventStationClosed {
 	var output = make([]*models.EventStationClosed, 0)
@@ -1702,6 +1936,17 @@ func (s *Simulator) getEventsStationClosed(start,
 	return output
 }
 
+/*
+getEventsLineDelay is used to get the events "line delay".
+
+Param :
+  - s *Simulator : the simulator
+  - start time.Time : the start time
+  - end time.Time : the end time
+
+Return :
+  - []*models.EventLineDelay : the events
+*/
 func (s *Simulator) getEventsLineDelay(start,
 	end time.Time) []*models.EventLineDelay {
 	var output []*models.EventLineDelay
@@ -1718,6 +1963,17 @@ func (s *Simulator) getEventsLineDelay(start,
 	return output
 }
 
+/*
+getEventsLineClosed is used to get the events "line close".
+
+Param :
+  - s *Simulator : the simulator
+  - start time.Time : the start time
+  - end time.Time : the end time
+
+Return :
+  - []*models.EventLineClosed : the events
+*/
 func (s *Simulator) getEventsLineClosed(start,
 	end time.Time) []*models.EventLineClosed {
 	var output []*models.EventLineClosed
@@ -1734,6 +1990,17 @@ func (s *Simulator) getEventsLineClosed(start,
 	return output
 }
 
+/*
+getEventsAttendancePeak is used to get the events "attendance peak".
+
+Param :
+  - s *Simulator : the simulator
+  - start time.Time : the start time
+  - end time.Time : the end time
+
+Return :
+  - []*models.EventAttendancePeak : the events
+*/
 func (s *Simulator) getEventsAttendancePeak(start,
 	end time.Time) []*models.EventAttendancePeak {
 	var output []*models.EventAttendancePeak
@@ -1749,6 +2016,13 @@ func (s *Simulator) getEventsAttendancePeak(start,
 
 /*
 NextEventsTrain call the next events.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []*models.MetroTrain : the trains
+  - time.Time : the time
 */
 func (s *Simulator) NextEventsTrain() ([]*models.MetroTrain, time.Time) {
 	var output []*models.MetroTrain
@@ -1779,6 +2053,14 @@ func (s *Simulator) NextEventsTrain() ([]*models.MetroTrain, time.Time) {
 	return output, maxAuthorizedTime
 }
 
+/*
+WriteInTimetableReal is used to write in the timetable real.
+
+Param :
+  - s *Simulator : the simulator
+  - train *models.MetroTrain : the train
+  - timeArrival time.Time : the time arrival
+*/
 func (s *Simulator) WriteInTimetableReal(train *models.MetroTrain,
 	timeArrival time.Time) {
 
@@ -1795,18 +2077,25 @@ func (s *Simulator) WriteInTimetableReal(train *models.MetroTrain,
 	nextArrival := departure.Add(time.Duration(timeBetweenStation+delay) *
 		time.Second)
 	nextDeparture := nextArrival.Add(time.Duration(timeInStation) * time.Second)
-	isRevenue := true
+	//isRevenue := true
 	//TODO is there people on the train ?
 
 	metroStationTab := [2]models.MetroStation{*station, *nextStation}
 	timeTab := [4]time.Time{timeArrival, nextArrival, departure, nextDeparture}
 	event := models.NewEventTimetableTrain(line, metroStationTab, train,
-		direction, timeTab, isRevenue, train.GetTripNumber())
+		direction, timeTab, true /*isRevenue*/, train.GetTripNumber())
 	s.timetableReal.AddEventsTrain(event)
 }
 
 /*
-GetTrainsPerLine is used get all trains of a given line
+GetTrainsPerLine is used get all trains of a given line in the simulator.
+
+Param :
+  - s *Simulator : the simulator
+  - line models.MetroLine : the line
+
+Return :
+  - []*models.MetroTrain : the trains
 */
 func (s *Simulator) GetTrainsPerLine(
 	line models.MetroLine) []*models.MetroTrain {
@@ -1819,6 +2108,12 @@ func (s *Simulator) GetTrainsPerLine(
 	return listTrains
 }
 
+/*
+ToCSV is used to write in a CSV file.
+
+Param :
+  - s *Simulator : the simulator
+*/
 func (s *Simulator) ToCSV() {
 	s.timetableReal.ToCSV()
 	//TODO CSV output writing should be here

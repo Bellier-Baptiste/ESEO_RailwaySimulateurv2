@@ -1,11 +1,14 @@
 /*
 File : timetableReal_test.go
 
-Brief :
+Brief : timetableReal_test.go runs tests on the timetableReal.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -46,6 +49,10 @@ var timeBetweenStation int
 // var stopTime time.Time
 var trainTest = MetroTrain{id: 1, line: &linesTest[0], direction: "up", capacity: 120}
 
+/*
+initForTimetableRealTest is a function that initialize the variables for the
+test of the TimetableReal struct and its methods.
+*/
 func initForTimetableRealTest() {
 	timetableRealTest = NewTimetableReal()
 	startTime = time.Date(2018, 12, 7, 0, 0, 0, 0, time.UTC)
@@ -60,6 +67,15 @@ func initForTimetableRealTest() {
 	eventTrainTest = NewEventTimetableTrain(&linesTest[0], metroStationTab, &trainTest, "up", timeTab, false, 0)
 }
 
+/*
+TestAddEventsTrain tests the AddEventsTrain method of the TimetableReal struct.
+
+# It tests if the method works properly
+
+Input : t *testing.T
+
+Expected : The method works properly
+*/
 func TestAddEventsTrain(t *testing.T) {
 	initForTimetableRealTest()
 
@@ -70,6 +86,15 @@ func TestAddEventsTrain(t *testing.T) {
 	assert.Equal(t, linesTest[0].Name(), timetableRealTest.GetEventsTrain()[0].Line().Name(), "name of the line in the event")
 }
 
+/*
+TestTimetableRealToCSV tests the ToCSV method of the TimetableReal struct.
+
+# It tests if the method works properly
+
+Input : t *testing.T
+
+Expected : The method works properly
+*/
 func TestTimetableRealToCSV(t *testing.T) {
 	initForTimetableRealTest()
 

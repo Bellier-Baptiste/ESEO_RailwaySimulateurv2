@@ -3,11 +3,13 @@ Package models
 
 File : eventLineClosed.go
 
-Brief :
+Brief : This file contains the EventLineClosed struct and its methods.
 
-Date : N/A
+Date : 10/02/2020
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -35,6 +37,26 @@ package models
 
 import "time"
 
+/*
+EventLineClosed is the structure that manage the event of a line closed.
+
+Attributes :
+  - start time.Time : the start time of the event
+  - end time.Time : the end time of the event
+  - idStationStart int : the id of the start station
+  - idStationEnd int : the id of the end station
+  - finished bool : true if the event is finished, false otherwise
+
+Methods :
+  - Finished() bool : return true if the event is finished, false otherwise
+  - SetFinished(f bool) : set the finished attribute to f
+  - Start() time.Time : return the start time of the event
+  - End() time.Time : return the end time of the event
+  - IdStationStart() int : return the id of the start station
+  - SetIdStationStart(id int) : set the id of the start station
+  - IdStationEnd() int : return the id of the end station
+  - SetIdStationEnd(id int) : set the id of the end station
+*/
 type EventLineClosed struct {
 	start          time.Time
 	end            time.Time
@@ -43,6 +65,18 @@ type EventLineClosed struct {
 	finished       bool
 }
 
+/*
+NewEventLineClosed creates a new EventLineClosed struct.
+
+Param :
+  - idStationStart int : the id of the start station
+  - idStationEnd int : the id of the end station
+  - start time.Time : the time of the start of the event
+  - end time.Time : the time of the end of the event
+
+Return :
+  - EventLineClosed : the new EventLineClosed struct
+*/
 func NewEventLineClosed(idStationStart, idStationEnd int,
 	start, end time.Time) EventLineClosed {
 	return EventLineClosed{
@@ -54,34 +88,108 @@ func NewEventLineClosed(idStationStart, idStationEnd int,
 	}
 }
 
+/*
+Finished returns the finished attribute of the EventLineClosed struct.
+
+Param :
+  - elc *EventLineClosed : the EventLineClosed struct
+
+Return :
+  - bool : the finished attribute of the EventLineClosed struct
+*/
 func (elc *EventLineClosed) Finished() bool {
 	return elc.finished
 }
 
+/*
+SetFinished sets the finished attribute of the EventLineClosed struct.
+
+Param :
+  - elc *EventLineClosed : the EventLineClosed struct
+
+Return :
+  - bool : the finished attribute of the EventLineClosed struct
+*/
 func (elc *EventLineClosed) SetFinished(f bool) {
 	elc.finished = f
 }
 
+/*
+Start returns the start attribute of the EventLineClosed struct.
+
+Param :
+  - elc *EventLineClosed : the EventLineClosed struct
+
+Return :
+  - time.Time : the start attribute of the EventLineClosed struct
+*/
 func (elc *EventLineClosed) Start() time.Time {
 	return elc.start
 }
 
+/*
+End returns the end attribute of the EventLineClosed struct.
+
+Param :
+  - elc *EventLineClosed : the EventLineClosed struct
+
+Return :
+  - time.Time : the end attribute of the EventLineClosed struct
+*/
 func (elc *EventLineClosed) End() time.Time {
 	return elc.end
 }
 
+/*
+IdStationStart returns the idStationStart attribute of the EventLineClosed
+struct.
+
+Param :
+  - elc *EventLineClosed : the EventLineClosed struct
+
+Return :
+  - int : the idStationStart attribute of the EventLineClosed struct
+*/
 func (elc *EventLineClosed) IdStationStart() int {
 	return elc.idStationStart
 }
 
+/*
+SetIdStationStart sets the idStationStart attribute of the EventLineClosed
+struct.
+
+Param :
+  - elc *EventLineClosed : the EventLineClosed struct
+
+Return :
+  - int : the idStationStart attribute of the EventLineClosed struct
+*/
 func (elc *EventLineClosed) SetIdStationStart(id int) {
 	elc.idStationStart = id
 }
 
+/*
+IdStationEnd returns the idStationEnd attribute of the EventLineClosed struct.
+
+Param :
+  - elc *EventLineClosed : the EventLineClosed struct
+
+Return :
+  - int : the idStationEnd attribute of the EventLineClosed struct
+*/
 func (elc *EventLineClosed) IdStationEnd() int {
 	return elc.idStationEnd
 }
 
+/*
+SetIdStationEnd sets the idStationEnd attribute of the EventLineClosed struct.
+
+Param :
+  - elc *EventLineClosed : the EventLineClosed struct
+
+Return :
+  - int : the idStationEnd attribute of the EventLineClosed struct
+*/
 func (elc *EventLineClosed) SetIdStationEnd(id int) {
 	elc.idStationEnd = id
 }

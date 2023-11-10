@@ -3,11 +3,14 @@ Package models
 
 File : trip.go
 
-Brief :
+Brief : This file contains the Trip struct and its methods.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -40,6 +43,33 @@ import (
 	"time"
 )
 
+/*
+Trip is the structure that manage the trip of a passenger.
+
+Attributes :
+  - departureTime time.Time : the departure time of the trip
+  - arrivalTime time.Time : the arrival time of the trip
+  - path PathStation : the path of the trip
+
+Methods :
+  - DepartureTime() time.Time : return the departureTime attribute of the
+    Trip struct
+  - ArrivalTime() time.Time : return the arrivalTime attribute of the Trip
+    struct
+  - Path() *PathStation : return the path attribute of the Trip struct
+  - SetPath(path PathStation) : set the path attribute of the Trip struct
+  - SetDepartureTime(time time.Time) : set the departureTime attribute of
+    the Trip struct
+  - SetArrivalTime(time time.Time) : set the arrivalTime attribute of the
+    Trip struct
+  - IsStarted(currentTime time.Time) bool : return true if the trip is
+    started at the given time, false otherwise
+  - IsCompleted() bool : return true if the trip is completed, false
+    otherwise
+  - IsValid(start time.Time, end time.Time) bool : return true if the trip
+    is valid between the given start and end time, false otherwise
+  - String() string : return a string representation of the Trip struct
+*/
 type Trip struct {
 	departureTime time.Time
 	arrivalTime   time.Time
@@ -48,6 +78,17 @@ type Trip struct {
 
 //--- constructors
 
+/*
+NewTrip creates a new trip with the given departure time and path and a zero
+arrival time (not completed) and return it as a pointer to Trip struct instance.
+
+Param :
+  - departure time.Time : the departure time of the trip
+  - path PathStation : the path of the trip
+
+Return :
+  - Trip : the trip created
+*/
 func NewTrip(departure time.Time, path PathStation) Trip {
 	var aTrip Trip
 	aTrip.departureTime = departure
@@ -56,9 +97,14 @@ func NewTrip(departure time.Time, path PathStation) Trip {
 }
 
 /*
-RandomTime
-Generate a random hour and minute in the given day within the boundaries
-defined by Business day start and end
+RandomTime generate a random hour and minute in the given day within the
+boundaries defined by Business day start and end in the config file.
+
+Param :
+  - currentDay time.Time : the day in which the time will be generated
+
+Return :
+  - time.Time : the random time generated
 */
 func RandomTime(currentDay time.Time) time.Time {
 	var currentDayMidnight = time.Date(currentDay.Year(), currentDay.Month(),
@@ -94,9 +140,19 @@ func RandomTime(currentDay time.Time) time.Time {
 	return pickedTime
 }
 
-// Generate a normal distributed time with expected time as mean
-// and duration as standard deviation (in seconds)
-// return the time limited to the boundaries defined by business day start/end
+/*
+normalDistributedTime generate a normal distributed time with expected time as
+mean and duration as standard deviation (in seconds) and return it as a
+time.Time instance.
+
+Param :
+  - duration int64 : the standard deviation of the normal distribution
+  - expectedTime time.Time : the mean of the normal distribution
+
+Return :
+  - time.Time : the time limited to the boundaries defined by business day
+    start/end
+*/
 func normalDistributedTime(duration int64, expectedTime time.Time) time.Time {
 	config := configs.GetInstance()
 	bDayStart, err := time.ParseDuration(config.BusinessDayStart())
@@ -140,8 +196,16 @@ func normalDistributedTime(duration int64, expectedTime time.Time) time.Time {
 	return aTime.UTC()
 }
 
-// Generate a random path in a map
-// return the path.
+/*
+randomPath generate a random path in the given map and return it as a
+PathStation instance.
+
+Param :
+  - aMap Map : the map in which the path will be generated
+
+Return :
+  - PathStation : the path generated
+*/
 func randomPath(aMap Map) PathStation {
 	stations := aMap.Stations()
 	//generating an index to pick a random station
@@ -158,9 +222,15 @@ func randomPath(aMap Map) PathStation {
 }
 
 /*
-RandomTrip
-generate a random trip with a random time and a random path
-return the trip
+RandomTrip generate a random trip with a random time and a random path return
+the trip as a Trip instance.
+
+Param :
+  - currentDay time.Time : the day in which the trip will be generated
+  - aMap Map : the map in which the trip will be generated
+
+Return :
+  - Trip : the trip generated
 */
 func RandomTrip(currentDay time.Time, aMap Map) Trip {
 	departure := RandomTime(currentDay)
@@ -169,7 +239,23 @@ func RandomTrip(currentDay time.Time, aMap Map) Trip {
 	return trip
 }
 
-func CommuntingTrips(commutePeriodDuration int64, morningCommute,
+/*
+CommutingTrips generate two commuting trips with a random time and a random
+path return the trips as a pair of Trip instances.
+
+Param :
+  - commutePeriodDuration int64 : the standard deviation of the normal
+    distribution
+  - morningCommute time.Duration : the mean of the normal distribution
+  - eveningCommute time.Duration : the mean of the normal distribution
+  - currentDay time.Time : the day in which the trip will be generated
+  - aMap Map : the map in which the trip will be generated
+
+Return :
+  - Trip : the first trip generated
+  - Trip : the second trip generated
+*/
+func CommutingTrips(commutePeriodDuration int64, morningCommute,
 	eveningCommute time.Duration, currentDay time.Time, aMap Map) (Trip, Trip) {
 	morningTime := normalDistributedTime(commutePeriodDuration,
 		currentDay.Add(morningCommute))
@@ -187,43 +273,132 @@ func CommuntingTrips(commutePeriodDuration int64, morningCommute,
 
 //--- constructors
 
+/*
+DepartureTime returns the departureTime attribute of the Trip struct.
+
+Param :
+  - t *Trip : the Trip struct
+
+Return :
+  - time.Time : the departureTime attribute of the Trip struct
+*/
 func (t *Trip) DepartureTime() time.Time {
 	return t.departureTime
 }
 
+/*
+ArrivalTime returns the arrivalTime attribute of the Trip struct.
+
+Param :
+  - t *Trip : the Trip struct
+
+Return :
+  - time.Time : the arrivalTime attribute of the Trip struct
+*/
 func (t *Trip) ArrivalTime() time.Time {
 	return t.arrivalTime
 }
 
+/*
+Path returns the path attribute of the Trip struct.
+
+Param :
+  - t *Trip : the Trip struct
+
+Return :
+  - *PathStation : the path attribute of the Trip struct
+*/
 func (t *Trip) Path() *PathStation {
 	return &t.path
 }
 
+/*
+SetPath sets the path attribute of the Trip struct.
+
+Param :
+  - t *Trip : the Trip struct
+  - path PathStation : the new value of the path attribute
+*/
 func (t *Trip) SetPath(path PathStation) {
 	t.path = path
 }
 
+/*
+SetDepartureTime sets the departureTime attribute of the Trip struct.
+
+Param :
+  - t *Trip : the Trip struct
+  - time time.Time : the new value of the departureTime attribute
+*/
 func (t *Trip) SetDepartureTime(time time.Time) {
 	t.departureTime = time
 }
 
+/*
+SetArrivalTime sets the arrivalTime attribute of the Trip struct.
+
+Param :
+  - t *Trip : the Trip struct
+  - time time.Time : the new value of the arrivalTime attribute
+*/
 func (t *Trip) SetArrivalTime(time time.Time) {
 	t.arrivalTime = time
 }
 
+/*
+IsStarted returns true if the trip is started at the given time, false
+otherwise.
+
+Param :
+  - t *Trip : the Trip struct
+  - currentTime time.Time : the time to compare with the departure time
+
+Return :
+  - bool : true if the trip is started at the given time, false otherwise
+*/
 func (t *Trip) IsStarted(currentTime time.Time) bool {
 	return t.departureTime.Before(currentTime)
 }
 
+/*
+IsCompleted returns true if the trip is completed, false otherwise.
+
+Param :
+  - t *Trip : the Trip struct
+
+Return :
+  - bool : true if the trip is completed, false otherwise
+*/
 func (t *Trip) IsCompleted() bool {
 	return !t.arrivalTime.IsZero()
 }
 
+/*
+IsValid returns true if the trip is valid between the given start and end
+time, false otherwise.
+
+Param :
+  - t *Trip : the Trip struct
+  - start time.Time : the start time
+  - end time.Time : the end time
+
+Return :
+  - bool : true if the trip is valid between the given start and end time,
+    false otherwise
+*/
 func (t *Trip) IsValid(start time.Time, end time.Time) bool {
 	return t.departureTime.After(start) && t.departureTime.Before(end)
 }
 
-// return a string representation of a trip
+/*
+String returns a string representation of the Trip struct.
+
+Param :
+  - t *Trip : the Trip struct
+
+Return :
+  - string : a string representation of the Trip struct
+*/
 func (t *Trip) String() string {
 	//station_start\tstation_end\ttime_start\ttime_end
 	var output string

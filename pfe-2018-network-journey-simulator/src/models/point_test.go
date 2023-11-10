@@ -1,11 +1,14 @@
 /*
 File : point_test.go
 
-Brief :
+Brief : point_test.go runs tests on the point.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -48,6 +51,15 @@ func assertEqualFloat(t *testing.T, expected float64, actual float64, allowedErr
 }
 */
 
+/*
+TestEquals tests the equals method of the Point struct.
+
+# It tests if the method works properly
+
+Input : t *testing.T
+
+Expected : The method works properly
+*/
 func TestEquals(t *testing.T) {
 	points := []Point{
 		{0, 0},

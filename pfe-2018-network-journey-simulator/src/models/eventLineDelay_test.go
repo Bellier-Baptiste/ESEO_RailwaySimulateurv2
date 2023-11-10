@@ -1,11 +1,13 @@
 /*
 File : eventLineDelay_test.go
 
-Brief :
+Brief : eventLineDelay_test.go runs tests on the eventLineDelay.go file.
 
-Date : N/A
+Date : 10/02/2020
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -40,6 +42,15 @@ import (
 	//	"github.com/stretchr/testify/assert"
 )
 
+/*
+TestEventLineDelay tests the EventLineDelay struct and its methods.
+
+# It tests if the struct and its methods work properly
+
+Input : t *testing.T
+
+Expected : The struct and its methods work properly
+*/
 func TestEventLineDelay(t *testing.T) {
 	eventld := NewEventLineDelay(0, 1, 1, time.Now(), time.Now().Add(10))
 	fmt.Println(eventld.Finished())
