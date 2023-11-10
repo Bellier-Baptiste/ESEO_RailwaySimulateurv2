@@ -53,7 +53,7 @@ public class AreaView {
   /**
    * get the area model linked to the view.
    *
-   * @return Area area binded to the view
+   * @return Area bound to the view
    */
   public Area getArea() {
     return area;

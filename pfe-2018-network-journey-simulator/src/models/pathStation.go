@@ -1,58 +1,196 @@
+/*
+Package models
+
+File : pathStation.go
+
+Brief : This file contains the PathStation struct and its methods.
+
+Date : 24/01/2019
+
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
+
+License : MIT License
+
+Copyright (c) 2023 Équipe PFE_2023_16
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 package models
 
 import "strconv"
 
-type pathStation struct {
-	stations []*MetroStation //stations between A and B (including A and B)
-	lines    []*MetroLine    //line between A and B (line to take to go to n+1 step)
+/*
+PathStation is a struct that represent a path between two stations. It contains
+the stations and the lines between the two stations.
+
+Attributes :
+  - stations []*MetroStation : the stations between the two stations
+  - lines []*MetroLine : the lines between the two stations
+  - minDuration int : the min duration of the path
+  - maxDuration int : the max duration of the path
+
+Methods :
+  - PathStationCreate(line *MetroLine, stations ...*MetroStation) *PathStation
+    : create a path between all stations
+  - PathStationInverse(line *MetroLine, stations ...*MetroStation) *PathStation
+    : create a path between all stations in reverse side
+  - Lines() []*MetroLine : return the lines attribute
+  - Stations() []*MetroStation : return the stations attribute
+  - EndStation() *MetroStation : return the last station of the path
+  - Inverse() : inverse the path
+  - HasStation(station *MetroStation) bool : return true if the path contains
+    the station, false otherwise
+  - HaveSameLineAs(ps2 *PathStation) bool : return true if the path contains the
+    same line as ps2, false otherwise
+  - GetSegment(start *MetroStation, end *MetroStation) *PathStation : return a
+    path between the two stations
+  - String() string : return a string representation of the path
+  - toString() string : return a string representation of the path
+  - append(ps2 *PathStation) *PathStation : append a path to the other
+  - TakeTrain(train *MetroTrain) bool : return true if the passenger should take
+    this train, false otherwise
+  - ExitTrain(train *MetroTrain) bool : return true if the passenger should exit
+    this train, false otherwise
+  - StartStation() *MetroStation : return the first station of the path
+  - PositionStation(station MetroStation) int : return the position of the
+    station in the path
+  - Reroute(ps2 PathStation) *PathStation : reroute the path
+*/
+type PathStation struct {
+	stations []*MetroStation
+	//stations between A and B (including A and B)
+	lines []*MetroLine
+	//line between A and B (line to take to go to n+1 step)
 	//ex : A->(1)->b->(1)->c->(2)->d->(3)->E
 	//stations = [A,b,c,d,E]
 	//lines = [1, 1, 2, 3]
 
-	//theses var will be useful when we will need to optimize the transportation time
-	minDuration int //min duration of traject between A and B (not implemented)
-	maxDuration int //max duration of traject between A and B (not implemented)
+	//these var will be useful when we will need to optimize
+	//the transportation time
+	minDuration int //min duration of trajectory between A and B (not implemented)
+	maxDuration int //max duration of trajectory between A and B (not implemented)
 }
 
 //--- Constructors
 
-//creates a path between all stations. they should all use the same line (use methods to add multi lignes)
-func PathStation(line *MetroLine, stations ...*MetroStation) *pathStation {
-	var out = pathStation{stations: stations}
+/*
+PathStationCreate creates a path between all stations. They should all use the
+same line (use methods to add multi lines). The stations should be in the order
+they are in the line.
+
+Param :
+  - line *MetroLine : the line used
+  - stations ...*MetroStation : the stations used
+
+Return :
+  - *PathStation : the path created
+*/
+func PathStationCreate(line *MetroLine,
+	stations ...*MetroStation) *PathStation {
+	var out = PathStation{stations: stations}
 	for i := 0; i < len(stations)-1; i++ {
 		out.lines = append(out.lines, line)
 	}
 	return &out
 }
 
-func PathStationInverse(line *MetroLine, stations ...*MetroStation) *pathStation {
-	var stations2 = []*MetroStation{}
+/*
+PathStationInverse creates a path between all stations in reverse side. They
+should all use the same line (use methods to add multi lines). The stations
+should be in the order they are in the line.
+
+Param :
+  - line *MetroLine : the line used
+  - stations ...*MetroStation : the stations used
+
+Return :
+  - *PathStation : the path created
+*/
+func PathStationInverse(line *MetroLine,
+	stations ...*MetroStation) *PathStation {
+	var stations2 []*MetroStation
 	for i := len(stations) - 1; i >= 0; i-- {
 		stations2 = append(stations2, stations[i])
 	}
-	return PathStation(line, stations2...)
+	return PathStationCreate(line, stations2...)
 }
 
 //--- Getters & Setters
 
-func (p pathStation) Lines() []*MetroLine {
-	return p.lines
+/*
+Lines returns the lines attribute of the PathStation struct.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - []*MetroLine : the lines attribute of the PathStation struct
+*/
+func (ps *PathStation) Lines() []*MetroLine {
+	return ps.lines
 }
 
-func (p pathStation) Stations() []*MetroStation {
-	return p.stations
+/*
+Stations returns the stations attribute of the PathStation struct.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - []*MetroStation : the stations attribute of the PathStation struct
+*/
+func (ps *PathStation) Stations() []*MetroStation {
+	return ps.stations
 }
 
-func (ps pathStation) EndStation() *MetroStation {
+/*
+EndStation returns the last station of the PathStation struct.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - *MetroStation : the last station of the PathStation struct
+*/
+func (ps *PathStation) EndStation() *MetroStation {
 	if len(ps.stations) == 0 {
 		return nil
 	}
 	return ps.stations[len(ps.stations)-1]
 }
 
-//--- Methods
-//verify if the pathStation is not wrongly formed (as in, a station appears twice)
-func (ps *pathStation) checkValidity() bool {
+// --- Methods
+
+/*
+CheckValidity verify if the PathStation is not wrongly formed (as in, a station
+appears twice).
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - bool : true if the PathStation is valid, false otherwise
+*/
+func (ps *PathStation) checkValidity() bool {
 	for i := 0; i < len(ps.stations); i++ {
 		for j := i + 1; j < len(ps.stations); j++ {
 			if ps.stations[i].id == ps.stations[j].id {
@@ -64,17 +202,36 @@ func (ps *pathStation) checkValidity() bool {
 	return true
 }
 
-// Deprecated : should not be used, try to find the correct pathStation in Map object instead
-func (ps *pathStation) Inverse() {
+/*
+Inverse the PathStation (eg A->B->C becomes C->B->A). The stations and lines
+attributes are reversed. The minDuration and maxDuration attributes are not yet
+reversed.
+Deprecated : should not be used, try to find the correct pathStation
+in Map object instead.
+
+Param :
+  - ps *PathStation : the PathStation struct
+*/
+func (ps *PathStation) Inverse() {
 	var stations = ps.Stations()
-	var stationsReversed = []*MetroStation{}
+	var stationsReversed []*MetroStation
 	for i := len(stations) - 1; i >= 0; i-- {
 		stationsReversed = append(stationsReversed, stations[i])
 	}
-	ps.stations = stationsReversed;
+	ps.stations = stationsReversed
 }
 
-func (ps pathStation) HasStation(station *MetroStation) bool {
+/*
+HasStation return true if the PathStation contains the station, false otherwise.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - station *MetroStation : the station to check
+
+Return :
+  - bool : true if the PathStation contains the station, false otherwise
+*/
+func (ps *PathStation) HasStation(station *MetroStation) bool {
 	for i := 0; i < len(ps.stations); i++ {
 		if ps.stations[i].id == station.id {
 			return true
@@ -84,8 +241,18 @@ func (ps pathStation) HasStation(station *MetroStation) bool {
 	return false
 }
 
-//compare the two pathStation to verify they don't have the same line in them. used to prevent errors while doing multi-lines path
-func (ps *pathStation) haveSameLineAs(ps2 *pathStation) bool {
+/*
+HaveSameLineAs compare the two PathStation to verify they don't have the same
+line in them. Used to prevent errors while doing multi-lines path.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - ps2 *PathStation : the PathStation struct
+
+Return :
+  - bool : true if the PathStation contains the station, false otherwise
+*/
+func (ps *PathStation) haveSameLineAs(ps2 *PathStation) bool {
 	for i := 0; i < len(ps.lines); i++ {
 		for j := 0; j < len(ps2.lines); j++ {
 			if ps.lines[i].id == ps2.lines[j].id {
@@ -96,8 +263,22 @@ func (ps *pathStation) haveSameLineAs(ps2 *pathStation) bool {
 	return false
 }
 
-func (ps *pathStation) GetSegment(start *MetroStation, end *MetroStation) *pathStation {
-	var output = pathStation{}
+/*
+GetSegment return a PathStation between the two stations. The stations should
+be in the PathStation. If the stations are not in the PathStation, the function
+will return nil.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - start *MetroStation : the start station
+  - end *MetroStation : the end station
+
+Return :
+  - *PathStation : the PathStation between the two stations
+*/
+func (ps *PathStation) GetSegment(start *MetroStation,
+	end *MetroStation) *PathStation {
+	var output = PathStation{}
 	for i, station := range ps.stations {
 		if station.id == start.id && len(output.stations) == 0 {
 			output.stations = append(output.stations, ps.stations[i])
@@ -116,7 +297,16 @@ func (ps *pathStation) GetSegment(start *MetroStation, end *MetroStation) *pathS
 	return &output
 }
 
-func (ps pathStation) String() string {
+/*
+String return a string representation of the PathStation struct.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - string : the string representation of the PathStation struct
+*/
+func (ps *PathStation) String() string {
 	var out = ""
 	out += "stations=\t["
 	for i := 0; i < len(ps.stations); i++ {
@@ -132,7 +322,17 @@ func (ps pathStation) String() string {
 	return out
 }
 
-func (ps pathStation) toString() string {
+/*
+toString return a string representation of the PathStation struct. The string
+representation is a list of the stations id.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - string : the string representation of the PathStation struct
+*/
+func (ps *PathStation) toString() string {
 	var out = "("
 	for i := 0; i < len(ps.stations); i++ {
 		out += strconv.Itoa(ps.stations[i].id)
@@ -143,10 +343,20 @@ func (ps pathStation) toString() string {
 	return out + ")"
 }
 
-// append a pathStation to the other and return a third object (note: the two objects won't be altered by this function)
-// if ps.station[-1] == ps2.stations[0] (ps.append(ps2)) then the station in double is removed
-func (ps pathStation) append(ps2 *pathStation) *pathStation {
-	var output = pathStation{}
+/*
+append a PathStation to the other and return a third object (note: the two
+objects won't be altered by this function). If ps.station[-1] == ps2.stations[0]
+(ps.append(ps2)) then the station in double is removed.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - ps2 *PathStation : the PathStation struct
+
+Return :
+  - *PathStation : the PathStation struct
+*/
+func (ps *PathStation) append(ps2 *PathStation) *PathStation {
+	var output = PathStation{}
 	//stations from ps1
 	for i := 0; i < len(ps.stations); i++ {
 		output.stations = append(output.stations, ps.stations[i])
@@ -168,23 +378,38 @@ func (ps pathStation) append(ps2 *pathStation) *pathStation {
 
 	//time
 	output.minDuration = ps.minDuration + ps2.minDuration
-	output.maxDuration = ps.maxDuration + ps2.maxDuration //TODO add delay in station
+	output.maxDuration = ps.maxDuration + ps2.maxDuration
+	//TODO add delay in station
 
 	return &output
 }
 
-//TODO test
-// return if the passenger should take this train. the passenger should be in the train.currentStation
-func (ps pathStation) TakeTrain(train *MetroTrain) bool {
+/*
+TakeTrain return if the passenger should take this train. The passenger should
+be in the train.currentStation. The train should be in the same line as the
+PathStation. The train should go to one of the stations of the PathStation.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - train *MetroTrain : the train
+
+Return :
+  - bool : true if the passenger should take this train, false otherwise
+
+TODO test
+*/
+func (ps *PathStation) TakeTrain(train *MetroTrain) bool {
 	currentStation := train.currentStation
 	index := ps.PositionStation(*currentStation)
 
-	if index == -1 || index == len(ps.stations)-1 { //TODO raise error as it should not happen
+	if index == -1 || index == len(ps.stations)-1 {
+		//TODO raise error as it should not happen
 		return false
 	}
 
 	//shortest path (eg same train as PathStation)
-	if train.nextStation.id == ps.stations[index+1].id && train.line.id == ps.lines[index].id {
+	if train.nextStation.id == ps.stations[index+1].id &&
+		train.line.id == ps.lines[index].id {
 		return true
 	}
 
@@ -202,8 +427,21 @@ func (ps pathStation) TakeTrain(train *MetroTrain) bool {
 	return takeTrain
 }
 
-//TODO test
-func (ps pathStation) ExitTrain(train *MetroTrain) bool {
+/*
+ExitTrain return if the passenger should exit this train. The passenger should
+be in the train.currentStation. The train should be in the same line as the
+PathStation. The train should go to one of the stations of the PathStation.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - train *MetroTrain : the train
+
+Return :
+  - bool : true if the passenger should exit this train, false otherwise
+
+TODO test
+*/
+func (ps *PathStation) ExitTrain(train *MetroTrain) bool {
 	index := ps.PositionStation(*train.currentStation)
 
 	//verify if the train can take us closer to the end
@@ -235,14 +473,34 @@ func (ps pathStation) ExitTrain(train *MetroTrain) bool {
 	return ps.lines[index].id != train.line.id
 }
 
-func (ps pathStation) StartStation() *MetroStation {
+/*
+StartStation return the first station of the PathStation struct.
+
+Param :
+  - ps *PathStation : the PathStation struct
+
+Return :
+  - *MetroStation : the first station of the PathStation struct
+*/
+func (ps *PathStation) StartStation() *MetroStation {
 	if len(ps.stations) == 0 {
 		return nil
 	}
 	return ps.stations[0]
 }
 
-func (ps pathStation) PositionStation(station MetroStation) int {
+/*
+PositionStation return the position of the station in the PathStation struct.
+If the station is not in the PathStation, the function will return -1.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - station MetroStation : the station
+
+Return :
+  - int : the position of the station in the PathStation struct
+*/
+func (ps *PathStation) PositionStation(station MetroStation) int {
 	for i := range ps.stations {
 		if ps.stations[i].id == station.id {
 			return i
@@ -251,8 +509,18 @@ func (ps pathStation) PositionStation(station MetroStation) int {
 	return -1
 }
 
-//reroute the pathStation, meaning that the start of ps2 will be added at the similar station in ps
-func (ps *pathStation) Reroute(ps2 pathStation) *pathStation {
+/*
+Reroute the pathStation, meaning that the start of ps2 will be added at the
+similar station in ps.
+
+Param :
+  - ps *PathStation : the PathStation struct
+  - ps2 *PathStation : the PathStation struct
+
+Return :
+  - *PathStation : the PathStation struct
+*/
+func (ps *PathStation) Reroute(ps2 PathStation) *PathStation {
 	var pos = ps.PositionStation(*ps2.StartStation())
 	if pos == -1 {
 		return ps.append(&ps2)

@@ -24,8 +24,6 @@
 
 package model;
 
-import controller.EventName;
-
 /**
  * Model class extending {@link model.EventBetween2Stations} which describes a
  * delay between two stations {@link model.Station}.

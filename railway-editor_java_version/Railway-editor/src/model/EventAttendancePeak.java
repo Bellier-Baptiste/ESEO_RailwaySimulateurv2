@@ -24,8 +24,6 @@
 
 package model;
 
-import controller.EventName;
-
 /**
  * Model class extending {@link Event} which describes an attendance peak on a
  * {@link model.Station}.

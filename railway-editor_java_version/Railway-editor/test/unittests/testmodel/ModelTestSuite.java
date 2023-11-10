@@ -22,31 +22,13 @@
  * SOFTWARE.
  */
 
-package model;
+package unittests.testmodel;
 
-/**
- * Model class extends {@link model.EventBetween2Stations} which describes the
- * closing between two stations {@link model.Station}.
- *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
- * @file EventLineClosed.java
- * @date N/A
- * @since 2.0
- */
-public class EventLineClosed extends EventBetween2Stations {
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-  /**
-   * Constructor.
-   *
-   * @param id        event id
-   * @param startTime event startTime
-   * @param endTime   event endTime
-   * @param type      event eventType
-   */
-  public EventLineClosed(final int id, final String startTime,
-                         final String endTime, final EventType type) {
-    super(id, startTime, endTime, type);
-    super.setEventName(EventName.LINE_CLOSED);
-  }
+@RunWith(Suite.class)
+@SuiteClasses({ AreaTest.class, LineTest.class, StationTest.class })
+public class ModelTestSuite {
 }

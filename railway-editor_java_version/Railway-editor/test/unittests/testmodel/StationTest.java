@@ -22,31 +22,40 @@
  * SOFTWARE.
  */
 
-package model;
+package unittests.testmodel;
+
+import model.Station;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
- * Model class extends {@link model.EventBetween2Stations} which describes the
- * closing between two stations {@link model.Station}.
+ * Test-case of {@link Station} model.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @file EventLineClosed.java
+ * @file StationTest.java
  * @date N/A
  * @since 2.0
  */
-public class EventLineClosed extends EventBetween2Stations {
+public class StationTest {
+    public static final String NAME = "eglantine";
 
-  /**
-   * Constructor.
-   *
-   * @param id        event id
-   * @param startTime event startTime
-   * @param endTime   event endTime
-   * @param type      event eventType
-   */
-  public EventLineClosed(final int id, final String startTime,
-                         final String endTime, final EventType type) {
-    super(id, startTime, endTime, type);
-    super.setEventName(EventName.LINE_CLOSED);
-  }
+
+    @Test
+    public void testConstructeur() {
+        Station station = new Station(0, 5, 5, NAME);
+        assertEquals(0, station.getId());
+        assertEquals(5, station.getPosX());
+        assertEquals(5, station.getPosY());
+        assertEquals("eglantine", station.getName());
+    }
+
+    @Test
+    public void testMoveStation() {
+        Station station = new Station(0, 5, 5, NAME);
+        station.moveStation(3, 3);
+        assertEquals(8, station.getPosX());
+        assertEquals(8, station.getPosY());
+    }
 }

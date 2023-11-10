@@ -49,10 +49,14 @@ public final class ActionRunSimulation {
    */
   private static ActionRunSimulation instance;
 
+  /** ActionFile instance. */
+  private final ActionFile actionFile;
+
   /**
    * Constructor of the class.
    */
   private ActionRunSimulation() {
+    this.actionFile = ActionFile.getInstance();
   }
 
   /**
@@ -69,35 +73,39 @@ public final class ActionRunSimulation {
 
   /**
    * Run the simulation.
+   *
+   * @return the exit value of the process
    */
-  public void runSimulation() {
-    try {
-      // Check if simulator.exe is already running
-      if (isSimulatorRunning()) {
-        return;
-      }
-
-      String rootJavaProjectPath = System.getProperty("user.dir");
-      String rootGoProjectPath = rootJavaProjectPath.replace(
-          "railway-editor_java_version", "pfe-2018-network-journey-simulator");
-      File runThisSimulation = new File(
-          rootGoProjectPath + "\\src\\configs\\runThisSimulation.xml");
-      ActionFile.getInstance().export(runThisSimulation);
-
-      // create a new list of arguments for our process
-      String[] commands = {"cmd", "/C",
-          "start metro_simulator.exe -configname runThisSimulation.xml"};
-      // create the process builder
-      ProcessBuilder pb = new ProcessBuilder(commands);
-      // set the working directory of the process
-      pb.directory(new File(rootGoProjectPath));
-      Process process = pb.start();
-      // wait that the process finish
-      process.waitFor();
-    } catch (IOException | InterruptedException ex) {
-      ex.printStackTrace();
-      Thread.currentThread().interrupt();
+  public int runSimulation() throws InterruptedException, IOException {
+    // Check if simulator.exe is already running
+    if (this.isSimulatorRunning()) {
+      // If yes, return -1 (did not run the simulation)
+      return -1;
     }
+
+    String rootJavaProjectPath = System.getProperty("user.dir");
+    String rootGoProjectPath = rootJavaProjectPath.replace(
+        "railway-editor_java_version", "pfe-2018-network-journey-simulator");
+
+    // Useful when running the unit test
+    rootGoProjectPath = rootGoProjectPath.replace(
+        "\\Railway-editor", "");
+
+    File runThisSimulation = new File(
+        rootGoProjectPath + "\\src\\configs\\runThisSimulation.xml");
+    this.actionFile.export(runThisSimulation);
+
+    // create a new list of arguments for our process
+    String[] commands = {"cmd", "/C",
+        "start metro_simulator.exe -configname runThisSimulation.xml"};
+    // create the process builder
+    ProcessBuilder pb = new ProcessBuilder(commands);
+    // set the working directory of the process
+    pb.directory(new File(rootGoProjectPath));
+    Process process = pb.start();
+    // wait that the process finish
+    process.waitFor();
+    return process.exitValue();
   }
 
   /**
@@ -105,28 +113,23 @@ public final class ActionRunSimulation {
    *
    * @return true if the process is running, false otherwise
    */
-  private boolean isSimulatorRunning() {
-    try {
-      String findProcess = "metro_simulator.exe";
-      String filenameFilter = "/nh /fi \"Imagename eq " + findProcess + "\"";
-      String tasksCmd = System.getenv("windir") + "/system32/tasklist.exe "
-          + filenameFilter;
+  public boolean isSimulatorRunning() throws IOException {
+    String findProcess = "metro_simulator.exe";
+    String filenameFilter = "/nh /fi \"Imagename eq " + findProcess + "\"";
+    String tasksCmd = System.getenv("windir") + "/system32/tasklist.exe "
+        + filenameFilter;
 
-      Process p = Runtime.getRuntime().exec(tasksCmd);
-      BufferedReader input = new BufferedReader(new InputStreamReader(
-          p.getInputStream()));
+    Process p = Runtime.getRuntime().exec(tasksCmd);
+    BufferedReader input = new BufferedReader(new InputStreamReader(
+        p.getInputStream()));
 
-      ArrayList<String> procs = new ArrayList<>();
-      String line;
-      while ((line = input.readLine()) != null) {
-        procs.add(line);
-      }
-      input.close();
-
-      return procs.stream().anyMatch(row -> row.contains(findProcess));
-    } catch (IOException ex) {
-      ex.printStackTrace();
-      return false;
+    ArrayList<String> processes = new ArrayList<>();
+    String line;
+    while ((line = input.readLine()) != null) {
+      processes.add(line);
     }
+    input.close();
+
+    return processes.stream().anyMatch(row -> row.contains(findProcess));
   }
 }

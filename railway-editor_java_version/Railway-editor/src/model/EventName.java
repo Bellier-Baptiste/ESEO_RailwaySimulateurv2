@@ -25,28 +25,56 @@
 package model;
 
 /**
- * Model class extends {@link model.EventBetween2Stations} which describes the
- * closing between two stations {@link model.Station}.
+ * Enum of the {@link model.Event} names.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @file EventLineClosed.java
- * @date N/A
- * @since 2.0
+ * @file EventName.java
+ * @date 2023-10-02
+ * @since 3.0
  */
-public class EventLineClosed extends EventBetween2Stations {
+public enum EventName {
+  /**
+   * Line delayed event name.
+   */
+  LINE_DELAYED("lineDelay"),
+  /**
+   * Line closed event name.
+   */
+  LINE_CLOSED("lineClosed"),
+  /**
+   * Attendance peak event name.
+   */
+  ATTENDANCE_PEAK("attendancePeak"),
+  /**
+   * Train hour event name.
+   */
+  TRAIN_HOUR("hour"),
+  /**
+   * Station closed event name.
+   */
+  STATION_CLOSED("stationClosed");
 
   /**
-   * Constructor.
-   *
-   * @param id        event id
-   * @param startTime event startTime
-   * @param endTime   event endTime
-   * @param type      event eventType
+   * String value of the event name.
    */
-  public EventLineClosed(final int id, final String startTime,
-                         final String endTime, final EventType type) {
-    super(id, startTime, endTime, type);
-    super.setEventName(EventName.LINE_CLOSED);
+  private final String value;
+
+  /**
+   * Constructor of the enum.
+   *
+   * @param valueToSet String value to set
+   */
+  EventName(final String valueToSet) {
+    this.value = valueToSet;
+  }
+
+  /**
+   * Get the string value of the event name.
+   *
+   * @return String value
+   */
+  public String getString() {
+    return value;
   }
 }
