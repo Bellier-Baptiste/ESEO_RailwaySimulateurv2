@@ -32,7 +32,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 
 /**
- * The panel which contains the hud with the {@link Station} names, some
+ * The panel which contains the hud with the {@link model.Station} names, some
  * instructions and the caption.
  *
  * @author Arthur Lagarce

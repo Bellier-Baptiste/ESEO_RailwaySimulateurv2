@@ -24,7 +24,7 @@
 
 package org.example.model;
 
-import org.example.data.Data;
+import data.Data;
 
 import java.awt.Color;
 import java.util.List;

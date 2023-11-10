@@ -25,10 +25,8 @@
 package org.example.controller;
 
 import org.example.model.Line;
-import org.example.view.MainPanel;
 import org.example.view.LineView;
 import org.example.view.MainWindow;
-import org.example.view.ToolBarPanel;
 import org.example.view.StationView;
 
 import javax.swing.JLabel;
@@ -36,8 +34,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A class for performing actions on the lines {@link Line}.
- * Linked to buttons in {@link ToolBarPanel}.
+ * A class for performing actions on the lines {@link org.example.model.Line}.
+ * Linked to buttons in {@link org.example.view.ToolBarPanel}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
@@ -52,6 +50,7 @@ public final class ActionLine {
   public static final String INCREMENT_LINE = "INCREMENT_LINE";
   /** String of the decrement action name. */
   public static final String DECREMENT_LINE = "DECREMENT_LINE";
+  public static final String DELETE_LINE = "DELETE_LINE";
   /** Singleton instance of the class. */
   private static ActionLine instance;
   /** Index of the line to update. */
@@ -97,7 +96,7 @@ public final class ActionLine {
 
   /**
    * Creates a {@link Line} with its linked {@link LineView} created and
-   * add this {@link LineView} to the {@link MainPanel} thanks to
+   * add this {@link LineView} to the {@link org.example.view.MainPanel} thanks to
    * {@link LineController}.
    */
   public void addLine() {

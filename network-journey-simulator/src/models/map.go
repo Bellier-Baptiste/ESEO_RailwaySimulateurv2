@@ -3,11 +3,14 @@ Package models
 
 File : map.go
 
-Brief :
+Brief : This file contains the Map struct and its methods.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -60,6 +63,69 @@ const (
 	strLon   string = "Longitude"
 )
 
+/*
+Map is the structure that manage the map of the metro network.
+
+Attributes :
+  - graphTimeBetweenStation [][]int : the graph of the time between stations
+  - graphDelay [][]int : the graph of the delay between stations
+  - stationsMappingCsv tools.CsvFile : the csv file of the stations mapping
+  - stationsCsv tools.CsvFile : the csv file of the stations
+  - stationsLinesCsv tools.CsvFile : the csv file of the stations lines
+  - isConvex bool : true if the map is convex, false otherwise
+  - lines []*MetroLine : the lines of the map
+  - stations []*MetroStation : the stations of the map
+  - graph [][]*PathStation : the graph of the map
+  - eventsLineClosed []*EventLineClosed : the events of line closed
+  - eventsAttendancePeak []*EventAttendancePeak : the events of attendance
+    peak
+
+Methods :
+  - Stations() []MetroStation : return the stations of the map
+  - Stations2() []*MetroStation : return the stations of the map
+  - Lines() []*MetroLine : return the lines of the map
+  - FindStationById(id int) *MetroStation : return the station with the id
+    id
+  - Lines2() []*MetroLine : return the lines of the map
+  - Graph() [][]*PathStation : return the graph of the map
+  - IsConvex() bool : return true if the map is convex, false otherwise
+  - GraphTimeBetweenStation() [][]int : return the graph of the time between
+    stations
+  - setGraphTimeBetweenStation(graph [][]int) : set the graph of the time
+    between stations
+  - GraphDelay() [][]int : return the graph of the delay between stations
+  - AddDelay(idStation1 int, idStation2 int, delay int) : add a delay
+  - ExportMapToAdConfig() configs.AdvancedConfig : export the map to an
+    advanced config
+  - generateSingleLineRailway(config configs.ConfigurationObject) error :
+    generate a single line railway
+  - generateDoubleLineRailway(config configs.ConfigurationObject) error :
+    generate a double line railway
+  - checkUnreachable(i, j int, graph [][]*PathStation,
+    hasBeenModified bool) ([][]*PathStation, bool) : check if we can reach
+    one of our unreachable
+  - multiLineRelationLoop(graph [][]*PathStation,
+    hasBeenModified bool) [][]*PathStation : loop of the function
+    multiLineRelation
+  - multiLineRelation(graph [][]*PathStation) [][]*PathStation : create the
+    >2-lines relations (with transfer)
+  - GenerateGraph() : generate the graph of the map
+  - initStationsIdNear(startId int, startStation *MetroStation, graph
+    [][]*PathStation, stationModifiedId []int) ([][]*PathStation, []int) :
+    init the stations near
+  - initStationsIdFarAffectation(startId, endStationId, stationMiddleId int,
+    graph [][]*PathStation, stationModifiedId []int, line *MetroLine)
+    ([][]*PathStation, []int) : init the stations far
+  - initStationsIdFarPreAffectation(startId, stationMiddleId int, graph
+    [][]*PathStation, stationModifiedId []int, line *MetroLine, stationMiddle
+    *MetroStation) ([][]*PathStation, []int) : init the stations far
+  - initStationsIdFar(startId, endStationId, stationMiddleId int, graph
+    [][]*PathStation, stationModifiedId []int, line *MetroLine)
+    ([][]*PathStation, []int) : init the stations far
+  - writeCsv() : write the csv files
+  - generateGraphTimeBetweenStation() : generate the graph of the time between
+    stations
+*/
 type Map struct {
 	graphTimeBetweenStation [][]int
 	graphDelay              [][]int
@@ -74,12 +140,27 @@ type Map struct {
 	eventsAttendancePeak    []*EventAttendancePeak
 }
 
+/*
+check is used to check if an error is not nil.
+
+Param :
+  - e error : the error to check
+*/
 func check(e error) {
 	if e != nil {
 		panic(e)
 	}
 }
 
+/*
+Stations returns the stations of the map.
+
+Param :
+  - mapPointer *Map : the map
+
+Return :
+  - []MetroStation : the stations of the map
+*/
 func (mapPointer *Map) Stations() []MetroStation {
 
 	clone := make([]MetroStation, len(mapPointer.stations))
@@ -91,10 +172,28 @@ func (mapPointer *Map) Stations() []MetroStation {
 	return clone
 }
 
+/*
+Stations2 returns the stations of the map.
+
+Param :
+  - mapPointer *Map : the map
+
+Return :
+  - []*MetroStation : the stations of the map
+*/
 func (mapPointer *Map) Stations2() []*MetroStation {
 	return mapPointer.stations
 }
 
+/*
+Lines returns the lines of the map.
+
+Param :
+  - mapPointer *Map : the map
+
+Return :
+  - []*MetroLine : the lines of the map
+*/
 func (mapPointer *Map) Lines() []*MetroLine {
 
 	clone := make([]*MetroLine, len(mapPointer.lines))
@@ -104,6 +203,16 @@ func (mapPointer *Map) Lines() []*MetroLine {
 	return clone
 }
 
+/*
+FindStationById returns the station with the id id.
+
+Param :
+  - mapPointer *Map : the map
+  - id int : the id of the station
+
+Return :
+  - *MetroStation : the station with the id id
+*/
 func (mapPointer *Map) FindStationById(id int) *MetroStation {
 	stations := mapPointer.Stations2()
 	for i := 0; i < len(stations); i++ {
@@ -114,10 +223,28 @@ func (mapPointer *Map) FindStationById(id int) *MetroStation {
 	return nil
 }
 
+/*
+Lines2 returns the lines of the map.
+
+Param :
+  - mapPointer *Map : the map
+
+Return :
+  - []*MetroLine : the lines of the map
+*/
 func (mapPointer *Map) Lines2() []*MetroLine {
 	return mapPointer.lines
 }
 
+/*
+Graph returns the graph of the map.
+
+Param :
+  - mapPointer *Map : the map
+
+Return :
+  - [][]*PathStation : the graph of the map
+*/
 func (mapPointer *Map) Graph() [][]*PathStation {
 
 	clone := make([][]*PathStation, len(mapPointer.graph))
@@ -130,26 +257,65 @@ func (mapPointer *Map) Graph() [][]*PathStation {
 	return clone
 }
 
+/*
+IsConvex returns true if the map is convex, false otherwise.
+
+Param :
+  - mapPointer *Map : the map
+
+Return :
+  - bool : true if the map is convex, false otherwise
+*/
 func (mapPointer *Map) IsConvex() bool {
 	return mapPointer.isConvex
 }
 
+/*
+GraphTimeBetweenStation returns the graph of the time between stations.
+
+Param :
+  - mapPointer *Map : the map
+
+Return :
+  - [][]int : the graph of the time between stations
+*/
 func (mapPointer *Map) GraphTimeBetweenStation() [][]int {
 	return mapPointer.graphTimeBetweenStation
 }
 
+/*
+setGraphTimeBetweenStation set the graph of the time between stations.
+
+Param :
+  - mapPointer *Map : the map
+  - graph [][]int : the graph of the time between stations
+*/
 func (mapPointer *Map) setGraphTimeBetweenStation(graph [][]int) {
 	mapPointer.graphTimeBetweenStation = graph
 }
 
+/*
+GraphDelay returns the graph of the delay between stations.
+
+Param :
+  - mapPointer *Map : the map
+
+Return :
+  - [][]int : the graph of the delay between stations
+*/
 func (mapPointer *Map) GraphDelay() [][]int {
 	return mapPointer.graphDelay
 }
 
 /*
-CreateMap
+CreateMap creates a new map.
+
 /!\ In order to create map from scratch and save it only
 - use CreateMapAdvanced for the run deprecated - use CreateMapAdvanced now
+
+Return :
+  - Map : the new map
+  - error : an error if something went wrong
 */
 func CreateMap() (Map, error) {
 
@@ -217,6 +383,15 @@ func CreateMap() (Map, error) {
 	return m, err
 }
 
+/*
+AddDelay add a delay.
+
+Param :
+  - mapPointer *Map : the map
+  - idStation1 int : the id of the first station
+  - idStation2 int : the id of the second station
+  - delay int : the delay to add
+*/
 func (mapPointer *Map) AddDelay(idStation1 int, idStation2 int, delay int) {
 	if len(mapPointer.GraphDelay()) < idStation1 ||
 		len(mapPointer.GraphDelay()) < idStation2 {
@@ -228,6 +403,15 @@ func (mapPointer *Map) AddDelay(idStation1 int, idStation2 int, delay int) {
 	mapPointer.graphDelay[idStation2][idStation1] = delay
 }
 
+/*
+CreateMapAdvanced creates a new map from an advanced config.
+
+Param :
+  - adConfig configs.AdvancedConfig : the advanced config
+
+Return :
+  - Map : the new map
+*/
 func CreateMapAdvanced(adConfig configs.AdvancedConfig) Map {
 
 	config := configs.GetInstance()
@@ -316,6 +500,15 @@ func CreateMapAdvanced(adConfig configs.AdvancedConfig) Map {
 	return m
 }
 
+/*
+ExportMapToAdConfig export the map to an advanced config.
+
+Param :
+  - mapPointer *Map : the map
+
+Return :
+  - configs.AdvancedConfig : the advanced config
+*/
 func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 	var adConfig configs.AdvancedConfig
 
@@ -399,6 +592,16 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 	return adConfig
 }
 
+/*
+generateLines generate the lines of the map.
+
+Param :
+  - mapPointer *Map : the map
+  - config configs.ConfigurationObject : the configuration object
+
+Return :
+  - error : an error if something went wrong
+*/
 func generateLines(mapPointer *Map, config configs.ConfigurationObject) error {
 
 	linesName := config.NameLineList()
@@ -417,6 +620,16 @@ func generateLines(mapPointer *Map, config configs.ConfigurationObject) error {
 	return nil
 }
 
+/*
+generateSingleLineRailway generate a single line railway.
+
+Param :
+  - mapPointer *Map : the map
+  - config configs.ConfigurationObject : the configuration object
+
+Return :
+  - error : an error if something went wrong
+*/
 func (mapPointer *Map) generateSingleLineRailway(
 	config configs.ConfigurationObject) error {
 
@@ -466,6 +679,16 @@ func (mapPointer *Map) generateSingleLineRailway(
 	return nil
 }
 
+/*
+generateDoubleLineRailway generate a double line railway.
+
+Param :
+  - mapPointer *Map : the map
+  - config configs.ConfigurationObject : the configuration object
+
+Return :
+  - error : an error if something went wrong
+*/
 func (mapPointer *Map) generateDoubleLineRailway(
 	config configs.ConfigurationObject) error {
 	//TODO that
@@ -553,6 +776,15 @@ func (mapPointer *Map) fillMultipleLineRailway(
 }
 */
 
+/*
+placeLineForInterchangeStation is used to place the stations of a line
+around the interchange station.
+
+Param :
+  - interchangeStation *MetroStation : the interchange station
+  - lineStations []*MetroStation : the stations of the line
+  - direction int : the direction
+*/
 func placeLineForInterchangeStation(interchangeStation *MetroStation,
 	lineStations []*MetroStation, direction int) {
 
@@ -603,10 +835,31 @@ func placeLineForInterchangeStation(interchangeStation *MetroStation,
 	}
 }
 
+/*
+nextDirection is used to determine the next direction.
+
+Param :
+  - direction int : the direction
+
+Return :
+  - int : the next direction
+*/
 func nextDirection(direction int) int {
 	return direction + (rand.Intn(5) - 2)
 }
 
+/*
+computeNextPosition is used to compute the next position.
+
+Param :
+  - X float64 : the x
+  - Y float64 : the y
+  - direction int : the direction
+
+Return :
+  - float64 : the new x
+  - float64 : the new y
+*/
 func computeNextPosition(X, Y float64, direction int) (newX, newY float64) {
 	adjustedDirection := (direction + 4) % 16
 	circlePosition := (math.Pi * 2) * (float64(adjustedDirection) / 16)
@@ -617,17 +870,19 @@ func computeNextPosition(X, Y float64, direction int) (newX, newY float64) {
 
 /*
 checkUnreachable is used for each reachable station to check if we can
-reach one of our unreachable
+reach one of our unreachable.
 
 Param :
-i int
-j int
-graph [][]*PathStation
-hasBeenModified bool
+  - mapPointer *Map : the map
+  - i int : the index of the first station
+  - j int : the index of the second station
+  - graph [][]*PathStation : the graph
+  - hasBeenModified bool : true if the graph has been modified, false
+    otherwise
 
 Return :
-[][]*PathStation
-bool
+  - [][]*PathStation : the graph
+  - bool : true if the graph has been modified, false otherwise
 */
 func (mapPointer *Map) checkUnreachable(i, j int, graph [][]*PathStation,
 	hasBeenModified bool) ([][]*PathStation, bool) {
@@ -659,14 +914,16 @@ func (mapPointer *Map) checkUnreachable(i, j int, graph [][]*PathStation,
 }
 
 /*
-checkUnreachable is used for the loop of the function multiLineRelation
+multiLineRelationLoop is used for the loop of the function multiLineRelation.
 
 Param :
-graph [][]*PathStation
-hasBeenModified bool
+  - mapPointer *Map : the map
+  - graph [][]*PathStation : the graph
+  - hasBeenModified bool : true if the graph has been modified, false
+    otherwise
 
 Return :
-[][]*PathStation
+  - [][]*PathStation : the graph
 */
 func (mapPointer *Map) multiLineRelationLoop(graph [][]*PathStation,
 	hasBeenModified bool) [][]*PathStation {
@@ -691,13 +948,14 @@ func (mapPointer *Map) multiLineRelationLoop(graph [][]*PathStation,
 }
 
 /*
-checkUnreachable is used to create the >2-lines relations (with transfer)
+multiLineRelation is used to create the >2-lines relations (with transfer).
 
 Param :
-graph [][]*PathStation
+  - mapPointer *Map : the map
+  - graph [][]*PathStation : the graph
 
 Return :
-[][]*PathStation
+  - [][]*PathStation : the graph
 */
 func (mapPointer *Map) multiLineRelation(
 	graph [][]*PathStation) [][]*PathStation {
@@ -710,10 +968,12 @@ func (mapPointer *Map) multiLineRelation(
 }
 
 /*
-GenerateGraphOld
-generate the graph enabling a passenger to determine to which station he
-should go next to arrive to destination this function needs the metroLines
-and metroStation to be finished deprecated
+GenerateGraphOld generate the graph enabling a passenger to determine to
+which station he should go next to arrive to destination this function needs
+the metroLines and metroStation to be finished deprecated.
+
+Param :
+  - mapPointer *Map : the map
 */
 func (mapPointer *Map) GenerateGraphOld() {
 
@@ -765,18 +1025,19 @@ func (mapPointer *Map) GenerateGraphOld() {
 }
 
 /*
-initStationsIdFar is used to initialize the ids of stations that are in
-proximity (range = 1)
+initStationsIdNear is used to initialize the ids of stations that are in
+proximity (range = 1).
 
 Param :
-startId int
-startStation *MetroStation
-graph [][]*PathStation
-stationModifiedId []int
+  - mapPointer *Map : the map
+  - startId int : the id of the start station
+  - startStation *MetroStation : the start station
+  - graph [][]*PathStation : the graph
+  - stationModifiedId []int : the modified ids
 
 Return :
-[][]*PathStation
-[]int
+  - [][]*PathStation : the graph
+  - []int : the modified ids
 */
 func (mapPointer *Map) initStationsIdNear(startId int,
 	startStation *MetroStation, graph [][]*PathStation,
@@ -801,20 +1062,21 @@ func (mapPointer *Map) initStationsIdNear(startId int,
 }
 
 /*
-initStationsIdFarPreAffectation is used to affect the ids
-depending on the position of the station in the line
+initStationsIdFarPreAffectation is used to affect the ids depending on the
+position of the station in the line.
 
 Param :
-startId int
-endStationId int
-stationMiddleId int
-graph [][]*PathStation
-stationModifiedId []int
-line *MetroLine
+  - mapPointer *Map : the map
+  - startId int : the id of the start station
+  - endStationId int : the id of the end station
+  - stationMiddleId int : the id of the middle station
+  - graph [][]*PathStation : the graph
+  - stationModifiedId []int : the modified ids
+  - line *MetroLine : the line
 
 Return :
-[][]*PathStation
-[]int
+  - [][]*PathStation : the graph
+  - []int : the modified ids
 */
 func (mapPointer *Map) initStationsIdFarAffectation(startId, endStationId,
 	stationMiddleId int, graph [][]*PathStation, stationModifiedId []int,
@@ -835,20 +1097,21 @@ func (mapPointer *Map) initStationsIdFarAffectation(startId, endStationId,
 }
 
 /*
-initStationsIdFarPreAffectation is used to prepare the affectation
-depending on the position of the station in the line
+initStationsIdFarPreAffectation is used to prepare the affectation depending on
+the position of the station in the line.
 
 Param :
-startId int
-stationMiddleId int
-graph [][]*PathStation
-stationModifiedId []int
-line *MetroLine
-stationMiddle *MetroStation
+  - mapPointer *Map : the map
+  - startId int : the id of the start station
+  - stationMiddleId int : the id of the middle station
+  - graph [][]*PathStation : the graph
+  - stationModifiedId []int : the modified ids
+  - line *MetroLine : the line
+  - stationMiddle *MetroStation : the middle station
 
 Return :
-[][]*PathStation
-[]int
+  - [][]*PathStation : the graph
+  - []int : the modified ids
 */
 func (mapPointer *Map) initStationsIdFarPreAffectation(startId,
 	stationMiddleId int, graph [][]*PathStation, stationModifiedId []int,
@@ -874,16 +1137,17 @@ func (mapPointer *Map) initStationsIdFarPreAffectation(startId,
 }
 
 /*
-initStationsIdFar is used to initialize the ids of stations that are > 1 range
+initStationsIdFar is used to initialize the ids of stations that are > 1 range.
 
 Param :
-startId int
-graph [][]*PathStation
-stationModifiedId []int
+  - mapPointer *Map : the map
+  - startId int : the id of the start station
+  - graph [][]*PathStation : the graph
+  - stationModifiedId []int : the modified ids
 
 Return :
-[][]*PathStation
-[]int
+  - [][]*PathStation : the graph
+  - []int : the modified ids
 */
 func (mapPointer *Map) initStationsIdFar(startId int, graph [][]*PathStation,
 	stationModifiedId []int) ([][]*PathStation, []int) {
@@ -907,12 +1171,13 @@ func (mapPointer *Map) initStationsIdFar(startId int, graph [][]*PathStation,
 checkMapValidity is used to verify if the map is goodly formed
 
 Param :
-graph [][]*PathStation
+  - mapPointer *Map : the map
+  - graph [][]*PathStation : the graph
 
 Return :
-bool : is the map badly formed (badlyFormed)
-  - true if badly formed
-  - false if goodly formed
+  - bool : is the map badly formed (badlyFormed)
+    -- true if badly formed
+    -- false if goodly formed
 */
 func (mapPointer *Map) checkMapValidity(graph [][]*PathStation) bool {
 	var badlyFormed = false
@@ -932,10 +1197,12 @@ func (mapPointer *Map) checkMapValidity(graph [][]*PathStation) bool {
 }
 
 /*
-GenerateGraph
-generate the graph enabling a passenger to determine to which station
-he should go next to arrive to destination this function needs the metroLines
-and metroStation to be finished
+GenerateGraph generate the graph enabling a passenger to determine to which
+station he should go next to arrive to destination this function needs the
+metroLines and metroStation to be finished.
+
+Param :
+  - mapPointer *Map : the map
 */
 func (mapPointer *Map) GenerateGraph() {
 	//attribute new ids to the elements
@@ -972,7 +1239,12 @@ func (mapPointer *Map) GenerateGraph() {
 	mapPointer.isConvex = mapPointer.isConvexCalc()
 }
 
-// reattribute the ID for the stations and the lines
+/*
+attributeIDs is used to reattribute the ID for the stations and the lines.
+
+Param :
+  - mapPointer *Map : the map
+*/
 func (mapPointer *Map) attributeIDs() {
 	for i := 0; i < len(mapPointer.stations); i++ {
 		mapPointer.stations[i].id = i
@@ -982,7 +1254,15 @@ func (mapPointer *Map) attributeIDs() {
 	}
 }
 
-// calculate if the city is convex
+/*
+isConvexCalc is used to calculate if the city is convex.
+
+Param :
+  - mapPointer *Map : the map
+
+Return :
+  - bool : is the city convex (isConvex)
+*/
 func (mapPointer *Map) isConvexCalc() bool {
 	for i := 0; i < len(mapPointer.stations); i++ {
 		for j := i + 1; j < len(mapPointer.stations); j++ {
@@ -995,8 +1275,16 @@ func (mapPointer *Map) isConvexCalc() bool {
 }
 
 /*
-GetPathStation
-get the path needed to go from s1 to s2
+GetPathStation is used to get the path needed to go from s1 to s2.
+
+Param :
+  - mapPointer *Map : the map
+  - s1 MetroStation : the start station
+  - s2 MetroStation : the end station
+
+Return :
+  - PathStation : the path
+  - error : an error if something went wrong
 */
 func (mapPointer *Map) GetPathStation(s1,
 	s2 MetroStation) (PathStation, error) {
@@ -1015,6 +1303,12 @@ func (mapPointer *Map) GetPathStation(s1,
 	return sOut, errors.New("badly constructed graph")
 }
 
+/*
+writeCsv is used to write the csv files.
+
+Param :
+  - mapPointer *Map : the map
+*/
 func (mapPointer *Map) writeCsv() {
 	for _, station := range mapPointer.stations {
 		mapPointer.stationsMappingCsv.Write([]string{
@@ -1049,9 +1343,15 @@ func (mapPointer *Map) writeCsv() {
 }
 
 /*
-timeBetweenDirectStations
-calculate the time to travel between two directly lined stations
-(no stations between them on a direct line)
+timeBetweenDirectStations is used to calculate the time to travel between two
+directly lined stations (no stations between them on a direct line).
+
+Param :
+  - station1 *MetroStation : the first station
+  - station2 *MetroStation : the second station
+
+Return :
+  - int : the time to travel between the two stations
 */
 func timeBetweenDirectStations(station1, station2 *MetroStation) int {
 	conf := configs.GetInstance()
@@ -1085,9 +1385,11 @@ func timeBetweenDirectStations(station1, station2 *MetroStation) int {
 }
 
 /*
-generateGraphTimeBetweenStation
-generate the time between each station using some maths
-T(a,b) = D(a,b) if Distance(a,b)
+generateGraphTimeBetweenStation is used to generate the time between each
+station using some maths : T(a,b) = D(a,b) if Distance(a,b).
+
+Param :
+  - mapPointer *Map : the map
 */
 func (mapPointer *Map) generateGraphTimeBetweenStation() {
 
@@ -1113,8 +1415,15 @@ func (mapPointer *Map) generateGraphTimeBetweenStation() {
 }
 
 /*
-GetNearestStations
-return the stations sorted by how near they are from the point.
+GetNearestStations is used to return the stations sorted by how near they are
+from the point.
+
+Param :
+  - mapPointer *Map : the map
+  - point Point : the point
+
+Return :
+  - []*MetroStation : the stations sorted by how near they are from the point
 */
 func (mapPointer *Map) GetNearestStations(point Point) []*MetroStation {
 	var output = make([]*MetroStation, len(mapPointer.stations))
@@ -1130,6 +1439,16 @@ func (mapPointer *Map) GetNearestStations(point Point) []*MetroStation {
 	return output
 }
 
+/*
+GetNearestStationOpened is used to return the nearest station that is opened.
+
+Param :
+  - mapPointer *Map : the map
+  - point Point : the point
+
+Return :
+  - *MetroStation : the nearest station that is opened
+*/
 func (mapPointer *Map) GetNearestStationOpened(point Point) *MetroStation {
 	var nearestStations = mapPointer.GetNearestStations(point)
 	//divert all passengers to the closest non-closed station
@@ -1145,9 +1464,17 @@ func (mapPointer *Map) GetNearestStationOpened(point Point) *MetroStation {
 }
 
 /*
-GetNewPathStationMiddleClose
-when start->end cannot be done, try to find a path that can
-be done from the start to the closest point possible of end
+GetNewPathStationMiddleClose is used when start->end cannot be done. It try to
+find a path that can be done from the start to the closest point possible of
+end.
+
+Param :
+  - mapPointer *Map : the map
+  - start *MetroStation : the start station
+  - end *MetroStation : the end station
+
+Return :
+  - *PathStation : the path
 */
 func (mapPointer *Map) GetNewPathStationMiddleClose(start,
 	end *MetroStation) *PathStation {

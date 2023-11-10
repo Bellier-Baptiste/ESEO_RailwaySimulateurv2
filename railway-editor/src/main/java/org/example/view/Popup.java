@@ -24,8 +24,6 @@
 
 package org.example.view;
 
-import org.example.model.Station;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -35,7 +33,7 @@ import java.awt.GridLayout;
 import java.util.function.Consumer;
 
 /**
- * Popup to inform an imminent merge between two {@link Station}.
+ * Popup to inform an imminent merge between two {@link org.example.model.Station}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

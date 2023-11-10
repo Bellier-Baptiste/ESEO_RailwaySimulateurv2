@@ -25,15 +25,13 @@
 package org.example.controller;
 
 import org.example.model.Area;
-import org.example.view.AreaView;
-import org.example.view.MainPanel;
-import org.example.view.ToolBarPanel;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.example.view.AreaView;
 import org.example.view.MainWindow;
 
 /**
  * A class for managing areas {@link Area} on the map.
- * Linked to a button in {@link ToolBarPanel}.
+ * Linked to a button in {@link org.example.view.ToolBarPanel}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
@@ -69,8 +67,8 @@ public class ActionArea {
 
   /**
    * Creates a {@link Area} with its linked {@link AreaView} created and
-   * add this {@link AreaView} to the {@link MainPanel} with
-   * {@link MainPanel#addAreaView(AreaView)}.
+   * add this {@link AreaView} to the {@link view.MainPanel} with
+   * {@link view.MainPanel#addAreaView(AreaView)}.
    */
   public void addArea() {
     Area area = new Area(AREA_POS_X_DEFAULT,

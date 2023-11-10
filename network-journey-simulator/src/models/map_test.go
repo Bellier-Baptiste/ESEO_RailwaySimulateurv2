@@ -1,11 +1,11 @@
 /*
 File : map_test.go
 
-Brief :
+Brief : map_test.go runs tests on the map.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author : Team v1, Team v2, Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -40,6 +40,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+/*
+TestMap tests the Map struct and its methods.
+
+# It tests if the struct and its methods work properly
+
+Input : t *testing.T
+
+Expected : The struct and its methods work properly
+*/
 func TestMap(t *testing.T) {
 
 	theMap, err := CreateMap()
@@ -61,7 +70,11 @@ func TestMap(t *testing.T) {
 
 }
 
-// Generate a city with 3 stations and one line
+/*
+generateMapSimpleLine test the generation of a city with 3 stations and one line.
+
+Expected : The city is generated properly
+*/
 func generateMapSimpleLine() Map {
 
 	clearStationsTest()
@@ -85,6 +98,11 @@ func generateMapSimpleLine() Map {
 	return m
 }
 
+/*
+generateMapTwoLine test the generation of a city with 3 stations and two lines.
+
+Expected : The city is generated properly
+*/
 func generateMapTwoLine() Map {
 	clearStationsTest()
 	clearLinesTest()
@@ -112,6 +130,15 @@ func generateMapTwoLine() Map {
 	return m
 }
 
+/*
+TestMap_GenerateGraph tests the generation of the graph of the map.
+
+# It tests if the graph is generated properly
+
+Input : m Map
+
+Expected : The graph is generated properly
+*/
 func map_printGraph(m Map) {
 	var g = m.graph
 	if g == nil {
@@ -133,6 +160,15 @@ func map_printGraph(m Map) {
 	}
 }
 
+/*
+TestMap_GenerateGraph tests the generation of the graph of the map.
+
+# It tests if the graph is generated properly
+
+Input : t *testing.T
+
+Expected : The graph is generated properly
+*/
 func TestMap_GenerateGraphDirectLine(t *testing.T) {
 	m := generateMapSimpleLine()
 
@@ -157,6 +193,15 @@ func TestMap_GenerateGraphDirectLine(t *testing.T) {
 	assert.Nil(t, m.graph[2][2])
 }
 
+/*
+TestMap_GenerateGraphComplex tests the generation of the graph of the map.
+
+# It tests if the graph is generated properly
+
+Input : t *testing.T
+
+Expected : The graph is generated properly
+*/
 func TestMap_GenerateGraphComplex(t *testing.T) {
 	clearLinesTest()
 
@@ -186,6 +231,15 @@ func TestMap_GenerateGraphComplex(t *testing.T) {
 	assert.Nil(t, m.graph[2][2])
 }
 
+/*
+TestMap_ExportMapToAdConfig tests the export of a map to an AdConfig.
+
+# It tests if the export is done properly
+
+Input : t *testing.T
+
+Expected : The export is done properly
+*/
 func TestMap_ExportMapToAdConfig(t *testing.T) {
 	var mapObject, err = CreateMap()
 	if err != nil {
@@ -198,6 +252,15 @@ func TestMap_ExportMapToAdConfig(t *testing.T) {
 	assert.Nil(t, adConfig.SaveXML("test.xml"))
 }
 
+/*
+TestAddDelay tests the AddDelay method of the Map struct.
+
+# It tests if the delay is added properly
+
+Input : t *testing.T
+
+Expected : The delay is added properly
+*/
 func TestAddDelay(t *testing.T) {
 	//create a map
 	var adConfig = *configs.GetAdvancedConfigInstance()
@@ -212,6 +275,15 @@ func TestAddDelay(t *testing.T) {
 	assert.Equal(t, 500, theMap.GraphDelay()[0][2], "time between 0 and 2 should be 500")
 }
 
+/*
+TestMap_GetNearestStations tests the GetNearestStations method of the Map struct.
+
+# It tests if the nearest stations are returned properly
+
+Input : t *testing.T
+
+Expected : The nearest stations are returned properly
+*/
 func TestMap_GetNearestStations(t *testing.T) {
 	theMap, _ := CreateMap()
 

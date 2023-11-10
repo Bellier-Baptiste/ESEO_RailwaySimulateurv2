@@ -32,7 +32,7 @@ import java.awt.Stroke;
 import java.util.List;
 
 /**
- * View for a {@link Line}.
+ * View for a {@link org.example.model.Line}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

@@ -3,11 +3,14 @@ Package models
 
 File : calendar.go
 
-Brief :
+Brief : This file contains the Calendar struct and its methods.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -39,9 +42,21 @@ import (
 	"time"
 )
 
+/*
+Calendar struct contains the calendar of the simulation
+*/
 type Calendar struct {
 }
 
+/*
+GetBusinessDay returns the business day of the simulation.
+
+Param :
+  - currentTime time.Time : the current time of the simulation
+
+Return :
+  - time.Time : the business day of the simulation
+*/
 func GetBusinessDay(currentTime time.Time) time.Time {
 	config := configs.GetInstance()
 	businessDayOffset := config.BusinessDayStart()

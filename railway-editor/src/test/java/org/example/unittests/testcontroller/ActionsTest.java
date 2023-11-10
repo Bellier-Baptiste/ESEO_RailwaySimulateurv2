@@ -22,14 +22,12 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testcontroller;
-
-import org.example.controller.ActionArea;
-import org.example.controller.ActionLine;
-import org.example.controller.ActionStation;
-import org.example.model.Line;
+package unittests.testcontroller;import controller.ActionArea;
+import controller.ActionLine;
+import controller.ActionStation;
+import model.Line;
 import org.junit.Test;
-import org.example.view.MainWindow;
+import view.MainWindow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

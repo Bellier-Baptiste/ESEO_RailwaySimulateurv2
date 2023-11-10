@@ -24,16 +24,10 @@
 
 package org.example.controller;
 
+import org.example.data.Data;
 import org.example.model.Area;
 import org.example.model.Station;
-import org.example.data.Data;
-import org.example.view.MainPanel;
-import org.example.view.Popup;
-import org.example.view.StationView;
-import org.example.view.AreaSetDistribution;
-import org.example.view.AreaView;
-import org.example.view.LineView;
-import org.example.view.MainWindow;
+import org.example.view.*;
 
 import java.awt.Cursor;
 import java.awt.Point;
@@ -44,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class which manage all actions relative to the {@link MainPanel}
+ * Class which manage all actions relative to the {@link org.example.view.MainPanel}
  * using mouse.
  *
  * @author Arthur Lagarce
@@ -285,7 +279,7 @@ public class MovingAdapter extends MouseAdapter {
     StationView clickedStation = this.getClickedStation(e.getX(), e.getY());
     // if we want to delete the selected station
     if (e.getButton() == MouseEvent.BUTTON3 && !selectSecStation
-        && clickedStation != null) {
+      && clickedStation != null) {
       deleteStation(clickedStation);
       MainWindow.getInstance().getMainPanel().repaint();
     }

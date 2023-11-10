@@ -45,7 +45,7 @@ import java.util.List;
  * Class which creates a custom {@link JComboBox} with integrated research
  * function.
  *
- * @see ListEventPanel
+ * @see org.example.view.ListEventPanel
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

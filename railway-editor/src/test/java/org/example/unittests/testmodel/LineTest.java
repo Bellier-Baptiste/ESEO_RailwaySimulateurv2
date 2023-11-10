@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testmodel;
+package unittests.testmodel;
 
-import org.example.model.Line;
-import org.example.model.Station;
+import model.Line;
+import model.Station;
 import org.junit.Test;
 
 import java.util.ArrayList;

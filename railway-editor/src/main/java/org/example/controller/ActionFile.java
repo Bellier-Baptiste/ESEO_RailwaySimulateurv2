@@ -34,7 +34,6 @@ import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
 import org.example.model.Station;
-import org.example.view.MenuBar;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -68,9 +67,9 @@ import java.util.Map;
 
 /**
  * A class for performing actions related to the file menu.
- * Linked to menu items in {@link MenuBar}.
+ * Linked to menu items in {@link org.example.view.MenuBar}.
  *
- * @see Data
+ * @see org.example.data.Data
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
@@ -200,13 +199,13 @@ public class ActionFile {
     for (Event event : eventList) {
       // Name of the event
       String timeStart = event.getStartTime();
+      timeStart = timeStart.replace("-", "T");
       timeStart = timeStart.replace("/", "-");
-      timeStart = timeStart.replace("_", "T");
       timeStart = timeStart + ":00.000Z";
 
       String timeEnd = event.getEndTime();
+      timeEnd = timeEnd.replace("-", "T");
       timeEnd = timeEnd.replace("/", "-");
-      timeEnd = timeEnd.replace("_", "T");
       timeEnd = timeEnd + ":00.000Z";
 
       Element eventName = document.createElement(event.getEventName()

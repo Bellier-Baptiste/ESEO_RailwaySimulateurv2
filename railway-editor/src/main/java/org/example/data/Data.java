@@ -25,8 +25,6 @@
 package org.example.data;
 
 import org.example.model.Event;
-import org.example.model.Line;
-import org.example.model.Station;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -40,9 +38,9 @@ import java.util.function.Consumer;
  * Data Singleton class which stores all information relative to the metro
  * network configuration.
  *
- * @see Line
- * @see Station
- * @see Event
+ * @see org.example.model.Line
+ * @see org.example.model.Station
+ * @see org.example.model.Event
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

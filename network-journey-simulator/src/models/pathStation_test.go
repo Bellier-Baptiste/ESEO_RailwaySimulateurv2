@@ -1,11 +1,14 @@
 /*
 File : pathStation_test.go
 
-Brief :
+Brief : pathStation_test.go runs tests on the pathStation.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -36,6 +39,14 @@ import (
 	"testing"
 )
 
+/*
+generateStationsLinesRandomTest generates a random set of stations and lines
+for testing purposes.
+
+Return :
+  - []*MetroStation : the generated stations
+  - []*MetroLine : the generated lines
+*/
 func generateStationsLinesRandomTest() ([]*MetroStation, []*MetroLine) {
 	var stations = []*MetroStation{
 		{id: 1},
@@ -50,6 +61,15 @@ func generateStationsLinesRandomTest() ([]*MetroStation, []*MetroLine) {
 	return stations, lines
 }
 
+/*
+TestPathStation_append tests the PathStation.append method.
+
+# It tests if the method works properly
+
+Input : t *testing.T
+
+Expected : The method works properly
+*/
 func TestPathStation_append(t *testing.T) {
 	var stations, lines = generateStationsLinesRandomTest()
 

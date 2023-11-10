@@ -78,9 +78,10 @@ public final class MenuBar extends JMenuBar {
 
     // Configuration menu
     JMenu config = new JMenu("Configuration");
-    JMenuItem newConfig = new JMenuItem("New");
-    newConfig.setName("New");
-    config.add(newConfig);
+    JMenuItem editConfig = new JMenuItem("Edit");
+    editConfig.setName("Edit");
+    editConfig.addActionListener(e -> new EditConfigDialog());
+    config.add(editConfig);
     JMenuItem openConfig = new JMenuItem("Open");
     openConfig.setName("Open");
     config.add(openConfig);

@@ -1,11 +1,13 @@
 /*
 File : eventLineClose_test.go
 
-Brief :
+Brief : eventLineClose_test.go runs tests on the eventLineClose.go file.
 
-Date : N/A
+Date : 10/02/2020
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -39,6 +41,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+/*
+TestEventLineClosed tests the EventLineClosed struct and its methods.
+
+# It tests if the struct and its methods work properly
+
+Input : t *testing.T
+
+Expected : The struct and its methods work properly
+*/
 func TestEventLineClosed(t *testing.T) {
 	println("*** eventLineClosed_test.go ***")
 	start, err := time.Parse("15:04", "00:01")

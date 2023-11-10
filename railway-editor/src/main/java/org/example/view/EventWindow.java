@@ -24,8 +24,6 @@
 
 package org.example.view;
 
-import org.example.model.Event;
-
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
@@ -36,9 +34,9 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 /**
- * JFrame of the {@link Event}'s edition.
+ * JFrame of the {@link org.example.model.Event}'s edition.
  *
- * @see ListEventPanel
+ * @see org.example.view.ListEventPanel
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

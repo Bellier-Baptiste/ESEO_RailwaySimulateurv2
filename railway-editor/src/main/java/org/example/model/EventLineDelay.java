@@ -25,8 +25,8 @@
 package org.example.model;
 
 /**
- * Model class extending {@link EventBetween2Stations} which describes a
- * delay between two stations {@link Station}.
+ * Model class extending {@link org.example.model.EventBetween2Stations} which describes a
+ * delay between two stations {@link org.example.model.Station}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

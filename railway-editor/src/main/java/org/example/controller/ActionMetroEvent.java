@@ -47,10 +47,10 @@ import java.awt.Color;
 import java.awt.event.WindowEvent;
 
 /**
- * A class for creating events {@link Event} on the map.
+ * A class for creating events {@link org.example.model.Event} on the map.
  *
- * @see EventWindow
- * @see EventRecap
+ * @see org.example.view.EventWindow
+ * @see org.example.view.EventRecap
  * @see ListEventPanel
  *
  * @author Arthur Lagarce

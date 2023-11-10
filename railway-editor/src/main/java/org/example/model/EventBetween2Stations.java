@@ -26,7 +26,7 @@ package org.example.model;
 
 /**
  * Model class which describes a generic event between two
- * {@link Station}.
+ * {@link model.Station}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

@@ -25,8 +25,8 @@
 package org.example.model;
 
 /**
- * Model class extends {@link EventBetween2Stations} which describes the
- * closing between two stations {@link Station}.
+ * Model class extends {@link org.example.model.EventBetween2Stations} which describes the
+ * closing between two stations {@link org.example.model.Station}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

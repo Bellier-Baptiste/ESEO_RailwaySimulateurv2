@@ -25,7 +25,7 @@
 package org.example.model;
 
 /**
- * Enum of the {@link Event} names.
+ * Enum of the {@link org.example.model.Event} names.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

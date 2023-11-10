@@ -24,8 +24,6 @@
 
 package org.example.controller;
 
-import org.example.view.ToolBarPanel;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -34,7 +32,7 @@ import java.util.ArrayList;
 
 /**
  * A class for running the simulation from the Java HMI.
- * Linked to buttons in {@link ToolBarPanel}.
+ * Linked to buttons in {@link view.ToolBarPanel}.
  *
  * @author Aurélie Chamouleau
  * @file ActionRunSimulation.java
@@ -78,14 +76,13 @@ public final class ActionRunSimulation {
    *
    * @return the exit value of the process
    */
-  //TODO change root directory of java and go
   public int runSimulation() throws InterruptedException, IOException {
     // Check if simulator.exe is already running
     if (this.isSimulatorRunning()) {
       // If yes, return -1 (did not run the simulation)
       return -1;
     }
-
+    //TODO change java and go root
     String rootJavaProjectPath = System.getProperty("user.dir");
     String rootGoProjectPath = rootJavaProjectPath.replace(
         "railway-editor_java_version", "pfe-2018-network-journey-simulator");

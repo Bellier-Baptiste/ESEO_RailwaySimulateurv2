@@ -3,11 +3,14 @@ Package models
 
 File : timetableReal.go
 
-Brief :
+Brief : This file contains the TimetableReal struct and its methods.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -38,26 +41,65 @@ import (
 	"strconv"
 )
 
+/*
+TimetableReal is the structure that manage the timetable of the real trains.
+
+Attributes :
+  - eventsTrain []*EventTimetableTrain : the list of the events of the real
+    trains
+
+Methods :
+  - GetEventsTrain() []*EventTimetableTrain : return the list of the events of
+    the real trains
+  - AddEventsTrain(event *EventTimetableTrain) : add an event to the list of
+    the events of the real trains
+  - ToCSV() : generate CSV file for the timetableReal
+*/
 type TimetableReal struct {
 	eventsTrain []*EventTimetableTrain
 }
 
+/*
+GetEventsTrain return the list of the events of the real trains.
+
+Param :
+  - timetableReal *TimetableReal : the timetable of the real trains
+
+Return :
+  - []*EventTimetableTrain : the list of the events of the real trains
+*/
 func (timetableReal *TimetableReal) GetEventsTrain() []*EventTimetableTrain {
 	return timetableReal.eventsTrain
 }
 
+/*
+AddEventsTrain add an event to the list of the events of the real trains.
+
+Param :
+  - timetableReal *TimetableReal : the timetable of the real trains
+  - event *EventTimetableTrain : the event to add
+*/
 func (timetableReal *TimetableReal) AddEventsTrain(event *EventTimetableTrain) {
 	timetableReal.eventsTrain = append(timetableReal.eventsTrain, event)
 }
 
 // --- Constructor
 
+/*
+NewTimetableReal creates a new TimetableReal struct.
+
+Return :
+  - TimetableReal : the new TimetableReal struct
+*/
 func NewTimetableReal() TimetableReal {
 	return TimetableReal{}
 }
 
 /*
-ToCSV generate CSV file
+ToCSV generate CSV file for the timetableReal.
+
+Param :
+  - timetableReal *TimetableReal : the timetable of the real trains
 */
 func (timetableReal *TimetableReal) ToCSV() {
 	var aux string

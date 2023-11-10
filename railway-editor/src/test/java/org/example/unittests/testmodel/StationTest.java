@@ -22,9 +22,9 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testmodel;
+package unittests.testmodel;
 
-import org.example.model.Station;
+import model.Station;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

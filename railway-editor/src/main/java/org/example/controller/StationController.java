@@ -25,12 +25,11 @@
 package org.example.controller;
 
 import org.example.model.Station;
-import org.example.view.MainPanel;
-import org.example.view.StationView;
 import org.example.view.MainWindow;
+import org.example.view.StationView;
 
 /**
- * Controller to add {@link StationView} to the {@link MainPanel}.
+ * Controller to add {@link StationView} to the {@link view.MainPanel}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

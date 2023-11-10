@@ -1,11 +1,14 @@
 /*
 File : metroStation_test.go
 
-Brief :
+Brief : metroStation_test.go runs tests on the metroStation.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -37,12 +40,23 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+/*
+linesTest is a slice of MetroLine used for tests.
+
+Attributes :
+  - name string : the name of the line
+  - trainNumber int : the number of trains of the line
+  - passengersMaxPerTrain int : the number of passengers max per train
+*/
 var linesTest = []MetroLine{
 	{name: "A", trainNumber: 5, passengersMaxPerTrain: 120},
 	{name: "B", trainNumber: 5, passengersMaxPerTrain: 120},
 	{name: "C", trainNumber: 5, passengersMaxPerTrain: 120},
 }
 
+/*
+clearLinesTest clears the linesTest slice.
+*/
 func clearLinesTest() {
 	linesTest = []MetroLine{
 		{name: "A", trainNumber: 5, passengersMaxPerTrain: 120},
@@ -51,6 +65,13 @@ func clearLinesTest() {
 	}
 }
 
+/*
+initStation initializes a MetroStation for tests. It adds the linesTest to the
+station.
+
+Return :
+  - station MetroStation : the initialized station
+*/
 func initStation() MetroStation {
 	var station = MetroStation{
 		id:       0,
@@ -65,6 +86,16 @@ func initStation() MetroStation {
 	return station
 }
 
+/*
+TestMetroStation_hasDirectLineTo tests the hasDirectLineTo method of the
+MetroStation struct.
+
+# It tests if the method works properly
+
+Input : t *testing.T
+
+Expected : The method works properly
+*/
 func TestMetroStation_hasDirectLineTo(t *testing.T) {
 	var station1 = initStation()
 	var station2 = initStation()

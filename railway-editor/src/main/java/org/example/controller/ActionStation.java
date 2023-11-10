@@ -26,8 +26,9 @@ package org.example.controller;
 
 import org.example.data.Data;
 import org.example.model.Station;
-import org.example.view.*;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.example.view.LineView;
+import org.example.view.MainWindow;
 import org.example.view.StationView;
 
 import java.util.List;
@@ -36,7 +37,7 @@ import java.util.Random;
 /**
  * A class for performing actions on the stations views {@link StationView} and
  * the stations {@link Station}.
- * Linked to buttons in {@link ToolBarPanel}.
+ * Linked to buttons in {@link org.example.view.ToolBarPanel}.
  *
  * @author Aurélie Chamouleau
  * @file ActionStation.java
@@ -46,6 +47,7 @@ import java.util.Random;
 public final class ActionStation {
   /** Action name of the add button. */
   public static final String ACTION_NAME = "ADD_STATION";
+  public static final String DELETE_STATION = "DELETE_STATION";
   /** Low bound for the random position of the station. */
   private static final int LOW_BOUND = 10;
   /** High bound for the random position of the station. */
@@ -85,8 +87,8 @@ public final class ActionStation {
 
   /**
    * Creates a {@link Station} with its linked {@link StationView} created and
-   * add this {@link StationView} to the {@link MainPanel}
-   * thanks to {@link StationController}.
+   * add this {@link StationView} to the {@link org.example.view.MainPanel}
+   * thanks to {@link org.example.controller.StationController}.
    */
   public void addStation() {
     int lineToUpdateIndex = ActionLine.getInstance().getLineToUpdateIndex();

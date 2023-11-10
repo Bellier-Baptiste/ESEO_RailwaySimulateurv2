@@ -3,11 +3,14 @@ Package tools
 
 File : csvCreator.go
 
-Brief :
+Brief : This file contains the tools to create csv files.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -44,26 +47,76 @@ import (
 // var basePath = os.Getenv("GOPATH")
 var projectPath = ""
 
+/*
+CsvFile is a struct that represents a csv file.
+
+Attributes :
+  - path string : The path of the file
+  - delimiter string : The delimiter of the file
+
+Methods :
+  - Write(content []string) : Writes a row in the csv file
+  - WriteMultiple(contents [][]string) : Writes multiple rows in the csv file
+*/
 type CsvFile struct {
 	path      string
 	delimiter string
 }
 
+/*
+check is a function that checks if an error is nil.
+
+Param :
+  - e error : The error to check
+*/
 func check(e error) {
 	if e != nil {
 		panic(e)
 	}
 }
 
+/*
+NewFileWithDelimiter creates a new csv file with a given name, columns and
+delimiter.
+
+Param :
+  - name string : The name of the file
+  - columns []string : The columns of the file
+  - delimiter string : The delimiter of the file
+
+Return :
+  - CsvFile : The created file
+*/
 func NewFileWithDelimiter(name string, columns []string,
 	delimiter string) CsvFile {
 	return createFile(name, columns, delimiter)
 }
 
+/*
+NewFile creates a new csv file with a given name and columns.
+
+Param :
+  - name string : The name of the file
+  - columns []string : The columns of the file
+
+Return :
+  - CsvFile : The created file
+*/
 func NewFile(name string, columns []string) CsvFile {
 	return createFile(name, columns, ",")
 }
 
+/*
+createFile creates a new csv file with a given name, columns and delimiter.
+
+Param :
+  - name string : The name of the file
+  - columns []string : The columns of the file
+  - delimiter string : The delimiter of the file
+
+Return :
+  - CsvFile : The created file
+*/
 func createFile(name string, columns []string, delimiter string) CsvFile {
 	currentPath, err := os.Getwd()
 	if err != nil {
@@ -140,6 +193,13 @@ func createFile(name string, columns []string, delimiter string) CsvFile {
 	return csv
 }
 
+/*
+Write writes a row in the csv file.
+
+Param :
+  - csv CsvFile : The csv file to write in
+  - content []string : The content of the row
+*/
 func (csv *CsvFile) Write(content []string) {
 
 	file, err := os.OpenFile(csv.path, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
@@ -175,6 +235,13 @@ func (csv *CsvFile) Write(content []string) {
 
 }
 
+/*
+WriteMultiple writes multiple rows in the csv file.
+
+Param :
+  - csv CsvFile : The csv file to write in
+  - contents [][]string : The content of the rows
+*/
 func (csv *CsvFile) WriteMultiple(contents [][]string) {
 	file, err := os.OpenFile(csv.path, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	check(err)
@@ -210,6 +277,16 @@ func (csv *CsvFile) WriteMultiple(contents [][]string) {
 
 }
 
+/*
+exists checks if a file exists.
+
+Param :
+  - path string : The path of the file
+
+Return :
+  - bool : True if the file exists, false otherwise
+  - error : The error if any
+*/
 func exists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
