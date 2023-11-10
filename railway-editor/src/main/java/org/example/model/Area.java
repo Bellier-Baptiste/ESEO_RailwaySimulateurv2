@@ -113,7 +113,7 @@ public class Area {
     distributionKey.add(Data.AREA_WORKER);
     distributionKey.add(Data.AREA_CHILD);
     distributionKey.add(Data.AREA_RETIRED);
-    distributionKey.add(Data.AREA_RETIRED);
+    distributionKey.add(Data.AREA_UNEMPLOYED);
     Random rand = new Random();
     float r = rand.nextFloat();
     float g = rand.nextFloat();
