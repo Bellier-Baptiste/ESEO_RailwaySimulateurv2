@@ -216,7 +216,7 @@ public class AreaSetDistribution {
     panel.add(panelDestination);
 
 
-    int result = JOptionPane.showConfirmDialog(null, panel,
+    int result = JOptionPane.showConfirmDialog(MainWindow.getInstance(), panel,
         "Edit distribution", JOptionPane.OK_CANCEL_OPTION,
         JOptionPane.PLAIN_MESSAGE);
     if (result == JOptionPane.OK_OPTION) {
