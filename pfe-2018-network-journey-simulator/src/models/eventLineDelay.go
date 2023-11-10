@@ -3,11 +3,14 @@ Package models
 
 File : eventLineDelay.go
 
-Brief :
+Brief : This file contains the EventLineDelay struct and its methods.
 
-Date : N/A
+Date : 10/02/2020
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -35,6 +38,26 @@ package models
 
 import "time"
 
+/*
+EventLineDelay is the structure that manage the event of a delay on a line.
+
+Attributes :
+  - delay int : the delay of the line
+  - start time.Time : start time of the event
+  - end time.Time : end time of the event
+  - idStationStart int : id of the start station
+  - idStationEnd int : id of the end station
+  - finished bool : true if the event is finished, false otherwise
+
+Methods :
+  - Finished() bool : return true if the event is finished, false otherwise
+  - SetFinished(f bool) : set the finished attribute to f
+  - Start() time.Time : return the start time of the event
+  - End() time.Time : return the end time of the event
+  - IdStationStart() int : return the id of the start station
+  - IdStationEnd() int : return the id of the end station
+  - Delay() int : return the delay of the line
+*/
 type EventLineDelay struct {
 	delay          int
 	start          time.Time
@@ -44,6 +67,19 @@ type EventLineDelay struct {
 	finished       bool
 }
 
+/*
+NewEventLineDelay is the constructor of the EventLineDelay struct.
+
+Param :
+  - idStationStart int : the id of the start station
+  - idStationEnd int : the id of the end station
+  - delay int : the delay of the line
+  - start time.Time : the start time of the delay
+  - end time.Time : the end time of the delay
+
+Return :
+  - EventLineDelay : the new EventLineDelay struct
+*/
 func NewEventLineDelay(idStationStart, idStationEnd, delay int,
 	start, end time.Time) EventLineDelay {
 	return EventLineDelay{
@@ -56,30 +92,92 @@ func NewEventLineDelay(idStationStart, idStationEnd, delay int,
 	}
 }
 
+/*
+Finished returns the finished attribute of the EventLineDelay struct.
+
+Param :
+  - eld *EventLineDelay : the EventLineDelay struct
+
+Return :
+  - bool : the finished attribute of the EventLineDelay struct
+*/
 func (eld *EventLineDelay) Finished() bool {
 	return eld.finished
 }
 
+/*
+SetFinished sets the finished attribute of the EventLineDelay struct.
+
+Param :
+  - eld *EventLineDelay : the EventLineDelay struct
+  - f bool : the new value of the finished attribute
+*/
 func (eld *EventLineDelay) SetFinished(f bool) {
 	eld.finished = f
 }
 
+/*
+Start returns the start attribute of the EventLineDelay struct.
+
+Param :
+  - eld *EventLineDelay : the EventLineDelay struct
+
+Return :
+  - time.Time : the start attribute of the EventLineDelay struct
+*/
 func (eld *EventLineDelay) Start() time.Time {
 	return eld.start
 }
 
+/*
+End returns the end attribute of the EventLineDelay struct.
+
+Param :
+  - eld *EventLineDelay : the EventLineDelay struct
+
+Return :
+  - time.Time : the end attribute of the EventLineDelay struct
+*/
 func (eld *EventLineDelay) End() time.Time {
 	return eld.end
 }
 
+/*
+IdStationStart returns the idStationStart attribute of the EventLineDelay
+struct.
+
+Param :
+  - eld *EventLineDelay : the EventLineDelay struct
+
+Return :
+  - int : the idStationStart attribute of the EventLineDelay struct
+*/
 func (eld *EventLineDelay) IdStationStart() int {
 	return eld.idStationStart
 }
 
+/*
+IdStationEnd returns the idStationEnd attribute of the EventLineDelay struct.
+
+Param :
+  - eld *EventLineDelay : the EventLineDelay struct
+
+Return :
+  - int : the idStationEnd attribute of the EventLineDelay struct
+*/
 func (eld *EventLineDelay) IdStationEnd() int {
 	return eld.idStationEnd
 }
 
+/*
+Delay returns the delay attribute of the EventLineDelay struct.
+
+Param :
+  - eld *EventLineDelay : the EventLineDelay struct
+
+Return :
+  - int : the delay attribute of the EventLineDelay struct
+*/
 func (eld *EventLineDelay) Delay() int {
 	return eld.delay
 }

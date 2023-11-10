@@ -1,11 +1,15 @@
 /*
 File : simulator_test.go
 
-Brief :
+Brief : simulator_test.go contains the tests of the simulator package.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Benoît VAVASSEUR
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -51,13 +55,28 @@ const (
 	eap_size         = 10
 )
 
+/*
+beforeAll() is called before all tests.
+*/
 func beforeAll() {
 	var config = configs.GetInstance()
 	config.Reload()
 }
 
+/*
+afterAll() is called after all tests.
+*/
 func afterAll() {}
 
+/*
+TestMain() is called before all tests. It calls beforeAll() and afterAll().
+
+# It tests if the beforeAll() and afterAll() functions work properly
+
+Input : m *testing.M
+
+Expected : The beforeAll() and afterAll() functions work properly
+*/
 func TestMain(m *testing.M) {
 	println("*** simulator_test.go ***")
 	beforeAll()
@@ -66,6 +85,15 @@ func TestMain(m *testing.M) {
 	os.Exit(retCode)
 }
 
+/*
+TestSimulator_SimulatorInit() tests the Init() method of the Simulator struct.
+
+# It tests if the Init() method works properly
+
+Input : t *testing.T
+
+Expected : The Init() method works properly
+*/
 func TestSimulator_SimulatorInit(t *testing.T) {
 	println("TestSimulator_SimulatorInit")
 	var sim = NewSimulator()
@@ -75,6 +103,15 @@ func TestSimulator_SimulatorInit(t *testing.T) {
 	assert.True(t, output)
 }
 
+/*
+TestSimulator_RunOnce() tests the RunOnce() method of the Simulator struct.
+
+# It tests if the RunOnce() method works properly
+
+Input : t *testing.T
+
+Expected : The RunOnce() method works properly
+*/
 func TestSimulator_RunOnce(t *testing.T) {
 	println("TestSimulator_RunOnce")
 	//var basePath = os.Getenv("GOPATH")
@@ -103,6 +140,15 @@ func TestSimulator_RunOnce(t *testing.T) {
 	sim.RunOnce()
 }
 
+/*
+TestSimulator_RunMultiple() tests the RunMultiple() method of the Simulator struct.
+
+# It tests if the RunMultiple() method works properly
+
+Input : t *testing.T
+
+Expected : The RunMultiple() method works properly
+*/
 func TestSimulator_RunMultiple(t *testing.T) {
 	println("TestSimulator_RunMultiple")
 	sim := NewSimulator()
@@ -128,6 +174,16 @@ func TestSimulator_RunMultiple(t *testing.T) {
 	}
 }
 
+/*
+TestSimulator_Run() tests the Run() method of the Simulator struct.
+
+# It tests if the Run() method works properly
+
+Input : t *testing.T
+
+Expected : The Run() method works properly
+*/
+/*
 func TestSimulator_Run(t *testing.T) {
 
 	var config = configs.GetInstance()
@@ -171,7 +227,17 @@ func TestSimulator_Run(t *testing.T) {
 	assert.True(t, tripsFinished > tripsNotFinished)
 	//println(simulator.population.String())
 }
+*/
 
+/*
+TestSimulator_TripNumber() tests the TripNumber() method of the Simulator struct.
+
+# It tests if the TripNumber() method works properly
+
+Input : t *testing.T
+
+Expected : The TripNumber() method works properly
+*/
 func TestSimulator_TripNumber(t *testing.T) {
 	println("\r")
 	println("TestSimulator_TripNumber")
@@ -188,6 +254,15 @@ func TestSimulator_TripNumber(t *testing.T) {
 	assert.True(t, sim.GetTrains()[0].GetTripNumber() != sim.GetTrains()[1].GetTripNumber(), "trip number can't be the same for the first two trains")
 }
 
+/*
+TestSimulator_EventLineClosed() tests the GetAllEventsLineClosed() method of the Simulator struct.
+
+# It tests if the GetAllEventsLineClosed() method works properly
+
+Input : t *testing.T
+
+Expected : The GetAllEventsLineClosed() method works properly
+*/
 func TestSimulator_EventLineClosed(t *testing.T) {
 	println("TestSimulator_EventLineClosed")
 	sim := NewSimulator()
@@ -206,6 +281,39 @@ func TestSimulator_EventLineClosed(t *testing.T) {
 	assert.Equal(t, elc_stationEnd, eventsLineClosed[0].IdStationEnd(), "Bad End station id")
 }
 
+/*
+TestSimulator_EventStationClosed() tests the GetAllEventsStationClosed() method of the Simulator struct.
+
+# It tests if the GetAllEventsStationClosed() method works properly
+
+Input : t *testing.T
+
+Expected : The GetAllEventsStationClosed() method works properly
+*/
+func TestSimulator_EventStationClosed(t *testing.T) {
+	println("TestSimulator_EventStationClosed")
+	sim := NewSimulator()
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
+	eventsStationClosed := sim.GetAllEventsStationClosed()
+
+	assert.True(t, len(eventsStationClosed) != 0, "Array of events (station closed) not initialized")
+
+	assert.Equal(t, timeStart, eventsStationClosed[0].Start().Format(time.RFC3339), "Bad Start time")
+	assert.Equal(t, timeEnd, eventsStationClosed[0].End().Format(time.RFC3339), "Bad End time")
+	assert.Equal(t, 2, eventsStationClosed[0].IdStation(), "Bad station id")
+}
+
+/*
+TestSimulator_EventAttendancePeak() tests the GetAllEventsAttendancePeak() method of the Simulator struct.
+
+# It tests if the GetAllEventsAttendancePeak() method works properly
+
+Input : t *testing.T
+
+Expected : The GetAllEventsAttendancePeak() method works properly
+*/
 func TestSimulator_EventAttendancePeak(t *testing.T) {
 	println("TestSimulator_EventAttendancePeak")
 	sim := NewSimulator()

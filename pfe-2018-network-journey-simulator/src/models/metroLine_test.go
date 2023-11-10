@@ -1,11 +1,14 @@
 /*
 File : metroLine_test.go
 
-Brief :
+Brief : metroLine_test.go runs tests on the metroLine.go file.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -38,12 +41,22 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+/*
+stationsTest is a slice of MetroStation used for the tests.
+
+Attributes :
+  - name string : the name of the station
+  - id int : the id of the station
+*/
 var stationsTest = []MetroStation{
 	{name: "station1", id: 0},
 	{name: "station2", id: 1},
 	{name: "station3", id: 2},
 }
 
+/*
+clearStationsTest is a function that clear the stationsTest slice.
+*/
 func clearStationsTest() {
 	stationsTest = []MetroStation{
 		{name: "station1", id: 0},
@@ -52,6 +65,12 @@ func clearStationsTest() {
 	}
 }
 
+/*
+initLine is a function that initialize a MetroLine for the tests.
+
+Return :
+  - MetroLine : the MetroLine initialized
+*/
 func initLine() MetroLine {
 	clearStationsTest()
 	return MetroLine{
@@ -66,6 +85,15 @@ func initLine() MetroLine {
 	}
 }
 
+/*
+TestGetPath tests the GetPath method of the MetroLine struct.
+
+# It tests if the method works properly
+
+Input : t *testing.T
+
+Expected : The method works properly
+*/
 func TestGetPath(t *testing.T) {
 	var line = initLine()
 
@@ -80,6 +108,15 @@ func TestGetPath(t *testing.T) {
 	assert.Equal(t, stationsTest[1], *path[1])
 }
 
+/*
+TestEqualsMetroLine tests the Equals method of the MetroLine struct.
+
+# It tests if the method works properly
+
+Input : t *testing.T
+
+Expected : The method works properly
+*/
 func TestEqualsMetroLine(t *testing.T) {
 	var line = initLine()
 	var line2 = initLine()
@@ -87,6 +124,15 @@ func TestEqualsMetroLine(t *testing.T) {
 	assert.True(t, line.Equals(line2))
 }
 
+/*
+TestPositionInLine tests the PositionInLine method of the MetroLine struct.
+
+# It tests if the method works properly
+
+Input : t *testing.T
+
+Expected : The method works properly
+*/
 func TestPositionInLine(t *testing.T) {
 	var line = initLine()
 
@@ -95,6 +141,15 @@ func TestPositionInLine(t *testing.T) {
 	assert.Equal(t, line.PositionInLine(&stationsTest[2]), 2)
 }
 
+/*
+TestDurationOfLine tests the DurationOfLine method of the MetroLine struct.
+
+# It tests if the method works properly
+
+Input : t *testing.T
+
+Expected : The method works properly
+*/
 func TestDurationOfLine(t *testing.T) {
 	line := initLine()
 	var graph [][]int

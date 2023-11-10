@@ -24,8 +24,6 @@
 
 package model;
 
-import controller.EventName;
-
 /**
  * Model class extends {@link model.EventBetween2Stations} which describes the
  * closing between two stations {@link model.Station}.

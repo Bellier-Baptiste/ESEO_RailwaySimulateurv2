@@ -1,11 +1,14 @@
 /*
 File : eventAttendancePeak_test.go
 
-Brief :
+Brief : eventAttendancePeak_test.go runs tests on the eventAttendancePeak.go
+file.
 
-Date : N/A
+Date : 10/02/2020
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -38,6 +41,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+/*
+TestEventAttendancePeak tests the EventAttendancePeak struct and its methods.
+
+# It tests if the struct and its methods work properly
+
+Input : t *testing.T
+
+Expected : The struct and its methods work properly
+*/
 func TestEventAttendancePeak(t *testing.T) {
 	println("*** eventAttendancePeak_test.go ***")
 	start, _ := time.Parse("15:04", "00:01")
@@ -45,7 +57,7 @@ func TestEventAttendancePeak(t *testing.T) {
 	attendancePeak := NewEventAttendancePeak(1, 10, start)
 
 	assert.Equal(t, 1, attendancePeak.IdStation(), "Bad Start station id")
-	attendancePeak.SetidStation(2)
+	attendancePeak.SetIdStation(2)
 	assert.Equal(t, 2, attendancePeak.IdStation(), "Bad Start station id")
 
 	assert.Equal(t, 10, attendancePeak.Size(), "Bad population size")

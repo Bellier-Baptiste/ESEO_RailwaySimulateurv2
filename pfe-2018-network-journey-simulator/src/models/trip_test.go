@@ -1,11 +1,14 @@
 /*
 File : trip_test.go
 
-Brief :
+Brief :	Tests for the Trip struct and its methods.
 
-Date : N/A
+Date : 24/01/2019
 
-Author : Team v2, Paul TRÉMOUREUX (quality check)
+Author :
+  - Team v1
+  - Team v2
+  - Paul TRÉMOUREUX (quality check)
 
 License : MIT License
 
@@ -33,6 +36,15 @@ package models
 
 import "testing"
 
+/*
+TestTrip tests the Trip struct and its methods.
+
+# It tests if the struct and its methods work properly
+
+Input : t *testing.T
+
+Expected : The struct and its methods work properly
+*/
 func TestTrip_NewTrip(t *testing.T) {
 
 }
