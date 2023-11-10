@@ -27,6 +27,8 @@ package org.example.view;
 import org.example.data.Data;
 import org.example.model.Area;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -34,9 +36,11 @@ import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridLayout;
 
 /**
  * Class to show a popup windows in order to distribute the population in the
@@ -122,39 +126,60 @@ public class AreaSetDistribution {
     JTextField fieldEducational = new JTextField(Integer.toString(
         area.getDistributionDestination().get(Data.AREA_EDUCATIONAL)));
 
-    JPanel panel = new JPanel(new GridLayout(0, 1));
-    panel.add(titlePopulation);
-    panel.add(new JLabel("Tourist: "));
-    panel.add(fieldTourist);
-    panel.add(new JLabel("Student: "));
-    panel.add(fieldStudent);
-    panel.add(new JLabel("BusinessMan: "));
-    panel.add(fieldBusinessMan);
-    panel.add(new JLabel("Worker: "));
-    panel.add(fieldWorker);
-    panel.add(new JLabel("Child: "));
-    panel.add(fieldChild);
-    panel.add(new JLabel("Retired: "));
-    panel.add(fieldRetired);
-    panel.add(new JLabel("Unemployed: "));
-    panel.add(fieldUnemployed);
+    JPanel panel = new JPanel();
+    panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 
-    panel.add(new JLabel("Destination: "));
-    panel.add(titleDestination);
-    panel.add(new JLabel("Residential: "));
-    panel.add(fieldResidential);
-    panel.add(new JLabel("Commercial: "));
-    panel.add(fieldCommercial);
-    panel.add(new JLabel("Office: "));
-    panel.add(fieldOffice);
-    panel.add(new JLabel("Industrial: "));
-    panel.add(fieldIndustrial);
-    panel.add(new JLabel("Touristic: "));
-    panel.add(fieldTouristic);
-    panel.add(new JLabel("Leisure: "));
-    panel.add(fieldLeisure);
-    panel.add(new JLabel("Educational: "));
-    panel.add(fieldEducational);
+    JPanel panelPopulation = new JPanel();
+    panelPopulation.setLayout(new BoxLayout(panelPopulation,
+        BoxLayout.Y_AXIS));
+    JPanel panelPopulationTitle = new JPanel();
+    panelPopulationTitle.setLayout(new BorderLayout());
+    panelPopulationTitle.add(titlePopulation, BorderLayout.WEST);
+    panelPopulation.add(panelPopulationTitle);
+
+    JPanel panelPopulationFieldsContainer = new JPanel();
+    panelPopulationFieldsContainer.setLayout(new BorderLayout());
+    JPanel panelPopulationFields = new JPanel();
+    panelPopulationFields.setLayout(new BoxLayout(panelPopulationFields,
+        BoxLayout.Y_AXIS));
+    this.addFieldToDistributionPanel(panelPopulationFields, "Tourist: ", fieldTourist);
+    this.addFieldToDistributionPanel(panelPopulationFields, "Student: ", fieldStudent);
+    this.addFieldToDistributionPanel(panelPopulationFields, "BusinessMan: ", fieldBusinessMan);
+    this.addFieldToDistributionPanel(panelPopulationFields, "Worker: ", fieldWorker);
+    this.addFieldToDistributionPanel(panelPopulationFields, "Child: ", fieldChild);
+    this.addFieldToDistributionPanel(panelPopulationFields, "Retired: ", fieldRetired);
+    this.addFieldToDistributionPanel(panelPopulationFields, "Unemployed: ", fieldUnemployed);
+    panelPopulationFieldsContainer.add(panelPopulationFields, BorderLayout.WEST);
+    panelPopulation.add(panelPopulationFieldsContainer);
+
+    JPanel panelDestination = new JPanel();
+    panelDestination.setLayout(new BoxLayout(panelDestination,
+        BoxLayout.Y_AXIS));
+    JPanel panelDestinationTitle = new JPanel();
+    panelDestinationTitle.setLayout(new BorderLayout());
+    panelDestinationTitle.add(titleDestination, BorderLayout.WEST);
+    panelDestination.add(panelDestinationTitle);
+
+    JPanel panelDestinationFieldsContainer = new JPanel();
+    panelDestinationFieldsContainer.setLayout(new BorderLayout());
+    JPanel panelDestinationFields = new JPanel();
+    panelDestinationFields.setLayout(new BoxLayout(panelDestinationFields,
+        BoxLayout.Y_AXIS));
+    this.addFieldToDistributionPanel(panelDestinationFields, "Residential: ", fieldResidential);
+    this.addFieldToDistributionPanel(panelDestinationFields, "Commercial: ", fieldCommercial);
+    this.addFieldToDistributionPanel(panelDestinationFields, "Office: ", fieldOffice);
+    this.addFieldToDistributionPanel(panelDestinationFields, "Industrial: ", fieldIndustrial);
+    this.addFieldToDistributionPanel(panelDestinationFields, "Touristic: ", fieldTouristic);
+    this.addFieldToDistributionPanel(panelDestinationFields, "Leisure: ", fieldLeisure);
+    this.addFieldToDistributionPanel(panelDestinationFields, "School: ", fieldEducational);
+    panelDestinationFieldsContainer.add(panelDestinationFields, BorderLayout.WEST);
+    panelDestination.add(panelDestinationFieldsContainer);
+
+    panel.add(panelPopulation);
+    Component horizontalSpace = Box.createHorizontalStrut(50);
+    panel.add(horizontalSpace);
+    panel.add(panelDestination);
+
 
     int result = JOptionPane.showConfirmDialog(null, panel,
         "Edit distribution", JOptionPane.OK_CANCEL_OPTION,
@@ -221,4 +246,21 @@ public class AreaSetDistribution {
       }
     });
   }
+
+  private void addFieldToDistributionPanel(JPanel panel, String label,
+                                           JTextField field) {
+    field.setPreferredSize(new Dimension(100, 20));
+    field.setMaximumSize(field.getPreferredSize());
+    field.setMinimumSize(field.getPreferredSize());
+
+    JPanel panelField = new JPanel();
+    panelField.setLayout(new BorderLayout());
+    panelField.setPreferredSize(new Dimension(200, 20));
+    panelField.setMaximumSize(panelField.getPreferredSize());
+    panelField.setMinimumSize(panelField.getPreferredSize());
+    panelField.add(new JLabel(label), BorderLayout.WEST);
+    panelField.add(field, BorderLayout.EAST);
+    panel.add(panelField);
+  }
+
 }
