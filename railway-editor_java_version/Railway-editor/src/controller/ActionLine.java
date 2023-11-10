@@ -50,6 +50,7 @@ public final class ActionLine {
   public static final String INCREMENT_LINE = "INCREMENT_LINE";
   /** String of the decrement action name. */
   public static final String DECREMENT_LINE = "DECREMENT_LINE";
+  public static final String DELETE_LINE = "DELETE_LINE";
   /** Singleton instance of the class. */
   private static ActionLine instance;
   /** Index of the line to update. */
