@@ -54,9 +54,8 @@ public class ActionConfiguration {
   /**
    * Path of the json file.
    */
-  private static final String JSON_FILE_PATH = System.getProperty("user"
-      + ".dir").replace("railway-editor_java_version",
-      "network-journey-simulator\\src" + "\\configs\\config.json");
+  private static final String JSON_FILE_PATH = System.getProperty("user.dir")
+      + "\\network-journey-simulator\\src\\configs\\config.json";
 
   /**
    * EditConfigDialog that calls this class methods.
