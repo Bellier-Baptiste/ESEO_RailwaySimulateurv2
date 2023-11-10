@@ -178,6 +178,13 @@ public final class Data {
    * String for unemployed label.
    */
   public static final String AREA_UNEMPLOYED = "Unemployed";
+  public static final String AREA_RESIDENTIAL = "Residential";
+  public static final String AREA_COMMERCIAL = "Commercial";
+  public static final String AREA_OFFICE = "Office";
+  public static final String AREA_INDUSTRIAL = "Industrial";
+  public static final String AREA_EDUCATIONAL = "Educational";
+  public static final String AREA_TOURISTIC = "Touristic";
+  public static final String AREA_LEISURE = "Leisure";
 
   //event attributes
   /** List of all event created. */

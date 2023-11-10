@@ -27,7 +27,6 @@ package org.example.view;
 import org.example.data.Data;
 import org.example.model.Area;
 
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,7 +37,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.Objects;
 
 /**
  * Class to show a popup windows in order to distribute the population in the
@@ -68,40 +66,64 @@ public class AreaSetDistribution {
   private String retired;
   /** Unemployed distribution. */
   private String unemployed;
-  /** Area destination. */
-  private String areaDestination;
-  /** List of the destinations. */
-  protected static final String[] DESTINATIONS = {"Business", "Commercial",
-      "Leisure", "Industrial", "School",
-      "Touristic", "University"};
+  /** Residential distribution. */
+  private String residential;
+  /** Commercial distribution. */
+  private String commercial;
+  /** Office distribution. */
+  private String office;
+  /** Industrial distribution. */
+  private String industrial;
+  /** Touristic distribution. */
+  private String touristic;
+  /** Leisure distribution. */
+  private String leisure;
+  /** Educational distribution. */
+  private String educational;
   /** Boolean to know if ok button of the popup clicked. */
   private boolean ok = false;
-  /** JComboBox for the list of the destinations. */
-  private final JComboBox<String> destinationList = new JComboBox<>(
-      DESTINATIONS);
 
   private void display(final Area area) {
     LookAndFeel previousLf = UIManager.getLookAndFeel();
-    destinationList.setSelectedItem(area.getDestination());
-    JLabel title = new JLabel("choose Area distribution (%)");
-    title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, FONT_SIZE));
+    JLabel titlePopulation = new JLabel("Choose population distribution "
+        + "percentage");
+    titlePopulation.setFont(new Font(Font.SANS_SERIF, Font.BOLD, FONT_SIZE));
+
     JTextField fieldTourist = new JTextField(Integer.toString(
-        area.getDistribution().get(Data.AREA_TOURIST)));
+        area.getDistributionPopulation().get(Data.AREA_TOURIST)));
     JTextField fieldStudent = new JTextField(Integer.toString(
-        area.getDistribution().get(Data.AREA_STUDENT)));
-    JTextField fieldBusinessMan = new JTextField(
-        Integer.toString(area.getDistribution().get(Data.AREA_BUSINESSMAN)));
+        area.getDistributionPopulation().get(Data.AREA_STUDENT)));
+    JTextField fieldBusinessMan = new JTextField(Integer.toString(
+        area.getDistributionPopulation().get(Data.AREA_BUSINESSMAN)));
     JTextField fieldWorker = new JTextField(Integer.toString(
-        area.getDistribution().get(Data.AREA_WORKER)));
+        area.getDistributionPopulation().get(Data.AREA_WORKER)));
     JTextField fieldChild = new JTextField(Integer.toString(
-        area.getDistribution().get(Data.AREA_CHILD)));
+        area.getDistributionPopulation().get(Data.AREA_CHILD)));
     JTextField fieldRetired = new JTextField(Integer.toString(
-        area.getDistribution().get(Data.AREA_RETIRED)));
+        area.getDistributionPopulation().get(Data.AREA_RETIRED)));
     JTextField fieldUnemployed = new JTextField(Integer.toString(
-        area.getDistribution().get(Data.AREA_UNEMPLOYED)));
+        area.getDistributionPopulation().get(Data.AREA_UNEMPLOYED)));
+
+    JLabel  titleDestination = new JLabel("Choose destination"
+        + " distribution percentage");
+    titleDestination.setFont(new Font(Font.SANS_SERIF, Font.BOLD, FONT_SIZE));
+    JTextField fieldResidential = new JTextField(Integer.toString(
+        area.getDistributionDestination().get(Data.AREA_RESIDENTIAL)));
+    JTextField fieldCommercial = new JTextField(Integer.toString(
+        area.getDistributionDestination().get(Data.AREA_COMMERCIAL)));
+    JTextField fieldOffice = new JTextField(Integer.toString(
+        area.getDistributionDestination().get(Data.AREA_OFFICE)));
+    JTextField fieldIndustrial = new JTextField(Integer.toString(
+        area.getDistributionDestination().get(Data.AREA_INDUSTRIAL)));
+    JTextField fieldTouristic = new JTextField(Integer.toString(
+        area.getDistributionDestination().get(Data.AREA_TOURISTIC)));
+    JTextField fieldLeisure = new JTextField(Integer.toString(
+        area.getDistributionDestination().get(Data.AREA_LEISURE)));
+    JTextField fieldEducational = new JTextField(Integer.toString(
+        area.getDistributionDestination().get(Data.AREA_EDUCATIONAL)));
 
     JPanel panel = new JPanel(new GridLayout(0, 1));
-    panel.add(title);
+    panel.add(titlePopulation);
     panel.add(new JLabel("Tourist: "));
     panel.add(fieldTourist);
     panel.add(new JLabel("Student: "));
@@ -116,8 +138,23 @@ public class AreaSetDistribution {
     panel.add(fieldRetired);
     panel.add(new JLabel("Unemployed: "));
     panel.add(fieldUnemployed);
+
     panel.add(new JLabel("Destination: "));
-    panel.add(destinationList);
+    panel.add(titleDestination);
+    panel.add(new JLabel("Residential: "));
+    panel.add(fieldResidential);
+    panel.add(new JLabel("Commercial: "));
+    panel.add(fieldCommercial);
+    panel.add(new JLabel("Office: "));
+    panel.add(fieldOffice);
+    panel.add(new JLabel("Industrial: "));
+    panel.add(fieldIndustrial);
+    panel.add(new JLabel("Touristic: "));
+    panel.add(fieldTouristic);
+    panel.add(new JLabel("Leisure: "));
+    panel.add(fieldLeisure);
+    panel.add(new JLabel("Educational: "));
+    panel.add(fieldEducational);
 
     int result = JOptionPane.showConfirmDialog(null, panel,
         "Edit distribution", JOptionPane.OK_CANCEL_OPTION,
@@ -130,8 +167,15 @@ public class AreaSetDistribution {
       child = fieldChild.getText();
       retired = fieldRetired.getText();
       unemployed = fieldUnemployed.getText();
-      areaDestination = Objects.requireNonNull(
-          destinationList.getSelectedItem()).toString();
+
+      residential = fieldResidential.getText();
+      commercial = fieldCommercial.getText();
+      office = fieldOffice.getText();
+      industrial = fieldIndustrial.getText();
+      touristic = fieldTouristic.getText();
+      leisure = fieldLeisure.getText();
+      educational = fieldEducational.getText();
+
       ok = true;
     }
     try {
@@ -151,14 +195,28 @@ public class AreaSetDistribution {
     EventQueue.invokeLater(() -> {
       display(area);
       if (ok) {
-        area.setNewPart(Data.AREA_TOURIST, Integer.parseInt(tourist));
-        area.setNewPart(Data.AREA_STUDENT, Integer.parseInt(student));
-        area.setNewPart(Data.AREA_BUSINESSMAN, Integer.parseInt(businessMan));
-        area.setNewPart(Data.AREA_WORKER, Integer.parseInt(worker));
-        area.setNewPart(Data.AREA_CHILD, Integer.parseInt(child));
-        area.setNewPart(Data.AREA_RETIRED, Integer.parseInt(retired));
-        area.setNewPart(Data.AREA_UNEMPLOYED, Integer.parseInt(unemployed));
-        area.setDestination(areaDestination);
+        area.setNewPopulationPart(Data.AREA_TOURIST, Integer.parseInt(tourist));
+        area.setNewPopulationPart(Data.AREA_STUDENT, Integer.parseInt(student));
+        area.setNewPopulationPart(Data.AREA_BUSINESSMAN, Integer.parseInt(
+            businessMan));
+        area.setNewPopulationPart(Data.AREA_WORKER, Integer.parseInt(worker));
+        area.setNewPopulationPart(Data.AREA_CHILD, Integer.parseInt(child));
+        area.setNewPopulationPart(Data.AREA_RETIRED, Integer.parseInt(retired));
+        area.setNewPopulationPart(Data.AREA_UNEMPLOYED, Integer.parseInt(
+            unemployed));
+        area.setNewDestinationPart(Data.AREA_RESIDENTIAL, Integer.parseInt(
+            residential));
+        area.setNewDestinationPart(Data.AREA_COMMERCIAL, Integer.parseInt(
+            commercial));
+        area.setNewDestinationPart(Data.AREA_OFFICE, Integer.parseInt(office));
+        area.setNewDestinationPart(Data.AREA_INDUSTRIAL, Integer.parseInt(
+            industrial));
+        area.setNewDestinationPart(Data.AREA_TOURISTIC, Integer.parseInt(
+            touristic));
+        area.setNewDestinationPart(Data.AREA_LEISURE, Integer.parseInt(
+            leisure));
+        area.setNewDestinationPart(Data.AREA_EDUCATIONAL, Integer.parseInt(
+            educational));
         ok = false;
       }
     });
