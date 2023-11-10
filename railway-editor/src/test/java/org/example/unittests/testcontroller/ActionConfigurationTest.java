@@ -74,8 +74,8 @@ class ActionConfigurationTest {
 
     // Use introspection to get the JSON_FILE_PATH field
     Field jsonFilePathField = getJsonFilePathField(actionConfiguration);
-    jsonFilePathField.set(actionConfiguration, "test/unittests"
-        + "/testcontroller/configTest.json");
+    jsonFilePathField.set(actionConfiguration, "src/test/java/org/example/"
+        + "unittests/testcontroller/configTest.json");
 
     // Running tested method
     actionConfiguration.readJsonFile();

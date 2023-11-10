@@ -33,6 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -89,25 +90,27 @@ public class AreaSetDistribution {
         + "percentages");
     titlePopulation.setFont(new Font(Font.SANS_SERIF, Font.BOLD, FONT_SIZE));
 
-    JSpinner fieldTourist = new JSpinner();
+    JSpinner fieldTourist = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldTourist.setValue(area.getDistributionPopulation().get(
         Data.AREA_TOURIST));
-    JSpinner fieldStudent = new JSpinner();
+    JSpinner fieldStudent = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldStudent.setValue(area.getDistributionPopulation().get(
         Data.AREA_STUDENT));
-    JSpinner fieldBusinessMan = new JSpinner();
+    JSpinner fieldBusinessMan = new JSpinner(new SpinnerNumberModel(0, 0, 100,
+        1));
     fieldBusinessMan.setValue(area.getDistributionPopulation().get(
         Data.AREA_BUSINESSMAN));
-    JSpinner fieldWorker = new JSpinner();
+    JSpinner fieldWorker = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldWorker.setValue(area.getDistributionPopulation().get(
         Data.AREA_WORKER));
-    JSpinner fieldChild = new JSpinner();
+    JSpinner fieldChild = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldChild.setValue(area.getDistributionPopulation().get(
         Data.AREA_CHILD));
-    JSpinner fieldRetired = new JSpinner();
+    JSpinner fieldRetired = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldRetired.setValue(area.getDistributionPopulation().get(
         Data.AREA_RETIRED));
-    JSpinner fieldUnemployed = new JSpinner();
+    JSpinner fieldUnemployed = new JSpinner(new SpinnerNumberModel(0, 0, 100,
+        1));
     fieldUnemployed.setValue(area.getDistributionPopulation().get(
         Data.AREA_UNEMPLOYED));
 
@@ -115,25 +118,29 @@ public class AreaSetDistribution {
     JLabel  titleDestination = new JLabel("Destination"
         + " distribution percentages");
     titleDestination.setFont(new Font(Font.SANS_SERIF, Font.BOLD, FONT_SIZE));
-    JSpinner fieldResidential = new JSpinner();
+    JSpinner fieldResidential = new JSpinner(new SpinnerNumberModel(0, 0, 100,
+        1));
     fieldResidential.setValue(area.getDistributionDestination().get(
         Data.AREA_RESIDENTIAL));
-    JSpinner fieldCommercial = new JSpinner();
+    JSpinner fieldCommercial = new JSpinner(new SpinnerNumberModel(0, 0, 100,
+        1));
     fieldCommercial.setValue(area.getDistributionDestination().get(
         Data.AREA_COMMERCIAL));
-    JSpinner fieldOffice = new JSpinner();
+    JSpinner fieldOffice = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldOffice.setValue(area.getDistributionDestination().get(
         Data.AREA_OFFICE));
-    JSpinner fieldIndustrial = new JSpinner();
+    JSpinner fieldIndustrial = new JSpinner(new SpinnerNumberModel(0, 0, 100,
+        1));
     fieldIndustrial.setValue(area.getDistributionDestination().get(
         Data.AREA_INDUSTRIAL));
-    JSpinner fieldTouristic = new JSpinner();
+    JSpinner fieldTouristic = new JSpinner(new SpinnerNumberModel(0, 0, 100,
+        1));
     fieldTouristic.setValue(area.getDistributionDestination().get(
         Data.AREA_TOURISTIC));
-    JSpinner fieldLeisure = new JSpinner();
+    JSpinner fieldLeisure = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldLeisure.setValue(area.getDistributionDestination().get(
         Data.AREA_LEISURE));
-    JSpinner fieldSchool = new JSpinner();
+    JSpinner fieldSchool = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldSchool.setValue(area.getDistributionDestination().get(
         Data.AREA_EDUCATIONAL));
 

@@ -62,7 +62,7 @@ public class Area {
   private HashMap<String, Integer> distributionPopulation;
   /** Area destination distribution. */
   private HashMap<String, Integer> distributionDestination;
-
+  /** Area color. */
   private Color color;
   /** Area destination. */
   private String destination;

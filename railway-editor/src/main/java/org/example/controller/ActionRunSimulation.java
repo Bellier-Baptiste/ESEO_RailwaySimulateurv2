@@ -82,8 +82,8 @@ public final class ActionRunSimulation {
       // If yes, return -1 (did not run the simulation)
       return -1;
     }
-    //TODO change java and go root
     String rootProjectPath = System.getProperty("user.dir");
+    rootProjectPath = rootProjectPath.replace("\\railway-editor", "");
     String rootGoProjectPath = rootProjectPath + "\\network-journey-simulator";
 
     File runThisSimulation = new File(
