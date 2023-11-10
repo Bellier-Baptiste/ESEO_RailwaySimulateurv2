@@ -21,13 +21,13 @@
  *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  *  SOFTWARE.
  */
-package unittests.testmodel;
+package org.example.unittests.testmodel;
 
 import static org.junit.Assert.assertEquals;
 
-import model.Line;
+import org.example.model.Line;
 import org.junit.Test;
-import model.EventStationClosed;
+import org.example.model.EventStationClosed;
 
 /**
  * Test-case of {@link Line} model.

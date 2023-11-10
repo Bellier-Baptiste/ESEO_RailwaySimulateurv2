@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package unittests.testmodel;
+package org.example.unittests.testmodel;
 
-import data.Data;
-import model.Area;
+import org.example.data.Data;
+import org.example.model.Area;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
