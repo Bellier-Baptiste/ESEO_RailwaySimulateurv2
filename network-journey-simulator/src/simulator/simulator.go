@@ -224,10 +224,6 @@ func (s *Simulator) GetAllEventsAttendancePeak() []models.EventAttendancePeak {
 	return s.eventsAttendancePeak
 }
 
-func (s *Simulator) GetAllEventsStationClosed() []models.EventStationClosed {
-	return s.eventsStationClosed
-}
-
 /*
 CreateEventsStationClose is used to create "station close" event of the
 simulator.

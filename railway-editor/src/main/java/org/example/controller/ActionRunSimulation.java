@@ -32,7 +32,7 @@ import java.util.ArrayList;
 
 /**
  * A class for running the simulation from the Java HMI.
- * Linked to buttons in {@link view.ToolBarPanel}.
+ * Linked to buttons in {@link org.example.view.ToolBarPanel}.
  *
  * @author Aurélie Chamouleau
  * @file ActionRunSimulation.java
@@ -83,21 +83,18 @@ public final class ActionRunSimulation {
       return -1;
     }
     //TODO change java and go root
-    String rootJavaProjectPath = System.getProperty("user.dir");
-    String rootGoProjectPath = rootJavaProjectPath.replace(
-        "railway-editor_java_version", "pfe-2018-network-journey-simulator");
-
-    // Useful when running the unit test
-    rootGoProjectPath = rootGoProjectPath.replace(
-        "\\Railway-editor", "");
+    String rootProjectPath = System.getProperty("user.dir");
+    String rootGoProjectPath = rootProjectPath + "\\network-journey-simulator";
 
     File runThisSimulation = new File(
-        rootGoProjectPath + "\\src\\configs\\runThisSimulation.xml");
+        rootGoProjectPath + "\\src\\configs" +
+            "\\runThisSimulation.xml");
     this.actionFile.export(runThisSimulation);
 
     // create a new list of arguments for our process
     String[] commands = {"cmd", "/C",
-        "start metro_simulator.exe -configname runThisSimulation.xml"};
+        "start metro_simulator.exe -configname " +
+            "runThisSimulation.xml"};
     // create the process builder
     ProcessBuilder pb = new ProcessBuilder(commands);
     // set the working directory of the process
