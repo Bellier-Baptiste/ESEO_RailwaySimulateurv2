@@ -93,8 +93,7 @@ public final class ActionRunSimulation {
 
     // create a new list of arguments for our process
     String[] commands = {"cmd", "/C",
-        "start metro_simulator.exe -configname " +
-            "runThisSimulation.xml"};
+        "start metro_simulator.exe -configname runThisSimulation.xml"};
     // create the process builder
     ProcessBuilder pb = new ProcessBuilder(commands);
     // set the working directory of the process

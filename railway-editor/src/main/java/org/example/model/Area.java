@@ -25,13 +25,12 @@
 package org.example.model;
 
 import org.example.data.Data;
-import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.example.view.MainWindow;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -378,20 +377,7 @@ public class Area {
    * @param part new percentage
    */
   public void setNewPopulationPart(final String key, final int part) {
-    int total = 0;
-    int checkedPart;
-    for (Map.Entry<String, Integer> entry : distributionPopulation
-        .entrySet()) {
-      if (!Objects.equals(entry.getKey(), key)) {
-        total += distributionPopulation.get(entry.getKey());
-      }
-    }
-    if (total + part > ONE_HUNDRED) {
-      checkedPart = ONE_HUNDRED - total;
-    } else {
-      checkedPart = part;
-    }
-    distributionPopulation.put(key, checkedPart);
+    this.distributionPopulation.put(key, part);
   }
 
   /**
@@ -402,20 +388,7 @@ public class Area {
    * @param part new percentage
    */
   public void setNewDestinationPart(final String key, final int part) {
-    int total = 0;
-    int checkedPart;
-    for (Map.Entry<String, Integer> entry : distributionDestination
-        .entrySet()) {
-      if (!Objects.equals(entry.getKey(), key)) {
-        total += distributionDestination.get(entry.getKey());
-      }
-    }
-    if (total + part > ONE_HUNDRED) {
-      checkedPart = ONE_HUNDRED - total;
-    } else {
-      checkedPart = part;
-    }
-    distributionDestination.put(key, checkedPart);
+    this.distributionDestination.put(key, part);
   }
 
   /**
