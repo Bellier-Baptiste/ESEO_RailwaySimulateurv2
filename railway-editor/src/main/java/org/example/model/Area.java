@@ -25,15 +25,12 @@
 package org.example.model;
 
 import org.example.data.Data;
-import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.example.view.MainWindow;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -60,10 +57,10 @@ public class Area {
   private int width;
   /** Area height. */
   private int height;
-  /** Area distribution. */
-  private HashMap<String, Integer> distribution;
-  /** Area distribution keys. */
-  private List<String> distributionKey;
+  /** Area population distribution. */
+  private HashMap<String, Integer> distributionPopulation;
+  /** Area destination distribution. */
+  private HashMap<String, Integer> distributionDestination;
   /** Area color. */
   private Color color;
   /** Area destination. */
@@ -97,23 +94,25 @@ public class Area {
     this.posY = areaPosY;
     this.width = areaWidth;
     this.height = areaHeight;
-    this.distribution = new HashMap<>();
-    this.distributionKey = new ArrayList<>();
+    this.distributionPopulation = new HashMap<>();
 
-    distribution.put(Data.AREA_TOURIST, 0);
-    distribution.put(Data.AREA_STUDENT, 0);
-    distribution.put(Data.AREA_BUSINESSMAN, 0);
-    distribution.put(Data.AREA_WORKER, 0);
-    distribution.put(Data.AREA_CHILD, 0);
-    distribution.put(Data.AREA_RETIRED, 0);
-    distribution.put(Data.AREA_UNEMPLOYED, 0);
-    distributionKey.add(Data.AREA_TOURIST);
-    distributionKey.add(Data.AREA_STUDENT);
-    distributionKey.add(Data.AREA_BUSINESSMAN);
-    distributionKey.add(Data.AREA_WORKER);
-    distributionKey.add(Data.AREA_CHILD);
-    distributionKey.add(Data.AREA_RETIRED);
-    distributionKey.add(Data.AREA_RETIRED);
+    distributionPopulation.put(Data.AREA_TOURIST, 0);
+    distributionPopulation.put(Data.AREA_STUDENT, 0);
+    distributionPopulation.put(Data.AREA_BUSINESSMAN, 0);
+    distributionPopulation.put(Data.AREA_WORKER, 0);
+    distributionPopulation.put(Data.AREA_CHILD, 0);
+    distributionPopulation.put(Data.AREA_RETIRED, 0);
+    distributionPopulation.put(Data.AREA_UNEMPLOYED, 0);
+
+    this.distributionDestination = new HashMap<>();
+
+    distributionDestination.put(Data.AREA_RESIDENTIAL, 0);
+    distributionDestination.put(Data.AREA_COMMERCIAL, 0);
+    distributionDestination.put(Data.AREA_OFFICE, 0);
+    distributionDestination.put(Data.AREA_INDUSTRIAL, 0);
+    distributionDestination.put(Data.AREA_TOURISTIC, 0);
+    distributionDestination.put(Data.AREA_LEISURE, 0);
+    distributionDestination.put(Data.AREA_EDUCATIONAL, 0);
     Random rand = new Random();
     float r = rand.nextFloat();
     float g = rand.nextFloat();
@@ -226,12 +225,21 @@ public class Area {
    * getter for distribution, the percentage of population type who live in
    * the area.
    *
-   * @return hashmap of distribution
+   * @return hashmap of population distribution
    */
-  public Map<String, Integer> getDistribution() {
-    return distribution;
+  public Map<String, Integer> getDistributionPopulation() {
+    return distributionPopulation;
   }
 
+  /**
+   * getter for distribution, the percentage of destination type where people
+   * go to.
+   *
+   * @return hashmap of destination distribution
+   */
+  public Map<String, Integer> getDistributionDestination() {
+    return distributionDestination;
+  }
 
   /**
    * setter for distribution.
@@ -239,7 +247,7 @@ public class Area {
    * @param areaDistribution area distribution hashMap
    */
   public void setDistribution(final Map<String, Integer> areaDistribution) {
-    this.distribution = (HashMap<String, Integer>) areaDistribution;
+    this.distributionPopulation = (HashMap<String, Integer>) areaDistribution;
   }
 
 
@@ -260,26 +268,6 @@ public class Area {
    */
   public void setColor(final Color areaColor) {
     this.color = areaColor;
-  }
-
-
-  /**
-   * get the keys of th distribution hashmap (names of population types).
-   *
-   * @return String list of  distributionKeys
-   */
-  public List<String> getDistributionKey() {
-    return distributionKey;
-  }
-
-
-  /**
-   * setter for distributionKey.
-   *
-   * @param areaDistributionKey area keys of population types list
-   */
-  public void setDistributionKey(final List<String> areaDistributionKey) {
-    this.distributionKey = areaDistributionKey;
   }
 
   /**
@@ -382,27 +370,26 @@ public class Area {
 
 
   /**
-   * Update a distribution value and check if the total is under 100 percent.
+   * Update the population distribution value and check if the total is under
+   * 100 percent.
    *
    * @param key  population type key to update
    * @param part new percentage
    */
-  public void setNewPart(final String key, final int part) {
-    int total = 0;
-    int checkedPart;
-    for (String key2 : distributionKey) {
-      if (!Objects.equals(key2, key)) {
-        total += distribution.get(key2);
-      }
-    }
-    if (total + part > ONE_HUNDRED) {
-      checkedPart = ONE_HUNDRED - total;
-    } else {
-      checkedPart = part;
-    }
-    distribution.put(key, checkedPart);
+  public void setNewPopulationPart(final String key, final int part) {
+    this.distributionPopulation.put(key, part);
   }
 
+  /**
+   * Update the destination distribution value and check if the total is under
+   * 100 percent.
+   *
+   * @param key  destination type key to update
+   * @param part new percentage
+   */
+  public void setNewDestinationPart(final String key, final int part) {
+    this.distributionDestination.put(key, part);
+  }
 
   /**
    * same as setNewPart but dont check if the total is under 100 percent.
@@ -411,7 +398,7 @@ public class Area {
    * @param part new percentage
    */
   public void addNewPart(final String key, final int part) {
-    distribution.put(key, part);
+    distributionPopulation.put(key, part);
   }
 
   /**
