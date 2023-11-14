@@ -9,6 +9,7 @@ Date : 10/02/2020
 Author :
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Alexis BONAMY
 
 License : MIT License
 
@@ -50,24 +51,26 @@ Input : t *testing.T
 
 Expected : The struct and its methods work properly
 */
-func TestEventAttendancePeak(t *testing.T) {
-	println("*** eventAttendancePeak_test.go ***")
-	start, _ := time.Parse("15:04", "00:01")
+func TestEventAttendancePeakModel(t *testing.T) {
+	// create a new eventAttendancePeak arguments
+	start := time.Now()
+	end := time.Now()
+	peak := time.Now()
+	idStation := 1
+	size := 10
 
-	attendancePeak := NewEventAttendancePeak(1, 10, start)
+	// create a new eventAttendancePeak
+	eventAttendancePeak := NewEventAttendancePeak(start, end, peak,
+		idStation, size)
 
-	assert.Equal(t, 1, attendancePeak.IdStation(), "Bad Start station id")
-	attendancePeak.SetIdStation(2)
-	assert.Equal(t, 2, attendancePeak.IdStation(), "Bad Start station id")
+	// check if the eventAttendancePeak is created
+	assert.NotNil(t, eventAttendancePeak, "eventAttendancePeak should not be nil")
 
-	assert.Equal(t, 10, attendancePeak.Size(), "Bad population size")
-	attendancePeak.SetSize(30)
-	assert.Equal(t, 30, attendancePeak.Size(), "Bad population size")
-
-	assert.Equal(t, "0000-01-01 00:01:00 +0000 UTC", attendancePeak.Time().String(), "Bad Start time")
-
-	assert.False(t, attendancePeak.Finished(), "Bad event status")
-	attendancePeak.SetFinished(true)
-	assert.True(t, attendancePeak.Finished(), "Bad event status")
-
+	// check if the eventAttendancePeak is created with the right values
+	assert.Equal(t, start, eventAttendancePeak.GetStart(), "Bad Start time")
+	assert.Equal(t, end, eventAttendancePeak.GetEnd(), "Bad End time")
+	assert.Equal(t, peak, eventAttendancePeak.GetEnd(), "Bad Peak time")
+	assert.Equal(t, idStation, eventAttendancePeak.GetIdStation(), "Bad Start station id")
+	assert.Equal(t, size, eventAttendancePeak.GetSize(), "Bad population size")
+	assert.False(t, eventAttendancePeak.IsFinished(), "Bad event status")
 }
