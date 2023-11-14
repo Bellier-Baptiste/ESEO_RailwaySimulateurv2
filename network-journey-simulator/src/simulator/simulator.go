@@ -11,6 +11,7 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Alexis BONAMY
 
 License : MIT License
 
@@ -38,6 +39,7 @@ package simulator
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"network-journey-simulator/src/configs"
 	"network-journey-simulator/src/models"
@@ -116,7 +118,8 @@ type Simulator struct {
 }
 
 const (
-	strErr = " error : "
+	strErr      = " error : "
+	strEacParse = "EventAttendancePeak : couldn't parse date : "
 )
 
 /*
@@ -321,14 +324,26 @@ func (s *Simulator) CreateEventsAttendancePeak() {
 	s.eventsAttendancePeak = make([]models.EventAttendancePeak,
 		len(s.adConfig.MapC.EventsAttendancePeak))
 	for i, ev := range s.adConfig.MapC.EventsAttendancePeak {
-		timeEv, err := time.Parse(time.RFC3339, ev.TimeString)
+		startEv, err := time.Parse(time.RFC3339, ev.StartString)
 		if err != nil {
-			fmt.Print("EventAttendancePeak : couldn't parse date : ",
-				ev.TimeString, strErr, err)
+			fmt.Print(strEacParse,
+				ev.StartString, strErr, err)
 			continue
 		}
-		s.eventsAttendancePeak[i] = models.NewEventAttendancePeak(ev.StationId,
-			ev.Size, timeEv)
+		endEv, err := time.Parse(time.RFC3339, ev.EndString)
+		if err != nil {
+			fmt.Print(strEacParse,
+				ev.EndString, strErr, err)
+			continue
+		}
+		peakEv, err := time.Parse(time.RFC3339, ev.PeakString)
+		if err != nil {
+			fmt.Print(strEacParse,
+				ev.PeakString, strErr, err)
+			continue
+		}
+		s.eventsAttendancePeak[i] = models.NewEventAttendancePeak(startEv,
+			endEv, peakEv, ev.StationId, ev.Size)
 	}
 }
 
@@ -685,7 +700,6 @@ func (s *Simulator) RunOnce() {
 		} else {
 			threadWaitGroup.Add(1)
 			func() {
-				//TODO add go
 				defer threadWaitGroup.Done()
 
 				mapStationsMutexesLock.RLock()
@@ -1882,25 +1896,97 @@ Param :
   - currentTime time.Time : the current time
 */
 func (s *Simulator) executeEventsAttendancePeak(
-	events []*models.EventAttendancePeak, oldTime, currentTime time.Time) {
-	var totalPopulation = len(s.Population().Outside()) +
-		len(s.Population().InStation()) + len(s.Population().InTrains())
+	events []*models.EventAttendancePeak, oldTime time.Time,
+	currentTime time.Time) {
 	for _, event := range events {
-		if event.Time().After(oldTime) && (event.Time().Before(currentTime) ||
-			event.Time().Equal(currentTime)) && !event.Finished() {
-			//execute the event
-			for i := 0; i < event.Size(); i++ {
-				departureStation := s.mapObject.FindStationById(event.IdStation())
-				arrivalStation := s.mapObject.FindStationById(rand.Intn(
-					len(s.mapObject.Stations())))
-				ps, _ := s.mapObject.GetPathStation(*departureStation, *arrivalStation)
-				trip := models.NewTrip(event.Time(), ps)
+		// get minutes
+		startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+		endMinutes := event.GetEnd().Hour()*60 + event.GetEnd().Minute()
+		peakMinutes := event.GetPeak().Hour()*60 + event.GetPeak().Minute()
+		oldMinutes := oldTime.Hour()*60 + oldTime.Minute()
+		currentMinutes := currentTime.Hour()*60 + currentTime.Minute()
 
-				passenger := models.NewPassenger(strconv.Itoa(totalPopulation+i), 0)
-				passenger.SetCurrentTrip(&trip)
+		// create a table to store the number of passengers for each minute
+		passengerDistribution := make([]int, endMinutes-startMinutes)
 
-				s.Population().InStation()[event.IdStation()][passenger.Id()] = &passenger
+		// calcultate asymetrical gaussian distribution
+		peakWidth := float64(endMinutes-startMinutes) / 10.0
+		peakArea := float64(event.GetSize())
+		peakHeight := peakArea / (peakWidth * math.Sqrt(2*math.Pi))
+		for minute := startMinutes; minute < endMinutes; minute++ {
+			exponent := -math.Pow(float64(minute-peakMinutes), 2) /
+				(2 * math.Pow(peakWidth, 2))
+			passengerDistribution[minute-startMinutes] = int(peakHeight *
+				math.Exp(exponent))
+		}
+
+		// get total number of passengers from passengerDistribution
+		totalPassengers := 0
+		for _, passengers := range passengerDistribution {
+			totalPassengers += passengers
+		}
+
+		// add missing passengers to the distribution or remove passengers if
+		// there are too many
+		missingPassengers := event.GetSize() - totalPassengers
+		if missingPassengers > 0 {
+			// add missing passengers
+			for missingPassengers > 0 {
+				passengerDistribution[rand.Intn(len(passengerDistribution))]++
+				missingPassengers--
 			}
+		}
+		if missingPassengers < 0 {
+			// remove passengers
+			for missingPassengers < 0 {
+				passengerDistribution[rand.Intn(len(passengerDistribution))]--
+				missingPassengers++
+			}
+		}
+
+		// determine the number of passengers for the current minute by taking the
+		// difference between the current time and the old time
+		currentPassengers := 0
+		for minute := oldMinutes; minute < currentMinutes; minute++ {
+			if minute < startMinutes {
+				continue
+			}
+			currentPassengers += passengerDistribution[minute-startMinutes]
+		}
+
+		// execute the event
+		for i := 0; i < currentPassengers; i++ {
+			// get total population
+			var totalPopulation int
+			totalPopulation += len(s.population.Outside())
+			for _, station := range s.population.InStation() {
+				totalPopulation += len(station)
+			}
+			for _, train := range s.population.InTrains() {
+				totalPopulation += len(train)
+			}
+
+			departureStation := s.mapObject.FindStationById(event.GetIdStation())
+			// create arrival station, different from departure station
+			arrivalStation := departureStation
+			for arrivalStation == departureStation {
+				arrivalStation = s.mapObject.FindStationById(rand.Intn(
+					len(s.mapObject.Stations())))
+			}
+
+			ps, _ := s.mapObject.GetPathStation(*departureStation, *arrivalStation)
+			trip := models.NewTrip(currentTime, ps)
+
+			passenger := models.NewPassenger(strconv.Itoa(totalPopulation),
+				models.PickAKind())
+			passenger.SetTrips([]*models.Trip{&trip})
+			passenger.SetCurrentTrip(&trip)
+
+			s.population.Outside()[passenger.Id()] = &passenger
+			s.population.TransferFromPopulationToStation(&passenger, departureStation,
+				currentTime)
+			s.population.InStation()[event.GetIdStation()][passenger.Id()] =
+				&passenger
 		}
 	}
 }
@@ -2002,8 +2088,8 @@ func (s *Simulator) getEventsAttendancePeak(start,
 	var output []*models.EventAttendancePeak
 
 	for i := range s.eventsAttendancePeak {
-		if s.eventsAttendancePeak[i].Time().Before(end) &&
-			s.eventsAttendancePeak[i].Time().After(start) {
+		if s.eventsAttendancePeak[i].GetStart().Before(end) &&
+			s.eventsAttendancePeak[i].GetEnd().After(start) {
 			output = append(output, &s.eventsAttendancePeak[i])
 		}
 	}

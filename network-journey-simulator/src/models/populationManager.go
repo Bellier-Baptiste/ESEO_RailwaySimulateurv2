@@ -11,6 +11,7 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Alexis BONAMY
 
 License : MIT License
 
@@ -584,7 +585,7 @@ func (p *Population) FindPassenger(passenger Passenger) string {
 }
 
 /*
-transferFromPopulationToStation transfer a passenger from the general population
+TransferFromPopulationToStation transfer a passenger from the general population
 to a station.
 
 Param :
@@ -593,7 +594,7 @@ Param :
   - stationPt *MetroStation : the station
   - aTime time.Time : the time of the transfer
 */
-func (p *Population) transferFromPopulationToStation(passenger *Passenger,
+func (p *Population) TransferFromPopulationToStation(passenger *Passenger,
 	stationPt *MetroStation, aTime time.Time) {
 	if p.inStation[stationPt.Id()] == nil {
 		p.inStation[stationPt.Id()] = make(map[string]*Passenger)
@@ -611,7 +612,7 @@ func (p *Population) transferFromPopulationToStation(passenger *Passenger,
 }
 
 /*
-transferFromStationToPopulation transfer a passenger from a station to the
+TransferFromStationToPopulation transfer a passenger from a station to the
 general population.
 
 Param :
@@ -620,7 +621,7 @@ Param :
   - stationPt *MetroStation : the station
   - aTime time.Time : the time of the transfer
 */
-func (p *Population) transferFromStationToPopulation(passenger *Passenger,
+func (p *Population) TransferFromStationToPopulation(passenger *Passenger,
 	stationPt *MetroStation, aTime time.Time) {
 	info := prepareCSVline(*passenger, stationPt, aTime, "USE")
 	p.output.Write(info)
@@ -742,7 +743,7 @@ func (p *Population) UpdateOutsideToStations(aTime time.Time) {
 		}
 		departureStation := trip.Path().Stations()[0]
 		passenger.SetCurrentTrip(trip)
-		p.transferFromPopulationToStation(passenger, departureStation, aTime)
+		p.TransferFromPopulationToStation(passenger, departureStation, aTime)
 	}
 }
 
@@ -761,17 +762,14 @@ func (p *Population) UpdateStationToOutside(aTime time.Time,
 		passenger := p.inStation[station.Id()][i]
 		var trip = passenger.CurrentTrip()
 		if trip.Path().EndStation().Id() == station.Id() ||
-			passenger.timeArrivalLastStation.Add(
-				p.maxTimeInStationPassenger).Before(aTime) {
-			//TODO account for time in station --> gate
+			(passenger.timeArrivalLastStation.Add(p.maxTimeInStationPassenger).
+				Before(aTime)) {
 			trip.SetArrivalTime(aTime)
-			p.transferFromStationToPopulation(passenger, station, aTime)
+			p.TransferFromStationToPopulation(passenger, station, aTime)
 
 			passenger.ClearCurrentTrip()
 			passenger.calculateNextTrip()
 			p.OutsideSortedInsertPassenger(passenger)
-			//use after the transfer from station to pop
-			//println("station->outside: passenger #"+passenger.id)
 		}
 	}
 }
@@ -789,7 +787,7 @@ func (p *Population) StationToOutside(aTime time.Time, station *MetroStation,
 	passenger *Passenger) {
 	var trip = passenger.CurrentTrip()
 	trip.SetArrivalTime(aTime)
-	p.transferFromStationToPopulation(passenger, station, aTime)
+	p.TransferFromStationToPopulation(passenger, station, aTime)
 
 	passenger.ClearCurrentTrip()
 	passenger.calculateNextTrip()
@@ -808,7 +806,6 @@ func (p *Population) UpdateStationToTrain(train *MetroTrain) {
 	station := train.CurrentStation()
 	p.inStationMutex.Lock()
 	inStation := p.inStation[station.Id()]
-	//TODO check above
 	p.inStationMutex.Unlock()
 	for i := range inStation {
 		p.inStationMutex.Lock()
