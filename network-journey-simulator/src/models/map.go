@@ -11,6 +11,7 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Alexis BONAMY
 
 License : MIT License
 
@@ -579,9 +580,11 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 	var attendancePeakEventsC configs.ConfigAttendancePeakEvent
 	for _, eventAttendancePeak := range mapPointer.eventsAttendancePeak {
 		attendancePeakEventsC = configs.ConfigAttendancePeakEvent{
-			TimeString: eventAttendancePeak.time.String(),
-			StationId:  eventAttendancePeak.idStation,
-			Size:       eventAttendancePeak.size,
+			StartString: eventAttendancePeak.start.String(),
+			EndString:   eventAttendancePeak.end.String(),
+			PeakString:  eventAttendancePeak.peak.String(),
+			StationId:   eventAttendancePeak.idStation,
+			Size:        eventAttendancePeak.size,
 		}
 		mapC.EventsAttendancePeak = append(mapC.EventsAttendancePeak,
 			attendancePeakEventsC)

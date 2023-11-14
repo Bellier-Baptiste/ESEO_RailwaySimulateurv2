@@ -10,6 +10,7 @@ Date : 10/02/2020
 Author :
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Alexis BONAMY
 
 License : MIT License
 
@@ -44,7 +45,9 @@ EventAttendancePeak is the structure that manage the event of a peak of
 attendance.
 
 Attributes :
-  - time time.Time : the time of the peak
+  - start time.Time : the start time of the event
+  - end time.Time : the end time of the event
+  - peak time.Time : the time of the peak
   - idStation int : the id of the station concerned by the peak
   - size int : the size of the peak
   - finished bool : true if the event is finished, false otherwise
@@ -59,7 +62,9 @@ Methods :
   - SetSize(s int) : set the size of the peak
 */
 type EventAttendancePeak struct {
-	time      time.Time
+	start     time.Time
+	end       time.Time
+	peak      time.Time
 	idStation int
 	size      int
 	finished  bool
@@ -69,17 +74,21 @@ type EventAttendancePeak struct {
 NewEventAttendancePeak creates a new EventAttendancePeak struct.
 
 Param :
+  - start time.Time : the start time of the event
+  - end time.Time : the end time of the event
+  - peak time.Time : the time of the peak
   - idStation int : the id of the station
   - size int : the size of the peak
-  - time time.Time : the time of the peak
 
 Return :
   - EventAttendancePeak : the new EventAttendancePeak struct
 */
-func NewEventAttendancePeak(idStation, size int,
-	time time.Time) EventAttendancePeak {
+func NewEventAttendancePeak(start time.Time, end time.Time, peak time.Time,
+	idStation int, size int) EventAttendancePeak {
 	return EventAttendancePeak{
-		time:      time,
+		start:     start,
+		end:       end,
+		peak:      peak,
 		idStation: idStation,
 		size:      size,
 		finished:  false,
@@ -87,44 +96,73 @@ func NewEventAttendancePeak(idStation, size int,
 }
 
 /*
-Finished returns the finished attribute of the EventAttendancePeak struct.
+GetStart returns the start attribute of the EventAttendancePeak struct.
 
 Param :
   - eap *EventAttendancePeak : the EventAttendancePeak struct
 
 Return :
-  - bool : the finished attribute of the EventAttendancePeak struct
+  - time.Time : the start attribute of the EventAttendancePeak struct
 */
-func (eap *EventAttendancePeak) Finished() bool {
-	return eap.finished
+func (eap *EventAttendancePeak) GetStart() time.Time {
+	return eap.start
 }
 
 /*
-SetFinished sets the finished attribute of the EventAttendancePeak struct.
+SetStart sets the start attribute of the EventAttendancePeak struct.
 
 Param :
   - eap *EventAttendancePeak : the EventAttendancePeak struct
-  - f bool : the new value of the finished attribute
+  - start time.Time : the new value of the start attribute
 */
-func (eap *EventAttendancePeak) SetFinished(f bool) {
-	eap.finished = f
+func (eap *EventAttendancePeak) SetStart(start time.Time) {
+	eap.start = start
 }
 
 /*
-Time returns the time attribute of the EventAttendancePeak struct.
+GetEnd returns the end attribute of the EventAttendancePeak struct.
+*/
+func (eap *EventAttendancePeak) GetEnd() time.Time {
+	return eap.end
+}
+
+/*
+SetEnd sets the end attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - end time.Time : the new value of the end attribute
+*/
+func (eap *EventAttendancePeak) SetEnd(end time.Time) {
+	eap.end = end
+}
+
+/*
+GetPeak returns the peak attribute of the EventAttendancePeak struct.
 
 Param :
   - eap *EventAttendancePeak : the EventAttendancePeak struct
 
 Return :
-  - time.Time : the time attribute of the EventAttendancePeak struct
+  - time.Time : the peak attribute of the EventAttendancePeak struct
 */
-func (eap *EventAttendancePeak) Time() time.Time {
-	return eap.time
+func (eap *EventAttendancePeak) GetPeak() time.Time {
+	return eap.peak
 }
 
 /*
-IdStation returns the idStation attribute of the EventAttendancePeak struct.
+SetPeak sets the peak attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - peak time.Time : the new value of the peak attribute
+*/
+func (eap *EventAttendancePeak) SetPeak(peak time.Time) {
+	eap.peak = peak
+}
+
+/*
+GetIdStation returns the idStation attribute of the EventAttendancePeak struct.
 
 Param :
   - eap *EventAttendancePeak : the EventAttendancePeak struct
@@ -132,7 +170,7 @@ Param :
 Return :
   - int : the idStation attribute of the EventAttendancePeak struct
 */
-func (eap *EventAttendancePeak) IdStation() int {
+func (eap *EventAttendancePeak) GetIdStation() int {
 	return eap.idStation
 }
 
@@ -148,7 +186,7 @@ func (eap *EventAttendancePeak) SetIdStation(id int) {
 }
 
 /*
-Size returns the size attribute of the EventAttendancePeak struct.
+GetSize returns the size attribute of the EventAttendancePeak struct.
 
 Param :
   - eap *EventAttendancePeak : the EventAttendancePeak struct
@@ -156,7 +194,7 @@ Param :
 Return :
   - int : the size attribute of the EventAttendancePeak struct
 */
-func (eap *EventAttendancePeak) Size() int {
+func (eap *EventAttendancePeak) GetSize() int {
 	return eap.size
 }
 
@@ -169,4 +207,28 @@ Param :
 */
 func (eap *EventAttendancePeak) SetSize(s int) {
 	eap.size = s
+}
+
+/*
+IsFinished returns the finished attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+
+Return :
+  - bool : the finished attribute of the EventAttendancePeak struct
+*/
+func (eap *EventAttendancePeak) IsFinished() bool {
+	return eap.finished
+}
+
+/*
+SetFinished sets the finished attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - f bool : the new value of the finished attribute
+*/
+func (eap *EventAttendancePeak) SetFinished(f bool) {
+	eap.finished = f
 }
