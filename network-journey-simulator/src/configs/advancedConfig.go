@@ -83,11 +83,22 @@ Attributes :
   - Lines []Line
 */
 type ConfigStation struct {
-	XMLName  xml.Name `xml:"station"`
-	Id       int      `xml:"id"`
-	Name     string   `xml:"name"`
-	Position Pos      `xml:"position"`
-	Lines    []Line   `xml:"lines>line"`
+	XMLName          xml.Name         `xml:"station"`
+	Id               int              `xml:"id"`
+	Name             string           `xml:"name"`
+	Position         Pos              `xml:"position"`
+	Lines            []Line           `xml:"lines>line"`
+	AreaDistribution AreaDistribution `xml:"areaDistribution"`
+}
+
+type AreaDistribution struct {
+	Businessman int `xml:"businessman,attr"`
+	Child       int `xml:"child,attr"`
+	Retired     int `xml:"retired,attr"`
+	Student     int `xml:"student,attr"`
+	Tourist     int `xml:"tourist,attr"`
+	Unemployed  int `xml:"unemployed,attr"`
+	Worker      int `xml:"worker,attr"`
 }
 
 /*

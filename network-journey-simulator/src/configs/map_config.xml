@@ -10,6 +10,8 @@
       <lines>
         <line id="0" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>1</id>
@@ -21,6 +23,8 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="0" child="20" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>2</id>
@@ -32,6 +36,8 @@
       <lines>
         <line id="0" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>3</id>
@@ -43,6 +49,8 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>4</id>
@@ -54,6 +62,8 @@
       <lines>
         <line id="0" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>5</id>
@@ -65,6 +75,8 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>6</id>
@@ -76,6 +88,8 @@
       <lines>
         <line id="0" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>7</id>
@@ -87,6 +101,8 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>8</id>
@@ -98,6 +114,8 @@
       <lines>
         <line id="0" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>9</id>
@@ -109,6 +127,8 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>10</id>
@@ -121,6 +141,8 @@
         <line id="0" platform=""></line>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>11</id>
@@ -132,6 +154,8 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>12</id>
@@ -143,6 +167,8 @@
       <lines>
         <line id="0" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>13</id>
@@ -154,6 +180,8 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>14</id>
@@ -165,6 +193,8 @@
       <lines>
         <line id="0" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>15</id>
@@ -176,6 +206,8 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>16</id>
@@ -187,6 +219,8 @@
       <lines>
         <line id="0" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>17</id>
@@ -198,6 +232,8 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>18</id>
@@ -209,6 +245,8 @@
       <lines>
         <line id="0" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
     <station>
       <id>19</id>
@@ -220,6 +258,8 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
+      <destination>Commercial</destination>
+      <areaDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </station>
   </stations>
   <lines>
@@ -260,17 +300,17 @@
     </line>
   </lines>
   <events>
-  	<lineClosed>
-		<start>2018-10-26T10:01:00Z</start>
-		<end>2018-10-26T10:02:00Z</end>
-		<stationIdStart>1</stationIdStart>
-		<stationIdEnd>19</stationIdEnd>
-	</lineClosed>
-	<attendancePeak>
-		<time>2018-10-26T10:01:00Z</time>
-		<stationId>2</stationId>
-		<size>10</size>
-	</attendancePeak>
+    <lineClosed>
+      <start>2018-10-26T10:01:00Z</start>
+      <end>2018-10-26T10:02:00Z</end>
+      <stationIdStart>1</stationIdStart>
+      <stationIdEnd>19</stationIdEnd>
+    </lineClosed>
+    <attendancePeak>
+      <time>2018-10-26T10:01:00Z</time>
+      <stationId>2</stationId>
+      <size>10</size>
+    </attendancePeak>
     <lineDelay>
       <start>2018-10-12T00:19:00Z</start>
       <end>2018-10-12T00:20:00Z</end>

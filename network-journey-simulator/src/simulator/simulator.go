@@ -65,6 +65,8 @@ Attributes :
   - eventsLineClosed []models.EventLineClosed : the events of the simulator
   - eventsAttendancePeak []models.EventAttendancePeak : the events of the
     simulator
+  - areasDistribution []models.AreaDistribution : the population distribution of
+    an area
   - tripNumberCounter int : the trip number counter of the simulator
 
 Methods :
@@ -113,6 +115,8 @@ type Simulator struct {
 	eventsLineClosed     []models.EventLineClosed
 	eventsAttendancePeak []models.EventAttendancePeak
 	tripNumberCounter    int
+	areasDistribution    []models.AreaDistribution
+	metroStations        []models.MetroStation
 }
 
 const (
@@ -165,6 +169,8 @@ func NewSimulator() *Simulator {
 		eventsLineDelay:      make([]models.EventLineDelay, 0),
 		eventsLineClosed:     make([]models.EventLineClosed, 0),
 		eventsAttendancePeak: make([]models.EventAttendancePeak, 0),
+		areasDistribution:    make([]models.AreaDistribution, 0),
+		metroStations:        make([]models.MetroStation, 0),
 		tripNumberCounter:    0,
 	}
 	return simulator
@@ -222,6 +228,18 @@ Return :
 */
 func (s *Simulator) GetAllEventsAttendancePeak() []models.EventAttendancePeak {
 	return s.eventsAttendancePeak
+}
+
+func (s *Simulator) GetAllAreasDistribution() []models.AreaDistribution {
+	return s.areasDistribution
+}
+
+func (s *Simulator) GetAreaDistributionStation(id int) models.AreaDistribution {
+	return s.areasDistribution[id]
+}
+
+func (s *Simulator) GetAllMetroStation() []models.MetroStation {
+	return s.metroStations
 }
 
 /*
@@ -330,6 +348,22 @@ func (s *Simulator) CreateEventsAttendancePeak() {
 		s.eventsAttendancePeak[i] = models.NewEventAttendancePeak(ev.StationId,
 			ev.Size, timeEv)
 	}
+}
+
+/*
+CreateAreasDistribution is used to create "area distribution"
+*/
+func (s *Simulator) CreateAreasDistribution() {
+	s.areasDistribution = make([]models.AreaDistribution,
+		len(s.adConfig.MapC.Stations))
+	for i, ad := range s.adConfig.MapC.Stations {
+		s.areasDistribution[i] =
+			models.NewAreaDistribution(ad.AreaDistribution.Businessman,
+				ad.AreaDistribution.Child, ad.AreaDistribution.Retired,
+				ad.AreaDistribution.Student, ad.AreaDistribution.Tourist,
+				ad.AreaDistribution.Unemployed, ad.AreaDistribution.Worker)
+	}
+
 }
 
 /*
@@ -496,6 +530,8 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	s.CreateEventsLineClose()
 
 	s.CreateEventsAttendancePeak()
+
+	s.CreateAreasDistribution()
 
 	// create map
 	s.mapObject = models.CreateMapAdvanced(*s.adConfig)
