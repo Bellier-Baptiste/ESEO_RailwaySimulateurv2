@@ -42,8 +42,9 @@ import java.awt.event.ActionEvent;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
  * @file ClockView.java
- * @date N/A
+ * @date 2023/11/12
  * @since 2.0
  */
 public final class EventRecap extends JScrollPane {
@@ -248,6 +249,7 @@ public final class EventRecap extends JScrollPane {
    */
   public void createEventAttendancePeak(final int id, final String startDateStr,
                                         final String endDateStr,
+                                        final String peakDateStr,
                                         final String stationStr,
                                         final String peakStr) {
     JXTaskPane taskpane = new JXTaskPane();
@@ -263,6 +265,10 @@ public final class EventRecap extends JScrollPane {
     endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     endDate.setText(END_DATE + endDateStr);
     endDate.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel peakTime = new JXLabel();
+    peakTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    peakTime.setText("Peak time: " + peakDateStr);
+    peakTime.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel station = new JXLabel();
     station.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     station.setText("Station: " + stationStr);
@@ -276,6 +282,7 @@ public final class EventRecap extends JScrollPane {
 
     taskpane.add(startDate);
     taskpane.add(endDate);
+    taskpane.add(peakTime);
     taskpane.add(station);
     taskpane.add(peak);
     taskpane.add(new AbstractAction(REMOVE

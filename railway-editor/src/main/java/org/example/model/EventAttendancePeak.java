@@ -24,14 +24,19 @@
 
 package org.example.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 /**
  * Model class extending {@link Event} which describes an attendance peak on a
- * {@link model.Station}.
+ * Station
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
  * @file EventAttendancePeak.java
- * @date N/A
+ * @date 2023/11/12
  * @since 2.0
  */
 public class EventAttendancePeak extends Event {
@@ -39,6 +44,8 @@ public class EventAttendancePeak extends Event {
   private int idStation;
   /** Peak size. */
   private int size;
+  /** Peak time. */
+  private String peakTime;
 
   /**
    * Constructor.
@@ -89,5 +96,53 @@ public class EventAttendancePeak extends Event {
    */
   public void setSize(final int peakSize) {
     this.size = peakSize;
+  }
+
+  /**
+   * get the peak time.
+   *
+   * @return String peakTime
+   */
+  public String getPeakTime() {
+    return peakTime;
+  }
+
+  /**
+   * set the peak time.
+   *
+   * @param peakTime time of the peak
+   */
+  public void setPeakTime(final String peakTime) {
+    // check if the peaktime is valid and between the start and end time
+    if (isPeakTimeValid(peakTime)) {
+      this.peakTime = peakTime;
+    } else {
+      throw new IllegalArgumentException("Peak time is not valid");
+    }
+  }
+
+  /**
+   * check if peak time is between start time and end time. The peak time should
+   * be equal or after the start time and equal or before the end time.
+   * @param peakTime peak time
+   */
+  private boolean isPeakTimeValid(final String peakTime) {
+    try {
+      DateTimeFormatter formatter =
+              DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm");
+      LocalDateTime peakTimeDate = LocalDateTime.parse(
+              peakTime, formatter);
+      LocalDateTime startTimeDate = LocalDateTime.parse(
+              getStartTime(), formatter);
+      LocalDateTime endTimeDate = LocalDateTime.parse(
+              getEndTime(), formatter);
+
+      return (peakTimeDate.isEqual(startTimeDate)
+              || peakTimeDate.isAfter(startTimeDate))
+              && (peakTimeDate.isEqual(endTimeDate)
+              || peakTimeDate.isBefore(endTimeDate));
+    } catch (DateTimeParseException e) {
+      return false;
+    }
   }
 }

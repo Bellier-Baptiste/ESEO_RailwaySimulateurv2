@@ -73,8 +73,9 @@ import java.util.Map;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
  * @file ActionFile.java
- * @date 2023/09/22
+ * @date 2023/11/12
  * @since 3.0
  */
 public class ActionFile {
@@ -192,6 +193,8 @@ public class ActionFile {
    * @param root the root element of the document
    */
   private void exportEvents(final Document document, final Element root) {
+    // Define constants
+    final String SECONDS = ":00.000Z";
     // Events
     Element events = document.createElement("events");
     root.appendChild(events);
@@ -201,12 +204,12 @@ public class ActionFile {
       String timeStart = event.getStartTime();
       timeStart = timeStart.replace("-", "T");
       timeStart = timeStart.replace("/", "-");
-      timeStart = timeStart + ":00.000Z";
+      timeStart = timeStart + SECONDS;
 
       String timeEnd = event.getEndTime();
       timeEnd = timeEnd.replace("-", "T");
       timeEnd = timeEnd.replace("/", "-");
-      timeEnd = timeEnd + ":00.000Z";
+      timeEnd = timeEnd + SECONDS;
 
       Element eventName = document.createElement(event.getEventName()
           .getString());
@@ -258,6 +261,15 @@ public class ActionFile {
         case "attendancePeak":
           EventAttendancePeak eventAttendancePeak = (EventAttendancePeak) event;
 
+          String peakTime = eventAttendancePeak.getPeakTime();
+          peakTime = peakTime.replace("-", "T");
+          peakTime = peakTime.replace("/", "-");
+          peakTime = peakTime + SECONDS;
+
+          Element peakTimeElement = document.createElement("peakTime");
+          peakTimeElement.appendChild(document.createTextNode(peakTime));
+          eventName.appendChild(peakTimeElement);
+
           Element stationId = document.createElement("stationId");
           stationId
               .appendChild(document.createTextNode(Integer.toString(
@@ -305,13 +317,21 @@ public class ActionFile {
    */
   private void exportAreas(final Document document, final Element root) {
     // Areas of the Map
-    Element areas = document.createElement("areas");
-    root.appendChild(areas);
     for (AreaView areaView : MainWindow.getInstance().getMainPanel()
         .getAreaViews()) {
+
+      // if the current area is the first of the list
+      Element areas = null;
+      if (areaView.getArea().getId() == 0) {
+        areas = document.createElement("areas");
+        root.appendChild(areas);
+      }
+
       // one area of the map
       Element area = document.createElement("area");
-      areas.appendChild(area);
+      if (areas != null) {
+        areas.appendChild(area);
+      }
 
       // id of the area
       Element id = document.createElement("id");

@@ -55,8 +55,9 @@ import java.awt.event.WindowEvent;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
  * @file ActionMetroEvent.java
- * @date 2023-10-02
+ * @date 2023-11-12
  * @since 3.0
  */
 public class ActionMetroEvent {
@@ -283,12 +284,15 @@ public class ActionMetroEvent {
     String endTime =
         eventStringTab[ENDING_DATE_INDEX] + "-" + eventStringTab[
             ENDING_TIME_INDEX];
+    String peakTime = eventStringTab[4] + "-" + eventStringTab[5];
+
     EventAttendancePeak eventAttendancePeak = new EventAttendancePeak(
         this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
+    eventAttendancePeak.setPeakTime(peakTime);
     eventAttendancePeak.setIdStation(Integer.parseInt(eventStringTab[
-        STATION_CONCERNED_INDEX]));
+        STATION_CONCERNED_INDEX+2]));
     eventAttendancePeak.setSize(Integer.parseInt(eventStringTab[
-        PEAK_NUMBER_INDEX]));
+        PEAK_NUMBER_INDEX+2]));
     Data.getInstance().getEventList().add(eventAttendancePeak);
 
     Station stationConcerned = null;
@@ -307,9 +311,9 @@ public class ActionMetroEvent {
     MainWindow.getInstance().getMainPanel().repaint();
     if (stationConcerned != null) {
       MainWindow.getInstance().getEventRecapPanel().createEventAttendancePeak(
-          this.getCurrentId(), startTime, endTime,
+          this.getCurrentId(), startTime, endTime, peakTime,
           Integer.toString(stationConcerned.getId()),
-          eventStringTab[PEAK_NUMBER_INDEX]);
+          eventStringTab[PEAK_NUMBER_INDEX+2]);
     }
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();

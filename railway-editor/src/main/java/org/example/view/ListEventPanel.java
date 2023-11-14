@@ -69,8 +69,9 @@ import java.util.Properties;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
  * @file ListEventPanel.java
- * @date N/A
+ * @date 2023/11/12
  * @since 2.0
  */
 public final class ListEventPanel extends JPanel {
@@ -166,13 +167,17 @@ public final class ListEventPanel extends JPanel {
   private JTextField editStationEnd;
 
   //eventAttendancePeakAttribute
+  /** date picker peak. */
+  private JDatePickerImpl datePickerPeak;
+  /** clock panel peak. */
+  private ClockPanel clockPanelPeak;
   /** edit station concerned text field. */
   private JTextField editStationConcerned;
   /** edit peak number text field. */
   private JTextField editPeakNumber;
-  /** edit station closed concerned text field. */
 
   //eventStationClosedAttribute
+  /** edit station closed concerned text field. */
   private JTextField editStationClosedConcerned;
   /** edit train number text field. */
   //eventTrainHour
@@ -617,7 +622,7 @@ public final class ListEventPanel extends JPanel {
   private void initAttendancePeak(final GridBagConstraints c) {
     JLabel timeStart = new JLabel(START_TIME);
     JLabel timeEnd = new JLabel(END_TIME);
-
+    JLabel peakTime = new JLabel("Peak Time: ");
 
     Properties p = new Properties();
     p.put(PROPERTIES_TEXT_TODAY, PROPERTIES_TEXT_TODAY_VALUE);
@@ -626,21 +631,31 @@ public final class ListEventPanel extends JPanel {
 
     JPanel viewDateStart = new JPanel();
     JPanel viewDateEnd = new JPanel();
+    JPanel viewDatePeak = new JPanel();
     viewDateStart.setBorder(new BevelBorder(BevelBorder.RAISED));
     viewDateEnd.setBorder(new BevelBorder(BevelBorder.RAISED));
+    viewDatePeak.setBorder(new BevelBorder(BevelBorder.RAISED));
 
     UtilDateModel model = new UtilDateModel();
     UtilDateModel model2 = new UtilDateModel();
+    UtilDateModel model3 = new UtilDateModel();
     JDatePanelImpl datePanelStart = new JDatePanelImpl(model, p);
     Properties p2 = new Properties();
     JDatePanelImpl datePanelEnd = new JDatePanelImpl(model2, p2);
+    Properties p3 = new Properties();
+    JDatePanelImpl datePanelPeak = new JDatePanelImpl(model3, p3);
+
     datePickerStart = new JDatePickerImpl(datePanelStart,
         new DateLabelFormatter());
     datePickerEnd = new JDatePickerImpl(datePanelEnd, new DateLabelFormatter());
+    datePickerPeak = new JDatePickerImpl(datePanelPeak,
+            new DateLabelFormatter());
     viewDateStart.add(datePickerStart, BorderLayout.CENTER);
     viewDateEnd.add(datePickerEnd, BorderLayout.CENTER);
+    viewDatePeak.add(datePickerPeak, BorderLayout.CENTER);
     clockPanelStart = new ClockPanel();
     clockPanelEnd = new ClockPanel();
+    clockPanelPeak = new ClockPanel();
 
     JLabel stationConcerned = new JLabel("Id station concerned: ");
     editStationConcerned = new JTextField();
@@ -704,29 +719,51 @@ public final class ListEventPanel extends JPanel {
       c.weighty = 0.4;
       view.add(clockPanelEnd, c);
 
-      c.fill = GridBagConstraints.HORIZONTAL;
+      c.fill = GridBagConstraints.VERTICAL;
+      c.gridwidth = 3;
       c.gridx = 0;
       c.gridy = 4;
+      c.gridheight = 1;
+      c.weightx = 3;
       c.weighty = 0.1;
-      c.insets = new Insets(15, 0, 0, 0);
-      view.add(stationConcerned, c);
+      view.add(peakTime, c);
+
+      c.fill = GridBagConstraints.BOTH;
+      c.gridwidth = 1;
       c.gridx = 0;
       c.gridy = 5;
-      c.weighty = 0.2;
-      view.add(editStationConcerned, c);
-      c.fill = GridBagConstraints.CENTER;
+      c.gridheight = 1;
+      c.weightx = 3;
+      c.weighty = 0.4;
+      view.add(viewDatePeak, c);
       c.gridx = 1;
       c.gridy = 5;
-      c.weighty = 0.2;
-      view.add(stationConcernedPicker, c);
+      c.weighty = 0.4;
+      view.add(clockPanelPeak, c);
+
       c.fill = GridBagConstraints.HORIZONTAL;
       c.gridx = 0;
       c.gridy = 6;
       c.weighty = 0.1;
+      c.insets = new Insets(15, 0, 0, 0);
+      view.add(stationConcerned, c);
+      c.gridx = 0;
+      c.gridy = 7;
+      c.weighty = 0.2;
+      view.add(editStationConcerned, c);
+      c.fill = GridBagConstraints.CENTER;
+      c.gridx = 1;
+      c.gridy = 7;
+      c.weighty = 0.2;
+      view.add(stationConcernedPicker, c);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.gridx = 0;
+      c.gridy = 8;
+      c.weighty = 0.1;
       JLabel peakNumber = new JLabel("peakNumber: ");
       view.add(peakNumber, c);
       c.gridx = 0;
-      c.gridy = 7;
+      c.gridy = 9;
       c.weighty = 0.2;
       view.add(editPeakNumber, c);
 
@@ -1021,14 +1058,17 @@ public final class ListEventPanel extends JPanel {
 
     String dateStart = df.format((Date) datePickerStart.getModel().getValue());
     String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String datePeak = df.format((Date) datePickerPeak.getModel().getValue());
     String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
+    String timePeak = dfTime.format(clockPanelPeak.getTimeSpinner().getValue());
     String stationConcerned = editStationConcerned.getText();
     String peakNb = editPeakNumber.getText();
 
-    return dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
-      + stationConcerned + "," + peakNb;
+    return dateStart + "," + timeStart + "," + dateEnd + "," +
+            timeEnd + "," + datePeak + "," + timePeak + "," + stationConcerned +
+            "," + peakNb;
   }
 
   /**
