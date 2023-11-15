@@ -24,22 +24,22 @@
 
 package models
 
-import (
-	"github.com/stretchr/testify/assert"
-	"testing"
-)
+type Area struct {
+	id                     int
+	populationDistribution PopulationDistribution
+}
 
-/*
-TestAreaDistribution tests the AreaDistribution struct
-*/
-func TestAreaDistribution(t *testing.T) {
-	var ad = NewAreaDistribution(10, 10, 10,
-		10, 10, 40, 10)
-	assert.Equal(t, 10, ad.Businessman())
-	assert.Equal(t, 10, ad.Child())
-	assert.Equal(t, 10, ad.Retired())
-	assert.Equal(t, 10, ad.Student())
-	assert.Equal(t, 10, ad.Tourist())
-	assert.Equal(t, 40, ad.Unemployed())
-	assert.Equal(t, 10, ad.Worker())
+func NewArea(id int, populationDistribution PopulationDistribution) Area {
+	return Area{
+		id:                     id,
+		populationDistribution: populationDistribution,
+	}
+}
+
+func (a *Area) Id() int {
+	return a.id
+}
+
+func (a *Area) PopulationDistribution() PopulationDistribution {
+	return a.populationDistribution
 }

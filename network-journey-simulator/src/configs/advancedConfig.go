@@ -63,13 +63,15 @@ Attributes :
   - EventsAttendancePeak []ConfigAttendancePeakEvent : the events of attendance
 */
 type ConfigMap struct {
-	XMLName              xml.Name                    `xml:"map"`
-	Stations             []ConfigStation             `xml:"stations>station"`
-	Lines                []ConfigLine                `xml:"lines>line"`
-	EventsStationClosed  []ConfigStationClosedEvent  `xml:"events>stationClosed"`
-	EventsLineDelay      []ConfigLineDelayEvent      `xml:"events>lineDelay"`
-	EventsLineClosed     []ConfigLineClosedEvent     `xml:"events>lineClosed"`
-	EventsAttendancePeak []ConfigAttendancePeakEvent `xml:"events>attendancePeak"`
+	XMLName                xml.Name                       `xml:"map"`
+	Stations               []ConfigStation                `xml:"stations>station"`
+	Lines                  []ConfigLine                   `xml:"lines>line"`
+	EventsStationClosed    []ConfigStationClosedEvent     `xml:"events>stationClosed"`
+	EventsLineDelay        []ConfigLineDelayEvent         `xml:"events>lineDelay"`
+	EventsLineClosed       []ConfigLineClosedEvent        `xml:"events>lineClosed"`
+	EventsAttendancePeak   []ConfigAttendancePeakEvent    `xml:"events>attendancePeak"`
+	Areas                  []ConfigArea                   `xml:"areas>area"`
+	PopulationDistribution []ConfigPopulationDistribution `xml:"area>populationDistribution"`
 }
 
 /*
@@ -83,15 +85,19 @@ Attributes :
   - Lines []Line
 */
 type ConfigStation struct {
-	XMLName          xml.Name         `xml:"station"`
-	Id               int              `xml:"id"`
-	Name             string           `xml:"name"`
-	Position         Pos              `xml:"position"`
-	Lines            []Line           `xml:"lines>line"`
-	AreaDistribution AreaDistribution `xml:"areaDistribution"`
+	XMLName  xml.Name `xml:"station"`
+	Id       int      `xml:"id"`
+	Name     string   `xml:"name"`
+	Position Pos      `xml:"position"`
+	Lines    []Line   `xml:"lines>line"`
+	IdArea   int      `xml:"idArea"`
 }
 
-type AreaDistribution struct {
+type ConfigArea struct {
+	Id                     int                          `xml:"id"`
+	PopulationDistribution ConfigPopulationDistribution `xml:"area>populationDistribution"`
+}
+type ConfigPopulationDistribution struct {
 	Businessman int `xml:"businessman,attr"`
 	Child       int `xml:"child,attr"`
 	Retired     int `xml:"retired,attr"`

@@ -65,7 +65,7 @@ Attributes :
   - eventsLineClosed []models.EventLineClosed : the events of the simulator
   - eventsAttendancePeak []models.EventAttendancePeak : the events of the
     simulator
-  - areasDistribution []models.AreaDistribution : the population distribution of
+  - areasDistribution []models.PopulationDistribution : the population distribution of
     an area
   - tripNumberCounter int : the trip number counter of the simulator
 
@@ -102,21 +102,21 @@ Methods :
   - ToCSV() : save the timetable and timetableReal as CSV
 */
 type Simulator struct {
-	config               configs.ConfigurationObject
-	adConfig             *configs.AdvancedConfig
-	mapObject            models.Map
-	population           *models.Population
-	trains               []*models.MetroTrain
-	currentTime          time.Time
-	timetable            models.Timetable
-	timetableReal        models.TimetableReal
-	eventsStationClosed  []models.EventStationClosed
-	eventsLineDelay      []models.EventLineDelay
-	eventsLineClosed     []models.EventLineClosed
-	eventsAttendancePeak []models.EventAttendancePeak
-	tripNumberCounter    int
-	areasDistribution    []models.AreaDistribution
-	metroStations        []models.MetroStation
+	config                   configs.ConfigurationObject
+	adConfig                 *configs.AdvancedConfig
+	mapObject                models.Map
+	population               *models.Population
+	trains                   []*models.MetroTrain
+	currentTime              time.Time
+	timetable                models.Timetable
+	timetableReal            models.TimetableReal
+	eventsStationClosed      []models.EventStationClosed
+	eventsLineDelay          []models.EventLineDelay
+	eventsLineClosed         []models.EventLineClosed
+	eventsAttendancePeak     []models.EventAttendancePeak
+	tripNumberCounter        int
+	populationsDistributions []models.PopulationDistribution
+	metroStations            []models.MetroStation
 }
 
 const (
@@ -157,21 +157,21 @@ Return :
 */
 func NewSimulator() *Simulator {
 	simulator := &Simulator{
-		config:               configs.GetInstance(),
-		adConfig:             nil,
-		mapObject:            models.Map{},
-		population:           nil,
-		trains:               make([]*models.MetroTrain, 0),
-		currentTime:          time.Now(),
-		timetable:            models.Timetable{},
-		timetableReal:        models.TimetableReal{},
-		eventsStationClosed:  make([]models.EventStationClosed, 0),
-		eventsLineDelay:      make([]models.EventLineDelay, 0),
-		eventsLineClosed:     make([]models.EventLineClosed, 0),
-		eventsAttendancePeak: make([]models.EventAttendancePeak, 0),
-		areasDistribution:    make([]models.AreaDistribution, 0),
-		metroStations:        make([]models.MetroStation, 0),
-		tripNumberCounter:    0,
+		config:                   configs.GetInstance(),
+		adConfig:                 nil,
+		mapObject:                models.Map{},
+		population:               nil,
+		trains:                   make([]*models.MetroTrain, 0),
+		currentTime:              time.Now(),
+		timetable:                models.Timetable{},
+		timetableReal:            models.TimetableReal{},
+		eventsStationClosed:      make([]models.EventStationClosed, 0),
+		eventsLineDelay:          make([]models.EventLineDelay, 0),
+		eventsLineClosed:         make([]models.EventLineClosed, 0),
+		eventsAttendancePeak:     make([]models.EventAttendancePeak, 0),
+		populationsDistributions: make([]models.PopulationDistribution, 0),
+		metroStations:            make([]models.MetroStation, 0),
+		tripNumberCounter:        0,
 	}
 	return simulator
 }
@@ -230,16 +230,34 @@ func (s *Simulator) GetAllEventsAttendancePeak() []models.EventAttendancePeak {
 	return s.eventsAttendancePeak
 }
 
-func (s *Simulator) GetAllAreasDistribution() []models.AreaDistribution {
-	return s.areasDistribution
+func (s *Simulator) GetAllPopulationsDistribution() []models.PopulationDistribution {
+	return s.populationsDistributions
 }
 
-func (s *Simulator) GetAreaDistributionStation(id int) models.AreaDistribution {
-	return s.areasDistribution[id]
+func (s *Simulator) GetPopulationDistributionStation(id int) models.PopulationDistribution {
+	return s.populationsDistributions[id]
 }
 
 func (s *Simulator) GetAllMetroStation() []models.MetroStation {
 	return s.metroStations
+}
+
+/*
+get metroStation areaId
+*/
+func (s *Simulator) GetMetroStationIdArea(id int) int {
+	return s.metroStations[id].IdArea()
+}
+
+/*
+get all metroStations areaIds
+*/
+func (s *Simulator) GetMetroStationsIdArea() []int {
+	var areaIds []int
+	for _, ms := range s.metroStations {
+		areaIds = append(areaIds, ms.IdArea())
+	}
+	return areaIds
 }
 
 /*
@@ -353,15 +371,15 @@ func (s *Simulator) CreateEventsAttendancePeak() {
 /*
 CreateAreasDistribution is used to create "area distribution"
 */
-func (s *Simulator) CreateAreasDistribution() {
-	s.areasDistribution = make([]models.AreaDistribution,
-		len(s.adConfig.MapC.Stations))
-	for i, ad := range s.adConfig.MapC.Stations {
-		s.areasDistribution[i] =
-			models.NewAreaDistribution(ad.AreaDistribution.Businessman,
-				ad.AreaDistribution.Child, ad.AreaDistribution.Retired,
-				ad.AreaDistribution.Student, ad.AreaDistribution.Tourist,
-				ad.AreaDistribution.Unemployed, ad.AreaDistribution.Worker)
+func (s *Simulator) CreatePopulationsDistribution() {
+	s.populationsDistributions = make([]models.PopulationDistribution,
+		len(s.adConfig.MapC.Areas))
+	for i, ad := range s.adConfig.MapC.Areas {
+		s.populationsDistributions[i] =
+			models.NewPopulationDistribution(ad.PopulationDistribution.Businessman,
+				ad.PopulationDistribution.Child, ad.PopulationDistribution.Retired,
+				ad.PopulationDistribution.Student, ad.PopulationDistribution.Tourist,
+				ad.PopulationDistribution.Unemployed, ad.PopulationDistribution.Worker)
 	}
 
 }
@@ -531,7 +549,7 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 
 	s.CreateEventsAttendancePeak()
 
-	s.CreateAreasDistribution()
+	s.CreatePopulationsDistribution()
 
 	// create map
 	s.mapObject = models.CreateMapAdvanced(*s.adConfig)

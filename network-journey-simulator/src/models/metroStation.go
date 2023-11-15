@@ -77,14 +77,14 @@ Methods :
     stations are equals, false otherwise
 */
 type MetroStation struct {
-	id               int
-	number           int
-	code             string
-	name             string
-	position         Point
-	metroLines       []*MetroLine
-	areaDistribution AreaDistribution
-	status           string
+	id         int
+	number     int
+	code       string
+	name       string
+	position   Point
+	metroLines []*MetroLine
+	status     string
+	idArea     int
 }
 
 /*
@@ -261,10 +261,10 @@ func (ms *MetroStation) setPosition(position Point) {
 }
 
 /*
-AreaDistribution returns the areaDistribution of the station.
+IdArea returns the id of the area of the station.
 */
-func (ms *MetroStation) AreaDistribution() AreaDistribution {
-	return ms.areaDistribution
+func (ms *MetroStation) IdArea() int {
+	return ms.idArea
 }
 
 /*

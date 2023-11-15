@@ -334,7 +334,7 @@ func TestSimulator_EventAttendancePeak(t *testing.T) {
 
 /*
 TestSimulator_GetAllAreasDistribution() tests the
-GetAllAreasDistribution() method of the Simulator struct.
+GetAllPopulationsDistribution() method of the Simulator struct.
 */
 func TestSimulator_GetAllAreasDistribution(t *testing.T) {
 	println("TestSimulator_GetAllAreasDistribution")
@@ -343,7 +343,7 @@ func TestSimulator_GetAllAreasDistribution(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	areasDistribution := sim.GetAllAreasDistribution()
+	areasDistribution := sim.GetAllPopulationsDistribution()
 
 	assert.True(t, len(areasDistribution) != 0, "Array of areas distribution not initialized")
 
@@ -380,7 +380,7 @@ func TestSimulator_GetAllAreasDistribution(t *testing.T) {
 
 /*
 TestSimulator_GetAreaDistributionStation() tests the
-GetAreaDistributionStation() method of the Simulator struct.
+GetPopulationDistributionStation() method of the Simulator struct.
 */
 func TestSimulator_GetAreaDistributionStation(t *testing.T) {
 	println("TestSimulator_GetAreaDistributionStation")
@@ -389,7 +389,7 @@ func TestSimulator_GetAreaDistributionStation(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	areaDistribution := sim.GetAreaDistributionStation(0)
+	areaDistribution := sim.GetPopulationDistributionStation(0)
 
 	assert.Equal(t, 10, areaDistribution.Businessman(),
 		"Bad businessman attribut")

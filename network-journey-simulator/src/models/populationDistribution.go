@@ -24,7 +24,7 @@
 
 package models
 
-type AreaDistribution struct {
+type PopulationDistribution struct {
 	businessman int
 	child       int
 	retired     int
@@ -34,9 +34,9 @@ type AreaDistribution struct {
 	worker      int
 }
 
-func NewAreaDistribution(businessman, child, retired, student, tourist,
-	unemployed, worker int) AreaDistribution {
-	return AreaDistribution{
+func NewPopulationDistribution(businessman, child, retired, student, tourist,
+	unemployed, worker int) PopulationDistribution {
+	return PopulationDistribution{
 		businessman: businessman,
 		child:       child,
 		retired:     retired,
@@ -47,30 +47,30 @@ func NewAreaDistribution(businessman, child, retired, student, tourist,
 	}
 }
 
-func (ad *AreaDistribution) Businessman() int {
+func (ad *PopulationDistribution) Businessman() int {
 	return ad.businessman
 }
 
-func (ad *AreaDistribution) Child() int {
+func (ad *PopulationDistribution) Child() int {
 	return ad.child
 }
 
-func (ad *AreaDistribution) Retired() int {
+func (ad *PopulationDistribution) Retired() int {
 	return ad.retired
 }
 
-func (ad *AreaDistribution) Student() int {
+func (ad *PopulationDistribution) Student() int {
 	return ad.student
 }
 
-func (ad *AreaDistribution) Tourist() int {
+func (ad *PopulationDistribution) Tourist() int {
 	return ad.tourist
 }
 
-func (ad *AreaDistribution) Unemployed() int {
+func (ad *PopulationDistribution) Unemployed() int {
 	return ad.unemployed
 }
 
-func (ad *AreaDistribution) Worker() int {
+func (ad *PopulationDistribution) Worker() int {
 	return ad.worker
 }
