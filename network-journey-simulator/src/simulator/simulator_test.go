@@ -406,3 +406,147 @@ func TestSimulator_GetAreaDistributionStation(t *testing.T) {
 	assert.Equal(t, 10, areaDistribution.Worker(),
 		"Bad worker attribut")
 }
+
+/*
+test GetIdAreaMetroStations() tests the GetIdAreaMetroStations() method of the Simulator struct.
+*/
+
+func TestSimulator_GetIdAreaMetroStations(t *testing.T) {
+	println("TestSimulator_GetIdAreaMetroStations")
+	sim := NewSimulator()
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
+
+	areaDistribution := sim.GetIdAreaMetroStations()
+
+	assert.Equal(t, 0, areaDistribution[0],
+		"Bad id attribut")
+	assert.Equal(t, 1, areaDistribution[1],
+		"Bad id attribut")
+	assert.Equal(t, 2, areaDistribution[2],
+		"Bad id attribut")
+	assert.Equal(t, 3, areaDistribution[3],
+		"Bad id attribut")
+	assert.Equal(t, 4, areaDistribution[4],
+		"Bad id attribut")
+	assert.Equal(t, 5, areaDistribution[5],
+		"Bad id attribut")
+	assert.Equal(t, 6, areaDistribution[6],
+		"Bad id attribut")
+	assert.Equal(t, 7, areaDistribution[7],
+		"Bad id attribut")
+	assert.Equal(t, 8, areaDistribution[8],
+		"Bad id attribut")
+	assert.Equal(t, 9, areaDistribution[9],
+		"Bad id attribut")
+	assert.Equal(t, 10, areaDistribution[10],
+		"Bad id attribut")
+	assert.Equal(t, 11, areaDistribution[11],
+		"Bad id attribut")
+	assert.Equal(t, 12, areaDistribution[12],
+		"Bad id attribut")
+	assert.Equal(t, 13, areaDistribution[13],
+		"Bad id attribut")
+	assert.Equal(t, 14, areaDistribution[14],
+		"Bad id attribut")
+	assert.Equal(t, 15, areaDistribution[15],
+		"Bad id attribut")
+	assert.Equal(t, 16, areaDistribution[16],
+		"Bad id attribut")
+	assert.Equal(t, 17, areaDistribution[17],
+		"Bad id attribut")
+	assert.Equal(t, 18, areaDistribution[18],
+		"Bad id attribut")
+	assert.Equal(t, 19, areaDistribution[19],
+		"Bad id attribut")
+}
+
+/*
+test GetAllPopulationsDistribution() tests the GetAllPopulationsDistribution() method of the Simulator struct.
+*/
+
+func TestSimulator_GetAllPopulationsDistribution(t *testing.T) {
+	println("TestSimulator_GetAllPopulationsDistribution")
+	sim := NewSimulator()
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
+
+	areaDistribution := sim.GetAllPopulationsDistribution()
+
+	assert.Equal(t, 10, areaDistribution[0].Businessman(),
+		"Bad businessman attribut")
+	assert.Equal(t, 10, areaDistribution[0].Child(),
+		"Bad child attribut")
+	assert.Equal(t, 10, areaDistribution[0].Retired(),
+		"Bad retired attribut")
+	assert.Equal(t, 10, areaDistribution[0].Student(),
+		"Bad student attribut")
+	assert.Equal(t, 10, areaDistribution[0].Tourist(),
+		"Bad tourist attribut")
+	assert.Equal(t, 30, areaDistribution[0].Unemployed(),
+		"Bad unemployed attribut")
+	assert.Equal(t, 10, areaDistribution[0].Worker(),
+		"Bad worker attribut")
+
+	assert.Equal(t, 0, areaDistribution[1].Businessman(),
+		"Bad businessman attribut")
+	assert.Equal(t, 20, areaDistribution[1].Child(),
+		"Bad child attribut")
+	assert.Equal(t, 10, areaDistribution[1].Retired(),
+		"Bad retired attribut")
+	assert.Equal(t, 10, areaDistribution[1].Student(),
+		"Bad student attribut")
+	assert.Equal(t, 10, areaDistribution[1].Tourist(),
+		"Bad tourist attribut")
+	assert.Equal(t, 30, areaDistribution[1].Unemployed(),
+		"Bad unemployed attribut")
+	assert.Equal(t, 10, areaDistribution[1].Worker(),
+		"Bad worker attribut")
+}
+
+/*
+test createAreas() tests the createAreas() method of the Simulator struct.
+*/
+
+func TestSimulator_createAreas(t *testing.T) {
+	println("TestSimulator_createAreas")
+	sim := NewSimulator()
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
+
+	sim.CreateAreas()
+
+	assert.Equal(t, 2, len(sim.areas),
+		"Bad number of areas")
+}
+
+/*
+test GetPopulationDistributionStation(idArea int) tests the GetPopulationDistributionStation(idArea int) method of the Simulator struct.
+*/
+func TestSimulator_GetPopulationDistributionStation(t *testing.T) {
+	println("TestSimulator_GetPopulationDistributionStation")
+	sim := NewSimulator()
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
+
+	areaDistribution := sim.GetPopulationDistributionStation(3)
+
+	assert.Equal(t, 10, areaDistribution.Businessman(),
+		"Bad businessman attribut")
+	assert.Equal(t, 10, areaDistribution.Child(),
+		"Bad child attribut")
+	assert.Equal(t, 10, areaDistribution.Retired(),
+		"Bad retired attribut")
+	assert.Equal(t, 10, areaDistribution.Student(),
+		"Bad student attribut")
+	assert.Equal(t, 10, areaDistribution.Tourist(),
+		"Bad tourist attribut")
+	assert.Equal(t, 30, areaDistribution.Unemployed(),
+		"Bad unemployed attribut")
+	assert.Equal(t, 10, areaDistribution.Worker(),
+		"Bad worker attribut")
+}

@@ -117,6 +117,7 @@ type Simulator struct {
 	tripNumberCounter        int
 	populationsDistributions []models.PopulationDistribution
 	metroStations            []models.MetroStation
+	areas                    []models.Area
 }
 
 const (
@@ -171,6 +172,7 @@ func NewSimulator() *Simulator {
 		eventsAttendancePeak:     make([]models.EventAttendancePeak, 0),
 		populationsDistributions: make([]models.PopulationDistribution, 0),
 		metroStations:            make([]models.MetroStation, 0),
+		areas:                    make([]models.Area, 0),
 		tripNumberCounter:        0,
 	}
 	return simulator
@@ -234,25 +236,31 @@ func (s *Simulator) GetAllPopulationsDistribution() []models.PopulationDistribut
 	return s.populationsDistributions
 }
 
+/*
+GetPopulationDistributionStation is used to get the population distribution of
+a station. The station has a idArea attribute that is used to get the corresponding
+population distribution.
+*/
 func (s *Simulator) GetPopulationDistributionStation(id int) models.PopulationDistribution {
-	return s.populationsDistributions[id]
+	var idArea = s.adConfig.MapC.Stations[id].IdArea
+	return s.populationsDistributions[idArea]
 }
 
-func (s *Simulator) GetAllMetroStation() []models.MetroStation {
-	return s.metroStations
+func (s *Simulator) GetAllMetroStation() []configs.ConfigStation {
+	return s.adConfig.MapC.Stations
 }
 
 /*
 get metroStation areaId
 */
-func (s *Simulator) GetMetroStationIdArea(id int) int {
+func (s *Simulator) GetIdAreaMetroStation(id int) int {
 	return s.metroStations[id].IdArea()
 }
 
 /*
 get all metroStations areaIds
 */
-func (s *Simulator) GetMetroStationsIdArea() []int {
+func (s *Simulator) GetIdAreaMetroStations() []int {
 	var areaIds []int
 	for _, ms := range s.metroStations {
 		areaIds = append(areaIds, ms.IdArea())
@@ -380,6 +388,16 @@ func (s *Simulator) CreatePopulationsDistribution() {
 				ad.PopulationDistribution.Child, ad.PopulationDistribution.Retired,
 				ad.PopulationDistribution.Student, ad.PopulationDistribution.Tourist,
 				ad.PopulationDistribution.Unemployed, ad.PopulationDistribution.Worker)
+	}
+
+}
+
+func (s *Simulator) CreateAreas() {
+	s.areas = make([]models.Area,
+		len(s.adConfig.MapC.Areas))
+	for i, ad := range s.adConfig.MapC.Areas {
+		s.areas[i] =
+			models.NewArea(ad.Id, s.populationsDistributions[i])
 	}
 
 }
@@ -550,6 +568,8 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	s.CreateEventsAttendancePeak()
 
 	s.CreatePopulationsDistribution()
+
+	s.CreateAreas()
 
 	// create map
 	s.mapObject = models.CreateMapAdvanced(*s.adConfig)

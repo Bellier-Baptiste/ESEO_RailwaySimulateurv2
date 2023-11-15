@@ -94,17 +94,19 @@ type ConfigStation struct {
 }
 
 type ConfigArea struct {
+	XMLName                xml.Name                     `xml:"area"`
 	Id                     int                          `xml:"id"`
-	PopulationDistribution ConfigPopulationDistribution `xml:"area>populationDistribution"`
+	PopulationDistribution ConfigPopulationDistribution `xml:"populationDistribution"`
 }
 type ConfigPopulationDistribution struct {
-	Businessman int `xml:"businessman,attr"`
-	Child       int `xml:"child,attr"`
-	Retired     int `xml:"retired,attr"`
-	Student     int `xml:"student,attr"`
-	Tourist     int `xml:"tourist,attr"`
-	Unemployed  int `xml:"unemployed,attr"`
-	Worker      int `xml:"worker,attr"`
+	XMLName     xml.Name `xml:"populationDistribution"`
+	Businessman int      `xml:"businessman,attr"`
+	Child       int      `xml:"child,attr"`
+	Retired     int      `xml:"retired,attr"`
+	Student     int      `xml:"student,attr"`
+	Tourist     int      `xml:"tourist,attr"`
+	Unemployed  int      `xml:"unemployed,attr"`
+	Worker      int      `xml:"worker,attr"`
 }
 
 /*
