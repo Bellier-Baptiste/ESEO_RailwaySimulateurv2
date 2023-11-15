@@ -77,5 +77,5 @@ java_build:
   only:
     - master
     - dev
-    - merge_requests
+    - mgt_37_bbel
 
