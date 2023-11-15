@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-package unittests.testmodel;
+package org.example.unittests.testmodel;
 
-import data.Data;
-import model.Area;
-import org.junit.Test;
+import org.example.data.Data;
+import org.example.model.Area;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 /**
  * Test-case of {@link Area} model.
