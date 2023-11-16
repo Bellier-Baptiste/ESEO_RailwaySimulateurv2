@@ -416,38 +416,45 @@ public class ActionFile {
     Element populationDistribution = document.createElement(
         "populationDistribution");
     // tourist Attribute
-    Attr attrTourist = document.createAttribute(Data.AREA_TOURIST);
+    Attr attrTourist = document.createAttribute(
+        Data.AREA_TOURIST.toLowerCase());
     attrTourist.setValue(distributionPopulation.get(0));
     populationDistribution.setAttributeNode(attrTourist);
 
     // Student attribute
-    Attr attrStudent = document.createAttribute(Data.AREA_STUDENT);
+    Attr attrStudent = document.createAttribute(
+        Data.AREA_STUDENT.toLowerCase());
     attrStudent.setValue(distributionPopulation.get(1));
     populationDistribution.setAttributeNode(attrStudent);
 
     // Businessman attribute
-    Attr attrBusinessman = document.createAttribute(Data.AREA_BUSINESSMAN);
+    Attr attrBusinessman = document.createAttribute(
+        Data.AREA_BUSINESSMAN.toLowerCase());
     attrBusinessman
         .setValue(distributionPopulation.get(2));
     populationDistribution.setAttributeNode(attrBusinessman);
 
     // worker attribute
-    Attr attrWorker = document.createAttribute(Data.AREA_WORKER);
+    Attr attrWorker = document.createAttribute(
+        Data.AREA_WORKER.toLowerCase());
     attrWorker.setValue(distributionPopulation.get(3));
     populationDistribution.setAttributeNode(attrWorker);
 
     // child attribute
-    Attr attrChild = document.createAttribute(Data.AREA_CHILD);
+    Attr attrChild = document.createAttribute(
+        Data.AREA_CHILD.toLowerCase());
     attrChild.setValue(distributionPopulation.get(4));
     populationDistribution.setAttributeNode(attrChild);
 
     // retired attribute
-    Attr attrRetired = document.createAttribute(Data.AREA_RETIRED);
+    Attr attrRetired = document.createAttribute(
+        Data.AREA_RETIRED.toLowerCase());
     attrRetired.setValue(distributionPopulation.get(5));
     populationDistribution.setAttributeNode(attrRetired);
 
     // unemployed attribute
-    Attr attrUnemployed = document.createAttribute(Data.AREA_UNEMPLOYED);
+    Attr attrUnemployed = document.createAttribute(
+        Data.AREA_UNEMPLOYED.toLowerCase());
     attrUnemployed.setValue(distributionPopulation.get(6));
     populationDistribution.setAttributeNode(attrUnemployed);
     element.appendChild(populationDistribution);
@@ -456,37 +463,44 @@ public class ActionFile {
     Element destinationDistribution = document.createElement(
         "destinationDistribution");
     // residential Attribute
-    Attr attrResidential = document.createAttribute(Data.AREA_RESIDENTIAL);
+    Attr attrResidential = document.createAttribute(
+        Data.AREA_RESIDENTIAL.toLowerCase());
     attrResidential.setValue(distributionDestination.get(0));
     destinationDistribution.setAttributeNode(attrResidential);
 
     // commercial attribute
-    Attr attrCommercial = document.createAttribute(Data.AREA_COMMERCIAL);
+    Attr attrCommercial = document.createAttribute(
+        Data.AREA_COMMERCIAL.toLowerCase());
     attrCommercial.setValue(distributionDestination.get(1));
     destinationDistribution.setAttributeNode(attrCommercial);
 
     // office attribute
-    Attr attrOffice = document.createAttribute(Data.AREA_OFFICE);
+    Attr attrOffice = document.createAttribute(
+        Data.AREA_OFFICE.toLowerCase());
     attrOffice.setValue(distributionDestination.get(2));
     destinationDistribution.setAttributeNode(attrOffice);
 
     // industrial attribute
-    Attr attrIndustrial = document.createAttribute(Data.AREA_INDUSTRIAL);
+    Attr attrIndustrial = document.createAttribute(
+        Data.AREA_INDUSTRIAL.toLowerCase());
     attrIndustrial.setValue(distributionDestination.get(3));
     destinationDistribution.setAttributeNode(attrIndustrial);
 
     // touristic attribute
-    Attr attrTouristic = document.createAttribute(Data.AREA_TOURISTIC);
+    Attr attrTouristic = document.createAttribute(
+        Data.AREA_TOURISTIC.toLowerCase());
     attrTouristic.setValue(distributionDestination.get(4));
     destinationDistribution.setAttributeNode(attrTouristic);
 
     // leisure attribute
-    Attr attrLeisure = document.createAttribute(Data.AREA_LEISURE);
+    Attr attrLeisure = document.createAttribute(
+        Data.AREA_LEISURE.toLowerCase());
     attrLeisure.setValue(distributionDestination.get(5));
     destinationDistribution.setAttributeNode(attrLeisure);
 
     // school attribute
-    Attr attrSchool = document.createAttribute(Data.AREA_EDUCATIONAL);
+    Attr attrSchool = document.createAttribute(
+        Data.AREA_EDUCATIONAL.toLowerCase());
     attrSchool.setValue(distributionDestination.get(6));
     destinationDistribution.setAttributeNode(attrSchool);
     element.appendChild(destinationDistribution);
