@@ -95,6 +95,9 @@ public class EventAttendancePeak extends Event {
    * @param peakSize size of the peak
    */
   public void setSize(final int peakSize) {
+    if (peakSize < 0) {
+      throw new IllegalArgumentException("Peak size is not valid");
+    }
     this.size = peakSize;
   }
 

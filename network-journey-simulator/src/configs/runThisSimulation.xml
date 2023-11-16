@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<map>
+    <stations>
+        <station>
+            <id>0</id>
+            <name>Phely</name>
+            <position>
+                <latitude>34.13165547154819</latitude>
+                <longitude>-118.46746444702148</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>1</id>
+            <name>Daresu</name>
+            <position>
+                <latitude>34.128103077311266</latitude>
+                <longitude>-118.46317291259766</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>2</id>
+            <name>Barbeh</name>
+            <position>
+                <latitude>34.12455053378872</latitude>
+                <longitude>-118.45888137817383</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>3</id>
+            <name>Undar</name>
+            <position>
+                <latitude>34.12099784098793</latitude>
+                <longitude>-118.45458984375</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>4</id>
+            <name>Lukil</name>
+            <position>
+                <latitude>34.117444998916284</latitude>
+                <longitude>-118.45029830932617</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>5</id>
+            <name>Lasym</name>
+            <position>
+                <latitude>34.11389200758116</latitude>
+                <longitude>-118.44600677490234</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>6</id>
+            <name>Sinorata</name>
+            <position>
+                <latitude>34.11033886698995</latitude>
+                <longitude>-118.44171524047852</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+        <station>
+            <id>7</id>
+            <name>Arin</name>
+            <position>
+                <latitude>34.10678557715007</latitude>
+                <longitude>-118.43742370605469</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+        </station>
+    </stations>
+    <lines>
+        <line>
+            <id>0</id>
+            <name>A</name>
+            <numberOfTrain>30</numberOfTrain>
+            <stations>
+                <station id="0" order="0"/>
+                <station id="1" order="1"/>
+                <station id="2" order="2"/>
+                <station id="3" order="3"/>
+                <station id="4" order="4"/>
+                <station id="5" order="5"/>
+                <station id="6" order="6"/>
+                <station id="7" order="7"/>
+            </stations>
+        </line>
+    </lines>
+    <events/>
+</map>
