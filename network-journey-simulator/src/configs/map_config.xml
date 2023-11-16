@@ -10,7 +10,6 @@
       <lines>
         <line id="0" platform=""></line>
       </lines>
-      <idArea>0</idArea>
     </station>
     <station>
       <id>1</id>
@@ -22,7 +21,6 @@
       <lines>
         <line id="1" platform=""></line>
       </lines>
-      <idArea>1</idArea>
     </station>
     <station>
       <id>2</id>
@@ -307,11 +305,11 @@
   <areas>
     <area>
       <id>0</id>
-      <populationDistribution businessman="10" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
+      <populationDistribution businessman="20" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </area>
     <area>
       <id>1</id>
-      <populationDistribution businessman="0" child="20" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
+      <populationDistribution businessman="0" child="30" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
     </area>
   </areas>
 </map>

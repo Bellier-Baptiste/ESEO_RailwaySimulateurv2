@@ -84,7 +84,7 @@ type MetroStation struct {
 	position   Point
 	metroLines []*MetroLine
 	status     string
-	idArea     int
+	idArea     *int
 }
 
 /*
@@ -263,7 +263,7 @@ func (ms *MetroStation) setPosition(position Point) {
 /*
 IdArea returns the id of the area of the station.
 */
-func (ms *MetroStation) IdArea() int {
+func (ms *MetroStation) IdArea() *int {
 	return ms.idArea
 }
 

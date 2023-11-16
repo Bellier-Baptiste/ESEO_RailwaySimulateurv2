@@ -24,6 +24,31 @@
 
 package models
 
+/*
+PopulationDistribution is the structure that manage the population distribution
+of an area.
+
+Attributes :
+  - businessman int : the number of businessmen in the area
+  - child int : the number of children in the area
+  - retired int : the number of retired in the area
+  - student int : the number of students in the area
+  - tourist int : the number of tourists in the area
+  - unemployed int : the number of unemployed in the area
+  - worker int : the number of workers in the area
+
+Methods :
+  - NewPopulationDistribution(businessman, child, retired, student, tourist,
+    unemployed, worker int) PopulationDistribution : create a new
+    PopulationDistribution
+  - Businessman() int : return the number of businessmen in the area
+  - Child() int : return the number of children in the area
+  - Retired() int : return the number of retired in the area
+  - Student() int : return the number of students in the area
+  - Tourist() int : return the number of tourists in the area
+  - Unemployed() int : return the number of unemployed in the area
+  - Worker() int : return the number of workers in the area
+*/
 type PopulationDistribution struct {
 	businessman int
 	child       int
@@ -34,6 +59,13 @@ type PopulationDistribution struct {
 	worker      int
 }
 
+/*
+NewPopulationDistribution creates a new PopulationDistribution.
+
+It takes the number of people in each category as parameters.
+
+It returns a PopulationDistribution.
+*/
 func NewPopulationDistribution(businessman, child, retired, student, tourist,
 	unemployed, worker int) PopulationDistribution {
 	return PopulationDistribution{

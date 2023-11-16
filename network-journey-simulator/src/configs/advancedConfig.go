@@ -61,6 +61,10 @@ Attributes :
   - EventsLineDelay []ConfigLineDelayEvent : the events of line delay
   - EventsLineClosed []ConfigLineClosedEvent : the events of line closed
   - EventsAttendancePeak []ConfigAttendancePeakEvent : the events of attendance
+    peak
+  - Areas []ConfigArea : the areas linking stations
+  - PopulationDistribution []ConfigPopulationDistribution : the population
+    distribution of an area
 */
 type ConfigMap struct {
 	XMLName                xml.Name                       `xml:"map"`
@@ -83,6 +87,7 @@ Attributes :
   - Name string
   - Position Pos
   - Lines []Line
+  - IdArea *int
 */
 type ConfigStation struct {
 	XMLName  xml.Name `xml:"station"`
@@ -90,14 +95,36 @@ type ConfigStation struct {
 	Name     string   `xml:"name"`
 	Position Pos      `xml:"position"`
 	Lines    []Line   `xml:"lines>line"`
-	IdArea   int      `xml:"idArea"`
+	IdArea   *int     `xml:"idArea"`
 }
 
+/*
+ConfigArea is the structure that contains the configuration of an area.
+
+Attributes :
+  - XMLName xml.Name
+  - Id int
+  - PopulationDistribution ConfigPopulationDistribution
+*/
 type ConfigArea struct {
 	XMLName                xml.Name                     `xml:"area"`
 	Id                     int                          `xml:"id"`
 	PopulationDistribution ConfigPopulationDistribution `xml:"populationDistribution"`
 }
+
+/*
+ConfigPopulationDistribution is the structure that contains the configuration
+
+Attributes :
+  - XMLName xml.Name
+  - Businessman int
+  - Child int
+  - Retired int
+  - Student int
+  - Tourist int
+  - Unemployed int
+  - Worker int
+*/
 type ConfigPopulationDistribution struct {
 	XMLName     xml.Name `xml:"populationDistribution"`
 	Businessman int      `xml:"businessman,attr"`
