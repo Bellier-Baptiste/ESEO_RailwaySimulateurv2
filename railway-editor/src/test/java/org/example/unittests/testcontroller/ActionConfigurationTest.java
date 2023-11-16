@@ -22,11 +22,13 @@
  * SOFTWARE.
  */
 
-package unittests.testcontroller;
+package org.example.unittests.testcontroller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import controller.ActionConfiguration;
+import org.example.controller.ActionConfiguration;
+import org.example.view.EditConfigDialog;
+import org.example.view.EditConfigParamPanel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
@@ -34,8 +36,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mockito;
-import view.EditConfigDialog;
-import view.EditConfigParamPanel;
 
 import java.io.File;
 import java.io.IOException;
