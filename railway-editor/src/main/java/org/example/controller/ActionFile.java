@@ -390,6 +390,7 @@ public class ActionFile {
         Data.AREA_EDUCATIONAL
     );
 
+    /* Export population distribution. */
     Element populationDistribution = document.createElement(
         "populationDistribution");
     for (String distributionPopulationElement
@@ -409,6 +410,7 @@ public class ActionFile {
     }
     element.appendChild(populationDistribution);
 
+    /* Export destination distribution. */
     Element destinationDistribution = document.createElement(
         "destinationDistribution");
     for (String distributionDestinationElement
