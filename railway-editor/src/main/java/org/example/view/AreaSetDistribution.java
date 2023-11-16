@@ -152,10 +152,10 @@ public class AreaSetDistribution {
     populationDistributionSpinners[5] = fieldRetired;
     JSpinner fieldUnemployed = new JSpinner(new SpinnerNumberModel(0, 0, 100,
         1));
-    fieldUnemployed.addChangeListener(new DistributionChangeListener(
-        POPULATION_DISTRIBUTION_TYPE));
     fieldUnemployed.setValue(area.getDistributionPopulation().get(
         Data.AREA_UNEMPLOYED));
+    fieldUnemployed.addChangeListener(new DistributionChangeListener(
+        POPULATION_DISTRIBUTION_TYPE));
     populationDistributionSpinners[6] = fieldUnemployed;
 
     JLabel  titleDestination = new JLabel("Destination"
@@ -358,6 +358,7 @@ public class AreaSetDistribution {
   private void updatePopulationDistributionTotal() {
     AreaSetDistribution.this.totalPopulationDistribution = 0;
     for (JSpinner jSpinner : populationDistributionSpinners) {
+
       AreaSetDistribution.this.totalPopulationDistribution += (int)
           jSpinner.getValue();
       AreaSetDistribution.this.totalPopulationLabel.setText(

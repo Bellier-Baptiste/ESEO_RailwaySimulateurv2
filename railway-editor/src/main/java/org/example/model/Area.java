@@ -71,12 +71,14 @@ public class Area {
   private double latitudeTop;
   /** Area top left corner longitude. */
   private double longitudeTop;
-
   //bottom right corner
   /** Area bottom right corner latitude. */
   private double latitudeBot;
   /** Area bottom right corner longitude. */
   private double longitudeBot;
+  /** Random generator. */
+  private final Random rand = new Random();
+
 
   /**
    * Area constructor.
@@ -376,31 +378,30 @@ public class Area {
 
   private void initDistributions() {
     this.distributionPopulation = new HashMap<>();
-
-    distributionPopulation.put(Data.AREA_TOURIST, 0);
-    distributionPopulation.put(Data.AREA_STUDENT, 0);
-    distributionPopulation.put(Data.AREA_BUSINESSMAN, 0);
-    distributionPopulation.put(Data.AREA_WORKER, 0);
-    distributionPopulation.put(Data.AREA_CHILD, 0);
-    distributionPopulation.put(Data.AREA_RETIRED, 0);
-    distributionPopulation.put(Data.AREA_UNEMPLOYED, 0);
+    // Init the value at 100 / number of fields for the distribution (7 here
+    distributionPopulation.put(Data.AREA_WORKER, 15);
+    distributionPopulation.put(Data.AREA_STUDENT, 15);
+    distributionPopulation.put(Data.AREA_TOURIST, 14);
+    distributionPopulation.put(Data.AREA_BUSINESSMAN, 14);
+    distributionPopulation.put(Data.AREA_CHILD, 14);
+    distributionPopulation.put(Data.AREA_RETIRED, 14);
+    distributionPopulation.put(Data.AREA_UNEMPLOYED, 14);
 
     this.distributionDestination = new HashMap<>();
 
-    distributionDestination.put(Data.AREA_RESIDENTIAL, 0);
-    distributionDestination.put(Data.AREA_COMMERCIAL, 0);
-    distributionDestination.put(Data.AREA_OFFICE, 0);
-    distributionDestination.put(Data.AREA_INDUSTRIAL, 0);
-    distributionDestination.put(Data.AREA_TOURISTIC, 0);
-    distributionDestination.put(Data.AREA_LEISURE, 0);
-    distributionDestination.put(Data.AREA_EDUCATIONAL, 0);
+    distributionDestination.put(Data.AREA_OFFICE, 15);
+    distributionDestination.put(Data.AREA_COMMERCIAL, 15);
+    distributionDestination.put(Data.AREA_RESIDENTIAL, 14);
+    distributionDestination.put(Data.AREA_INDUSTRIAL, 14);
+    distributionDestination.put(Data.AREA_TOURISTIC, 14);
+    distributionDestination.put(Data.AREA_LEISURE, 14);
+    distributionDestination.put(Data.AREA_EDUCATIONAL, 14);
   }
 
   private void initColor() {
-    Random rand = new Random();
-    float r = rand.nextFloat();
-    float g = rand.nextFloat();
-    float b = rand.nextFloat();
+    float r = this.rand.nextFloat();
+    float g = this.rand.nextFloat();
+    float b = this.rand.nextFloat();
     this.color = new Color(r, g, b, AREA_OPACITY);
   }
 

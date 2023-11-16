@@ -60,6 +60,7 @@ import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -69,30 +70,45 @@ import java.util.Map;
  * A class for performing actions related to the file menu.
  * Linked to menu items in {@link org.example.view.MenuBar}.
  *
- * @see org.example.data.Data
- *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
  * @file ActionFile.java
  * @date 2023/09/22
+ * @see org.example.data.Data
  * @since 3.0
  */
 public class ActionFile {
-  /** Name of the export action. */
+  /**
+   * Name of the export action.
+   */
   public static final String EXPORT_NAME = "Export";
-  /** Name of the import action. */
+  /**
+   * Name of the import action.
+   */
   public static final String IMPORT_NAME = "Open";
-  /** String of the position tag. */
+  /**
+   * String of the position tag.
+   */
   public static final String POSITION = "position";
-  /** String of the lines tag. */
+  /**
+   * String of the lines tag.
+   */
   public static final String LINES = "lines";
-  /** String of the stations tag. */
+  /**
+   * String of the stations tag.
+   */
   public static final String STATIONS = "stations";
-  /** String of the station tag. */
+  /**
+   * String of the station tag.
+   */
   public static final String STATION = "station";
-  /** Number of letters in alphabet. */
+  /**
+   * Number of letters in alphabet.
+   */
   private static final int ALPHABET_SIZE = 26;
-  /** Singleton instance. */
+  /**
+   * Singleton instance.
+   */
   private static ActionFile instance;
 
   /**
@@ -189,7 +205,7 @@ public class ActionFile {
    * Generate the xml part of the events.
    *
    * @param document the document to add the events
-   * @param root the root element of the document
+   * @param root     the root element of the document
    */
   private void exportEvents(final Document document, final Element root) {
     // Events
@@ -301,7 +317,7 @@ public class ActionFile {
    * Generates the xml part of the areas.
    *
    * @param document the document to add the areas
-   * @param root the root element of the document
+   * @param root     the root element of the document
    */
   private void exportAreas(final Document document, final Element root) {
     // Areas of the Map
@@ -339,106 +355,148 @@ public class ActionFile {
       position.setAttributeNode(longitudeBot);
       area.appendChild(position);
 
-      // population distribution of the area
-      Element populationDistribution = document.createElement(
-          "populationDistribution");
-      // tourist Attribute
-      Attr attrTourist = document.createAttribute(Data.AREA_TOURIST);
-      attrTourist.setValue(Integer.toString(areaView.getArea()
-          .getDistributionPopulation().get(Data.AREA_TOURIST)));
-      populationDistribution.setAttributeNode(attrTourist);
-
-      // Student attribute
-      Attr attrStudent = document.createAttribute(Data.AREA_STUDENT);
-      attrStudent.setValue(Integer.toString(areaView.getArea()
-          .getDistributionPopulation().get(Data.AREA_STUDENT)));
-      populationDistribution.setAttributeNode(attrStudent);
-
-      // Businessman attribute
-      Attr attrBusinessman = document.createAttribute(Data.AREA_BUSINESSMAN);
-      attrBusinessman
-          .setValue(Integer.toString(areaView.getArea()
-              .getDistributionPopulation().get(Data.AREA_BUSINESSMAN)));
-      populationDistribution.setAttributeNode(attrBusinessman);
-
-      // worker attribute
-      Attr attrWorker = document.createAttribute(Data.AREA_WORKER);
-      attrWorker.setValue(Integer.toString(areaView.getArea()
-          .getDistributionPopulation().get(Data.AREA_WORKER)));
-      populationDistribution.setAttributeNode(attrWorker);
-
-      // child attribute
-      Attr attrChild = document.createAttribute(Data.AREA_CHILD);
-      attrChild.setValue(Integer.toString(areaView.getArea()
-          .getDistributionPopulation().get(Data.AREA_CHILD)));
-      populationDistribution.setAttributeNode(attrChild);
-
-      // retired attribute
-      Attr attrRetired = document.createAttribute(Data.AREA_RETIRED);
-      attrRetired.setValue(Integer.toString(areaView.getArea()
-          .getDistributionPopulation().get(Data.AREA_RETIRED)));
-      populationDistribution.setAttributeNode(attrRetired);
-
-      // unemployed attribute
-      Attr attrUnemployed = document.createAttribute(Data.AREA_UNEMPLOYED);
-      attrUnemployed.setValue(Integer.toString(areaView.getArea()
-          .getDistributionPopulation().get(Data.AREA_UNEMPLOYED)));
-      populationDistribution.setAttributeNode(attrUnemployed);
-      area.appendChild(populationDistribution);
-
-      // destination distribution of the area
-      Element destinationDistribution = document.createElement(
-          "destinationDistribution");
-      // residential Attribute
-      Attr attrResidential = document.createAttribute(Data.AREA_RESIDENTIAL);
-      attrResidential.setValue(Integer.toString(areaView.getArea()
-          .getDistributionDestination().get(Data.AREA_RESIDENTIAL)));
-      destinationDistribution.setAttributeNode(attrResidential);
-
-      // commercial attribute
-      Attr attrCommercial = document.createAttribute(Data.AREA_COMMERCIAL);
-      attrCommercial.setValue(Integer.toString(areaView.getArea()
-          .getDistributionDestination().get(Data.AREA_COMMERCIAL)));
-      destinationDistribution.setAttributeNode(attrCommercial);
-
-      // office attribute
-      Attr attrOffice = document.createAttribute(Data.AREA_OFFICE);
-      attrOffice.setValue(Integer.toString(areaView.getArea()
-          .getDistributionDestination().get(Data.AREA_OFFICE)));
-      destinationDistribution.setAttributeNode(attrOffice);
-
-      // industrial attribute
-      Attr attrIndustrial = document.createAttribute(Data.AREA_INDUSTRIAL);
-      attrIndustrial.setValue(Integer.toString(areaView.getArea()
-          .getDistributionDestination().get(Data.AREA_INDUSTRIAL)));
-      destinationDistribution.setAttributeNode(attrIndustrial);
-
-      // touristic attribute
-      Attr attrTouristic = document.createAttribute(Data.AREA_TOURISTIC);
-      attrTouristic.setValue(Integer.toString(areaView.getArea()
-          .getDistributionDestination().get(Data.AREA_TOURISTIC)));
-      destinationDistribution.setAttributeNode(attrTouristic);
-
-      // leisure attribute
-      Attr attrLeisure = document.createAttribute(Data.AREA_LEISURE);
-      attrLeisure.setValue(Integer.toString(areaView.getArea()
-          .getDistributionDestination().get(Data.AREA_LEISURE)));
-      destinationDistribution.setAttributeNode(attrLeisure);
-
-      // school attribute
-      Attr attrSchool = document.createAttribute(Data.AREA_EDUCATIONAL);
-      attrSchool.setValue(Integer.toString(areaView.getArea()
-          .getDistributionDestination().get(Data.AREA_EDUCATIONAL)));
-      destinationDistribution.setAttributeNode(attrSchool);
-      area.appendChild(destinationDistribution);
+      this.exportDistributions(document, areaView, area);
     }
+  }
+
+  /**
+   * Export the distributions elements of an area or a station
+   * that doesn't have an area.
+   *
+   * @param document the document to add the distributions
+   * @param areaView the area view, null if it's for a station
+   * @param element the element to add the distributions
+   */
+  private void exportDistributions(final Document document,
+                                   final AreaView areaView,
+                                   final Element element) {
+    List<String> distributionPopulation;
+    List<String> distributionDestination;
+    if (areaView == null) {
+      distributionPopulation = Arrays.asList("14", "15", "14", "15",
+          "14", "14", "14");
+      distributionDestination = Arrays.asList("14", "15", "15", "14",
+          "14", "14", "14");
+    } else {
+      distributionPopulation = Arrays.asList(
+          Integer.toString(areaView.getArea()
+              .getDistributionPopulation().get(Data.AREA_TOURIST)),
+          Integer.toString(areaView.getArea()
+              .getDistributionPopulation().get(Data.AREA_STUDENT)),
+          Integer.toString(areaView.getArea()
+              .getDistributionPopulation().get(Data.AREA_BUSINESSMAN)),
+          Integer.toString(areaView.getArea()
+              .getDistributionPopulation().get(Data.AREA_WORKER)),
+          Integer.toString(areaView.getArea()
+              .getDistributionPopulation().get(Data.AREA_CHILD)),
+          Integer.toString(areaView.getArea()
+              .getDistributionPopulation().get(Data.AREA_RETIRED)),
+          Integer.toString(areaView.getArea()
+              .getDistributionPopulation().get(Data.AREA_UNEMPLOYED))
+      );
+      distributionDestination = Arrays.asList(
+          Integer.toString(areaView.getArea()
+              .getDistributionDestination().get(Data.AREA_RESIDENTIAL)),
+          Integer.toString(areaView.getArea()
+              .getDistributionDestination().get(Data.AREA_COMMERCIAL)),
+          Integer.toString(areaView.getArea()
+              .getDistributionDestination().get(Data.AREA_OFFICE)),
+          Integer.toString(areaView.getArea()
+              .getDistributionDestination().get(Data.AREA_INDUSTRIAL)),
+          Integer.toString(areaView.getArea()
+              .getDistributionDestination().get(Data.AREA_TOURISTIC)),
+          Integer.toString(areaView.getArea()
+              .getDistributionDestination().get(Data.AREA_LEISURE)),
+          Integer.toString(areaView.getArea()
+              .getDistributionDestination().get(Data.AREA_EDUCATIONAL))
+      );
+    }
+
+    // population distribution of the area
+    Element populationDistribution = document.createElement(
+        "populationDistribution");
+    // tourist Attribute
+    Attr attrTourist = document.createAttribute(Data.AREA_TOURIST);
+    attrTourist.setValue(distributionPopulation.get(0));
+    populationDistribution.setAttributeNode(attrTourist);
+
+    // Student attribute
+    Attr attrStudent = document.createAttribute(Data.AREA_STUDENT);
+    attrStudent.setValue(distributionPopulation.get(1));
+    populationDistribution.setAttributeNode(attrStudent);
+
+    // Businessman attribute
+    Attr attrBusinessman = document.createAttribute(Data.AREA_BUSINESSMAN);
+    attrBusinessman
+        .setValue(distributionPopulation.get(2));
+    populationDistribution.setAttributeNode(attrBusinessman);
+
+    // worker attribute
+    Attr attrWorker = document.createAttribute(Data.AREA_WORKER);
+    attrWorker.setValue(distributionPopulation.get(3));
+    populationDistribution.setAttributeNode(attrWorker);
+
+    // child attribute
+    Attr attrChild = document.createAttribute(Data.AREA_CHILD);
+    attrChild.setValue(distributionPopulation.get(4));
+    populationDistribution.setAttributeNode(attrChild);
+
+    // retired attribute
+    Attr attrRetired = document.createAttribute(Data.AREA_RETIRED);
+    attrRetired.setValue(distributionPopulation.get(5));
+    populationDistribution.setAttributeNode(attrRetired);
+
+    // unemployed attribute
+    Attr attrUnemployed = document.createAttribute(Data.AREA_UNEMPLOYED);
+    attrUnemployed.setValue(distributionPopulation.get(6));
+    populationDistribution.setAttributeNode(attrUnemployed);
+    element.appendChild(populationDistribution);
+
+    // destination distribution of the area
+    Element destinationDistribution = document.createElement(
+        "destinationDistribution");
+    // residential Attribute
+    Attr attrResidential = document.createAttribute(Data.AREA_RESIDENTIAL);
+    attrResidential.setValue(distributionDestination.get(0));
+    destinationDistribution.setAttributeNode(attrResidential);
+
+    // commercial attribute
+    Attr attrCommercial = document.createAttribute(Data.AREA_COMMERCIAL);
+    attrCommercial.setValue(distributionDestination.get(1));
+    destinationDistribution.setAttributeNode(attrCommercial);
+
+    // office attribute
+    Attr attrOffice = document.createAttribute(Data.AREA_OFFICE);
+    attrOffice.setValue(distributionDestination.get(2));
+    destinationDistribution.setAttributeNode(attrOffice);
+
+    // industrial attribute
+    Attr attrIndustrial = document.createAttribute(Data.AREA_INDUSTRIAL);
+    attrIndustrial.setValue(distributionDestination.get(3));
+    destinationDistribution.setAttributeNode(attrIndustrial);
+
+    // touristic attribute
+    Attr attrTouristic = document.createAttribute(Data.AREA_TOURISTIC);
+    attrTouristic.setValue(distributionDestination.get(4));
+    destinationDistribution.setAttributeNode(attrTouristic);
+
+    // leisure attribute
+    Attr attrLeisure = document.createAttribute(Data.AREA_LEISURE);
+    attrLeisure.setValue(distributionDestination.get(5));
+    destinationDistribution.setAttributeNode(attrLeisure);
+
+    // school attribute
+    Attr attrSchool = document.createAttribute(Data.AREA_EDUCATIONAL);
+    attrSchool.setValue(distributionDestination.get(6));
+    destinationDistribution.setAttributeNode(attrSchool);
+    element.appendChild(destinationDistribution);
   }
 
   /**
    * Generates the xml part of the lines.
    *
    * @param document the document to add the lines
-   * @param root the root element of the document
+   * @param root     the root element of the document
    */
   private void exportLines(final Document document, final Element root) {
     // lines of map
@@ -494,7 +552,7 @@ public class ActionFile {
    * Generates the xml part of the stations.
    *
    * @param document the document to add the stations
-   * @param root the root element of the document
+   * @param root     the root element of the document
    */
   private void exportStations(final Document document, final Element root) {
     // stations of map
@@ -549,6 +607,8 @@ public class ActionFile {
             idArea.appendChild(document.createTextNode(Integer.toString(
                 stationView.getStation().getArea().getId())));
             station.appendChild(idArea);
+          } else {
+            this.exportDistributions(document, null, station);
           }
           stationIds.add(stationView.getStation().getId());
         }
@@ -559,8 +619,8 @@ public class ActionFile {
   /**
    * Generates the xml part of the stations lines.
    *
-   * @param document the document to add the stations lines
-   * @param station the station element
+   * @param document    the document to add the stations lines
+   * @param station     the station element
    * @param stationView the station view
    */
   private void exportStationsLines(final Document document,
@@ -625,7 +685,7 @@ public class ActionFile {
 
       List<Line> lineModelList = new ArrayList<>();
 
-      if(!linesId.isEmpty()) {
+      if (!linesId.isEmpty()) {
         int linesNumber = Collections.max(linesId) + 1;
         for (int i = 0; i < linesNumber; i++) {
           Line line = new Line(i, new ArrayList<>());
@@ -633,21 +693,8 @@ public class ActionFile {
         }
       }
 
-      for (Map.Entry<Integer, String[]> entry : linesMatchStations.entrySet()) {
-        int stationId = Integer.parseInt(linesMatchStations.get(entry
-            .getKey())[0]);
-        int lineId = Integer.parseInt(linesMatchStations.get(entry
-            .getKey())[1]);
-        Station station = null;
-        for (Station stationL : stationsToLoad) {
-          if (stationL.getId() == stationId) {
-            station = stationL;
-          }
-        }
-        if (station != null) {
-          lineModelList.get(lineId).addStation(station);
-        }
-      }
+      this.addStationsToLines(stationsToLoad, linesMatchStations,
+          lineModelList);
 
       for (Line line : lineModelList) {
         List<StationView> stationsViews = new ArrayList<>();
@@ -662,6 +709,27 @@ public class ActionFile {
       }
     } catch (ParserConfigurationException | SAXException | IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void addStationsToLines(final List<Station> stationsToLoad,
+                                  final HashMap<Integer, String[]>
+                                      linesMatchStations,
+                                  final List<Line> lineModelList) {
+    for (Map.Entry<Integer, String[]> entry : linesMatchStations.entrySet()) {
+      int stationId = Integer.parseInt(linesMatchStations.get(entry
+          .getKey())[0]);
+      int lineId = Integer.parseInt(linesMatchStations.get(entry
+          .getKey())[1]);
+      Station station = null;
+      for (Station stationL : stationsToLoad) {
+        if (stationL.getId() == stationId) {
+          station = stationL;
+        }
+      }
+      if (station != null) {
+        lineModelList.get(lineId).addStation(station);
+      }
     }
   }
 
@@ -704,8 +772,8 @@ public class ActionFile {
   /**
    * Load the areas section of the xml file and generate the view for each area.
    *
-   * @param doc the document to read
-   * @param areasToLoad  the list of areas to load
+   * @param doc         the document to read
+   * @param areasToLoad the list of areas to load
    */
   private void readAreasSection(final Document doc,
                                 final List<Area> areasToLoad) {
@@ -766,7 +834,6 @@ public class ActionFile {
    * Format the number to avoid empty string.
    *
    * @param populationAmount the population amount to format
-   *
    * @return the formatted number
    */
   private String formatNumber(final String populationAmount) {
@@ -781,8 +848,8 @@ public class ActionFile {
    * Load the stations section of the xml file and generate the view for each.
    *
    * @param stationsToLoad the list of stations to load
-   * @param linesId the list of lines id
-   * @param doc the document to read
+   * @param linesId        the list of lines id
+   * @param doc            the document to read
    */
   private void readStationsSection(final List<Station> stationsToLoad,
                                    final List<Integer> linesId,
@@ -833,7 +900,7 @@ public class ActionFile {
    * Load the lines section of the xml file and generate the view for each line.
    *
    * @param linesMatchStations the map of lines match stations
-   * @param nthNodeL the node to read
+   * @param nthNodeL           the node to read
    */
   public void readLinesSection(final Map<Integer, String[]> linesMatchStations,
                                final Node nthNodeL) {
@@ -888,8 +955,7 @@ public class ActionFile {
    * check if a station is in an Area.
    *
    * @param stationView station to check
-   * @param areaView   area to check
-   *
+   * @param areaView    area to check
    * @return true if the station is in the area
    */
   private boolean isInArea(final StationView stationView,
