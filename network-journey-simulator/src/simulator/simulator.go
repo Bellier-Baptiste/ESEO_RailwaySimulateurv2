@@ -11,6 +11,7 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Benoît VAVASSEUR
 
 License : MIT License
 
@@ -273,7 +274,7 @@ Param :
 
 Return :
   - models.PopulationDistribution : the population distribution of the
-    station,
+    station
 */
 func (s *Simulator) GetPopulationDistributionStation(id int) models.PopulationDistribution {
 	ms := s.adConfig.MapC.Stations[id]
@@ -611,6 +612,7 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 
 	s.CreateEventsAttendancePeak()
 
+	//generate populations distribution
 	s.CreatePopulationsDistribution()
 
 	// create map

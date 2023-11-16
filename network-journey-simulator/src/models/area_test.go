@@ -1,5 +1,4 @@
 /*
- *
  * Author :
  * 	- Benoît VAVASSEUR
  *
@@ -17,13 +16,13 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND EXPRESS OR
+ *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ *  SOFTWARE.
  */
 
 package models
@@ -33,17 +32,10 @@ import (
 	"testing"
 )
 
-/*
-TestAreaDistribution tests the PopulationDistribution struct
-*/
-func TestPopulationDistribution(t *testing.T) {
+func TestArea(t *testing.T) {
 	var ad = NewPopulationDistribution(10, 10, 10,
 		10, 10, 40, 10)
-	assert.Equal(t, 10, ad.Businessman())
-	assert.Equal(t, 10, ad.Child())
-	assert.Equal(t, 10, ad.Retired())
-	assert.Equal(t, 10, ad.Student())
-	assert.Equal(t, 10, ad.Tourist())
-	assert.Equal(t, 40, ad.Unemployed())
-	assert.Equal(t, 10, ad.Worker())
+	var a = NewArea(1, ad)
+	assert.Equal(t, 1, a.Id())
+	assert.Equal(t, ad, a.PopulationDistribution())
 }

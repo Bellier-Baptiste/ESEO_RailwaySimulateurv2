@@ -349,36 +349,36 @@ func TestSimulator_GetAllPopulationsDistribution(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	areaDistribution := sim.GetAllPopulationsDistribution()
+	populationDistribution := sim.GetAllPopulationsDistribution()
 
-	assert.Equal(t, 20, areaDistribution[0].Businessman(),
+	assert.Equal(t, 20, populationDistribution[0].Businessman(),
 		"Bad businessman attribut")
-	assert.Equal(t, 10, areaDistribution[0].Child(),
+	assert.Equal(t, 10, populationDistribution[0].Child(),
 		"Bad child attribut")
-	assert.Equal(t, 10, areaDistribution[0].Retired(),
+	assert.Equal(t, 10, populationDistribution[0].Retired(),
 		"Bad retired attribut")
-	assert.Equal(t, 10, areaDistribution[0].Student(),
+	assert.Equal(t, 10, populationDistribution[0].Student(),
 		"Bad student attribut")
-	assert.Equal(t, 10, areaDistribution[0].Tourist(),
+	assert.Equal(t, 10, populationDistribution[0].Tourist(),
 		"Bad tourist attribut")
-	assert.Equal(t, 30, areaDistribution[0].Unemployed(),
+	assert.Equal(t, 30, populationDistribution[0].Unemployed(),
 		"Bad unemployed attribut")
-	assert.Equal(t, 10, areaDistribution[0].Worker(),
+	assert.Equal(t, 10, populationDistribution[0].Worker(),
 		"Bad worker attribut")
 
-	assert.Equal(t, 0, areaDistribution[1].Businessman(),
+	assert.Equal(t, 0, populationDistribution[1].Businessman(),
 		"Bad businessman attribut")
-	assert.Equal(t, 30, areaDistribution[1].Child(),
+	assert.Equal(t, 30, populationDistribution[1].Child(),
 		"Bad child attribut")
-	assert.Equal(t, 10, areaDistribution[1].Retired(),
+	assert.Equal(t, 10, populationDistribution[1].Retired(),
 		"Bad retired attribut")
-	assert.Equal(t, 10, areaDistribution[1].Student(),
+	assert.Equal(t, 10, populationDistribution[1].Student(),
 		"Bad student attribut")
-	assert.Equal(t, 10, areaDistribution[1].Tourist(),
+	assert.Equal(t, 10, populationDistribution[1].Tourist(),
 		"Bad tourist attribut")
-	assert.Equal(t, 30, areaDistribution[1].Unemployed(),
+	assert.Equal(t, 30, populationDistribution[1].Unemployed(),
 		"Bad unemployed attribut")
-	assert.Equal(t, 10, areaDistribution[1].Worker(),
+	assert.Equal(t, 10, populationDistribution[1].Worker(),
 		"Bad worker attribut")
 }
 
@@ -399,21 +399,21 @@ func TestSimulator_GetPopulationDistributionArea(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	areaDistribution := sim.GetPopulationDistributionArea(0)
+	populationDistribution := sim.GetPopulationDistributionArea(0)
 
-	assert.Equal(t, 20, areaDistribution.Businessman(),
+	assert.Equal(t, 20, populationDistribution.Businessman(),
 		"Bad businessman attribut")
-	assert.Equal(t, 10, areaDistribution.Child(),
+	assert.Equal(t, 10, populationDistribution.Child(),
 		"Bad child attribut")
-	assert.Equal(t, 10, areaDistribution.Retired(),
+	assert.Equal(t, 10, populationDistribution.Retired(),
 		"Bad retired attribut")
-	assert.Equal(t, 10, areaDistribution.Student(),
+	assert.Equal(t, 10, populationDistribution.Student(),
 		"Bad student attribut")
-	assert.Equal(t, 10, areaDistribution.Tourist(),
+	assert.Equal(t, 10, populationDistribution.Tourist(),
 		"Bad tourist attribut")
-	assert.Equal(t, 30, areaDistribution.Unemployed(),
+	assert.Equal(t, 30, populationDistribution.Unemployed(),
 		"Bad unemployed attribut")
-	assert.Equal(t, 10, areaDistribution.Worker(),
+	assert.Equal(t, 10, populationDistribution.Worker(),
 		"Bad worker attribut")
 }
 
@@ -434,47 +434,47 @@ func TestSimulator_GetIdAreaStations(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	areaDistribution := sim.GetIdAreaStations()
+	populationDistribution := sim.GetIdAreaStations()
 
-	assert.Equal(t, -1, areaDistribution[0],
+	assert.Equal(t, -1, populationDistribution[0],
 		"Bad id attribut")
-	assert.Equal(t, -1, areaDistribution[1],
+	assert.Equal(t, -1, populationDistribution[1],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[2],
+	assert.Equal(t, 0, populationDistribution[2],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[3],
+	assert.Equal(t, 0, populationDistribution[3],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[4],
+	assert.Equal(t, 0, populationDistribution[4],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[5],
+	assert.Equal(t, 0, populationDistribution[5],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[6],
+	assert.Equal(t, 0, populationDistribution[6],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[7],
+	assert.Equal(t, 0, populationDistribution[7],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[8],
+	assert.Equal(t, 0, populationDistribution[8],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[9],
+	assert.Equal(t, 0, populationDistribution[9],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[10],
+	assert.Equal(t, 0, populationDistribution[10],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[11],
+	assert.Equal(t, 0, populationDistribution[11],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[12],
+	assert.Equal(t, 0, populationDistribution[12],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[13],
+	assert.Equal(t, 0, populationDistribution[13],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[14],
+	assert.Equal(t, 0, populationDistribution[14],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[15],
+	assert.Equal(t, 0, populationDistribution[15],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[16],
+	assert.Equal(t, 0, populationDistribution[16],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[17],
+	assert.Equal(t, 0, populationDistribution[17],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[18],
+	assert.Equal(t, 0, populationDistribution[18],
 		"Bad id attribut")
-	assert.Equal(t, 0, areaDistribution[19],
+	assert.Equal(t, 0, populationDistribution[19],
 		"Bad id attribut")
 }
 
@@ -520,21 +520,21 @@ func TestSimulator_GetPopulationDistributionStation(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	areaDistribution := sim.GetPopulationDistributionStation(3)
+	populationDistribution := sim.GetPopulationDistributionStation(3)
 
-	assert.Equal(t, 20, areaDistribution.Businessman(),
+	assert.Equal(t, 20, populationDistribution.Businessman(),
 		"Bad businessman attribut")
-	assert.Equal(t, 10, areaDistribution.Child(),
+	assert.Equal(t, 10, populationDistribution.Child(),
 		"Bad child attribut")
-	assert.Equal(t, 10, areaDistribution.Retired(),
+	assert.Equal(t, 10, populationDistribution.Retired(),
 		"Bad retired attribut")
-	assert.Equal(t, 10, areaDistribution.Student(),
+	assert.Equal(t, 10, populationDistribution.Student(),
 		"Bad student attribut")
-	assert.Equal(t, 10, areaDistribution.Tourist(),
+	assert.Equal(t, 10, populationDistribution.Tourist(),
 		"Bad tourist attribut")
-	assert.Equal(t, 30, areaDistribution.Unemployed(),
+	assert.Equal(t, 30, populationDistribution.Unemployed(),
 		"Bad unemployed attribut")
-	assert.Equal(t, 10, areaDistribution.Worker(),
+	assert.Equal(t, 10, populationDistribution.Worker(),
 		"Bad worker attribut")
 }
 
