@@ -33,25 +33,25 @@ PopulationDistribution is the structure that manage the population distribution
 of an area.
 
 Attributes :
-  - businessman int : the number of businessmen in the area
-  - child int : the number of children in the area
-  - retired int : the number of retired in the area
-  - student int : the number of students in the area
-  - tourist int : the number of tourists in the area
-  - unemployed int : the number of unemployed in the area
-  - worker int : the number of workers in the area
+  - businessman int : the percentage of businessmen in the area
+  - child int : the percentage of children in the area
+  - retired int : the percentage of retired in the area
+  - student int : the percentage of students in the area
+  - tourist int : the percentage of tourists in the area
+  - unemployed int : the percentage of unemployed in the area
+  - worker int : the percentage of workers in the area
 
 Methods :
   - NewPopulationDistribution(businessman, child, retired, student, tourist,
     unemployed, worker int) PopulationDistribution : create a new
     PopulationDistribution
-  - Businessman() int : return the number of businessmen in the area
-  - Child() int : return the number of children in the area
-  - Retired() int : return the number of retired in the area
-  - Student() int : return the number of students in the area
-  - Tourist() int : return the number of tourists in the area
-  - Unemployed() int : return the number of unemployed in the area
-  - Worker() int : return the number of workers in the area
+  - Businessman() int : return the percentage of businessmen in the area
+  - Child() int : return the percentage of children in the area
+  - Retired() int : return the percentage of retired in the area
+  - Student() int : return the percentage of students in the area
+  - Tourist() int : return the percentage of tourists in the area
+  - Unemployed() int : return the percentage of unemployed in the area
+  - Worker() int : return the percentage of workers in the area
 */
 type PopulationDistribution struct {
 	businessman int
