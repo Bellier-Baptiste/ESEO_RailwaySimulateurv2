@@ -370,139 +370,62 @@ public class ActionFile {
   private void exportDistributions(final Document document,
                                    final AreaView areaView,
                                    final Element element) {
-    List<String> distributionPopulation;
-    List<String> distributionDestination;
-    if (areaView == null) {
-      distributionPopulation = Arrays.asList("14", "15", "14", "15",
-          "14", "14", "14");
-      distributionDestination = Arrays.asList("14", "15", "15", "14",
-          "14", "14", "14");
-    } else {
-      distributionPopulation = Arrays.asList(
-          Integer.toString(areaView.getArea()
-              .getDistributionPopulation().get(Data.AREA_TOURIST)),
-          Integer.toString(areaView.getArea()
-              .getDistributionPopulation().get(Data.AREA_STUDENT)),
-          Integer.toString(areaView.getArea()
-              .getDistributionPopulation().get(Data.AREA_BUSINESSMAN)),
-          Integer.toString(areaView.getArea()
-              .getDistributionPopulation().get(Data.AREA_WORKER)),
-          Integer.toString(areaView.getArea()
-              .getDistributionPopulation().get(Data.AREA_CHILD)),
-          Integer.toString(areaView.getArea()
-              .getDistributionPopulation().get(Data.AREA_RETIRED)),
-          Integer.toString(areaView.getArea()
-              .getDistributionPopulation().get(Data.AREA_UNEMPLOYED))
-      );
-      distributionDestination = Arrays.asList(
-          Integer.toString(areaView.getArea()
-              .getDistributionDestination().get(Data.AREA_RESIDENTIAL)),
-          Integer.toString(areaView.getArea()
-              .getDistributionDestination().get(Data.AREA_COMMERCIAL)),
-          Integer.toString(areaView.getArea()
-              .getDistributionDestination().get(Data.AREA_OFFICE)),
-          Integer.toString(areaView.getArea()
-              .getDistributionDestination().get(Data.AREA_INDUSTRIAL)),
-          Integer.toString(areaView.getArea()
-              .getDistributionDestination().get(Data.AREA_TOURISTIC)),
-          Integer.toString(areaView.getArea()
-              .getDistributionDestination().get(Data.AREA_LEISURE)),
-          Integer.toString(areaView.getArea()
-              .getDistributionDestination().get(Data.AREA_EDUCATIONAL))
-      );
-    }
+    List<String> distributionPopulationElements = Arrays.asList(
+        Data.AREA_TOURIST,
+        Data.AREA_STUDENT,
+        Data.AREA_BUSINESSMAN,
+        Data.AREA_WORKER,
+        Data.AREA_CHILD,
+        Data.AREA_RETIRED,
+        Data.AREA_UNEMPLOYED
+    );
 
-    // population distribution of the area
+    List<String> distributionDestinationElements = Arrays.asList(
+        Data.AREA_RESIDENTIAL,
+        Data.AREA_COMMERCIAL,
+        Data.AREA_OFFICE,
+        Data.AREA_INDUSTRIAL,
+        Data.AREA_TOURISTIC,
+        Data.AREA_LEISURE,
+        Data.AREA_EDUCATIONAL
+    );
+
     Element populationDistribution = document.createElement(
         "populationDistribution");
-    // tourist Attribute
-    Attr attrTourist = document.createAttribute(
-        Data.AREA_TOURIST.toLowerCase());
-    attrTourist.setValue(distributionPopulation.get(0));
-    populationDistribution.setAttributeNode(attrTourist);
+    for (String distributionPopulationElement
+        : distributionPopulationElements) {
 
-    // Student attribute
-    Attr attrStudent = document.createAttribute(
-        Data.AREA_STUDENT.toLowerCase());
-    attrStudent.setValue(distributionPopulation.get(1));
-    populationDistribution.setAttributeNode(attrStudent);
-
-    // Businessman attribute
-    Attr attrBusinessman = document.createAttribute(
-        Data.AREA_BUSINESSMAN.toLowerCase());
-    attrBusinessman
-        .setValue(distributionPopulation.get(2));
-    populationDistribution.setAttributeNode(attrBusinessman);
-
-    // worker attribute
-    Attr attrWorker = document.createAttribute(
-        Data.AREA_WORKER.toLowerCase());
-    attrWorker.setValue(distributionPopulation.get(3));
-    populationDistribution.setAttributeNode(attrWorker);
-
-    // child attribute
-    Attr attrChild = document.createAttribute(
-        Data.AREA_CHILD.toLowerCase());
-    attrChild.setValue(distributionPopulation.get(4));
-    populationDistribution.setAttributeNode(attrChild);
-
-    // retired attribute
-    Attr attrRetired = document.createAttribute(
-        Data.AREA_RETIRED.toLowerCase());
-    attrRetired.setValue(distributionPopulation.get(5));
-    populationDistribution.setAttributeNode(attrRetired);
-
-    // unemployed attribute
-    Attr attrUnemployed = document.createAttribute(
-        Data.AREA_UNEMPLOYED.toLowerCase());
-    attrUnemployed.setValue(distributionPopulation.get(6));
-    populationDistribution.setAttributeNode(attrUnemployed);
+      Attr attr = document.createAttribute(distributionPopulationElement
+          .toLowerCase());
+      if (areaView != null) {
+        attr.setValue(Integer.toString(areaView.getArea()
+            .getDistributionPopulation()
+            .get(distributionPopulationElement)));
+      } else {
+        attr.setValue(String.valueOf(Area.getDefaultPopulationDistribution(
+            distributionPopulationElement)));
+      }
+      populationDistribution.setAttributeNode(attr);
+    }
     element.appendChild(populationDistribution);
 
-    // destination distribution of the area
     Element destinationDistribution = document.createElement(
         "destinationDistribution");
-    // residential Attribute
-    Attr attrResidential = document.createAttribute(
-        Data.AREA_RESIDENTIAL.toLowerCase());
-    attrResidential.setValue(distributionDestination.get(0));
-    destinationDistribution.setAttributeNode(attrResidential);
+    for (String distributionDestinationElement
+        : distributionDestinationElements) {
 
-    // commercial attribute
-    Attr attrCommercial = document.createAttribute(
-        Data.AREA_COMMERCIAL.toLowerCase());
-    attrCommercial.setValue(distributionDestination.get(1));
-    destinationDistribution.setAttributeNode(attrCommercial);
-
-    // office attribute
-    Attr attrOffice = document.createAttribute(
-        Data.AREA_OFFICE.toLowerCase());
-    attrOffice.setValue(distributionDestination.get(2));
-    destinationDistribution.setAttributeNode(attrOffice);
-
-    // industrial attribute
-    Attr attrIndustrial = document.createAttribute(
-        Data.AREA_INDUSTRIAL.toLowerCase());
-    attrIndustrial.setValue(distributionDestination.get(3));
-    destinationDistribution.setAttributeNode(attrIndustrial);
-
-    // touristic attribute
-    Attr attrTouristic = document.createAttribute(
-        Data.AREA_TOURISTIC.toLowerCase());
-    attrTouristic.setValue(distributionDestination.get(4));
-    destinationDistribution.setAttributeNode(attrTouristic);
-
-    // leisure attribute
-    Attr attrLeisure = document.createAttribute(
-        Data.AREA_LEISURE.toLowerCase());
-    attrLeisure.setValue(distributionDestination.get(5));
-    destinationDistribution.setAttributeNode(attrLeisure);
-
-    // school attribute
-    Attr attrSchool = document.createAttribute(
-        Data.AREA_EDUCATIONAL.toLowerCase());
-    attrSchool.setValue(distributionDestination.get(6));
-    destinationDistribution.setAttributeNode(attrSchool);
+      Attr attr = document.createAttribute(distributionDestinationElement
+          .toLowerCase());
+      if (areaView != null) {
+        attr.setValue(Integer.toString(areaView.getArea()
+                .getDistributionDestination()
+            .get(distributionDestinationElement)));
+      } else {
+        attr.setValue(String.valueOf(Area.getDefaultDestinationDistribution(
+            distributionDestinationElement)));
+      }
+      destinationDistribution.setAttributeNode(attr);
+    }
     element.appendChild(destinationDistribution);
   }
 

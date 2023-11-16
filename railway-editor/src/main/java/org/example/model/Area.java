@@ -48,8 +48,6 @@ import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 public class Area {
   /** Area opacity. */
   public static final float AREA_OPACITY = 0.5f;
-  /** One hundred percent. */
-  public static final int ONE_HUNDRED = 100;
   /** Area X position. */
   private int posX;
   /** Area Y position. */
@@ -60,10 +58,46 @@ public class Area {
   private int width;
   /** Area height. */
   private int height;
+
   /** Area population distribution. */
   private HashMap<String, Integer> distributionPopulation;
   /** Area destination distribution. */
   private HashMap<String, Integer> distributionDestination;
+  // Init the value at 100 / number of fields for the distribution (7 here)
+  /** Default value 14 of some fields. */
+  private static final int DEFAULT_VALUE_14 = 14;
+  /** Default value 15 of some fields. */
+  private static final int DEFAULT_VALUE_15 = 15;
+  /** Area population destination distribution default values. */
+  protected static final Map<String, Integer> DEFAULT_DISTRIBUTION_DESTINATION =
+      new HashMap<>();
+  /** Area population population distribution default values. */
+  protected static final Map<String, Integer> DEFAULT_DISTRIBUTION_POPULATION =
+      new HashMap<>();
+
+  static {
+    DEFAULT_DISTRIBUTION_POPULATION.put(Data.AREA_WORKER, DEFAULT_VALUE_15);
+    DEFAULT_DISTRIBUTION_POPULATION.put(Data.AREA_STUDENT, DEFAULT_VALUE_15);
+    DEFAULT_DISTRIBUTION_POPULATION.put(Data.AREA_TOURIST, DEFAULT_VALUE_14);
+    DEFAULT_DISTRIBUTION_POPULATION.put(Data.AREA_BUSINESSMAN,
+        DEFAULT_VALUE_14);
+    DEFAULT_DISTRIBUTION_POPULATION.put(Data.AREA_CHILD, DEFAULT_VALUE_14);
+    DEFAULT_DISTRIBUTION_POPULATION.put(Data.AREA_RETIRED, DEFAULT_VALUE_14);
+    DEFAULT_DISTRIBUTION_POPULATION.put(Data.AREA_UNEMPLOYED, DEFAULT_VALUE_14);
+
+    DEFAULT_DISTRIBUTION_DESTINATION.put(Data.AREA_OFFICE, DEFAULT_VALUE_15);
+    DEFAULT_DISTRIBUTION_DESTINATION.put(Data.AREA_COMMERCIAL,
+        DEFAULT_VALUE_15);
+    DEFAULT_DISTRIBUTION_DESTINATION.put(Data.AREA_RESIDENTIAL,
+        DEFAULT_VALUE_14);
+    DEFAULT_DISTRIBUTION_DESTINATION.put(Data.AREA_INDUSTRIAL,
+        DEFAULT_VALUE_14);
+    DEFAULT_DISTRIBUTION_DESTINATION.put(Data.AREA_TOURISTIC, DEFAULT_VALUE_14);
+    DEFAULT_DISTRIBUTION_DESTINATION.put(Data.AREA_LEISURE, DEFAULT_VALUE_14);
+    DEFAULT_DISTRIBUTION_DESTINATION.put(Data.AREA_EDUCATIONAL,
+        DEFAULT_VALUE_14);
+  }
+
   /** Area color. */
   private Color color;
   //top left corner
@@ -81,7 +115,7 @@ public class Area {
 
 
   /**
-   * Area constructor.
+   * Area constructor when creating a new area.
    *
    * @param areaPosX   area positionX
    * @param areaPosY   area positionY
@@ -105,19 +139,28 @@ public class Area {
     this.initDistributions();
     this.initColor();
   }
-  public Area(final double latitudeTop, final double longitudeTop,
-              final double latitudeBot, final double longitudeBot) {
+
+  /**
+   * Area constructor when importing xml file.
+   *
+   * @param latitudeTopToSet latitude of the top left corner
+   * @param longitudeTopToSet longitude of the top left corner
+   * @param latitudeBotToSet latitude of the bottom right corner
+   * @param longitudeBotToSet longitude of the bottom right corner
+   */
+  public Area(final double latitudeTopToSet, final double longitudeTopToSet,
+              final double latitudeBotToSet, final double longitudeBotToSet) {
     this.initDistributions();
     this.initColor();
-    this.latitudeBot = latitudeBot;
-    this.latitudeTop = latitudeTop;
-    this.longitudeBot = longitudeBot;
-    this.longitudeTop = longitudeTop;
+    this.latitudeBot = latitudeBotToSet;
+    this.latitudeTop = latitudeTopToSet;
+    this.longitudeBot = longitudeBotToSet;
+    this.longitudeTop = longitudeTopToSet;
     Point posTopLeft = MainPanel.getInstance().getMapPosition(latitudeTop,
         longitudeTop);
     Point posBotRight = MainPanel.getInstance().getMapPosition(latitudeBot,
         longitudeBot);
-    if(posTopLeft == null || posBotRight == null) {
+    if (posTopLeft == null || posBotRight == null) {
       return;
     }
     this.posX = posTopLeft.x;
@@ -243,16 +286,6 @@ public class Area {
   }
 
   /**
-   * setter for distribution.
-   *
-   * @param areaDistribution area distribution hashMap
-   */
-  public void setDistribution(final Map<String, Integer> areaDistribution) {
-    this.distributionPopulation = (HashMap<String, Integer>) areaDistribution;
-  }
-
-
-  /**
    * getter for area color.
    *
    * @return color
@@ -367,35 +400,60 @@ public class Area {
   }
 
   /**
-   * same as setNewPart but dont check if the total is under 100 percent.
+   * Get the default value of the destination distribution key.
    *
-   * @param key  population type key to update
-   * @param part new percentage
+   * @param key destination distribution key
+   *
+   * @return default value for the given key
    */
-  public void addNewPart(final String key, final int part) {
-    distributionPopulation.put(key, part);
+  public static int getDefaultDestinationDistribution(final String key) {
+    return DEFAULT_DISTRIBUTION_DESTINATION.get(key);
+  }
+
+  /**
+   * Get the default value of the population distribution key.
+   *
+   * @param key population distribution key
+   *
+   * @return default value for the given key
+   */
+  public static int getDefaultPopulationDistribution(final String key) {
+    return DEFAULT_DISTRIBUTION_POPULATION.get(key);
   }
 
   private void initDistributions() {
     this.distributionPopulation = new HashMap<>();
-    // Init the value at 100 / number of fields for the distribution (7 here
-    distributionPopulation.put(Data.AREA_WORKER, 15);
-    distributionPopulation.put(Data.AREA_STUDENT, 15);
-    distributionPopulation.put(Data.AREA_TOURIST, 14);
-    distributionPopulation.put(Data.AREA_BUSINESSMAN, 14);
-    distributionPopulation.put(Data.AREA_CHILD, 14);
-    distributionPopulation.put(Data.AREA_RETIRED, 14);
-    distributionPopulation.put(Data.AREA_UNEMPLOYED, 14);
+    distributionPopulation.put(Data.AREA_WORKER,
+        DEFAULT_DISTRIBUTION_POPULATION.get(Data.AREA_WORKER));
+    distributionPopulation.put(Data.AREA_STUDENT,
+        DEFAULT_DISTRIBUTION_POPULATION.get(Data.AREA_STUDENT));
+    distributionPopulation.put(Data.AREA_TOURIST,
+        DEFAULT_DISTRIBUTION_POPULATION.get(Data.AREA_TOURIST));
+    distributionPopulation.put(Data.AREA_BUSINESSMAN,
+        DEFAULT_DISTRIBUTION_POPULATION.get(Data.AREA_BUSINESSMAN));
+    distributionPopulation.put(Data.AREA_CHILD,
+        DEFAULT_DISTRIBUTION_POPULATION.get(Data.AREA_CHILD));
+    distributionPopulation.put(Data.AREA_RETIRED,
+        DEFAULT_DISTRIBUTION_POPULATION.get(Data.AREA_RETIRED));
+    distributionPopulation.put(Data.AREA_UNEMPLOYED,
+        DEFAULT_DISTRIBUTION_POPULATION.get(Data.AREA_UNEMPLOYED));
 
     this.distributionDestination = new HashMap<>();
 
-    distributionDestination.put(Data.AREA_OFFICE, 15);
-    distributionDestination.put(Data.AREA_COMMERCIAL, 15);
-    distributionDestination.put(Data.AREA_RESIDENTIAL, 14);
-    distributionDestination.put(Data.AREA_INDUSTRIAL, 14);
-    distributionDestination.put(Data.AREA_TOURISTIC, 14);
-    distributionDestination.put(Data.AREA_LEISURE, 14);
-    distributionDestination.put(Data.AREA_EDUCATIONAL, 14);
+    distributionDestination.put(Data.AREA_OFFICE,
+        DEFAULT_DISTRIBUTION_DESTINATION.get(Data.AREA_OFFICE));
+    distributionDestination.put(Data.AREA_COMMERCIAL,
+        DEFAULT_DISTRIBUTION_DESTINATION.get(Data.AREA_COMMERCIAL));
+    distributionDestination.put(Data.AREA_RESIDENTIAL,
+        DEFAULT_DISTRIBUTION_DESTINATION.get(Data.AREA_RESIDENTIAL));
+    distributionDestination.put(Data.AREA_INDUSTRIAL,
+        DEFAULT_DISTRIBUTION_DESTINATION.get(Data.AREA_INDUSTRIAL));
+    distributionDestination.put(Data.AREA_TOURISTIC,
+        DEFAULT_DISTRIBUTION_DESTINATION.get(Data.AREA_TOURISTIC));
+    distributionDestination.put(Data.AREA_LEISURE,
+        DEFAULT_DISTRIBUTION_DESTINATION.get(Data.AREA_LEISURE));
+    distributionDestination.put(Data.AREA_EDUCATIONAL,
+        DEFAULT_DISTRIBUTION_DESTINATION.get(Data.AREA_EDUCATIONAL));
   }
 
   private void initColor() {
