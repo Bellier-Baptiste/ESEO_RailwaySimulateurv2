@@ -438,12 +438,12 @@ CreateAreasDistribution is used to create "area distribution"
 func (s *Simulator) CreatePopulationsDistribution() {
 	s.populationsDistributions = make([]models.PopulationDistribution,
 		len(s.adConfig.MapC.Areas))
-	for i, ad := range s.adConfig.MapC.Areas {
+	for i, pd := range s.adConfig.MapC.Areas {
 		s.populationsDistributions[i] =
-			models.NewPopulationDistribution(ad.PopulationDistribution.Businessman,
-				ad.PopulationDistribution.Child, ad.PopulationDistribution.Retired,
-				ad.PopulationDistribution.Student, ad.PopulationDistribution.Tourist,
-				ad.PopulationDistribution.Unemployed, ad.PopulationDistribution.Worker)
+			models.NewPopulationDistribution(pd.PopulationDistribution.Businessman,
+				pd.PopulationDistribution.Child, pd.PopulationDistribution.Retired,
+				pd.PopulationDistribution.Student, pd.PopulationDistribution.Tourist,
+				pd.PopulationDistribution.Unemployed, pd.PopulationDistribution.Worker)
 	}
 }
 

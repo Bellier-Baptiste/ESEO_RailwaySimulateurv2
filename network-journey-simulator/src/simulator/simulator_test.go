@@ -434,47 +434,47 @@ func TestSimulator_GetIdAreaStations(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	populationDistribution := sim.GetIdAreaStations()
+	idAreas := sim.GetIdAreaStations()
 
-	assert.Equal(t, -1, populationDistribution[0],
+	assert.Equal(t, -1, idAreas[0],
 		"Bad id attribut")
-	assert.Equal(t, -1, populationDistribution[1],
+	assert.Equal(t, -1, idAreas[1],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[2],
+	assert.Equal(t, 0, idAreas[2],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[3],
+	assert.Equal(t, 0, idAreas[3],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[4],
+	assert.Equal(t, 0, idAreas[4],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[5],
+	assert.Equal(t, 0, idAreas[5],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[6],
+	assert.Equal(t, 0, idAreas[6],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[7],
+	assert.Equal(t, 0, idAreas[7],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[8],
+	assert.Equal(t, 0, idAreas[8],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[9],
+	assert.Equal(t, 0, idAreas[9],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[10],
+	assert.Equal(t, 0, idAreas[10],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[11],
+	assert.Equal(t, 0, idAreas[11],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[12],
+	assert.Equal(t, 0, idAreas[12],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[13],
+	assert.Equal(t, 0, idAreas[13],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[14],
+	assert.Equal(t, 0, idAreas[14],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[15],
+	assert.Equal(t, 0, idAreas[15],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[16],
+	assert.Equal(t, 0, idAreas[16],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[17],
+	assert.Equal(t, 0, idAreas[17],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[18],
+	assert.Equal(t, 0, idAreas[18],
 		"Bad id attribut")
-	assert.Equal(t, 0, populationDistribution[19],
+	assert.Equal(t, 0, idAreas[19],
 		"Bad id attribut")
 }
 
