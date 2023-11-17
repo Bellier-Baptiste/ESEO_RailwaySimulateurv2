@@ -62,11 +62,11 @@ java_build:
   stage: build
   # Cache downloaded dependencies and plugins between builds.
   # The key here separates one cache per branch/tag ($CI_COMMIT_REF_SLUG)
-  #image: maven:3.8.1-jdk-11
-  #cache:
-    #key: "maven-$CI_COMMIT_REF_SLUG"
-    #paths:
-      #- .m2/repository
+  image: maven:3.8.6-jdk-11
+  cache:
+    key: "maven-$CI_COMMIT_REF_SLUG"
+    paths:
+      - .m2/repository
   script:
     - mvn $MAVEN_CLI_OPTS package -DskipTests=true
 #  artifacts:
