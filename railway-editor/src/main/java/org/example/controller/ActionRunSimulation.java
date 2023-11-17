@@ -87,8 +87,8 @@ public final class ActionRunSimulation {
     String rootGoProjectPath = rootProjectPath + "\\network-journey-simulator";
 
     File runThisSimulation = new File(
-        rootGoProjectPath + "\\src\\configs" +
-            "\\runThisSimulation.xml");
+        rootGoProjectPath + "\\src\\configs"
+            + "\\runThisSimulation.xml");
     this.actionFile.export(runThisSimulation);
 
     // create a new list of arguments for our process
