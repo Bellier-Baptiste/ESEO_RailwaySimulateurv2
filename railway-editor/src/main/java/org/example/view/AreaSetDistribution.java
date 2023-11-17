@@ -29,6 +29,9 @@ import org.example.model.Area;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.InputVerifier;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -40,9 +43,13 @@ import javax.swing.event.ChangeListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 /**
  * Class to show a popup windows in order to distribute the population in the
@@ -109,6 +116,14 @@ public class AreaSetDistribution {
   private final JLabel totalDestinationLabel = new JLabel();
 
   private void display(final Area area) {
+//    for (JSpinner spinner : populationDistributionSpinners) {
+//      spinner.setInputVerifier(new DistributionInputVerifier());
+//    }
+//
+//    for (JSpinner spinner : destinationDestributionSpinners) {
+//      spinner.setInputVerifier(new DistributionInputVerifier());
+//    }
+
     JLabel titlePopulation = new JLabel("Population distribution "
         + "percentages");
     titlePopulation.setFont(new Font(Font.SANS_SERIF, Font.BOLD, FONT_SIZE));
@@ -118,16 +133,16 @@ public class AreaSetDistribution {
         Data.AREA_TOURIST));
     fieldTourist.addChangeListener(new DistributionChangeListener(
         POPULATION_DISTRIBUTION_TYPE));
-    populationDistributionSpinners[0] = fieldTourist;
+    this.populationDistributionSpinners[0] = fieldTourist;
     JSpinner fieldStudent = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldStudent.setValue(area.getDistributionPopulation().get(
         Data.AREA_STUDENT));
-    populationDistributionSpinners[1] = fieldStudent;
+    this.populationDistributionSpinners[1] = fieldStudent;
     fieldStudent.addChangeListener(new DistributionChangeListener(
         POPULATION_DISTRIBUTION_TYPE));
     JSpinner fieldBusinessMan = new JSpinner(new SpinnerNumberModel(0, 0, 100,
         1));
-    populationDistributionSpinners[2] = fieldBusinessMan;
+    this.populationDistributionSpinners[2] = fieldBusinessMan;
     fieldBusinessMan.setValue(area.getDistributionPopulation().get(
         Data.AREA_BUSINESSMAN));
     fieldBusinessMan.addChangeListener(new DistributionChangeListener(
@@ -137,26 +152,26 @@ public class AreaSetDistribution {
         Data.AREA_WORKER));
     fieldWorker.addChangeListener(new DistributionChangeListener(
         POPULATION_DISTRIBUTION_TYPE));
-    populationDistributionSpinners[3] = fieldWorker;
+    this.populationDistributionSpinners[3] = fieldWorker;
     JSpinner fieldChild = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldChild.setValue(area.getDistributionPopulation().get(
         Data.AREA_CHILD));
     fieldChild.addChangeListener(new DistributionChangeListener(
         POPULATION_DISTRIBUTION_TYPE));
-    populationDistributionSpinners[4] = fieldChild;
+    this.populationDistributionSpinners[4] = fieldChild;
     JSpinner fieldRetired = new JSpinner(new SpinnerNumberModel(0, 0, 100, 1));
     fieldRetired.setValue(area.getDistributionPopulation().get(
         Data.AREA_RETIRED));
     fieldRetired.addChangeListener(new DistributionChangeListener(
         POPULATION_DISTRIBUTION_TYPE));
-    populationDistributionSpinners[5] = fieldRetired;
+    this.populationDistributionSpinners[5] = fieldRetired;
     JSpinner fieldUnemployed = new JSpinner(new SpinnerNumberModel(0, 0, 100,
         1));
     fieldUnemployed.setValue(area.getDistributionPopulation().get(
         Data.AREA_UNEMPLOYED));
     fieldUnemployed.addChangeListener(new DistributionChangeListener(
         POPULATION_DISTRIBUTION_TYPE));
-    populationDistributionSpinners[6] = fieldUnemployed;
+    this.populationDistributionSpinners[6] = fieldUnemployed;
 
     JLabel  titleDestination = new JLabel("Destination"
         + " distribution percentages");
@@ -243,7 +258,7 @@ public class AreaSetDistribution {
         fieldUnemployed, POPULATION_DISTRIBUTION_TYPE);
 
     // Total of the population distribution
-    this.updatePopulationDistributionTotal();
+    //this.updatePopulationDistributionTotal();
     this.totalPopulationLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     this.totalPopulationLabel.setPreferredSize(new Dimension(100, 25));
     this.totalPopulationLabel.setMaximumSize(this.totalPopulationLabel
@@ -264,8 +279,6 @@ public class AreaSetDistribution {
     panelPopulationFieldsContainer.add(panelPopulationFields,
         BorderLayout.WEST);
     panelPopulation.add(panelPopulationFieldsContainer);
-
-
 
 
     JPanel panelDestination = new JPanel();
@@ -300,7 +313,7 @@ public class AreaSetDistribution {
         fieldSchool, DESTINATION_DISTRIBUTION_TYPE);
 
     // Total of the destination distribution
-    this.updateDestinationDistributionTotal();
+    //this.updateDestinationDistributionTotal();
     this.totalDestinationLabel.setHorizontalAlignment(SwingConstants.RIGHT);
     this.totalDestinationLabel.setPreferredSize(new Dimension(100, 25));
     this.totalDestinationLabel.setMaximumSize(this.totalDestinationLabel
@@ -320,21 +333,18 @@ public class AreaSetDistribution {
 
     panelDestinationFieldsContainer.add(panelDestinationFields,
         BorderLayout.WEST);
-    panelDestination.add(panelDestinationFieldsContainer);
-
-
-
-
+    panelDestination.add(panelDestinationFieldsContainer);;
     panel.add(panelPopulation);
     Component horizontalSpace = Box.createHorizontalStrut(30);
     panel.add(horizontalSpace);
     panel.add(panelDestination);
 
-
     int result = JOptionPane.showConfirmDialog(MainWindow.getInstance(), panel,
         "Edit distribution", JOptionPane.OK_CANCEL_OPTION,
         JOptionPane.PLAIN_MESSAGE);
-    if (result == JOptionPane.OK_OPTION) {
+    System.out.println("nom de la joptionpane " + panel.getParent().getName());
+    System.out.println(((JOptionPane)panel.getParent()).getOptions()[0].getClass());
+    if (result == JOptionPane.OK_OPTION && ok) {
       tourist = (int) fieldTourist.getValue();
       student = (int) fieldStudent.getValue();
       businessMan = (int) fieldBusinessMan.getValue();
@@ -355,6 +365,17 @@ public class AreaSetDistribution {
     }
   }
 
+  protected JOptionPane getOptionPane(JComponent parent) {
+    JOptionPane pane = null;
+    if (!(parent instanceof JOptionPane)) {
+      System.out.println(parent.getParent().getClass());
+      pane = getOptionPane((JComponent)parent.getParent());
+    } else {
+      pane = (JOptionPane) parent;
+    }
+    return pane;
+  }
+
   private void updatePopulationDistributionTotal() {
     AreaSetDistribution.this.totalPopulationDistribution = 0;
     for (JSpinner jSpinner : populationDistributionSpinners) {
@@ -364,9 +385,19 @@ public class AreaSetDistribution {
       AreaSetDistribution.this.totalPopulationLabel.setText(
           AreaSetDistribution.this.totalPopulationDistribution + "%");
     }
+   JOptionPane pane = getOptionPane(this.totalPopulationLabel);
     if (AreaSetDistribution.this.totalPopulationDistribution != 100) {
       AreaSetDistribution.this.totalPopulationLabel.setForeground(Color.RED);
+      if (pane != null) {
+        System.out.println("joptionpane returned " + pane.getClass());
+        JButton okayButton = (JButton) pane.getOptions()[0];
+        okayButton.setEnabled(false);
+      }
     } else {
+      if (pane != null) {
+        JButton okayButton = (JButton) pane.getOptions()[0];
+        okayButton.setEnabled(true);
+      }
       AreaSetDistribution.this.totalPopulationLabel.setForeground(Color.GREEN);
     }
   }
@@ -481,3 +512,4 @@ public class AreaSetDistribution {
     }
   }
 }
+
