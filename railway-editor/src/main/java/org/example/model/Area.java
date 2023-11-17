@@ -24,17 +24,17 @@
 
 package org.example.model;
 
-import java.awt.Point;
 import org.example.data.Data;
 import org.example.view.MainPanel;
 import org.example.view.MainWindow;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 
 /**
  * Model Class to describe an Area.
