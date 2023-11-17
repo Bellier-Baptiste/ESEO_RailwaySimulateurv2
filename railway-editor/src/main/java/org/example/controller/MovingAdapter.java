@@ -43,8 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class which manage all actions relative to the {@link org.example.view.MainPanel}
- * using mouse.
+ * Class which manage all actions relative to the {@link
+ * org.example.view.MainPanel} using mouse.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
@@ -118,21 +118,13 @@ public class MovingAdapter extends MouseAdapter {
    * area being extended.
    */
   private Area extendedArea;
-  /**
-   * form to set the distribution of the area.
-   */
-  private final AreaSetDistribution form;
 
   /**
    * MovingAdapter constructor.
    */
   public MovingAdapter() {
     super();
-    this.form = new AreaSetDistribution();
   }
-
-
-  // Mouse Event
 
   /**
    * Action when mouse is pressed.
@@ -277,14 +269,16 @@ public class MovingAdapter extends MouseAdapter {
           popup.pop();
         }
       } else if (clickedArea != null) {
-        form.pop(clickedArea.getArea());
+        AreaSetDistribution form =
+            new AreaSetDistribution(clickedArea.getArea());
+        form.pop();
       }
     }
 
     StationView clickedStation = this.getClickedStation(e.getX(), e.getY());
     // if we want to delete the selected station
     if (e.getButton() == MouseEvent.BUTTON3 && !selectSecStation
-      && clickedStation != null) {
+        && clickedStation != null) {
       deleteStation(clickedStation);
       MainWindow.getInstance().getMainPanel().repaint();
     }
