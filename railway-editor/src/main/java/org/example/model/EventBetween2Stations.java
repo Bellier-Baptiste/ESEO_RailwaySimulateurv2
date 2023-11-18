@@ -24,6 +24,8 @@
 
 package org.example.model;
 
+import java.util.ArrayList;
+
 /**
  * Model class which describes a generic event between two
  * {@link model.Station}.
@@ -39,6 +41,9 @@ public abstract class EventBetween2Stations extends Event {
   private int idStationStart;
   /** Id of the ending station. */
   private int idStationEnd;
+
+  /** List of all the id of stations of the event. */
+  private ArrayList<Integer> idStations;
 
   /**
    * EventBetween2Stations constructor.
@@ -87,5 +92,23 @@ public abstract class EventBetween2Stations extends Event {
    */
   public void setIdStationEnd(final int eventIdStationEnd) {
     this.idStationEnd = eventIdStationEnd;
+  }
+
+  /**
+   * get the id of the stations.
+   *
+   * @return idStations
+   */
+  public ArrayList<Integer> getIdStations() {
+    return idStations;
+  }
+
+  /**
+   * set the id of the stations.
+   *
+   * @param eventIdStations event stations Id
+   */
+  public void setIdStations(final ArrayList<Integer> eventIdStations) {
+    this.idStations = eventIdStations;
   }
 }

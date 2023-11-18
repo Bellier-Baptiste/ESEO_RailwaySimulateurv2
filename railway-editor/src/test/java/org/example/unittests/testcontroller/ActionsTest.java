@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package unittests.testcontroller;import controller.ActionArea;
-import controller.ActionLine;
-import controller.ActionStation;
-import model.Line;
+package unittests.testcontroller;
+import org.example.controller.ActionArea;
+import org.example.controller.ActionLine;
+import org.example.controller.ActionStation;
+import org.example.model.Line;
 import org.junit.Test;
 import view.MainWindow;
 

@@ -128,5 +128,20 @@ public class Line {
     this.stations.add(station);
   }
 
+  /**
+   * Check if a station is in the line.
+   * @param station
+   * @return true if the station is in the line, false otherwise
+   */
+  public boolean isStationInLine(Station station) {
+    for (Station s : stations) {
+      if (s.getId() == station.getId()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
 
 }
+
