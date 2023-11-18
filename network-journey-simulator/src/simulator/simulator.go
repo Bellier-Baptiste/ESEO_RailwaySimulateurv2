@@ -100,7 +100,7 @@ Methods :
   - ToCSV() : save the timetable and timetableReal as CSV
 */
 type Simulator struct {
-	config               configs.ConfigurationObject
+	config               configs.ConfigurationType
 	adConfig             *configs.AdvancedConfig
 	mapObject            models.Map
 	population           *models.Population
@@ -128,7 +128,7 @@ Param :
 Return :
   - configs.ConfigurationObject : the config object of the simulator
 */
-func (s *Simulator) Config() configs.ConfigurationObject {
+func (s *Simulator) Config() configs.ConfigurationType {
 	return s.config
 }
 
@@ -486,7 +486,7 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	// initialisation of the day type in the config
 	fmt.Println("dayType changed in : ", dayType)
 	s.config.ChangeParam("day type", dayType)
-	fmt.Println("dayType changed in : ", s.config["day type"], "-> ok !")
+	fmt.Println("dayType changed in : ", s.config.Get("day type"), "-> ok !")
 
 	//generate events
 	s.CreateEventsStationClose()
@@ -536,7 +536,7 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	// assign current time
 	s.currentTime = s.config.TimeStart()
 
-	if s.Config().PreTimetable() {
+	if s.config.PreTimetable() {
 		// create timetables
 		s.timetable = models.NewTimetable(&s.mapObject, s.GetTrains())
 		// save timetable and timetableStations as CSV

@@ -121,7 +121,8 @@ func TestSimulator_RunOnce(t *testing.T) {
 	var configPath = filepath.Join(basePath, projectPath, "configs/config.json")
 	var stationsPath = filepath.Join(basePath, projectPath, "configs/nameStationList.json")
 	var linesPath = filepath.Join(basePath, projectPath, "configs/nameLineList.json")
-	configs.Load(configPath, stationsPath, linesPath)
+	var config = configs.ConfigurationType{}
+	config.Load(configPath, stationsPath, linesPath)
 
 	sim := NewSimulator()
 
