@@ -50,7 +50,7 @@ import (
 Simulator is the struct that represents the simulator.
 
 Attributes :
-  - config configs.ConfigurationObject : the config object of the simulator
+  - config configs.ConfigurationType : the config object of the simulator
   - adConfig *configs.AdvancedConfig : the advanced config object of the
     simulator
   - mapObject models.Map : the map of the simulator
@@ -68,7 +68,7 @@ Attributes :
   - tripNumberCounter int : the trip number counter of the simulator
 
 Methods :
-  - Config() configs.ConfigurationObject : get the config object of the
+  - Config() configs.ConfigurationType : get the config object of the
     simulator
   - GetTrains() []*models.MetroTrain : get the trains of the simulator
   - Population() *models.Population : get the population of the simulator
@@ -126,7 +126,7 @@ Param :
   - s *Simulator : the simulator
 
 Return :
-  - configs.ConfigurationObject : the config object of the simulator
+  - configs.ConfigurationType : the config object of the simulator
 */
 func (s *Simulator) Config() configs.ConfigurationType {
 	return s.config
