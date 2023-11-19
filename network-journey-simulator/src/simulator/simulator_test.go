@@ -9,7 +9,7 @@ Author :
   - Team v1
   - Team v2
   - Benoît VAVASSEUR
-  - Paul TRÉMOUREUX (quality check)
+  - Paul TRÉMOUREUX
 
 License : MIT License
 
