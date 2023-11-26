@@ -10,6 +10,7 @@ Author :
   - Team v2
   - Benoît VAVASSEUR
   - Paul TRÉMOUREUX (quality check)
+  - Aurélie CHAMOULEAU
 
 License : MIT License
 
@@ -664,6 +665,8 @@ func TestSimulator_GetDestinationDistributionStation(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
+	// Station of id 3 is in the area of id 0 so it should return its
+	// distribution
 	destinationDistribution := sim.GetDestinationDistributionStation(3)
 
 	assert.Equal(t, 20, destinationDistribution.Commercial(),
@@ -679,6 +682,25 @@ func TestSimulator_GetDestinationDistributionStation(t *testing.T) {
 	assert.Equal(t, 30, destinationDistribution.Residential(),
 		"Bad residential attribut")
 	assert.Equal(t, 10, destinationDistribution.Touristic(),
+		"Bad touristic attribut")
+
+	// Station of id 0 is not in any area so it should return a distribution
+	// with all default values
+	destinationDistribution = sim.GetDestinationDistributionStation(0)
+
+	assert.Equal(t, 15, destinationDistribution.Commercial(),
+		"Bad commercial attribut")
+	assert.Equal(t, 14, destinationDistribution.Educational(),
+		"Bad educational attribut")
+	assert.Equal(t, 14, destinationDistribution.Industrial(),
+		"Bad industrial attribut")
+	assert.Equal(t, 14, destinationDistribution.Leisure(),
+		"Bad leisure attribut")
+	assert.Equal(t, 15, destinationDistribution.Office(),
+		"Bad office attribut")
+	assert.Equal(t, 14, destinationDistribution.Residential(),
+		"Bad residential attribut")
+	assert.Equal(t, 14, destinationDistribution.Touristic(),
 		"Bad touristic attribut")
 }
 

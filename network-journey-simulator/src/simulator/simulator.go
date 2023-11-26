@@ -12,6 +12,7 @@ Author :
   - Team v2
   - Paul TRÉMOUREUX (quality check)
   - Benoît VAVASSEUR
+  - Aurélie CHAMOULEAU
 
 License : MIT License
 
@@ -334,7 +335,7 @@ Return :
 func (s *Simulator) GetDestinationDistributionStation(id int) models.DestinationDistribution {
 	ms := s.adConfig.MapC.Stations[id]
 	if ms.IdArea == nil {
-		return models.DestinationDistribution{} //TODO: if no IdArea, return a "real" default DestinationDistribution
+		return models.NewDestinationDistribution(15, 14, 14, 14, 15, 14, 14)
 	}
 	idArea := *ms.IdArea
 	return s.destinationDistributions[idArea]
