@@ -12,6 +12,7 @@ Author :
   - Team v2
   - Paul TRÉMOUREUX (quality check)
   - Benoît VAVASSEUR
+  - Aurélie CHAMOULEAU
 
 License : MIT License
 
@@ -279,7 +280,7 @@ Return :
 func (s *Simulator) GetPopulationDistributionStation(id int) models.PopulationDistribution {
 	ms := s.adConfig.MapC.Stations[id]
 	if ms.IdArea == nil {
-		return models.PopulationDistribution{} //TODO: if no IdArea, return a "real" default PopulationDistribution
+		return models.NewPopulationDistribution(14, 14, 14, 15, 14, 14, 15)
 	}
 	idArea := *ms.IdArea
 	return s.populationsDistributions[idArea]
