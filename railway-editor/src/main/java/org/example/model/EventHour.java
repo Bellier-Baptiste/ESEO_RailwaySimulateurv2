@@ -26,7 +26,7 @@ package org.example.model;
 
 /**
  * Model class extending {@link Event} which describes a change of trains
- * number on a {@link model.Line} at a certain hour of the day.
+ * number on a {@link org.example.model.Line} at a certain hour of the day.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

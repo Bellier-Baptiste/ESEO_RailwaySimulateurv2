@@ -34,16 +34,16 @@ import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
 import org.example.model.Station;
+import org.example.view.AreaView;
+import org.example.view.LineView;
+import org.example.view.MainWindow;
+import org.example.view.StationView;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.example.view.AreaView;
-import org.example.view.LineView;
-import org.example.view.MainWindow;
-import org.example.view.StationView;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -321,76 +321,116 @@ public class ActionFile {
 
       // position of the area
       Element position = document.createElement(POSITION);
-      Attr posX = document.createAttribute("posX");
-      posX.setValue(Integer.toString(areaView.getArea().getPosX()));
-      position.setAttributeNode(posX);
-      Attr posY = document.createAttribute("posY");
-      posY.setValue(Integer.toString(areaView.getArea().getPosY()));
-      position.setAttributeNode(posY);
+      Attr latitudeTop = document.createAttribute("latitudeTop");
+      latitudeTop.setValue(Double.toString(areaView.getArea()
+          .getLatitudeTop()));
+      position.setAttributeNode(latitudeTop);
+      Attr longitudeTop = document.createAttribute("longitudeTop");
+      longitudeTop.setValue(Double.toString(areaView.getArea()
+          .getLongitudeTop()));
+      position.setAttributeNode(longitudeTop);
+      Attr latitudeBot = document.createAttribute("latitudeBot");
+      latitudeBot.setValue(Double.toString(areaView.getArea()
+          .getLatitudeBot()));
+      position.setAttributeNode(latitudeBot);
+      Attr longitudeBot = document.createAttribute("longitudeBot");
+      longitudeBot.setValue(Double.toString(areaView.getArea()
+          .getLongitudeBot()));
+      position.setAttributeNode(longitudeBot);
       area.appendChild(position);
 
-      // size of the area
-      Element size = document.createElement("size");
-      Attr width = document.createAttribute("width");
-      width.setValue(Integer.toString(areaView.getArea().getWidth()));
-      size.setAttributeNode(width);
-      Attr height = document.createAttribute("height");
-      height.setValue(Integer.toString(areaView.getArea().getHeight()));
-      size.setAttributeNode(height);
-      area.appendChild(size);
-
-      // type of the area (Stations destination)
-      Element areaType = document.createElement("type");
-      areaType.appendChild(document.createTextNode(areaView.getArea()
-          .getDestination()));
-      area.appendChild(areaType);
-
-      // distribution of the area
-      Element distribution = document.createElement("distribution");
+      // population distribution of the area
+      Element populationDistribution = document.createElement(
+          "populationDistribution");
       // tourist Attribute
       Attr attrTourist = document.createAttribute(Data.AREA_TOURIST);
       attrTourist.setValue(Integer.toString(areaView.getArea()
-          .getDistribution().get(Data.AREA_TOURIST)));
-      distribution.setAttributeNode(attrTourist);
+          .getDistributionPopulation().get(Data.AREA_TOURIST)));
+      populationDistribution.setAttributeNode(attrTourist);
 
       // Student attribute
       Attr attrStudent = document.createAttribute(Data.AREA_STUDENT);
       attrStudent.setValue(Integer.toString(areaView.getArea()
-          .getDistribution().get(Data.AREA_STUDENT)));
-      distribution.setAttributeNode(attrStudent);
+          .getDistributionPopulation().get(Data.AREA_STUDENT)));
+      populationDistribution.setAttributeNode(attrStudent);
 
       // Businessman attribute
       Attr attrBusinessman = document.createAttribute(Data.AREA_BUSINESSMAN);
       attrBusinessman
-          .setValue(Integer.toString(areaView.getArea().getDistribution()
-              .get(Data.AREA_BUSINESSMAN)));
-      distribution.setAttributeNode(attrBusinessman);
+          .setValue(Integer.toString(areaView.getArea()
+              .getDistributionPopulation().get(Data.AREA_BUSINESSMAN)));
+      populationDistribution.setAttributeNode(attrBusinessman);
 
       // worker attribute
       Attr attrWorker = document.createAttribute(Data.AREA_WORKER);
-      attrWorker.setValue(Integer.toString(areaView.getArea().getDistribution()
-          .get(Data.AREA_WORKER)));
-      distribution.setAttributeNode(attrWorker);
+      attrWorker.setValue(Integer.toString(areaView.getArea()
+          .getDistributionPopulation().get(Data.AREA_WORKER)));
+      populationDistribution.setAttributeNode(attrWorker);
 
       // child attribute
       Attr attrChild = document.createAttribute(Data.AREA_CHILD);
-      attrChild.setValue(Integer.toString(areaView.getArea().getDistribution()
-          .get(Data.AREA_CHILD)));
-      distribution.setAttributeNode(attrChild);
+      attrChild.setValue(Integer.toString(areaView.getArea()
+          .getDistributionPopulation().get(Data.AREA_CHILD)));
+      populationDistribution.setAttributeNode(attrChild);
 
       // retired attribute
       Attr attrRetired = document.createAttribute(Data.AREA_RETIRED);
-      attrRetired.setValue(Integer.toString(areaView.getArea().getDistribution()
-          .get(Data.AREA_RETIRED)));
-      distribution.setAttributeNode(attrRetired);
+      attrRetired.setValue(Integer.toString(areaView.getArea()
+          .getDistributionPopulation().get(Data.AREA_RETIRED)));
+      populationDistribution.setAttributeNode(attrRetired);
 
       // unemployed attribute
       Attr attrUnemployed = document.createAttribute(Data.AREA_UNEMPLOYED);
-      attrUnemployed
-          .setValue(Integer.toString(areaView.getArea().getDistribution()
-              .get(Data.AREA_UNEMPLOYED)));
-      distribution.setAttributeNode(attrUnemployed);
-      area.appendChild(distribution);
+      attrUnemployed.setValue(Integer.toString(areaView.getArea()
+          .getDistributionPopulation().get(Data.AREA_UNEMPLOYED)));
+      populationDistribution.setAttributeNode(attrUnemployed);
+      area.appendChild(populationDistribution);
+
+      // destination distribution of the area
+      Element destinationDistribution = document.createElement(
+          "destinationDistribution");
+      // residential Attribute
+      Attr attrResidential = document.createAttribute(Data.AREA_RESIDENTIAL);
+      attrResidential.setValue(Integer.toString(areaView.getArea()
+          .getDistributionDestination().get(Data.AREA_RESIDENTIAL)));
+      destinationDistribution.setAttributeNode(attrResidential);
+
+      // commercial attribute
+      Attr attrCommercial = document.createAttribute(Data.AREA_COMMERCIAL);
+      attrCommercial.setValue(Integer.toString(areaView.getArea()
+          .getDistributionDestination().get(Data.AREA_COMMERCIAL)));
+      destinationDistribution.setAttributeNode(attrCommercial);
+
+      // office attribute
+      Attr attrOffice = document.createAttribute(Data.AREA_OFFICE);
+      attrOffice.setValue(Integer.toString(areaView.getArea()
+          .getDistributionDestination().get(Data.AREA_OFFICE)));
+      destinationDistribution.setAttributeNode(attrOffice);
+
+      // industrial attribute
+      Attr attrIndustrial = document.createAttribute(Data.AREA_INDUSTRIAL);
+      attrIndustrial.setValue(Integer.toString(areaView.getArea()
+          .getDistributionDestination().get(Data.AREA_INDUSTRIAL)));
+      destinationDistribution.setAttributeNode(attrIndustrial);
+
+      // touristic attribute
+      Attr attrTouristic = document.createAttribute(Data.AREA_TOURISTIC);
+      attrTouristic.setValue(Integer.toString(areaView.getArea()
+          .getDistributionDestination().get(Data.AREA_TOURISTIC)));
+      destinationDistribution.setAttributeNode(attrTouristic);
+
+      // leisure attribute
+      Attr attrLeisure = document.createAttribute(Data.AREA_LEISURE);
+      attrLeisure.setValue(Integer.toString(areaView.getArea()
+          .getDistributionDestination().get(Data.AREA_LEISURE)));
+      destinationDistribution.setAttributeNode(attrLeisure);
+
+      // school attribute
+      Attr attrSchool = document.createAttribute(Data.AREA_EDUCATIONAL);
+      attrSchool.setValue(Integer.toString(areaView.getArea()
+          .getDistributionDestination().get(Data.AREA_EDUCATIONAL)));
+      destinationDistribution.setAttributeNode(attrSchool);
+      area.appendChild(destinationDistribution);
     }
   }
 
@@ -503,68 +543,12 @@ public class ActionFile {
 
           this.exportStationsLines(document, station, stationView);
 
-          // Station destination element
-          Element destination = document.createElement("destination");
+          // id area element
           if (stationView.getStation().getArea() != null) {
-            destination.appendChild(
-                document.createTextNode(stationView.getStation().getArea()
-                    .getDestination()));
-            station.appendChild(destination);
-
-            // station distribution element
-            Element areaDistribution = document.createElement(
-                "areaDistribution");
-            // tourist Attribute
-            Attr attrTourist = document.createAttribute("tourist");
-            attrTourist.setValue(Integer
-                .toString(stationView.getStation().getArea().getDistribution()
-                    .get(Data.AREA_TOURIST)));
-            areaDistribution.setAttributeNode(attrTourist);
-
-            // Student attribute
-            Attr attrStudent = document.createAttribute("student");
-            attrStudent.setValue(Integer
-                .toString(stationView.getStation().getArea().getDistribution()
-                    .get(Data.AREA_STUDENT)));
-            areaDistribution.setAttributeNode(attrStudent);
-
-            // Businessman attribute
-            Attr attrBusinessman = document.createAttribute(
-                "businessman");
-            attrBusinessman.setValue(Integer.toString(
-                stationView.getStation().getArea().getDistribution().get(
-                    Data.AREA_BUSINESSMAN)));
-            areaDistribution.setAttributeNode(attrBusinessman);
-
-            // worker attribute
-            Attr attrWorker = document.createAttribute("worker");
-            attrWorker.setValue(Integer
-                .toString(stationView.getStation().getArea().getDistribution()
-                    .get(Data.AREA_WORKER)));
-            areaDistribution.setAttributeNode(attrWorker);
-
-            // child attribute
-            Attr attrChild = document.createAttribute("child");
-            attrChild.setValue(Integer
-                .toString(stationView.getStation().getArea().getDistribution()
-                    .get(Data.AREA_CHILD)));
-            areaDistribution.setAttributeNode(attrChild);
-
-            // retired attribute
-            Attr attrRetired = document.createAttribute("retired");
-            attrRetired.setValue(Integer
-                .toString(stationView.getStation().getArea().getDistribution()
-                    .get(Data.AREA_RETIRED)));
-            areaDistribution.setAttributeNode(attrRetired);
-
-            // unemployed attribute
-            Attr attrUnemployed = document.createAttribute("unemployed");
-            attrUnemployed.setValue(Integer.toString(
-                stationView.getStation().getArea().getDistribution().get(
-                    Data.AREA_UNEMPLOYED)));
-            areaDistribution.setAttributeNode(attrUnemployed);
-
-            station.appendChild(areaDistribution);
+            Element idArea = document.createElement("idArea");
+            idArea.appendChild(document.createTextNode(Integer.toString(
+                stationView.getStation().getArea().getId())));
+            station.appendChild(idArea);
           }
           stationIds.add(stationView.getStation().getId());
         }
@@ -641,10 +625,12 @@ public class ActionFile {
 
       List<Line> lineModelList = new ArrayList<>();
 
-      int linesNumber = Collections.max(linesId) + 1;
-      for (int i = 0; i < linesNumber; i++) {
-        Line line = new Line(i, new ArrayList<>());
-        lineModelList.add(line);
+      if(!linesId.isEmpty()) {
+        int linesNumber = Collections.max(linesId) + 1;
+        for (int i = 0; i < linesNumber; i++) {
+          Line line = new Line(i, new ArrayList<>());
+          lineModelList.add(line);
+        }
       }
 
       for (Map.Entry<Integer, String[]> entry : linesMatchStations.entrySet()) {
@@ -733,43 +719,43 @@ public class ActionFile {
         Node nthNodeA2 = areaList.item(i);
         if (nthNodeA2.getNodeType() == Node.ELEMENT_NODE) {
           Element areaElement = (Element) nthNodeA2;
-          Element distributions = (Element) areaElement.getElementsByTagName(
-              "distribution").item(0);
+          Element populationDistribution = (Element) areaElement
+              .getElementsByTagName("populationDistribution").item(0);
 
           // format number
           String touristAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_TOURIST));
+              populationDistribution.getAttribute(Data.AREA_TOURIST));
           String studentAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_STUDENT));
+              populationDistribution.getAttribute(Data.AREA_STUDENT));
           String businessManAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_BUSINESSMAN));
+              populationDistribution.getAttribute(Data.AREA_BUSINESSMAN));
           String childAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_CHILD));
+              populationDistribution.getAttribute(Data.AREA_CHILD));
           String retiredAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_RETIRED));
+              populationDistribution.getAttribute(Data.AREA_RETIRED));
           String unemployedAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_UNEMPLOYED));
+              populationDistribution.getAttribute(Data.AREA_UNEMPLOYED));
           Element positions = (Element) areaElement.getElementsByTagName(
               POSITION).item(0);
-          String posX = positions.getAttribute("posX");
-          String posY = positions.getAttribute("posY");
-          Element size = (Element) areaElement.getElementsByTagName("size")
-              .item(0);
-          String width = size.getAttribute("width");
-          String height = size.getAttribute("height");
-          Area area = new Area(Integer.parseInt(posX), Integer.parseInt(posY),
-              Integer.parseInt(width), Integer.parseInt(height));
-          area.setNewPart(Data.AREA_TOURIST, Integer.parseInt(touristAmount));
-          area.setNewPart(Data.AREA_STUDENT, Integer.parseInt(studentAmount));
-          area.setNewPart(Data.AREA_BUSINESSMAN,
+          String latitudeTop = positions.getAttribute("latitudeTop");
+          String longitudeTop = positions.getAttribute("longitudeTop");
+          String latitudeBot = positions.getAttribute("latitudeBot");
+          String longitudeBot = positions.getAttribute("longitudeBot");
+          Area area = new Area(Double.parseDouble(latitudeTop),
+              Double.parseDouble(longitudeTop), Double.parseDouble(latitudeBot),
+              Double.parseDouble(longitudeBot));
+          area.setNewPopulationPart(Data.AREA_TOURIST, Integer.parseInt(
+              touristAmount));
+          area.setNewPopulationPart(Data.AREA_STUDENT, Integer.parseInt(
+              studentAmount));
+          area.setNewPopulationPart(Data.AREA_BUSINESSMAN,
               Integer.parseInt(businessManAmount));
-          area.setNewPart(Data.AREA_CHILD, Integer.parseInt(childAmount));
-          area.setNewPart(Data.AREA_RETIRED, Integer.parseInt(retiredAmount));
-          area.setNewPart(Data.AREA_UNEMPLOYED,
+          area.setNewPopulationPart(Data.AREA_CHILD, Integer.parseInt(
+              childAmount));
+          area.setNewPopulationPart(Data.AREA_RETIRED, Integer.parseInt(
+              retiredAmount));
+          area.setNewPopulationPart(Data.AREA_UNEMPLOYED,
               Integer.parseInt(unemployedAmount));
-          String type = areaElement.getElementsByTagName("type").item(0)
-              .getTextContent();
-          area.setDestination(type);
           areasToLoad.add(area);
         }
       }

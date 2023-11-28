@@ -11,6 +11,8 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Benoît VAVASSEUR
+  - Aurélie CHAMOULEAU
 
 License : MIT License
 
@@ -65,6 +67,8 @@ Attributes :
   - eventsLineClosed []models.EventLineClosed : the events of the simulator
   - eventsAttendancePeak []models.EventAttendancePeak : the events of the
     simulator
+  - areasDistribution []models.PopulationDistribution : the population distribution of
+    an area
   - tripNumberCounter int : the trip number counter of the simulator
 
 Methods :
@@ -100,19 +104,21 @@ Methods :
   - ToCSV() : save the timetable and timetableReal as CSV
 */
 type Simulator struct {
-	config               configs.ConfigurationObject
-	adConfig             *configs.AdvancedConfig
-	mapObject            models.Map
-	population           *models.Population
-	trains               []*models.MetroTrain
-	currentTime          time.Time
-	timetable            models.Timetable
-	timetableReal        models.TimetableReal
-	eventsStationClosed  []models.EventStationClosed
-	eventsLineDelay      []models.EventLineDelay
-	eventsLineClosed     []models.EventLineClosed
-	eventsAttendancePeak []models.EventAttendancePeak
-	tripNumberCounter    int
+	config                   configs.ConfigurationObject
+	adConfig                 *configs.AdvancedConfig
+	mapObject                models.Map
+	population               *models.Population
+	trains                   []*models.MetroTrain
+	currentTime              time.Time
+	timetable                models.Timetable
+	timetableReal            models.TimetableReal
+	eventsStationClosed      []models.EventStationClosed
+	eventsLineDelay          []models.EventLineDelay
+	eventsLineClosed         []models.EventLineClosed
+	eventsAttendancePeak     []models.EventAttendancePeak
+	tripNumberCounter        int
+	populationsDistributions []models.PopulationDistribution
+	areas                    []models.Area
 }
 
 const (
@@ -153,19 +159,21 @@ Return :
 */
 func NewSimulator() *Simulator {
 	simulator := &Simulator{
-		config:               configs.GetInstance(),
-		adConfig:             nil,
-		mapObject:            models.Map{},
-		population:           nil,
-		trains:               make([]*models.MetroTrain, 0),
-		currentTime:          time.Now(),
-		timetable:            models.Timetable{},
-		timetableReal:        models.TimetableReal{},
-		eventsStationClosed:  make([]models.EventStationClosed, 0),
-		eventsLineDelay:      make([]models.EventLineDelay, 0),
-		eventsLineClosed:     make([]models.EventLineClosed, 0),
-		eventsAttendancePeak: make([]models.EventAttendancePeak, 0),
-		tripNumberCounter:    0,
+		config:                   configs.GetInstance(),
+		adConfig:                 nil,
+		mapObject:                models.Map{},
+		population:               nil,
+		trains:                   make([]*models.MetroTrain, 0),
+		currentTime:              time.Now(),
+		timetable:                models.Timetable{},
+		timetableReal:            models.TimetableReal{},
+		eventsStationClosed:      make([]models.EventStationClosed, 0),
+		eventsLineDelay:          make([]models.EventLineDelay, 0),
+		eventsLineClosed:         make([]models.EventLineClosed, 0),
+		eventsAttendancePeak:     make([]models.EventAttendancePeak, 0),
+		populationsDistributions: make([]models.PopulationDistribution, 0),
+		areas:                    make([]models.Area, 0),
+		tripNumberCounter:        0,
 	}
 	return simulator
 }
@@ -222,6 +230,99 @@ Return :
 */
 func (s *Simulator) GetAllEventsAttendancePeak() []models.EventAttendancePeak {
 	return s.eventsAttendancePeak
+}
+
+/*
+GetAllPopulationsDistribution is used to get the population distribution of
+all the areas.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []models.PopulationDistribution : the population distribution of all the
+    areas
+*/
+func (s *Simulator) GetAllPopulationsDistribution() []models.PopulationDistribution {
+	return s.populationsDistributions
+}
+
+/*
+GetPopulationDistributionArea is used to obtain the population distribution
+of an area.
+
+Param :
+  - s *Simulator : the simulator
+  - id int : the id of the area
+
+Return :
+  - models.PopulationDistribution : the population distribution of the
+    area
+*/
+func (s *Simulator) GetPopulationDistributionArea(id int) models.PopulationDistribution {
+	return s.populationsDistributions[id]
+}
+
+/*
+GetPopulationDistributionStation is used to obtain the population distribution
+of a station.
+The station has an idArea attribute which is used to obtain the corresponding
+population distribution for the area.
+
+Param :
+  - s *Simulator : the simulator
+  - id int : the id of the station
+
+Return :
+  - models.PopulationDistribution : the population distribution of the
+    station
+*/
+func (s *Simulator) GetPopulationDistributionStation(id int) models.PopulationDistribution {
+	ms := s.adConfig.MapC.Stations[id]
+	if ms.IdArea == nil {
+		return models.NewPopulationDistribution(14, 14, 14, 15, 14, 14, 15)
+	}
+	idArea := *ms.IdArea
+	return s.populationsDistributions[idArea]
+}
+
+/*
+GetIdAreaStation is used to get the areaId of a station.
+
+Param :
+  - s *Simulator : the simulator
+  - id int : the id of the metroStation
+
+Return :
+  - int : the areaId of the station, -1 if the station has no areaId
+*/
+func (s *Simulator) GetIdAreaStation(id int) int {
+	station := s.adConfig.MapC.Stations[id]
+	if station.IdArea == nil {
+		return -1
+	}
+	return *station.IdArea
+}
+
+/*
+GetIdAreaStations is used to get the areaIds of all the stations.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []int : the areaIds of all the stations
+*/
+func (s *Simulator) GetIdAreaStations() []int {
+	var areaIds []int
+	for _, ms := range s.adConfig.MapC.Stations {
+		if ms.IdArea != nil {
+			areaIds = append(areaIds, *ms.IdArea)
+		} else {
+			areaIds = append(areaIds, -1)
+		}
+	}
+	return areaIds
 }
 
 /*
@@ -329,6 +430,21 @@ func (s *Simulator) CreateEventsAttendancePeak() {
 		}
 		s.eventsAttendancePeak[i] = models.NewEventAttendancePeak(ev.StationId,
 			ev.Size, timeEv)
+	}
+}
+
+/*
+CreateAreasDistribution is used to create "area distribution"
+*/
+func (s *Simulator) CreatePopulationsDistribution() {
+	s.populationsDistributions = make([]models.PopulationDistribution,
+		len(s.adConfig.MapC.Areas))
+	for i, pd := range s.adConfig.MapC.Areas {
+		s.populationsDistributions[i] =
+			models.NewPopulationDistribution(pd.PopulationDistribution.Businessman,
+				pd.PopulationDistribution.Child, pd.PopulationDistribution.Retired,
+				pd.PopulationDistribution.Student, pd.PopulationDistribution.Tourist,
+				pd.PopulationDistribution.Unemployed, pd.PopulationDistribution.Worker)
 	}
 }
 
@@ -496,6 +612,9 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	s.CreateEventsLineClose()
 
 	s.CreateEventsAttendancePeak()
+
+	//generate populations distribution
+	s.CreatePopulationsDistribution()
 
 	// create map
 	s.mapObject = models.CreateMapAdvanced(*s.adConfig)

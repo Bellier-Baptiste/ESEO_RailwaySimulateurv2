@@ -1,4 +1,8 @@
 /*
+ *
+ * Author :
+ * 	- Benoît VAVASSEUR
+ *
  * License : MIT License
  *
  * Copyright (c) 2023 Team PFE_2023_16
@@ -22,36 +26,24 @@
  * SOFTWARE.
  */
 
-package org.example.controller;
+package models
 
-import org.example.model.Station;
-import org.example.view.MainWindow;
-import org.example.view.StationView;
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
-/**
- * Controller to add {@link StationView} to the {@link org.example.view.MainPanel}.
- *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
- * @file MovingAdapter.java
- * @date N/A
- * @since 2.0
- */
-public class StationController {
-
-  /**
-   * StationController constructor.
-   *
-   * @param station     station to add
-   * @param stationView stationView bound to station
-   * @param lineIndex   index of the current line
-   */
-  public StationController(final Station station, final StationView stationView,
-                           final int lineIndex) {
-    super();
-    MainWindow.getInstance().getMainPanel().getLineViews().get(lineIndex)
-        .getStationViews().add(stationView);
-    MainWindow.getInstance().getMainPanel().getLineViews().get(lineIndex)
-        .getLine().addStation(station);
-  }
+/*
+TestAreaDistribution tests the PopulationDistribution struct
+*/
+func TestPopulationDistribution(t *testing.T) {
+	var ad = NewPopulationDistribution(10, 10, 10,
+		10, 10, 40, 10)
+	assert.Equal(t, 10, ad.Businessman())
+	assert.Equal(t, 10, ad.Child())
+	assert.Equal(t, 10, ad.Retired())
+	assert.Equal(t, 10, ad.Student())
+	assert.Equal(t, 10, ad.Tourist())
+	assert.Equal(t, 40, ad.Unemployed())
+	assert.Equal(t, 10, ad.Worker())
 }
