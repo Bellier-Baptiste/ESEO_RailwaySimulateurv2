@@ -629,6 +629,7 @@ func TestSimulator_GetPopulationDistributionStation(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
+	// Station with id 3 is part of the area with id 0
 	populationDistribution := sim.GetPopulationDistributionStation(3)
 
 	assert.Equal(t, 20, populationDistribution.Businessman(),
@@ -644,6 +645,25 @@ func TestSimulator_GetPopulationDistributionStation(t *testing.T) {
 	assert.Equal(t, 30, populationDistribution.Unemployed(),
 		"Bad unemployed attribut")
 	assert.Equal(t, 10, populationDistribution.Worker(),
+		"Bad worker attribut")
+
+	// Station with id 0 is not part of any area, so it should return a
+	// PopulationDistribution with all default attributes
+	populationDistribution = sim.GetPopulationDistributionStation(0)
+
+	assert.Equal(t, 14, populationDistribution.Businessman(),
+		"Bad businessman attribut")
+	assert.Equal(t, 14, populationDistribution.Child(),
+		"Bad child attribut")
+	assert.Equal(t, 14, populationDistribution.Retired(),
+		"Bad retired attribut")
+	assert.Equal(t, 15, populationDistribution.Student(),
+		"Bad student attribut")
+	assert.Equal(t, 14, populationDistribution.Tourist(),
+		"Bad tourist attribut")
+	assert.Equal(t, 14, populationDistribution.Unemployed(),
+		"Bad unemployed attribut")
+	assert.Equal(t, 15, populationDistribution.Worker(),
 		"Bad worker attribut")
 }
 
