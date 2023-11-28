@@ -10,7 +10,7 @@ Date : 24/01/2019
 Author :
   - Team v1
   - Team v2
-  - Paul TRÉMOUREUX (quality check)
+  - Paul TRÉMOUREUX
   - Benoît VAVASSEUR
   - Aurélie CHAMOULEAU
 
@@ -52,7 +52,7 @@ import (
 Simulator is the struct that represents the simulator.
 
 Attributes :
-  - config configs.ConfigurationObject : the config object of the simulator
+  - config configs.ConfigurationType : the config object of the simulator
   - adConfig *configs.AdvancedConfig : the advanced config object of the
     simulator
   - mapObject models.Map : the map of the simulator
@@ -72,7 +72,7 @@ Attributes :
   - tripNumberCounter int : the trip number counter of the simulator
 
 Methods :
-  - Config() configs.ConfigurationObject : get the config object of the
+  - Config() configs.ConfigurationType : get the config object of the
     simulator
   - GetTrains() []*models.MetroTrain : get the trains of the simulator
   - Population() *models.Population : get the population of the simulator
@@ -133,9 +133,9 @@ Param :
   - s *Simulator : the simulator
 
 Return :
-  - configs.ConfigurationObject : the config object of the simulator
+  - configs.ConfigurationType : the config object of the simulator
 */
-func (s *Simulator) Config() configs.ConfigurationObject {
+func (s *Simulator) Config() configs.ConfigurationType {
 	return s.config
 }
 
@@ -669,7 +669,7 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	// initialisation of the day type in the config
 	fmt.Println("dayType changed in : ", dayType)
 	s.config.ChangeParam("day type", dayType)
-	fmt.Println("dayType changed in : ", s.config["day type"], "-> ok !")
+	fmt.Println("dayType changed in : ", s.config.Get("day type"), "-> ok !")
 
 	//generate events
 	s.CreateEventsStationClose()
@@ -724,7 +724,7 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	// assign current time
 	s.currentTime = s.config.TimeStart()
 
-	if s.Config().PreTimetable() {
+	if s.config.PreTimetable() {
 		// create timetables
 		s.timetable = models.NewTimetable(&s.mapObject, s.GetTrains())
 		// save timetable and timetableStations as CSV
