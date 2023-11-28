@@ -118,6 +118,7 @@ type Simulator struct {
 	eventsAttendancePeak     []models.EventAttendancePeak
 	tripNumberCounter        int
 	populationsDistributions []models.PopulationDistribution
+	destinationDistributions []models.DestinationDistribution
 	areas                    []models.Area
 }
 
@@ -172,6 +173,7 @@ func NewSimulator() *Simulator {
 		eventsLineClosed:         make([]models.EventLineClosed, 0),
 		eventsAttendancePeak:     make([]models.EventAttendancePeak, 0),
 		populationsDistributions: make([]models.PopulationDistribution, 0),
+		destinationDistributions: make([]models.DestinationDistribution, 0),
 		areas:                    make([]models.Area, 0),
 		tripNumberCounter:        0,
 	}
@@ -248,6 +250,21 @@ func (s *Simulator) GetAllPopulationsDistribution() []models.PopulationDistribut
 }
 
 /*
+GetAllDestinationDistribution is used to get the destination distribution of
+all the areas.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []models.DestinationDistribution : the destination distribution of all the
+    areas
+*/
+func (s *Simulator) GetAllDestinationDistribution() []models.DestinationDistribution {
+	return s.destinationDistributions
+}
+
+/*
 GetPopulationDistributionArea is used to obtain the population distribution
 of an area.
 
@@ -261,6 +278,21 @@ Return :
 */
 func (s *Simulator) GetPopulationDistributionArea(id int) models.PopulationDistribution {
 	return s.populationsDistributions[id]
+}
+
+/*
+GetDestinationDistributionArea is used to obtain the destination distribution
+of an area.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []models.DestinationDistribution : the destination distribution of the
+    areas
+*/
+func (s *Simulator) GetDestinationDistributionArea(id int) models.DestinationDistribution {
+	return s.destinationDistributions[id]
 }
 
 /*
@@ -284,6 +316,29 @@ func (s *Simulator) GetPopulationDistributionStation(id int) models.PopulationDi
 	}
 	idArea := *ms.IdArea
 	return s.populationsDistributions[idArea]
+}
+
+/*
+GetDestinationDistributionStation is used to obtain the destination distribution
+of a station.
+The station has an idArea attribute which is used to obtain the corresponding
+destination distribution for the area.
+
+Param :
+  - s *Simulator : the simulator
+  - id int : the id of the station
+
+Return :
+  - models.DestinationDistribution : the destination distribution of the
+    station
+*/
+func (s *Simulator) GetDestinationDistributionStation(id int) models.DestinationDistribution {
+	ms := s.adConfig.MapC.Stations[id]
+	if ms.IdArea == nil {
+		return models.NewDestinationDistribution(15, 14, 14, 14, 15, 14, 14)
+	}
+	idArea := *ms.IdArea
+	return s.destinationDistributions[idArea]
 }
 
 /*
@@ -445,6 +500,18 @@ func (s *Simulator) CreatePopulationsDistribution() {
 				pd.PopulationDistribution.Child, pd.PopulationDistribution.Retired,
 				pd.PopulationDistribution.Student, pd.PopulationDistribution.Tourist,
 				pd.PopulationDistribution.Unemployed, pd.PopulationDistribution.Worker)
+	}
+}
+
+func (s *Simulator) CreateDestinationDistribution() {
+	s.destinationDistributions = make([]models.DestinationDistribution,
+		len(s.adConfig.MapC.Areas))
+	for i, dd := range s.adConfig.MapC.Areas {
+		s.destinationDistributions[i] =
+			models.NewDestinationDistribution(dd.DestinationDistribution.Commercial,
+				dd.DestinationDistribution.Educational, dd.DestinationDistribution.Industrial,
+				dd.DestinationDistribution.Leisure, dd.DestinationDistribution.Office,
+				dd.DestinationDistribution.Residential, dd.DestinationDistribution.Touristic)
 	}
 }
 
@@ -615,6 +682,8 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 
 	//generate populations distribution
 	s.CreatePopulationsDistribution()
+
+	s.CreateDestinationDistribution()
 
 	// create map
 	s.mapObject = models.CreateMapAdvanced(*s.adConfig)

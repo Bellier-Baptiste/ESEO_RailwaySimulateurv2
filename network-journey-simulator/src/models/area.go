@@ -29,14 +29,17 @@
 package models
 
 type Area struct {
-	id                     int
-	populationDistribution PopulationDistribution
+	id                      int
+	populationDistribution  PopulationDistribution
+	destinationDistribution DestinationDistribution
 }
 
-func NewArea(id int, populationDistribution PopulationDistribution) Area {
+func NewArea(id int, populationDistribution PopulationDistribution,
+	destinationDistribution DestinationDistribution) Area {
 	return Area{
-		id:                     id,
-		populationDistribution: populationDistribution,
+		id:                      id,
+		populationDistribution:  populationDistribution,
+		destinationDistribution: destinationDistribution,
 	}
 }
 
@@ -46,4 +49,8 @@ func (a *Area) Id() int {
 
 func (a *Area) PopulationDistribution() PopulationDistribution {
 	return a.populationDistribution
+}
+
+func (a *Area) DestinationDistribution() DestinationDistribution {
+	return a.destinationDistribution
 }

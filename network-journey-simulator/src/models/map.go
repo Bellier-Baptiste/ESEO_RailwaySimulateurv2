@@ -450,6 +450,7 @@ func CreateMapAdvanced(adConfig configs.AdvancedConfig) Map {
 			id:     station.Id, //should be equal to i
 			number: station.Id + 1,
 			code:   strings.ToUpper(station.Name[0:3]),
+			idArea: station.IdArea,
 		}
 
 		m.stations[i].position = Point{

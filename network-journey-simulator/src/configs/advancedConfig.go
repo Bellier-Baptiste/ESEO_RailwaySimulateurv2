@@ -68,15 +68,16 @@ Attributes :
     distribution of an area
 */
 type ConfigMap struct {
-	XMLName                xml.Name                       `xml:"map"`
-	Stations               []ConfigStation                `xml:"stations>station"`
-	Lines                  []ConfigLine                   `xml:"lines>line"`
-	EventsStationClosed    []ConfigStationClosedEvent     `xml:"events>stationClosed"`
-	EventsLineDelay        []ConfigLineDelayEvent         `xml:"events>lineDelay"`
-	EventsLineClosed       []ConfigLineClosedEvent        `xml:"events>lineClosed"`
-	EventsAttendancePeak   []ConfigAttendancePeakEvent    `xml:"events>attendancePeak"`
-	Areas                  []ConfigArea                   `xml:"areas>area"`
-	PopulationDistribution []ConfigPopulationDistribution `xml:"area>populationDistribution"`
+	XMLName                 xml.Name                        `xml:"map"`
+	Stations                []ConfigStation                 `xml:"stations>station"`
+	Lines                   []ConfigLine                    `xml:"lines>line"`
+	EventsStationClosed     []ConfigStationClosedEvent      `xml:"events>stationClosed"`
+	EventsLineDelay         []ConfigLineDelayEvent          `xml:"events>lineDelay"`
+	EventsLineClosed        []ConfigLineClosedEvent         `xml:"events>lineClosed"`
+	EventsAttendancePeak    []ConfigAttendancePeakEvent     `xml:"events>attendancePeak"`
+	Areas                   []ConfigArea                    `xml:"areas>area"`
+	PopulationDistribution  []ConfigPopulationDistribution  `xml:"area>populationDistribution"`
+	DestinationDistribution []ConfigDestinationDistribution `xml:"area>destinationDistribution"`
 }
 
 /*
@@ -108,13 +109,15 @@ Attributes :
   - PopulationDistribution ConfigPopulationDistribution
 */
 type ConfigArea struct {
-	XMLName                xml.Name                     `xml:"area"`
-	Id                     int                          `xml:"id"`
-	PopulationDistribution ConfigPopulationDistribution `xml:"populationDistribution"`
+	XMLName                 xml.Name                      `xml:"area"`
+	Id                      int                           `xml:"id"`
+	PopulationDistribution  ConfigPopulationDistribution  `xml:"populationDistribution"`
+	DestinationDistribution ConfigDestinationDistribution `xml:"destinationDistribution"`
 }
 
 /*
 ConfigPopulationDistribution is the structure that contains the configuration
+of the population distribution.
 
 Attributes :
   - XMLName xml.Name
@@ -135,6 +138,31 @@ type ConfigPopulationDistribution struct {
 	Tourist     int      `xml:"tourist,attr"`
 	Unemployed  int      `xml:"unemployed,attr"`
 	Worker      int      `xml:"worker,attr"`
+}
+
+/*
+ConfigDestinationDistribution is the structure that contains the configuration
+of the destination distribution.
+
+Attributes :
+  - XMLName xml.Name
+  - Commercial int
+  - Educational int
+  - Industrial int
+  - Leisure int
+  - Office int
+  - Residential int
+  - Touristic int
+*/
+type ConfigDestinationDistribution struct {
+	XMLName     xml.Name `xml:"destinationDistribution"`
+	Commercial  int      `xml:"commercial,attr"`
+	Educational int      `xml:"educational,attr"`
+	Industrial  int      `xml:"industrial,attr"`
+	Leisure     int      `xml:"leisure,attr"`
+	Office      int      `xml:"office,attr"`
+	Residential int      `xml:"residential,attr"`
+	Touristic   int      `xml:"touristic,attr"`
 }
 
 /*

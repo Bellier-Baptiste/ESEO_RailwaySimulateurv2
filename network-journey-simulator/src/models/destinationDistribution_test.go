@@ -1,4 +1,5 @@
 /*
+ *
  * Author :
  * 	- Benoît VAVASSEUR
  *
@@ -32,14 +33,14 @@ import (
 	"testing"
 )
 
-func TestArea(t *testing.T) {
-	var pd = NewPopulationDistribution(10, 10, 10,
-		10, 10, 40, 10)
+func TestDestinationDistribution(t *testing.T) {
 	var dd = NewDestinationDistribution(10, 10, 10,
 		10, 10, 40, 10)
-	var a = NewArea(1, pd, dd)
-	assert.Equal(t, 1, a.Id())
-	assert.Equal(t, pd, a.PopulationDistribution())
-	assert.Equal(t, dd, a.DestinationDistribution())
-
+	assert.Equal(t, 10, dd.Commercial())
+	assert.Equal(t, 10, dd.Educational())
+	assert.Equal(t, 10, dd.Industrial())
+	assert.Equal(t, 10, dd.Leisure())
+	assert.Equal(t, 10, dd.Office())
+	assert.Equal(t, 40, dd.Residential())
+	assert.Equal(t, 10, dd.Touristic())
 }

@@ -306,10 +306,12 @@
     <area>
       <id>0</id>
       <populationDistribution businessman="20" child="10" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
+      <destinationDistribution commercial="20" educational="10" industrial="10" leisure="10" office="10" residential="30" touristic="10"/>
     </area>
     <area>
       <id>1</id>
       <populationDistribution businessman="0" child="30" retired="10" student="10" tourist="10" unemployed="30" worker="10"/>
+      <destinationDistribution commercial="0" educational="30" industrial="10" leisure="10" office="10" residential="30" touristic="10"/>
     </area>
   </areas>
 </map>
