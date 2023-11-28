@@ -29,7 +29,8 @@ import org.example.view.MainWindow;
 import org.example.view.StationView;
 
 /**
- * Controller to add {@link StationView} to the {@link org.example.view.MainPanel}.
+ * Controller to add {@link StationView} to the {@link
+ * org.example.view.MainPanel}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
