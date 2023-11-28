@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testmodel;
+package org.example.model;
 
 
-import org.example.model.EventStationClosed;
 import org.junit.Test;
 
 

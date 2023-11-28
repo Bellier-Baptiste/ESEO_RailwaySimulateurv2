@@ -22,11 +22,10 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testcontroller;
+package org.example.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.example.controller.ActionConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
@@ -74,8 +73,8 @@ class ActionConfigurationTest {
 
     // Use introspection to get the JSON_FILE_PATH field
     Field jsonFilePathField = getJsonFilePathField(actionConfiguration);
-    jsonFilePathField.set(actionConfiguration, "test/unittests"
-        + "/testcontroller/configTest.json");
+    jsonFilePathField.set(actionConfiguration, "test/controller/"
+        + "configTest.json");
 
     // Running tested method
     actionConfiguration.readJsonFile();

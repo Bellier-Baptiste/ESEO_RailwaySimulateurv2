@@ -1,28 +1,35 @@
-## This file is a template, and might need editing before it works on your project.
-# The purpose is to give student a simple working example of a CI pipeline in Gitlab
-#
-# The pipeline will include two stages, build and analysis
-# The build stage will build the maven project and package a downloadable war as artifact
-# The analysis stage will scan code and will upload audit results to a sonarqube project
-#
-# As this is only a template, student can (should ?) enrich this CI pipeline by adding jobs to the stages, or even adding stages if needed
+##  File : config.go
+##
+##  Brief : This file contains the configuration object and its methods.
+##    It also contains the functions to load the configuration from the config.json
+##    file.
 
-# Some important specific informations concerning the gitlab-CI and sonar infrastructure:
-## The infrastructure is part of the ESEO network, therfore, the same filtering rules are set, thus any elements issued from the CI pipeline is filtered from a network point-of-view.
-## To workaround this filters, a http proxy can be used to access the Internet, and can be used to access both http and https targets.
-## The proxy host is 192.168.4.8 and its port is 3128
-## Let's say this firmly again:
+##  Date : 28/11/2023
+
+##  Author :
+##    - Baptiste BELLIER
 ##
-## FOR EVERY ACCESS TO INTERNET, A PROXY MUST BE USED !!!
-## IF YOU DONT USE ONE AND TRY TO ACCESS INTERNET, YOU WILL BE FILTERED
+##  License : MIT License
 ##
-## On the other hand, if you use a proxy to access local machines, you won't be properly redirected form proxy to target
-## As a consequence, one should, as decribed in the before_script section:
-## - set http and https proxy
-## - set a NO_PROXY for lacal environments
+##    Copyright (c) 2023 Équipe PFE_2023_16
 ##
-## Be Aware that some managment tool don't care about system wide environnements variables and so you have to pass those same proxy and noproxy configs directly to those tools
-## For example, Maven needs to get -Dhttp.proxyHost=192.168.4.8 -Dhttp.proxyPort=3128 -Dhttps.proxyHost=192.168.4.8 -Dhttps.proxyPort=3128 options to configure proxy inside maven context
+##    Permission is hereby granted, free of charge, to any person obtaining a copy
+##    of this software and associated documentation files (the "Software"), to deal
+##    in the Software without restriction, including without limitation the rights
+##    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+##    copies of the Software, and to permit persons to whom the Software is
+##  furnished to do so, subject to the following conditions:
+##
+##    The above copyright notice and this permission notice shall be included in
+##    all copies or substantial portions of the Software.
+##
+##    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+##    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+##    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+##    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+##    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+##    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+##    SOFTWARE.
 
 stages:
   - build

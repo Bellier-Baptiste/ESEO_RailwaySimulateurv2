@@ -22,10 +22,9 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testmodel;
+package org.example.model;
 
 import org.example.data.Data;
-import org.example.model.Area;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

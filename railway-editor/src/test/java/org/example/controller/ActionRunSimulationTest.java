@@ -22,10 +22,8 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testcontroller;
+package org.example.controller;
 
-import org.example.controller.ActionFile;
-import org.example.controller.ActionRunSimulation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

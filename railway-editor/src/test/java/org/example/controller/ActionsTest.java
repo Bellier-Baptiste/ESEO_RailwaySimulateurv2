@@ -22,11 +22,8 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testcontroller;
+package org.example.controller;
 
-import org.example.controller.ActionArea;
-import org.example.controller.ActionLine;
-import org.example.controller.ActionStation;
 import org.example.model.Line;
 import org.junit.jupiter.api.Test;
 import org.example.view.MainWindow;
