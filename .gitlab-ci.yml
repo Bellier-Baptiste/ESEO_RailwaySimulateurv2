@@ -46,6 +46,7 @@ variables:
   # `installAtEnd` and `deployAtEnd` are only effective with recent version of the corresponding plugins.
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
 
+  CI_PROJECT_URL: "http://hkgit.thales.ai:8081/stephane.duguet/eseo_railwaysimulateurv2.git"
   # SonarQube configuration
   SONAR_HOST_URL: "http://172.24.1.1:9000/sonar"
   SONAR_DEV_NAME: "PFE_MNJS_v3"
