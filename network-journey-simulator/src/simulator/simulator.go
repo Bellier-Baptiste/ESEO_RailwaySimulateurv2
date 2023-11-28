@@ -10,7 +10,7 @@ Date : 24/01/2019
 Author :
   - Team v1
   - Team v2
-  - Paul TRÉMOUREUX (quality check)
+  - Paul TRÉMOUREUX
   - Benoît VAVASSEUR
   - Aurélie CHAMOULEAU
 
