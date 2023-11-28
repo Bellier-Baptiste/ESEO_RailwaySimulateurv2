@@ -27,7 +27,12 @@ package org.example.controller;
 import org.example.data.Data;
 import org.example.model.Area;
 import org.example.model.Station;
-import org.example.view.*;
+import org.example.view.AreaSetDistribution;
+import org.example.view.AreaView;
+import org.example.view.LineView;
+import org.example.view.MainWindow;
+import org.example.view.Popup;
+import org.example.view.StationView;
 
 import java.awt.Cursor;
 import java.awt.Point;
@@ -397,7 +402,7 @@ public class MovingAdapter extends MouseAdapter {
    * @param clickedCoordY y click coordinates
    * @return the station we clicked on
    */
-  private StationView getClickedStation(final int clickedCoordX,
+  protected StationView getClickedStation(final int clickedCoordX,
                                         final int clickedCoordY) {
     List<LineView> lineViews = MainWindow.getInstance().getMainPanel()
         .getLineViews();
@@ -425,7 +430,7 @@ public class MovingAdapter extends MouseAdapter {
    * @param clickedCoordY y click coordinates
    * @return the area we clicked on
    */
-  private AreaView getClickedArea(final int clickedCoordX,
+  protected AreaView getClickedArea(final int clickedCoordX,
                                   final int clickedCoordY) {
 
     List<AreaView> areaViews = MainWindow.getInstance().getMainPanel()

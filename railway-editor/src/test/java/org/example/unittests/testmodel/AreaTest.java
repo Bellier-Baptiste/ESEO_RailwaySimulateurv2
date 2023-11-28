@@ -22,10 +22,10 @@
  * SOFTWARE.
  */
 
-package unittests.testmodel;
+package org.example.unittests.testmodel;
 
-import data.Data;
-import model.Area;
+import org.example.data.Data;
+import org.example.model.Area;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -54,18 +54,18 @@ public class AreaTest {
 	@Test
 	public void testSetNewPart() {
 		Area area = new Area(10,10,20,20);
-		area.setNewPart(Data.AREA_TOURIST, 20);
-		area.setNewPart(Data.AREA_STUDENT, 20);
-		area.setNewPart(Data.AREA_BUSINESSMAN, 20);
-		area.setNewPart(Data.AREA_CHILD, 20);
-		area.setNewPart(Data.AREA_WORKER, 60);
+    area.setNewPopulationPart(Data.AREA_TOURIST, 20);
+    area.setNewPopulationPart(Data.AREA_STUDENT, 20);
+    area.setNewPopulationPart(Data.AREA_BUSINESSMAN, 20);
+    area.setNewPopulationPart(Data.AREA_CHILD, 20);
+    area.setNewPopulationPart(Data.AREA_WORKER, 60);
 
-		int touristAmount = area.getDistribution().get(Data.AREA_TOURIST);
-		int studentAmount = area.getDistribution().get(Data.AREA_STUDENT);
-		int businessmannAmount = area.getDistribution().get(Data.AREA_BUSINESSMAN);
-		int childAmount = area.getDistribution().get(Data.AREA_CHILD);
-		int workerAmount = area.getDistribution().get(Data.AREA_WORKER);
-		int unemployedAmount = area.getDistribution().get(Data.AREA_UNEMPLOYED);
+    int touristAmount = area.getDistributionPopulation().get(Data.AREA_TOURIST);
+    int studentAmount = area.getDistributionPopulation().get(Data.AREA_STUDENT);
+    int businessmannAmount = area.getDistributionPopulation().get(Data.AREA_BUSINESSMAN);
+    int childAmount = area.getDistributionPopulation().get(Data.AREA_CHILD);
+    int workerAmount = area.getDistributionPopulation().get(Data.AREA_WORKER);
+    int unemployedAmount = area.getDistributionPopulation().get(Data.AREA_UNEMPLOYED);
 
 		assertEquals(20, touristAmount);
 		assertEquals(20, studentAmount);

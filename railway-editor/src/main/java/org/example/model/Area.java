@@ -24,17 +24,17 @@
 
 package org.example.model;
 
+import java.awt.Point;
 import org.example.data.Data;
-import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.example.view.MainPanel;
 import org.example.view.MainWindow;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 
 /**
  * Model Class to describe an Area.
@@ -60,15 +60,12 @@ public class Area {
   private int width;
   /** Area height. */
   private int height;
-  /** Area distribution. */
-  private HashMap<String, Integer> distribution;
-  /** Area distribution keys. */
-  private List<String> distributionKey;
+  /** Area population distribution. */
+  private HashMap<String, Integer> distributionPopulation;
+  /** Area destination distribution. */
+  private HashMap<String, Integer> distributionDestination;
   /** Area color. */
   private Color color;
-  /** Area destination. */
-  private String destination;
-
   //top left corner
   /** Area top left corner latitude. */
   private double latitudeTop;
@@ -81,7 +78,6 @@ public class Area {
   /** Area bottom right corner longitude. */
   private double longitudeBot;
 
-
   /**
    * Area constructor.
    *
@@ -92,33 +88,40 @@ public class Area {
    */
   public Area(final int areaPosX, final int areaPosY,
               final int areaWidth, final int areaHeight) {
-    super();
     this.posX = areaPosX;
     this.posY = areaPosY;
     this.width = areaWidth;
     this.height = areaHeight;
-    this.distribution = new HashMap<>();
-    this.distributionKey = new ArrayList<>();
-
-    distribution.put(Data.AREA_TOURIST, 0);
-    distribution.put(Data.AREA_STUDENT, 0);
-    distribution.put(Data.AREA_BUSINESSMAN, 0);
-    distribution.put(Data.AREA_WORKER, 0);
-    distribution.put(Data.AREA_CHILD, 0);
-    distribution.put(Data.AREA_RETIRED, 0);
-    distribution.put(Data.AREA_UNEMPLOYED, 0);
-    distributionKey.add(Data.AREA_TOURIST);
-    distributionKey.add(Data.AREA_STUDENT);
-    distributionKey.add(Data.AREA_BUSINESSMAN);
-    distributionKey.add(Data.AREA_WORKER);
-    distributionKey.add(Data.AREA_CHILD);
-    distributionKey.add(Data.AREA_RETIRED);
-    distributionKey.add(Data.AREA_RETIRED);
-    Random rand = new Random();
-    float r = rand.nextFloat();
-    float g = rand.nextFloat();
-    float b = rand.nextFloat();
-    this.color = new Color(r, g, b, AREA_OPACITY);
+    ICoordinate geoPosTopLeft = MainPanel.getInstance().getPosition(this.posX,
+        this.posY);
+    ICoordinate geoPosBotRight = MainPanel.getInstance().getPosition(this.posX
+        + this.width, this.posY + this.height);
+    this.latitudeTop = geoPosTopLeft.getLat();
+    this.longitudeTop = geoPosTopLeft.getLon();
+    this.latitudeBot = geoPosBotRight.getLat();
+    this.longitudeBot = geoPosBotRight.getLon();
+    this.initDistributions();
+    this.initColor();
+  }
+  public Area(final double latitudeTop, final double longitudeTop,
+              final double latitudeBot, final double longitudeBot) {
+    this.initDistributions();
+    this.initColor();
+    this.latitudeBot = latitudeBot;
+    this.latitudeTop = latitudeTop;
+    this.longitudeBot = longitudeBot;
+    this.longitudeTop = longitudeTop;
+    Point posTopLeft = MainPanel.getInstance().getMapPosition(latitudeTop,
+        longitudeTop);
+    Point posBotRight = MainPanel.getInstance().getMapPosition(latitudeBot,
+        longitudeBot);
+    if(posTopLeft == null || posBotRight == null) {
+      return;
+    }
+    this.posX = posTopLeft.x;
+    this.posY = posTopLeft.y;
+    this.width = posBotRight.x - posTopLeft.x;
+    this.height = posBotRight.y - posTopLeft.y;
   }
 
 
@@ -131,7 +134,6 @@ public class Area {
     return id;
   }
 
-
   /**
    * setter of id.
    *
@@ -140,7 +142,6 @@ public class Area {
   public void setId(final int idToSet) {
     this.id = idToSet;
   }
-
 
   /**
    * getter of posX.
@@ -151,7 +152,6 @@ public class Area {
     return posX;
   }
 
-
   /**
    * setter of posX.
    *
@@ -161,7 +161,6 @@ public class Area {
     this.posX = areaPosX;
   }
 
-
   /**
    * getter of posY.
    *
@@ -170,7 +169,6 @@ public class Area {
   public int getPosY() {
     return posY;
   }
-
 
   /**
    * setter of posY.
@@ -223,15 +221,24 @@ public class Area {
 
 
   /**
-   * getter for distribution, the percentage of population type who live in
-   * the area.
+   * getter for distribution, the percentage of population type who live in the
+   * area.
    *
-   * @return hashmap of distribution
+   * @return hashmap of population distribution
    */
-  public Map<String, Integer> getDistribution() {
-    return distribution;
+  public Map<String, Integer> getDistributionPopulation() {
+    return distributionPopulation;
   }
 
+  /**
+   * getter for distribution, the percentage of destination type where people go
+   * to.
+   *
+   * @return hashmap of destination distribution
+   */
+  public Map<String, Integer> getDistributionDestination() {
+    return distributionDestination;
+  }
 
   /**
    * setter for distribution.
@@ -239,7 +246,7 @@ public class Area {
    * @param areaDistribution area distribution hashMap
    */
   public void setDistribution(final Map<String, Integer> areaDistribution) {
-    this.distribution = (HashMap<String, Integer>) areaDistribution;
+    this.distributionPopulation = (HashMap<String, Integer>) areaDistribution;
   }
 
 
@@ -262,45 +269,6 @@ public class Area {
     this.color = areaColor;
   }
 
-
-  /**
-   * get the keys of th distribution hashmap (names of population types).
-   *
-   * @return String list of  distributionKeys
-   */
-  public List<String> getDistributionKey() {
-    return distributionKey;
-  }
-
-
-  /**
-   * setter for distributionKey.
-   *
-   * @param areaDistributionKey area keys of population types list
-   */
-  public void setDistributionKey(final List<String> areaDistributionKey) {
-    this.distributionKey = areaDistributionKey;
-  }
-
-  /**
-   * get the destination of the area.
-   *
-   * @return destination
-   */
-  public String getDestination() {
-    return this.destination;
-  }
-
-  /**
-   * setter for the destination area.
-   *
-   * @param areaDestination area main destination
-   */
-  public void setDestination(final String areaDestination) {
-    this.destination = areaDestination;
-  }
-
-
   /**
    * get latitude of the top left corner.
    *
@@ -309,7 +277,6 @@ public class Area {
   public double getLatitudeTop() {
     return latitudeTop;
   }
-
 
   /**
    * set latitude of the top left corner.
@@ -320,7 +287,6 @@ public class Area {
     this.latitudeTop = areaLatitudeTop;
   }
 
-
   /**
    * get longitude of the top left corner.
    *
@@ -330,7 +296,6 @@ public class Area {
     return longitudeTop;
   }
 
-
   /**
    * set longitude of the top left corner.
    *
@@ -339,7 +304,6 @@ public class Area {
   public void setLongitudeTop(final double areaLongitudeTop) {
     this.longitudeTop = areaLongitudeTop;
   }
-
 
   /**
    * get latitude of the bottom right corner.
@@ -360,7 +324,6 @@ public class Area {
     this.latitudeBot = areaLatitudeBot;
   }
 
-
   /**
    * get longitude of the bottom right corner.
    *
@@ -369,7 +332,6 @@ public class Area {
   public double getLongitudeBot() {
     return longitudeBot;
   }
-
 
   /**
    * Set longitude of the bottom right corner.
@@ -380,29 +342,27 @@ public class Area {
     this.longitudeBot = areaLongitudeBot;
   }
 
-
   /**
-   * Update a distribution value and check if the total is under 100 percent.
+   * Update the population distribution value and check if the total is under
+   * 100 percent.
    *
    * @param key  population type key to update
    * @param part new percentage
    */
-  public void setNewPart(final String key, final int part) {
-    int total = 0;
-    int checkedPart;
-    for (String key2 : distributionKey) {
-      if (!Objects.equals(key2, key)) {
-        total += distribution.get(key2);
-      }
-    }
-    if (total + part > ONE_HUNDRED) {
-      checkedPart = ONE_HUNDRED - total;
-    } else {
-      checkedPart = part;
-    }
-    distribution.put(key, checkedPart);
+  public void setNewPopulationPart(final String key, final int part) {
+    this.distributionPopulation.put(key, part);
   }
 
+  /**
+   * Update the destination distribution value and check if the total is under
+   * 100 percent.
+   *
+   * @param key  destination type key to update
+   * @param part new percentage
+   */
+  public void setNewDestinationPart(final String key, final int part) {
+    this.distributionDestination.put(key, part);
+  }
 
   /**
    * same as setNewPart but dont check if the total is under 100 percent.
@@ -411,7 +371,37 @@ public class Area {
    * @param part new percentage
    */
   public void addNewPart(final String key, final int part) {
-    distribution.put(key, part);
+    distributionPopulation.put(key, part);
+  }
+
+  private void initDistributions() {
+    this.distributionPopulation = new HashMap<>();
+
+    distributionPopulation.put(Data.AREA_TOURIST, 0);
+    distributionPopulation.put(Data.AREA_STUDENT, 0);
+    distributionPopulation.put(Data.AREA_BUSINESSMAN, 0);
+    distributionPopulation.put(Data.AREA_WORKER, 0);
+    distributionPopulation.put(Data.AREA_CHILD, 0);
+    distributionPopulation.put(Data.AREA_RETIRED, 0);
+    distributionPopulation.put(Data.AREA_UNEMPLOYED, 0);
+
+    this.distributionDestination = new HashMap<>();
+
+    distributionDestination.put(Data.AREA_RESIDENTIAL, 0);
+    distributionDestination.put(Data.AREA_COMMERCIAL, 0);
+    distributionDestination.put(Data.AREA_OFFICE, 0);
+    distributionDestination.put(Data.AREA_INDUSTRIAL, 0);
+    distributionDestination.put(Data.AREA_TOURISTIC, 0);
+    distributionDestination.put(Data.AREA_LEISURE, 0);
+    distributionDestination.put(Data.AREA_EDUCATIONAL, 0);
+  }
+
+  private void initColor() {
+    Random rand = new Random();
+    float r = rand.nextFloat();
+    float g = rand.nextFloat();
+    float b = rand.nextFloat();
+    this.color = new Color(r, g, b, AREA_OPACITY);
   }
 
   /**
@@ -479,6 +469,4 @@ public class Area {
   public void extendBotSide(final int dy) {
     this.setHeight(this.height + dy);
   }
-
-
 }
