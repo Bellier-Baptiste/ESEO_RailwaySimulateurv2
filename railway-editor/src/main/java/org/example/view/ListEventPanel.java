@@ -75,106 +75,192 @@ import java.util.Properties;
  */
 public final class ListEventPanel extends JPanel {
   // constants
-  /** Serial version UID. */
+  /**
+   * Serial version UID.
+   */
   private static final long serialVersionUID = 1L;
-  /** Scroll pane width. */
+  /**
+   * Scroll pane width.
+   */
   private static final int SCROLL_PANE_WIDTH = 500;
-  /** Scroll pane height. */
+  /**
+   * Scroll pane height.
+   */
   private static final int SCROLL_PANE_HEIGHT = 500;
-  /** Table width. */
+  /**
+   * Table width.
+   */
   private static final int TABLE_WIDTH = 600;
-  /** Table height. */
+  /**
+   * Table height.
+   */
   private static final int TABLE_HEIGHT = 100;
-  /** Table type column max width. */
+  /**
+   * Table type column max width.
+   */
   private static final int TABLE_TYPE_COLUMN_MAX_WIDTH = 50;
-  /** Table event description column min width. */
+  /**
+   * Table event description column min width.
+   */
   private static final int TABLE_EVENT_DESCRIPTION_COLUMN_MIN_WIDTH = 200;
-  /** GridBagConstraints x position. */
+  /**
+   * GridBagConstraints x position.
+   */
   private static final int GRID_X_POSITION = 0;
-  /** GridBagConstraints width. */
+  /**
+   * GridBagConstraints width.
+   */
   private static final int GRID_WIDTH = 2;
-  /** GridBagConstraints weight. */
+  /**
+   * GridBagConstraints weight.
+   */
   private static final double GRID_WEIGHT = 0.1;
-  /** GridBagConstraints y position. */
+  /**
+   * GridBagConstraints y position.
+   */
   private static final int GRID_Y_POSITION = 10;
-  /** properties text today. */
+  /**
+   * properties text today.
+   */
   public static final String PROPERTIES_TEXT_TODAY = "text.today";
-  /** properties text today value. */
+  /**
+   * properties text today value.
+   */
   public static final String PROPERTIES_TEXT_TODAY_VALUE = "Today";
-  /** properties text month. */
+  /**
+   * properties text month.
+   */
   public static final String PROPERTIES_TEXT_MONTH = "text.month";
-  /** properties text month value. */
+  /**
+   * properties text month value.
+   */
   public static final String PROPERTIES_TEXT_MONTH_VALUE = "Month";
-  /** properties text year. */
+  /**
+   * properties text year.
+   */
   public static final String PROPERTIES_TEXT_YEAR = "text.year";
-  /** properties text year value. */
+  /**
+   * properties text year value.
+   */
   public static final String PROPERTIES_TEXT_YEAR_VALUE = "Year";
-  /** properties text select start time. */
+  /**
+   * properties text select start time.
+   */
   public static final String START_TIME = "Start Time: ";
-  /** properties text select end time. */
+  /**
+   * properties text select end time.
+   */
   public static final String END_TIME = "End Time: ";
-  /** how to format date in the date picker. */
+  /**
+   * how to format date in the date picker.
+   */
   public static final String FORMAT_DATE = "yyyy/MM/dd";
-  /** how to format time in the date picker. */
+  /**
+   * how to format time in the date picker.
+   */
   public static final String FORMAT_TIME = "HH:mm";
-  /** selection png path. */
+  /**
+   * selection png path.
+   */
   @SuppressWarnings("squid:S1075")
   public static final String SELECTION_PNG_PATH = "/images/selection.png";
-  /** list event panel column names. */
+  /**
+   * list event panel column names.
+   */
   private static final String[] COLUMN_NAMES = {"Event Name", "Type",
       "Event Description"};
-  /** Select station icon button width. */
+  /**
+   * Select station icon button width.
+   */
   private static final int SELECT_STATION_ICON_BTN_WIDTH = 15;
-  /** Select station icon button height. */
+  /**
+   * Select station icon button height.
+   */
   private static final int SELECT_STATION_ICON_BTN_HEIGHT = 15;
-  /** Select station button width. */
+  /**
+   * Select station button width.
+   */
   private static final int SELECT_STATION_BTN_WIDTH = 50;
-  /** Select station button height. */
+  /**
+   * Select station button height.
+   */
   private static final int SELECT_STATION_BTN_HEIGHT = 20;
-  /** list event panel table data. */
+  /**
+   * list event panel table data.
+   */
   private static final Object[][] TABLE_DATA = {
-    {"LineDelayed", "Line", "configure a delay between 2 stations of a line"},
-    {"StationClosed", "Station", "close a station"},
-    {"LineClosed", "Line", "close an entire line of the map"},
-    {"AttendancePeak", "Station", "configure a big raise of population on a"
-        + " defined station"},
-    {"TrainHour", "Line", "configure a new train flow on a line"}};
-  /** Singleton instance. */
+      {"LineDelayed", "Line", "configure a delay between 2 stations of a line"},
+      {"StationClosed", "Station", "close a station"},
+      {"LineClosed", "Line", "close an entire line of the map"},
+      {"AttendancePeak", "Station", "configure a big raise of population on a"
+          + " defined station"},
+      {"TrainHour", "Line", "configure a new train flow on a line"}};
+  /**
+   * Singleton instance.
+   */
   private static ListEventPanel instance;
-  /** view panel. */
+  /**
+   * view panel.
+   */
   private final JPanel view;
-  /** event config panel. */
+  /**
+   * event config panel.
+   */
   private final JScrollPane eventConfig;
 
   // event attribute
-  /** date picker start. */
+  /**
+   * date picker start.
+   */
   private JDatePickerImpl datePickerStart;
-  /** date picker end. */
+  /**
+   * date picker end.
+   */
   private JDatePickerImpl datePickerEnd;
-  /** clock panel start. */
+  /**
+   * clock panel start.
+   */
   private ClockPanel clockPanelStart;
-  /** clock panel end. */
+  /**
+   * clock panel end.
+   */
   private ClockPanel clockPanelEnd;
   // eventLineDelayAttribute
-  /** clock panel delay. */
+  /**
+   * clock panel delay.
+   */
   private ClockPanel clockPanelDelay;
-  /** edit line selected text field. */
+  /**
+   * edit line selected text field.
+   */
   private JTextField editLineSelected;
-  /** edit station start text field. */
+  /**
+   * edit station start text field.
+   */
   private JTextField editStationStart;
-  /** edit station end text field. */
+  /**
+   * edit station end text field.
+   */
   private JTextField editStationEnd;
 
   //eventAttendancePeakAttribute
-  /** edit station concerned text field. */
+  /**
+   * edit station concerned text field.
+   */
   private JTextField editStationConcerned;
-  /** edit peak number text field. */
+  /**
+   * edit peak number text field.
+   */
   private JTextField editPeakNumber;
-  /** edit station closed concerned text field. */
+  /**
+   * edit station closed concerned text field.
+   */
 
   //eventStationClosedAttribute
   private JTextField editStationClosedConcerned;
-  /** edit train number text field. */
+  /**
+   * edit train number text field.
+   */
   //eventTrainHour
   private JTextField editTrainNumber;
 
@@ -253,7 +339,8 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addLineDelay());
+                  ActionMetroEvent.getInstance().addLineDelay(ListEventPanel
+                      .getInstance().eventLineDelayToString()));
               view.add(confirmEventBtn, c);
               break;
             case "LineClosed":
@@ -264,7 +351,8 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addLineClosed());
+                  ActionMetroEvent.getInstance().addLineClosed(ListEventPanel
+                      .getInstance().eventLineClosedToString()));
               view.add(confirmEventBtn, c);
               break;
             case "AttendancePeak":
@@ -275,7 +363,9 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WIDTH;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addAttendancePeak());
+                  ActionMetroEvent.getInstance().addAttendancePeak(
+                      ListEventPanel.getInstance()
+                          .eventAttendancePeakToString()));
               view.add(confirmEventBtn, c);
               break;
             case "TrainHour":
@@ -286,7 +376,8 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addTrainHour());
+                  ActionMetroEvent.getInstance().addTrainHour(ListEventPanel
+                      .getInstance().eventTrainHourToString()));
               view.add(confirmEventBtn, c);
               break;
             case "StationClosed":
@@ -297,7 +388,8 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addStationClosed());
+                  ActionMetroEvent.getInstance().addStationClosed(ListEventPanel
+                      .getInstance().eventStationClosedToString()));
               view.add(confirmEventBtn, c);
               break;
             default:
@@ -472,7 +564,6 @@ public final class ListEventPanel extends JPanel {
   private void initLineClosed(final GridBagConstraints c) {
     JLabel timeStart = new JLabel(START_TIME);
     JLabel timeEnd = new JLabel(END_TIME);
-
 
 
     Properties p = new Properties();
@@ -749,7 +840,6 @@ public final class ListEventPanel extends JPanel {
     JLabel timeEnd = new JLabel(END_TIME);
 
 
-
     Properties p = new Properties();
     p.put(PROPERTIES_TEXT_TODAY, PROPERTIES_TEXT_TODAY_VALUE);
     p.put(PROPERTIES_TEXT_MONTH, PROPERTIES_TEXT_MONTH_VALUE);
@@ -942,19 +1032,27 @@ public final class ListEventPanel extends JPanel {
      * serial version UID.
      */
     private static final long serialVersionUID = 1L;
-    /** The date pattern. */
+    /**
+     * The date pattern.
+     */
     private static final String DATE_PATTERN = "yyyy-MM-dd";
-    /** The date formatter. */
+    /**
+     * The date formatter.
+     */
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat(
         DATE_PATTERN);
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Object stringToValue(final String text) throws ParseException {
       return dateFormatter.parseObject(text);
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String valueToString(final Object value) {
       if (value != null) {
@@ -986,7 +1084,7 @@ public final class ListEventPanel extends JPanel {
     String delay = dfTime.format(clockPanelDelay.getTimeSpinner().getValue());
 
     return dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
-      + stationStart + "," + stationEnd + "," + delay;
+        + stationStart + "," + stationEnd + "," + delay;
   }
 
   /**
@@ -1006,7 +1104,7 @@ public final class ListEventPanel extends JPanel {
     String stationStart = editStationStart.getText();
     String stationEnd = editStationEnd.getText();
     return dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
-      + stationStart + "," + stationEnd;
+        + stationStart + "," + stationEnd;
   }
 
   /**
@@ -1028,7 +1126,7 @@ public final class ListEventPanel extends JPanel {
     String peakNb = editPeakNumber.getText();
 
     return dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
-      + stationConcerned + "," + peakNb;
+        + stationConcerned + "," + peakNb;
   }
 
   /**
@@ -1048,7 +1146,7 @@ public final class ListEventPanel extends JPanel {
     String stationConcerned = editStationConcerned.getText();
 
     return dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
-      + stationConcerned;
+        + stationConcerned;
   }
 
   /**
@@ -1065,7 +1163,7 @@ public final class ListEventPanel extends JPanel {
     String trainNumer = editTrainNumber.getText();
 
     return timeStart + "," + timeEnd + "," + lineSelected + ","
-      + trainNumer;
+        + trainNumer;
   }
 
   /**

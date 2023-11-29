@@ -54,8 +54,7 @@ public class EventHour extends Event {
    */
   public EventHour(final int id, final String startTime, final String endTime,
                    final EventType type) {
-    super(id, startTime, endTime, type);
-    super.setEventName(EventName.TRAIN_HOUR);
+    super(id, startTime, endTime, type, EventName.TRAIN_HOUR);
   }
 
   /**

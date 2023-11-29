@@ -106,6 +106,18 @@ public class ActionFile {
    */
   private static final int ALPHABET_SIZE = 26;
   /**
+   * End of time string.
+   */
+  private static final String END_TIME_STRING = ":00.000Z";
+  /**
+   * Station id start xml marker.
+   */
+  private static final String STATION_ID_START = "stationIdStart";
+  /**
+   * Station id end xml marker.
+   */
+  private static final String STATION_ID_END = "stationIdEnd";
+  /**
    * Singleton instance.
    */
   private static ActionFile instance;
@@ -216,12 +228,12 @@ public class ActionFile {
       String timeStart = event.getStartTime();
       timeStart = timeStart.replace("-", "T");
       timeStart = timeStart.replace("/", "-");
-      timeStart = timeStart + ":00.000Z";
+      timeStart = timeStart + END_TIME_STRING;
 
       String timeEnd = event.getEndTime();
       timeEnd = timeEnd.replace("-", "T");
       timeEnd = timeEnd.replace("/", "-");
-      timeEnd = timeEnd + ":00.000Z";
+      timeEnd = timeEnd + END_TIME_STRING;
 
       Element eventName = document.createElement(event.getEventName()
           .getString());
@@ -238,13 +250,13 @@ public class ActionFile {
         case "lineDelay":
           EventLineDelay eventLineDelay = (EventLineDelay) event;
 
-          Element stationStart = document.createElement("stationIdStart");
+          Element stationStart = document.createElement(STATION_ID_START);
           stationStart
               .appendChild(document.createTextNode(Integer.toString(
                   eventLineDelay.getIdStationStart())));
           eventName.appendChild(stationStart);
 
-          Element stationEnd = document.createElement("stationIdEnd");
+          Element stationEnd = document.createElement(STATION_ID_END);
           stationEnd.appendChild(document.createTextNode(Integer.toString(
               eventLineDelay.getIdStationEnd())));
           eventName.appendChild(stationEnd);
@@ -258,13 +270,13 @@ public class ActionFile {
         case "lineClosed":
           EventLineClosed eventLineClosed = (EventLineClosed) event;
 
-          Element stationStartClosed = document.createElement("stationIdStart");
+          Element stationStartClosed = document.createElement(STATION_ID_START);
           stationStartClosed.appendChild(
               document.createTextNode(Integer.toString(eventLineClosed
                   .getIdStationStart())));
           eventName.appendChild(stationStartClosed);
 
-          Element stationEndClosed = document.createElement("stationIdEnd");
+          Element stationEndClosed = document.createElement(STATION_ID_END);
           stationEndClosed
               .appendChild(document.createTextNode(Integer.toString(
                   eventLineClosed.getIdStationEnd())));
@@ -364,7 +376,7 @@ public class ActionFile {
    *
    * @param document the document to add the distributions
    * @param areaView the area view, null if it's for a station
-   * @param element the element to add the distributions
+   * @param element  the element to add the distributions
    */
   private void exportDistributions(final Document document,
                                    final AreaView areaView,
@@ -419,7 +431,7 @@ public class ActionFile {
           .toLowerCase());
       if (areaView != null) {
         attr.setValue(Integer.toString(areaView.getArea()
-                .getDistributionDestination()
+            .getDistributionDestination()
             .get(distributionDestinationElement)));
       } else {
         attr.setValue(String.valueOf(Area.getDefaultDestinationDistribution(
@@ -613,15 +625,11 @@ public class ActionFile {
       NodeList linesList = doc.getElementsByTagName(LINES);
       HashMap<Integer, String[]> linesMatchStations = new HashMap<>();
       Node nthNodeL = linesList.item(linesList.getLength() - 1);
-      List<Area> areasToLoad = new ArrayList<>();
 
       this.readStationsSection(stationsToLoad, linesId, doc);
       this.readLinesSection(linesMatchStations, nthNodeL);
-      this.readAreasSection(doc, areasToLoad);
-      this.readEventsSection(doc);
 
       List<Line> lineModelList = new ArrayList<>();
-
       if (!linesId.isEmpty()) {
         int linesNumber = Collections.max(linesId) + 1;
         for (int i = 0; i < linesNumber; i++) {
@@ -629,10 +637,8 @@ public class ActionFile {
           lineModelList.add(line);
         }
       }
-
       this.addStationsToLines(stationsToLoad, linesMatchStations,
           lineModelList);
-
       for (Line line : lineModelList) {
         List<StationView> stationsViews = new ArrayList<>();
         for (Station station : line.getStations()) {
@@ -641,9 +647,15 @@ public class ActionFile {
         LineView lineView = new LineView(line, stationsViews);
         MainWindow.getInstance().getMainPanel().addLineView(lineView);
       }
+
+      List<Area> areasToLoad = new ArrayList<>();
+      this.readAreasSection(doc, areasToLoad);
       for (Area area : areasToLoad) {
         MainWindow.getInstance().getMainPanel().addAreaView(new AreaView(area));
       }
+
+      this.readEventsSection(doc);
+
     } catch (ParserConfigurationException | SAXException | IOException e) {
       e.printStackTrace();
     }
@@ -683,27 +695,72 @@ public class ActionFile {
       Node childNode = childList.item(j);
       if (childNode.getNodeType() == Node.ELEMENT_NODE) {
         Element eventElement = (Element) childNode;
+        String startTime = eventElement.getElementsByTagName("start")
+            .item(0).getTextContent();
+        String endTime = eventElement.getElementsByTagName("end")
+            .item(0).getTextContent();
+        String[] startTimeSplit = this.formatDate(startTime);
+        String[] endTimeSplit = this.formatDate(endTime);
         switch (eventElement.getTagName()) {
           case "lineDelay":
-            ActionMetroEvent.getInstance().addLineDelay();
+            ActionMetroEvent.getInstance().addLineDelay(
+                startTimeSplit[0] + "," + startTimeSplit[1] + ","
+                    + endTimeSplit[0] + "," + endTimeSplit[1] + ","
+                    + eventElement.getElementsByTagName(STATION_ID_START)
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName(STATION_ID_END)
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName("delay")
+                    .item(0).getTextContent()
+            );
             break;
           case "lineClosed":
-            ActionMetroEvent.getInstance().addLineClosed();
+            ActionMetroEvent.getInstance().addLineClosed(startTimeSplit[0]
+                + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
+                + endTimeSplit[1] + "," + eventElement.getElementsByTagName(
+                    STATION_ID_START).item(0).getTextContent() + ","
+                + eventElement.getElementsByTagName(STATION_ID_END).item(0)
+                    .getTextContent());
             break;
           case "attendancePeak":
-            ActionMetroEvent.getInstance().addAttendancePeak();
+            ActionMetroEvent.getInstance().addAttendancePeak(
+                startTimeSplit[0] + "," + startTimeSplit[1] + ","
+                    + endTimeSplit[0] + "," + endTimeSplit[1] + ","
+                    + eventElement.getElementsByTagName("stationId")
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName("size")
+                    .item(0).getTextContent()
+            );
             break;
           case "stationClosed":
-            ActionMetroEvent.getInstance().addStationClosed();
+            ActionMetroEvent.getInstance().addStationClosed(startTimeSplit[0]
+                + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
+                + endTimeSplit[1] + "," + eventElement.getElementsByTagName(
+                    "idStation").item(0).getTextContent()
+            );
             break;
           case "hour":
-            ActionMetroEvent.getInstance().addTrainHour();
+            String startHour = startTime.replace(END_TIME_STRING, "");
+            String endHour = endTime.replace(END_TIME_STRING, "");
+            ActionMetroEvent.getInstance().addTrainHour(startHour + ","
+                + endHour + "," + eventElement.getElementsByTagName("idLine")
+                .item(0).getTextContent() + ","
+                + eventElement.getElementsByTagName("trainNumber").item(0)
+                    .getTextContent());
             break;
           default:
             break;
         }
       }
     }
+  }
+
+  private String[] formatDate(final String date) {
+    String result = date;
+    result = result.replace(END_TIME_STRING, "");
+    result = result.replace("-", "/");
+    result = result.replace("T", "-");
+    return result.split("-");
   }
 
   /**
@@ -871,7 +928,7 @@ public class ActionFile {
    * @param nthNodeL           the node to read
    */
   public void readLinesSection(final Map<Integer, String[]> linesMatchStations,
-                                     final Node nthNodeL) {
+                               final Node nthNodeL) {
     if (nthNodeL.getNodeType() == Node.ELEMENT_NODE) {
       Element linesElement = (Element) nthNodeL;
       NodeList lineList = linesElement.getElementsByTagName("line");
