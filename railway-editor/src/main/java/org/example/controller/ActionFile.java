@@ -38,6 +38,8 @@ import org.example.view.AreaView;
 import org.example.view.LineView;
 import org.example.view.MainWindow;
 import org.example.view.StationView;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -118,6 +120,14 @@ public class ActionFile {
    */
   private static final String STATION_ID_END = "stationIdEnd";
   /**
+   * Longitude marker.
+   */
+  private static final String LONGITUDE = "longitude";
+  /**
+   * Latitude marker.
+   */
+  private static final String LATITUDE = "latitude";
+  /**
    * Singleton instance.
    */
   private static ActionFile instance;
@@ -183,6 +193,23 @@ public class ActionFile {
       // root element
       Element root = document.createElement("map");
       document.appendChild(root);
+
+      ICoordinate centerCoordinate =
+          MainWindow.getInstance().getMainPanel().getPosition();
+      Element zoom = document.createElement("zoom");
+      zoom.appendChild(document.createTextNode(Integer.toString(
+          MainWindow.getInstance().getMainPanel().getZoom())));
+      Element latitude = document.createElement(LATITUDE);
+      latitude.appendChild(document.createTextNode(Double.toString(
+          centerCoordinate.getLat())));
+      Element longitude = document.createElement(LONGITUDE);
+      longitude.appendChild(document.createTextNode(Double.toString(
+          centerCoordinate.getLon())));
+      Element location = document.createElement("location");
+      location.appendChild(latitude);
+      location.appendChild(longitude);
+      location.appendChild(zoom);
+      root.appendChild(location);
 
       this.exportStations(document, root);
       this.exportLines(document, root);
@@ -535,14 +562,14 @@ public class ActionFile {
           station.appendChild(position);
 
           // position latitude element
-          Element latitude = document.createElement("latitude");
+          Element latitude = document.createElement(LATITUDE);
           double latitudeValue = stationView.getStation().getLatitude();
           latitude.appendChild(document.createTextNode(Double.toString(
               latitudeValue)));
           position.appendChild(latitude);
 
           // position longitude element
-          Element longitude = document.createElement("longitude");
+          Element longitude = document.createElement(LONGITUDE);
           double longitudeValue = stationView.getStation().getLongitude();
           longitude.appendChild(document.createTextNode(Double.toString(
               longitudeValue)));
@@ -620,6 +647,27 @@ public class ActionFile {
       dbFactory.setExpandEntityReferences(false);
       DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
       Document doc = docBuilder.parse(fileToLoad);
+      // Get location
+      NodeList location = doc.getElementsByTagName("location");
+      Node nthNodeLocation = location.item(0);
+      if (nthNodeLocation != null && nthNodeLocation.getNodeType()
+          == Node.ELEMENT_NODE) {
+        Element locationElement = (Element) nthNodeLocation;
+        Element latitude = (Element) locationElement.getElementsByTagName(
+            LATITUDE).item(0);
+        Element longitude = (Element) locationElement.getElementsByTagName(
+            LONGITUDE).item(0);
+        Element zoom = (Element) locationElement.getElementsByTagName("zoom")
+            .item(0);
+        ICoordinate coordinate = new Coordinate(
+            Double.parseDouble(latitude.getTextContent()),
+            Double.parseDouble(longitude.getTextContent()));
+        MainWindow.getInstance().getMainPanel().setDisplayPosition(coordinate,
+            Integer.parseInt(zoom.getTextContent()));
+        MainWindow.getInstance().getMainPanel().setZoom(Integer.parseInt(
+            zoom.getTextContent()));
+      }
+
       List<Station> stationsToLoad = new ArrayList<>();
       List<Integer> linesId = new ArrayList<>();
       NodeList linesList = doc.getElementsByTagName(LINES);
@@ -901,9 +949,9 @@ public class ActionFile {
               .item(0).getTextContent();
           Element positions = (Element) stationElement
               .getElementsByTagName(POSITION).item(0);
-          String latitude = positions.getElementsByTagName("latitude")
+          String latitude = positions.getElementsByTagName(LATITUDE)
               .item(0).getTextContent();
-          String longitude = positions.getElementsByTagName("longitude")
+          String longitude = positions.getElementsByTagName(LONGITUDE)
               .item(0).getTextContent();
           Element lines = (Element) stationElement.getElementsByTagName(LINES)
               .item(0);
