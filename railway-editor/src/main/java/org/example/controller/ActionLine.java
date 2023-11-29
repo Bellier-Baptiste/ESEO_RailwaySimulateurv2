@@ -111,8 +111,7 @@ public final class ActionLine {
     @SuppressWarnings("unused")
     LineController lineController = new LineController(lineview);
     MainWindow.getInstance().getToolBarPanel().getLineId().setText(
-        Integer.toString(lineIndex)); // change line id
-    // displayed in the
+        Integer.toString(lineIndex)); // change line id displayed in the
     // toolBar Panel
     MainWindow.getInstance().getMainPanel().repaint();
   }

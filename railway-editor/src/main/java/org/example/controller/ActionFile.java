@@ -56,7 +56,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -456,8 +455,7 @@ public class ActionFile {
 
       // line name element
       Element name = document.createElement("name");
-      name.appendChild(document.createTextNode(ActionFile.toAlphabetic(lineView
-          .getLine().getId())));
+      name.appendChild(document.createTextNode(lineView.getLine().getName()));
       line.appendChild(name);
 
       // line number of train element
@@ -798,7 +796,7 @@ public class ActionFile {
               residentialAmount));
           area.setNewDestinationPart(Data.AREA_INDUSTRIAL, Integer.parseInt(
               industrialAmount));
-          
+
           areasToLoad.add(area);
         }
       }
@@ -855,16 +853,11 @@ public class ActionFile {
           Element line = (Element) lines.getElementsByTagName("line")
               .item(0);
           String lineId = line.getAttribute("id");
-          Point pos = MainWindow.getInstance().getMainPanel()
-              .getMapPosition(Double.parseDouble(latitude),
-                  Double.parseDouble(longitude), false);
-          int stationPosX = (int) pos.getX();
 
-          int stationPosY = (int) pos.getY();
-
-
-          stationsToLoad.add(new Station(Integer.parseInt(id), stationPosX,
-              stationPosY, name));
+          Station station = new Station(Integer.parseInt(id),
+              Double.parseDouble(latitude), Double.parseDouble(longitude),
+              name);
+          stationsToLoad.add(station);
           linesId.add(Integer.valueOf(lineId));
         }
       }
@@ -878,7 +871,7 @@ public class ActionFile {
    * @param nthNodeL           the node to read
    */
   public void readLinesSection(final Map<Integer, String[]> linesMatchStations,
-                               final Node nthNodeL) {
+                                     final Node nthNodeL) {
     if (nthNodeL.getNodeType() == Node.ELEMENT_NODE) {
       Element linesElement = (Element) nthNodeL;
       NodeList lineList = linesElement.getElementsByTagName("line");
@@ -892,6 +885,7 @@ public class ActionFile {
           Element stations = (Element) lineElement
               .getElementsByTagName(STATIONS).item(0);
           NodeList stationL = stations.getElementsByTagName(STATION);
+
           for (int j = 0; j < stationL.getLength(); j++) {
             Node nodeS = stationL.item(j);
             if (nodeS.getNodeType() == Node.ELEMENT_NODE) {

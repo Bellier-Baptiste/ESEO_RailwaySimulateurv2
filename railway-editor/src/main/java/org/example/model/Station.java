@@ -25,8 +25,12 @@
 package org.example.model;
 
 import org.example.data.Data;
+import org.example.view.MainPanel;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.example.view.MainWindow;
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
+
+import java.awt.Point;
 
 /**
  * Model class to describe a station.
@@ -80,6 +84,25 @@ public class Station {
     this.posX = stationPosX;
     this.posY = stationPosY;
     this.name = stationName;
+    ICoordinate latLon = MainWindow.getInstance().getMainPanel()
+        .getPosition(this.posX, this.posY);
+    this.latitude = latLon.getLat();
+    this.longitude = latLon.getLon();
+  }
+
+  public Station(final int stationId, final double latitude,
+                 final double longitude, final String stationName) {
+    super();
+    this.id = stationId;
+    this.latitude = latitude;
+    this.longitude = longitude;
+    this.name = stationName;
+    Point stationPosition = MainPanel.getInstance().getMapPosition(latitude,
+        longitude);
+    if (stationPosition != null) {
+      this.posX = stationPosition.x;
+      this.posY = stationPosition.y;
+    }
   }
 
   //accessors
