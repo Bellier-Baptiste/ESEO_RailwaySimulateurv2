@@ -728,20 +728,8 @@ public class ActionFile {
           Element areaElement = (Element) nthNodeA2;
           Element populationDistribution = (Element) areaElement
               .getElementsByTagName("populationDistribution").item(0);
-
-          // format number
-          String touristAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_TOURIST));
-          String studentAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_STUDENT));
-          String businessManAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_BUSINESSMAN));
-          String childAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_CHILD));
-          String retiredAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_RETIRED));
-          String unemployedAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_UNEMPLOYED));
+          Element destinationDistribution = (Element) areaElement
+              .getElementsByTagName("destinationDistribution").item(0);
           Element positions = (Element) areaElement.getElementsByTagName(
               POSITION).item(0);
           String latitudeTop = positions.getAttribute("latitudeTop");
@@ -751,6 +739,21 @@ public class ActionFile {
           Area area = new Area(Double.parseDouble(latitudeTop),
               Double.parseDouble(longitudeTop), Double.parseDouble(latitudeBot),
               Double.parseDouble(longitudeBot));
+          // format number
+          String touristAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_TOURIST.toLowerCase()));
+          String studentAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_STUDENT.toLowerCase()));
+          String businessManAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_BUSINESSMAN.toLowerCase()));
+          String childAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_CHILD.toLowerCase()));
+          String retiredAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_RETIRED.toLowerCase()));
+          String unemployedAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_UNEMPLOYED.toLowerCase()));
+          String workerAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_WORKER.toLowerCase()));
           area.setNewPopulationPart(Data.AREA_TOURIST, Integer.parseInt(
               touristAmount));
           area.setNewPopulationPart(Data.AREA_STUDENT, Integer.parseInt(
@@ -763,6 +766,39 @@ public class ActionFile {
               retiredAmount));
           area.setNewPopulationPart(Data.AREA_UNEMPLOYED,
               Integer.parseInt(unemployedAmount));
+          area.setNewPopulationPart(Data.AREA_WORKER, Integer.parseInt(
+              workerAmount));
+
+          // format number
+          String touristicAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_TOURISTIC.toLowerCase()));
+          String educationalAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_EDUCATIONAL.toLowerCase()));
+          String officeAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_OFFICE.toLowerCase()));
+          String leisureAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_LEISURE.toLowerCase()));
+          String commercialAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_COMMERCIAL.toLowerCase()));
+          String residentialAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_RESIDENTIAL.toLowerCase()));
+          String industrialAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_INDUSTRIAL.toLowerCase()));
+          area.setNewDestinationPart(Data.AREA_TOURISTIC, Integer.parseInt(
+              touristicAmount));
+          area.setNewDestinationPart(Data.AREA_EDUCATIONAL, Integer.parseInt(
+              educationalAmount));
+          area.setNewDestinationPart(Data.AREA_OFFICE, Integer.parseInt(
+              officeAmount));
+          area.setNewDestinationPart(Data.AREA_LEISURE, Integer.parseInt(
+              leisureAmount));
+          area.setNewDestinationPart(Data.AREA_COMMERCIAL, Integer.parseInt(
+              commercialAmount));
+          area.setNewDestinationPart(Data.AREA_RESIDENTIAL, Integer.parseInt(
+              residentialAmount));
+          area.setNewDestinationPart(Data.AREA_INDUSTRIAL, Integer.parseInt(
+              industrialAmount));
+          
           areasToLoad.add(area);
         }
       }
