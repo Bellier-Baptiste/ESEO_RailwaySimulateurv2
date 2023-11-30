@@ -42,10 +42,15 @@ import (
 )
 
 const (
+	// ADL ==> Adult
 	ADL = iota // 0
+	// STD ==> Student
 	STD = iota // 1
+	// DIS ==> Disabled
 	DIS = iota // 2
+	// CHD ==> Children
 	CHD = iota // 3
+	// SEN ==> Senior
 	SEN = iota // 4
 )
 

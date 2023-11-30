@@ -37,6 +37,7 @@ SOFTWARE.
 package models
 
 import (
+	"fmt"
 	"log"
 	"math"
 	"math/rand"
@@ -621,8 +622,8 @@ Param :
   - aTime time.Time : the time of the transfer
 */
 func (p *Population) transferFromStationToPopulation(passenger *Passenger,
-	stationPt *MetroStation, aTime time.Time) {
-	info := prepareCSVline(*passenger, stationPt, aTime, "USE")
+	stationPt *MetroStation, aTime time.Time, typeTicket string) {
+	info := prepareCSVline(*passenger, stationPt, aTime, typeTicket)
 	p.output.Write(info)
 	p.outside[passenger.Id()] = passenger
 	delete(p.inStation[stationPt.Id()], passenger.Id())
@@ -765,7 +766,8 @@ func (p *Population) UpdateStationToOutside(aTime time.Time,
 				p.maxTimeInStationPassenger).Before(aTime) {
 			//TODO account for time in station --> gate
 			trip.SetArrivalTime(aTime)
-			p.transferFromStationToPopulation(passenger, station, aTime)
+			var typeTicket = "USE"
+			p.transferFromStationToPopulation(passenger, station, aTime, typeTicket)
 
 			passenger.ClearCurrentTrip()
 			passenger.calculateNextTrip()
@@ -789,7 +791,8 @@ func (p *Population) StationToOutside(aTime time.Time, station *MetroStation,
 	passenger *Passenger) {
 	var trip = passenger.CurrentTrip()
 	trip.SetArrivalTime(aTime)
-	p.transferFromStationToPopulation(passenger, station, aTime)
+	var typeTicket = "USE"
+	p.transferFromStationToPopulation(passenger, station, aTime, typeTicket)
 
 	passenger.ClearCurrentTrip()
 	passenger.calculateNextTrip()
@@ -929,4 +932,31 @@ func (p *Population) createColumnsTitles() {
 		"machine_id",
 		"is_2nd_leg_intermodel"}
 	p.output = tools.NewFile("tickets", columnsNames)
+}
+
+func (p *Population) StationEvacuation(aTime time.Time, station *MetroStation) {
+	fmt.Println(station.name)
+	for i := range p.inStation[station.Id()] {
+		passenger := p.inStation[station.Id()][i]
+		var trip = passenger.CurrentTrip()
+		trip.SetArrivalTime(aTime)
+		var typeTicket = "EVA"
+		p.transferFromStationToPopulation(passenger, station, aTime, typeTicket)
+
+		passenger.ClearCurrentTrip()
+		passenger.calculateNextTrip()
+		p.OutsideSortedInsertPassenger(passenger)
+		//use after the transfer from station to pop
+		//println("station->outside: passenger #"+passenger.id)
+	}
+}
+
+func (p *Population) AllEvacuation(aTime time.Time, mapO *Map) {
+	fmt.Println("\rTest end of simulation")
+	fmt.Println(p.InStation())
+	fmt.Println(p.InTrains())
+	for _, station := range mapO.Stations() {
+		p.StationEvacuation(aTime, &station)
+	}
+	fmt.Println(p.InStation())
 }

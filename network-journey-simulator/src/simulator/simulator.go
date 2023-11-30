@@ -584,7 +584,7 @@ func (s *Simulator) Run(n int) {
 				s.currentTime.String())
 		}
 	}
-
+	s.population.AllEvacuation(s.currentTime, &s.mapObject)
 	s.ToCSV()
 }
 
