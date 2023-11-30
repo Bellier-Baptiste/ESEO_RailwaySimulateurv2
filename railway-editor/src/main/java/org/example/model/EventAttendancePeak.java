@@ -30,7 +30,7 @@ import java.time.format.DateTimeParseException;
 
 /**
  * Model class extending {@link Event} which describes an attendance peak on a
- * Station
+ * Station.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
@@ -113,12 +113,11 @@ public class EventAttendancePeak extends Event {
   /**
    * set the peak time.
    *
-   * @param peakTime time of the peak
+   * @param paramPeakTime time of the peak
    */
-  public void setPeakTime(final String peakTime) {
-    // check if the peaktime is valid and between the start and end time
-    if (isPeakTimeValid(peakTime)) {
-      this.peakTime = peakTime;
+  public void setPeakTime(final String paramPeakTime) {
+    if (isPeakTimeValid(paramPeakTime)) {
+      this.peakTime = paramPeakTime;
     } else {
       throw new IllegalArgumentException("Peak time is not valid");
     }
@@ -127,14 +126,16 @@ public class EventAttendancePeak extends Event {
   /**
    * check if peak time is between start time and end time. The peak time should
    * be equal or after the start time and equal or before the end time.
-   * @param peakTime peak time
+   *
+   * @param paramPeakTime peak time
+   * @return boolean true if peak time is valid, false otherwise
    */
-  private boolean isPeakTimeValid(final String peakTime) {
+  private boolean isPeakTimeValid(final String paramPeakTime) {
     try {
       DateTimeFormatter formatter =
               DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm");
       LocalDateTime peakTimeDate = LocalDateTime.parse(
-              peakTime, formatter);
+              paramPeakTime, formatter);
       LocalDateTime startTimeDate = LocalDateTime.parse(
               getStartTime(), formatter);
       LocalDateTime endTimeDate = LocalDateTime.parse(

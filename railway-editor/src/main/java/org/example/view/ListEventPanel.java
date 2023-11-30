@@ -1066,9 +1066,9 @@ public final class ListEventPanel extends JPanel {
     String stationConcerned = editStationConcerned.getText();
     String peakNb = editPeakNumber.getText();
 
-    return dateStart + "," + timeStart + "," + dateEnd + "," +
-            timeEnd + "," + datePeak + "," + timePeak + "," + stationConcerned +
-            "," + peakNb;
+    return dateStart + "," + timeStart + "," + dateEnd + ","
+            + timeEnd + "," + datePeak + "," + timePeak + "," + stationConcerned
+            + "," + peakNb;
   }
 
   /**

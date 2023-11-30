@@ -87,14 +87,14 @@ public final class ActionRunSimulation {
     String rootGoProjectPath = rootProjectPath + "\\network-journey-simulator";
 
     File runThisSimulation = new File(
-        rootGoProjectPath + "\\src\\configs" +
-            "\\runThisSimulation.xml");
+        rootGoProjectPath + "\\src\\configs"
+                + "\\runThisSimulation.xml");
     this.actionFile.export(runThisSimulation);
 
     // create a new list of arguments for our process
     String[] commands = {"cmd", "/C",
-        "start metro_simulator.exe -configname " +
-            "runThisSimulation.xml"};
+        "start metro_simulator.exe -configname "
+                + "runThisSimulation.xml"};
     // create the process builder
     ProcessBuilder pb = new ProcessBuilder(commands);
     // set the working directory of the process

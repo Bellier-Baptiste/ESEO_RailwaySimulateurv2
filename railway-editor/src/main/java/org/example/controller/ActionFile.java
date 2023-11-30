@@ -93,6 +93,8 @@ public class ActionFile {
   public static final String STATION = "station";
   /** Number of letters in alphabet. */
   private static final int ALPHABET_SIZE = 26;
+  /** Seconds. */
+  private static final String SECONDS = ":00.000Z";
   /** Singleton instance. */
   private static ActionFile instance;
 
@@ -193,8 +195,6 @@ public class ActionFile {
    * @param root the root element of the document
    */
   private void exportEvents(final Document document, final Element root) {
-    // Define constants
-    final String SECONDS = ":00.000Z";
     // Events
     Element events = document.createElement("events");
     root.appendChild(events);

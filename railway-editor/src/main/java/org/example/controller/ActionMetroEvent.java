@@ -83,6 +83,10 @@ public class ActionMetroEvent {
   private static final int TRAIN_HOUR_LINE_INDEX = 2;
   /** Ending time index. */
   private static final int ENDING_TIME_INDEX = 3;
+  /** Peak date index. */
+  private static final int PEAK_DATE_INDEX = 4;
+  /** Peak time index. */
+  private static final int PEAK_TIME_INDEX = 5;
   /** Train hour train number index. */
   private static final int TRAIN_HOUR_TRAIN_NUMBER_INDEX = 3;
   /** Starting station index. */
@@ -284,15 +288,16 @@ public class ActionMetroEvent {
     String endTime =
         eventStringTab[ENDING_DATE_INDEX] + "-" + eventStringTab[
             ENDING_TIME_INDEX];
-    String peakTime = eventStringTab[4] + "-" + eventStringTab[5];
+    String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
+            + eventStringTab[PEAK_TIME_INDEX];
 
     EventAttendancePeak eventAttendancePeak = new EventAttendancePeak(
         this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
     eventAttendancePeak.setPeakTime(peakTime);
     eventAttendancePeak.setIdStation(Integer.parseInt(eventStringTab[
-        STATION_CONCERNED_INDEX+2]));
+        STATION_CONCERNED_INDEX + 2]));
     eventAttendancePeak.setSize(Integer.parseInt(eventStringTab[
-        PEAK_NUMBER_INDEX+2]));
+        PEAK_NUMBER_INDEX + 2]));
     Data.getInstance().getEventList().add(eventAttendancePeak);
 
     Station stationConcerned = null;
@@ -313,7 +318,7 @@ public class ActionMetroEvent {
       MainWindow.getInstance().getEventRecapPanel().createEventAttendancePeak(
           this.getCurrentId(), startTime, endTime, peakTime,
           Integer.toString(stationConcerned.getId()),
-          eventStringTab[PEAK_NUMBER_INDEX+2]);
+          eventStringTab[PEAK_NUMBER_INDEX + 2]);
     }
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
