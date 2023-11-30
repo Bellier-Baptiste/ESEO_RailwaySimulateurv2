@@ -351,7 +351,7 @@ func TestSimulator_GetAllPopulationsDistribution(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	populationDistribution := sim.GetAllPopulationsDistribution()
+	populationDistribution := sim.GetAllPopDistribution()
 
 	assert.Equal(t, 20, populationDistribution[0].Businessman(),
 		"Bad businessman attribut")
@@ -401,7 +401,7 @@ func TestSimulator_GetAllDestinationDistribution(t *testing.T) {
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	destinationDistribution := sim.GetAllDestinationDistribution()
+	destinationDistribution := sim.GetAllDestDistribution()
 
 	assert.Equal(t, 20, destinationDistribution[0].Commercial(),
 		"Bad commercial attribut")
