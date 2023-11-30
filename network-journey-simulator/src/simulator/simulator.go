@@ -67,8 +67,8 @@ Attributes :
   - eventsLineClosed []models.EventLineClosed : the events of the simulator
   - eventsAttendancePeak []models.EventAttendancePeak : the events of the
     simulator
-  - areasDistribution []models.PopulationDistribution : the population distribution of
-    an area
+  - areasDistribution []models.PopulationDistribution : the population
+    distribution of an area
   - tripNumberCounter int : the trip number counter of the simulator
 
 Methods :
@@ -104,7 +104,7 @@ Methods :
   - ToCSV() : save the timetable and timetableReal as CSV
 */
 type Simulator struct {
-	config                   configs.ConfigurationObject
+	config                   configs.ConfigurationType
 	adConfig                 *configs.AdvancedConfig
 	mapObject                models.Map
 	population               *models.Population
@@ -235,7 +235,7 @@ func (s *Simulator) GetAllEventsAttendancePeak() []models.EventAttendancePeak {
 }
 
 /*
-GetAllPopulationsDistribution is used to get the population distribution of
+GetAllPopDistribution is used to get the population distribution of
 all the areas.
 
 Param :
@@ -245,12 +245,12 @@ Return :
   - []models.PopulationDistribution : the population distribution of all the
     areas
 */
-func (s *Simulator) GetAllPopulationsDistribution() []models.PopulationDistribution {
+func (s *Simulator) GetAllPopDistribution() []models.PopulationDistribution {
 	return s.populationsDistributions
 }
 
 /*
-GetAllDestinationDistribution is used to get the destination distribution of
+GetAllDestDistribution is used to get the destination distribution of
 all the areas.
 
 Param :
@@ -260,7 +260,7 @@ Return :
   - []models.DestinationDistribution : the destination distribution of all the
     areas
 */
-func (s *Simulator) GetAllDestinationDistribution() []models.DestinationDistribution {
+func (s *Simulator) GetAllDestDistribution() []models.DestinationDistribution {
 	return s.destinationDistributions
 }
 
@@ -276,7 +276,8 @@ Return :
   - models.PopulationDistribution : the population distribution of the
     area
 */
-func (s *Simulator) GetPopulationDistributionArea(id int) models.PopulationDistribution {
+func (s *Simulator) GetPopulationDistributionArea(
+	id int) models.PopulationDistribution {
 	return s.populationsDistributions[id]
 }
 
@@ -291,7 +292,8 @@ Return :
   - []models.DestinationDistribution : the destination distribution of the
     areas
 */
-func (s *Simulator) GetDestinationDistributionArea(id int) models.DestinationDistribution {
+func (s *Simulator) GetDestinationDistributionArea(
+	id int) models.DestinationDistribution {
 	return s.destinationDistributions[id]
 }
 
@@ -309,7 +311,8 @@ Return :
   - models.PopulationDistribution : the population distribution of the
     station
 */
-func (s *Simulator) GetPopulationDistributionStation(id int) models.PopulationDistribution {
+func (s *Simulator) GetPopulationDistributionStation(
+	id int) models.PopulationDistribution {
 	ms := s.adConfig.MapC.Stations[id]
 	if ms.IdArea == nil {
 		return models.NewPopulationDistribution(14, 14, 14, 15, 14, 14, 15)
@@ -332,7 +335,8 @@ Return :
   - models.DestinationDistribution : the destination distribution of the
     station
 */
-func (s *Simulator) GetDestinationDistributionStation(id int) models.DestinationDistribution {
+func (s *Simulator) GetDestinationDistributionStation(
+	id int) models.DestinationDistribution {
 	ms := s.adConfig.MapC.Stations[id]
 	if ms.IdArea == nil {
 		return models.NewDestinationDistribution(15, 14, 14, 14, 15, 14, 14)
@@ -509,9 +513,11 @@ func (s *Simulator) CreateDestinationDistribution() {
 	for i, dd := range s.adConfig.MapC.Areas {
 		s.destinationDistributions[i] =
 			models.NewDestinationDistribution(dd.DestinationDistribution.Commercial,
-				dd.DestinationDistribution.Educational, dd.DestinationDistribution.Industrial,
+				dd.DestinationDistribution.Educational,
+				dd.DestinationDistribution.Industrial,
 				dd.DestinationDistribution.Leisure, dd.DestinationDistribution.Office,
-				dd.DestinationDistribution.Residential, dd.DestinationDistribution.Touristic)
+				dd.DestinationDistribution.Residential,
+				dd.DestinationDistribution.Touristic)
 	}
 }
 
