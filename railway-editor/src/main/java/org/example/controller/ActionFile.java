@@ -631,6 +631,8 @@ public class ActionFile {
    * @param fileToLoad the xml file to load
    */
   public void importMap(final File fileToLoad) {
+    // Clean the map
+    MainWindow.getInstance().getMainPanel().cleanMap();
     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
     try {
       // Disable external entities

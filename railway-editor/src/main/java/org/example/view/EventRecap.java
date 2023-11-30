@@ -444,4 +444,13 @@ public final class EventRecap extends JScrollPane {
     taskPaneContainer.revalidate();
   }
 
+  /**
+   * Remove all events from the list.
+   * Used when loading a new file.
+   */
+  public void cleanEvents() {
+    this.taskPaneContainer.removeAll();
+    this.taskPaneContainer.revalidate();
+    Data.getInstance().getEventList().clear();
+  }
 }
