@@ -985,10 +985,15 @@ public class ActionFile {
       int counter = 0;
       for (int i = 0; i < lineList.getLength(); i++) {
         Node nodeL = lineList.item(i);
+
         if (nodeL.getNodeType() == Node.ELEMENT_NODE) {
           Element lineElement = (Element) nodeL;
           String lineId = lineElement.getElementsByTagName("id")
               .item(0).getTextContent();
+          MainWindow.getInstance().getToolBarPanel().getLineId().setText(
+              lineId);
+          ActionLine.getInstance().setLineToUpdateIndex(Integer.parseInt(
+              lineId));
           Element stations = (Element) lineElement
               .getElementsByTagName(STATIONS).item(0);
           NodeList stationL = stations.getElementsByTagName(STATION);
