@@ -194,6 +194,7 @@ public class ActionFile {
       Element root = document.createElement("map");
       document.appendChild(root);
 
+      // Export the location (with zoom and center)
       ICoordinate centerCoordinate =
           MainWindow.getInstance().getMainPanel().getPosition();
       Element zoom = document.createElement("zoom");
