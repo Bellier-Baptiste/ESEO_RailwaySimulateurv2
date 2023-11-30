@@ -1906,53 +1906,14 @@ func (s *Simulator) executeEventsAttendancePeak(
 		oldMinutes := oldTime.Hour()*60 + oldTime.Minute()
 		currentMinutes := currentTime.Hour()*60 + currentTime.Minute()
 
-		// create a table to store the number of passengers for each minute
-		passengerDistribution := make([]int, endMinutes-startMinutes)
-
-		// calcultate asymetrical gaussian distribution
-		peakWidth := float64(endMinutes-startMinutes) / 10.0
-		peakArea := float64(event.GetSize())
-		peakHeight := peakArea / (peakWidth * math.Sqrt(2*math.Pi))
-		for minute := startMinutes; minute < endMinutes; minute++ {
-			exponent := -math.Pow(float64(minute-peakMinutes), 2) /
-				(2 * math.Pow(peakWidth, 2))
-			passengerDistribution[minute-startMinutes] = int(peakHeight *
-				math.Exp(exponent))
-		}
-
-		// get total number of passengers from passengerDistribution
-		totalPassengers := 0
-		for _, passengers := range passengerDistribution {
-			totalPassengers += passengers
-		}
-
-		// add missing passengers to the distribution or remove passengers if
-		// there are too many
-		missingPassengers := event.GetSize() - totalPassengers
-		if missingPassengers > 0 {
-			// add missing passengers
-			for missingPassengers > 0 {
-				passengerDistribution[rand.Intn(len(passengerDistribution))]++
-				missingPassengers--
-			}
-		}
-		if missingPassengers < 0 {
-			// remove passengers
-			for missingPassengers < 0 {
-				passengerDistribution[rand.Intn(len(passengerDistribution))]--
-				missingPassengers++
-			}
-		}
+		// get passenger distribution
+		passengerDistribution := s.makeEventAttendancePeakDistribution(startMinutes,
+			endMinutes, peakMinutes, event)
 
 		// determine the number of passengers for the current minute by taking the
 		// difference between the current time and the old time
-		currentPassengers := 0
-		for minute := oldMinutes; minute < currentMinutes; minute++ {
-			if minute < startMinutes {
-				continue
-			}
-			currentPassengers += passengerDistribution[minute-startMinutes]
-		}
+		currentPassengers := s.pickEventAttendancePeakCurrentPassengers(
+			passengerDistribution, oldMinutes, currentMinutes, startMinutes)
 
 		// execute the event
 		for i := 0; i < currentPassengers; i++ {
@@ -1989,6 +1950,77 @@ func (s *Simulator) executeEventsAttendancePeak(
 				&passenger
 		}
 	}
+}
+
+/*
+makeEventAttendancePeakDistribution is used to create a distribution of
+passengers for an event "attendance peak".
+
+Param :
+  - s *Simulator : the simulator
+  - startMinutes int : the start minutes
+  - endMinutes int : the end minutes
+  - peakMinutes int : the peak minutes
+  - event *models.EventAttendancePeak : the event
+
+Return :
+  - []int : the distribution
+*/
+func (s *Simulator) makeEventAttendancePeakDistribution(startMinutes,
+	endMinutes, peakMinutes int, event *models.EventAttendancePeak) []int {
+	// create a table to store the number of passengers for each minute
+	passengerDistribution := make([]int, endMinutes-startMinutes)
+
+	// calcultate asymetrical gaussian distribution
+	peakWidth := float64(endMinutes-startMinutes) / 10.0
+	peakArea := float64(event.GetSize())
+	peakHeight := peakArea / (peakWidth * math.Sqrt(2*math.Pi))
+	for minute := startMinutes; minute < endMinutes; minute++ {
+		exponent := -math.Pow(float64(minute-peakMinutes), 2) /
+			(2 * math.Pow(peakWidth, 2))
+		passengerDistribution[minute-startMinutes] = int(peakHeight *
+			math.Exp(exponent))
+	}
+
+	// get total number of passengers from passengerDistribution
+	totalPassengers := 0
+	for _, passengers := range passengerDistribution {
+		totalPassengers += passengers
+	}
+
+	// add missing passengers to the distribution or remove passengers if
+	// there are too many
+	missingPassengers := event.GetSize() - totalPassengers
+	if missingPassengers > 0 {
+		// add missing passengers
+		for missingPassengers > 0 {
+			passengerDistribution[rand.Intn(len(passengerDistribution))]++
+			missingPassengers--
+		}
+	}
+	if missingPassengers < 0 {
+		// remove passengers
+		for missingPassengers < 0 {
+			passengerDistribution[rand.Intn(len(passengerDistribution))]--
+			missingPassengers++
+		}
+	}
+
+	return passengerDistribution
+}
+
+func (s *Simulator) pickEventAttendancePeakCurrentPassengers(
+	passengerDistribution []int, oldMinutes, currentMinutes,
+	startMinutes int) int {
+
+	currentPassengers := 0
+	for minute := oldMinutes; minute < currentMinutes; minute++ {
+		if minute < startMinutes {
+			continue
+		}
+		currentPassengers += passengerDistribution[minute-startMinutes]
+	}
+	return currentPassengers
 }
 
 /*
