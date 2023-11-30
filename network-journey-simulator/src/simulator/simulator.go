@@ -104,7 +104,7 @@ Methods :
   - ToCSV() : save the timetable and timetableReal as CSV
 */
 type Simulator struct {
-	config                   configs.ConfigurationObject
+	config                   configs.ConfigurationType
 	adConfig                 *configs.AdvancedConfig
 	mapObject                models.Map
 	population               *models.Population

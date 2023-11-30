@@ -45,6 +45,7 @@ import (
 	"network-journey-simulator/src/configs"
 	"network-journey-simulator/src/models"
 	"network-journey-simulator/src/simulator"
+	"network-journey-simulator/src/tools"
 	"os"
 	"path/filepath"
 	"strings"
@@ -297,4 +298,5 @@ func main() {
 	fmt.Println("run time : ", runTime.String())
 	fmt.Println("trips completed : ", tripsFinished)
 	fmt.Println("trips not completed :", tripsNotFinished)
+	tools.ArchiveOutputAndConfigFiles(tools.GetBasePath())
 }
