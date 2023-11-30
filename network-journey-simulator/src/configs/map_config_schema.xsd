@@ -103,6 +103,32 @@
 						</xs:choice>
 					</xs:complexType>
 				</xs:element>
+				<xs:element name="areas">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="area" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="id" type="xs:int"/>
+										<xs:element name="populationDistribution">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Businessman" type="xs:int"/>
+													<xs:element name="Child" type="xs:int"/>
+													<xs:element name="Retired" type="xs:int"/>
+													<xs:element name="Student" type="xs:int"/>
+													<xs:element name="Tourist" type="xs:int"/>
+													<xs:element name="Unemployed" type="xs:int"/>
+													<xs:element name="Worker" type="xs:int"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

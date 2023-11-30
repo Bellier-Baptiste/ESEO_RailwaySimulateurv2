@@ -10,7 +10,7 @@ Date : 24/01/2019
 Author :
   - Team v1
   - Team v2
-  - Paul TRÉMOUREUX (quality check)
+  - Paul TRÉMOUREUX
 
 License : MIT License
 
@@ -67,7 +67,7 @@ Attributes :
 
 Methods :
   - test(popSizeRandoms, popSizeCommuters int, config
-    configs.ConfigurationObject, aMap Map) : test create a population
+    configs.ConfigurationType, aMap Map) : test create a population
   - NewPopulation(popSize int, popCommutersProportion, popRandomsProportion
     float64, aMap Map) : create a population and assign it trips (random and
     commuting)
@@ -142,11 +142,11 @@ Param :
   - p *Population : the population to test
   - popSizeRandoms int : the number of random passengers
   - popSizeCommuters int : the number of commuting passengers
-  - config configs.ConfigurationObject : the configuration object
+  - config configs.ConfigurationType : the configuration object
   - aMap Map : the map of the network
 */
 func (p *Population) test(popSizeRandoms, popSizeCommuters int,
-	config configs.ConfigurationObject, aMap Map) {
+	config configs.ConfigurationType, aMap Map) {
 	for i := popSizeRandoms; i < popSizeRandoms+popSizeCommuters; i++ {
 		id := strconv.FormatInt(int64(i), 10)
 		passenger := NewPassenger(id, PickAKind())
