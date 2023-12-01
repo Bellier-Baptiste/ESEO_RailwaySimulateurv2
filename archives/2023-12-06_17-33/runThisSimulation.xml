@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<map>
+    <stations>
+        <station>
+            <id>0</id>
+            <name>Atalinit</name>
+            <position>
+                <latitude>47.48855700150933</latitude>
+                <longitude>-0.5977249145507812</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>1</id>
+            <name>Pandore</name>
+            <position>
+                <latitude>47.48565697095909</latitude>
+                <longitude>-0.5934333801269531</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>2</id>
+            <name>Cawold</name>
+            <position>
+                <latitude>47.482756780292505</latitude>
+                <longitude>-0.589141845703125</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+    </stations>
+    <lines>
+        <line>
+            <id>0</id>
+            <name>A</name>
+            <numberOfTrain>30</numberOfTrain>
+            <stations>
+                <station id="0" order="0"/>
+                <station id="1" order="1"/>
+                <station id="2" order="2"/>
+            </stations>
+        </line>
+    </lines>
+    <areas/>
+    <events/>
+</map>
