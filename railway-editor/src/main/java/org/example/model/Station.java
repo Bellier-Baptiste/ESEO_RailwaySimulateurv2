@@ -90,15 +90,23 @@ public class Station {
     this.longitude = latLon.getLon();
   }
 
-  public Station(final int stationId, final double latitude,
-                 final double longitude, final String stationName) {
+  /**
+   * Constructor with position in latitude and longitude.
+   *
+   * @param stationId    station id
+   * @param posLatitude  station latitude
+   * @param posLongitude station longitude
+   * @param stationName  station name
+   */
+  public Station(final int stationId, final double posLatitude,
+                 final double posLongitude, final String stationName) {
     super();
     this.id = stationId;
-    this.latitude = latitude;
-    this.longitude = longitude;
+    this.latitude = posLatitude;
+    this.longitude = posLongitude;
     this.name = stationName;
-    Point stationPosition = MainPanel.getInstance().getMapPosition(latitude,
-        longitude);
+    Point stationPosition =
+        MainPanel.getInstance().getMapPosition(this.latitude, this.longitude);
     if (stationPosition != null) {
       this.posX = stationPosition.x;
       this.posY = stationPosition.y;
@@ -242,8 +250,8 @@ public class Station {
 
 
   /**
-   * Moves the station of dx and dy and update latitudes and longitudes
-   * in consequences.
+   * Moves the station of dx and dy and update latitudes and longitudes in
+   * consequences.
    *
    * @param dx deltaX
    * @param dy deltaY

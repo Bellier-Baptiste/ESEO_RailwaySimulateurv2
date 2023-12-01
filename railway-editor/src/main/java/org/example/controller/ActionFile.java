@@ -806,6 +806,13 @@ public class ActionFile {
     }
   }
 
+  /**
+   * Format the date of the xml to be able to use it in the HMI.
+   *
+   * @param date the date from the xml file to format
+   *
+   * @return the formatted date
+   */
   private String[] formatDate(final String date) {
     String result = date;
     result = result.replace(END_TIME_STRING, "");
