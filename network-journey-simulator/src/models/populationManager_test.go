@@ -164,3 +164,11 @@ func TestPopulation_OutsideSortedPopAllBefore(t *testing.T) {
 	assert.Equal(t, 5, len(passengers))
 	assert.Equal(t, 5, len(population.outsideSorted))
 }
+
+func TestPopulation_StationExitPop(t *testing.T) {
+
+}
+
+func TestPopulation_AllStationExitPop(t *testing.T) {
+
+}

@@ -934,13 +934,21 @@ func (p *Population) createColumnsTitles() {
 	p.output = tools.NewFile("tickets", columnsNames)
 }
 
-func (p *Population) StationEvacuation(aTime time.Time, station *MetroStation) {
+/*
+StationExitPop transfer all passengers in a station to the general population.
+
+Param :
+  - p *Population : the population
+  - aTime time.Time : the time of the transfer
+  - station *MetroStation : the station
+*/
+func (p *Population) StationExitPop(aTime time.Time, station *MetroStation) {
 	fmt.Println(station.name)
 	for i := range p.inStation[station.Id()] {
 		passenger := p.inStation[station.Id()][i]
 		var trip = passenger.CurrentTrip()
 		trip.SetArrivalTime(aTime)
-		var typeTicket = "EVA"
+		var typeTicket = "USE"
 		p.transferFromStationToPopulation(passenger, station, aTime, typeTicket)
 
 		passenger.ClearCurrentTrip()
@@ -951,12 +959,21 @@ func (p *Population) StationEvacuation(aTime time.Time, station *MetroStation) {
 	}
 }
 
-func (p *Population) AllEvacuation(aTime time.Time, mapO *Map) {
+/*
+AllStationExitPop transfer all passengers in all stations to the general
+population.
+
+Param :
+  - p *Population : the population
+  - aTime time.Time : the time of the transfer
+  - mapO *Map : the map of the network
+*/
+func (p *Population) AllStationExitPop(aTime time.Time, mapO *Map) {
 	fmt.Println("\rTest end of simulation")
 	fmt.Println(p.InStation())
 	fmt.Println(p.InTrains())
 	for _, station := range mapO.Stations() {
-		p.StationEvacuation(aTime, &station)
+		p.StationExitPop(aTime, &station)
 	}
 	fmt.Println(p.InStation())
 }
