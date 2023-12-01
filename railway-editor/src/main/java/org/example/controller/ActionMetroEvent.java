@@ -31,14 +31,13 @@ import org.example.model.EventBetween2Stations;
 import org.example.model.EventHour;
 import org.example.model.EventLineClosed;
 import org.example.model.EventLineDelay;
+import org.example.model.EventName;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
 import org.example.model.Station;
-import org.example.model.EventName;
 import org.example.view.EventRecap;
 import org.example.view.EventWindow;
 import org.example.view.LineView;
-import org.example.view.ListEventPanel;
 import org.example.view.MainWindow;
 import org.example.view.StationView;
 
@@ -55,7 +54,7 @@ import java.awt.event.WindowEvent;
  * @date 2023-10-02
  * @see org.example.view.EventWindow
  * @see org.example.view.EventRecap
- * @see ListEventPanel
+ * @see org.example.view.ListEventPanel
  * @since 3.0
  */
 public class ActionMetroEvent {
@@ -221,7 +220,9 @@ public class ActionMetroEvent {
     this.addEventBetween2Stations(eventLineDelay, eventColor, eventStringTab);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    SwingUtilities.invokeLater(() ->
+        SwingUtilities.updateComponentTreeUI(MainWindow.getInstance())
+    );
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
@@ -249,7 +250,9 @@ public class ActionMetroEvent {
     this.addEventBetween2Stations(eventLineClosed, eventColor, eventStringTab);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    SwingUtilities.invokeLater(() ->
+        SwingUtilities.updateComponentTreeUI(MainWindow.getInstance())
+    );
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
@@ -356,7 +359,9 @@ public class ActionMetroEvent {
     }
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    SwingUtilities.invokeLater(() ->
+        SwingUtilities.updateComponentTreeUI(MainWindow.getInstance())
+    );
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
@@ -385,7 +390,9 @@ public class ActionMetroEvent {
         eventStringTab[TRAIN_HOUR_TRAIN_NUMBER_INDEX]);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    SwingUtilities.invokeLater(() ->
+        SwingUtilities.updateComponentTreeUI(MainWindow.getInstance())
+    );
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
@@ -434,7 +441,9 @@ public class ActionMetroEvent {
     }
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    SwingUtilities.invokeLater(() ->
+        SwingUtilities.updateComponentTreeUI(MainWindow.getInstance())
+    );
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 }
