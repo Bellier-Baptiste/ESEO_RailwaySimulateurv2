@@ -1085,10 +1085,11 @@ public final class ListEventPanel extends JPanel {
     String timePeak = dfTime.format(clockPanelPeak.getTimeSpinner().getValue());
     String stationConcerned = editStationConcerned.getText();
     String peakNb = editPeakNumber.getText();
+    String peakWidth = editPeakWidth.getText();
 
     return dateStart + "," + timeStart + "," + dateEnd + ","
             + timeEnd + "," + datePeak + "," + timePeak + "," + stationConcerned
-            + "," + peakNb;
+            + "," + peakNb + "," + peakWidth;
   }
 
   /**
