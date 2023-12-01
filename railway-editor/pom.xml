@@ -12,6 +12,8 @@
 
     <artifactId>railway-editor</artifactId>
     <build>
+        <sourceDirectory>src/main</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
