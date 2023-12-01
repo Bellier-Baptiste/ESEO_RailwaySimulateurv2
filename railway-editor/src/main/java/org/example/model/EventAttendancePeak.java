@@ -46,6 +46,8 @@ public class EventAttendancePeak extends Event {
   private int size;
   /** Peak time. */
   private String peakTime;
+  /** Peak width. */
+  private int peakWidth;
 
   /**
    * Constructor.
@@ -121,6 +123,27 @@ public class EventAttendancePeak extends Event {
     } else {
       throw new IllegalArgumentException("Peak time is not valid");
     }
+  }
+
+  /**
+   * get the peak width.
+   *
+   * @return int peakWidth
+   */
+  public int getPeakWidth() {
+    return peakWidth;
+  }
+
+  /**
+   * set the peak width.
+   *
+   * @param paramPeakWidth width of the peak
+   */
+  public void setPeakWidth(final int paramPeakWidth) {
+    if (paramPeakWidth < 0) {
+      throw new IllegalArgumentException("Peak width is not valid");
+    }
+    this.peakWidth = paramPeakWidth;
   }
 
   /**

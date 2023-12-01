@@ -87,6 +87,8 @@ public class ActionMetroEvent {
   private static final int PEAK_DATE_INDEX = 4;
   /** Peak time index. */
   private static final int PEAK_TIME_INDEX = 5;
+  /** Peak width index. */
+  private static final int PEAK_WIDTH_INDEX = 6;
   /** Train hour train number index. */
   private static final int TRAIN_HOUR_TRAIN_NUMBER_INDEX = 3;
   /** Starting station index. */
@@ -290,6 +292,7 @@ public class ActionMetroEvent {
             ENDING_TIME_INDEX];
     String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
             + eventStringTab[PEAK_TIME_INDEX];
+    String peakWidth = eventStringTab[PEAK_WIDTH_INDEX];
 
     EventAttendancePeak eventAttendancePeak = new EventAttendancePeak(
         this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
@@ -298,6 +301,7 @@ public class ActionMetroEvent {
         STATION_CONCERNED_INDEX + 2]));
     eventAttendancePeak.setSize(Integer.parseInt(eventStringTab[
         PEAK_NUMBER_INDEX + 2]));
+    eventAttendancePeak.setPeakWidth(Integer.parseInt(peakWidth));
     Data.getInstance().getEventList().add(eventAttendancePeak);
 
     Station stationConcerned = null;

@@ -276,10 +276,15 @@ public class ActionFile {
                   eventAttendancePeak.getIdStation())));
           eventName.appendChild(stationId);
 
-          Element sizePeak = document.createElement("size");
+          Element sizePeak = document.createElement("peakSize");
           sizePeak.appendChild(document.createTextNode(Integer.toString(
               eventAttendancePeak.getSize())));
           eventName.appendChild(sizePeak);
+
+          Element peakWidth = document.createElement("peakWidth");
+          peakWidth.appendChild(document.createTextNode(Integer.toString(
+              eventAttendancePeak.getPeakWidth())));
+          eventName.appendChild(peakWidth);
           break;
         case "stationClosed":
           EventStationClosed eventStationClosed = (EventStationClosed) event;

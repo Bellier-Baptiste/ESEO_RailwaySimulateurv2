@@ -175,6 +175,8 @@ public final class ListEventPanel extends JPanel {
   private JTextField editStationConcerned;
   /** edit peak number text field. */
   private JTextField editPeakNumber;
+  /** edit peak width text field. */
+  private JTextField editPeakWidth;
 
   //eventStationClosedAttribute
   /** edit station closed concerned text field. */
@@ -204,6 +206,7 @@ public final class ListEventPanel extends JPanel {
     editStationConcerned = new JTextField();
     editLineSelected = new JTextField();
     editPeakNumber = new JTextField();
+    editPeakWidth = new JTextField();
     editStationEnd = new JTextField();
     editStationStart = new JTextField();
     editTrainNumber = new JTextField();
@@ -277,7 +280,7 @@ public final class ListEventPanel extends JPanel {
               c.fill = GridBagConstraints.HORIZONTAL;
               c.gridwidth = GRID_WIDTH;
               c.gridx = GRID_X_POSITION;
-              c.gridy = GRID_Y_POSITION;
+              c.gridy = GRID_Y_POSITION + 3;
               c.weighty = GRID_WIDTH;
               confirmEventBtn.addActionListener(e ->
                   ActionMetroEvent.getInstance().addAttendancePeak());
@@ -673,6 +676,7 @@ public final class ListEventPanel extends JPanel {
       stationConcernedPicker.setPreferredSize(new Dimension(
           SELECT_STATION_BTN_WIDTH, SELECT_STATION_BTN_HEIGHT));
       editPeakNumber = new JTextField();
+      editPeakWidth = new JTextField();
 
       c.anchor = GridBagConstraints.NORTHWEST;
       c.fill = GridBagConstraints.VERTICAL;
@@ -766,6 +770,22 @@ public final class ListEventPanel extends JPanel {
       c.gridy = 9;
       c.weighty = 0.2;
       view.add(editPeakNumber, c);
+      c.gridx = 0;
+      c.gridy = 10;
+      c.weighty = 0;
+      JLabel peakWidth = new JLabel("peakWidth: ");
+      view.add(peakWidth, c);
+      JLabel peakWidthExample = new JLabel("Regular peak: 10:00-10:30 => "
+              + "peakWidth = 3");
+      peakWidthExample.setFont(peakWidthExample.getFont().deriveFont(10f));
+      c.gridx = 0;
+      c.gridy = 11;
+      c.weighty = 0.2;
+      view.add(peakWidthExample, c);
+      c.gridx = 0;
+      c.gridy = 12;
+      c.weighty = 0.2;
+      view.add(editPeakWidth, c);
 
 
       eventConfig.revalidate();

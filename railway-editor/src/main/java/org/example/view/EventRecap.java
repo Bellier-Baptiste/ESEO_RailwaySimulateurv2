@@ -244,6 +244,7 @@ public final class EventRecap extends JScrollPane {
    * @param id           event id
    * @param startDateStr event start date
    * @param endDateStr   event end date
+   * @param peakDateStr peak time
    * @param stationStr   station concerned
    * @param peakStr      peak amount
    */
@@ -277,6 +278,10 @@ public final class EventRecap extends JScrollPane {
     peak.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     peak.setText("Peak amount: " + peakStr);
     peak.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel peakWidth = new JXLabel();
+    peakWidth.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    peakWidth.setText("Peak width: " + peakStr);
+    peakWidth.setHorizontalAlignment(SwingConstants.LEFT);
 
     // add various actions and components to the taskpane
 
