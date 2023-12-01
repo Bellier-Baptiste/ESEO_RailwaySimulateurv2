@@ -24,9 +24,12 @@
 
 package org.example.controller;
 
+import org.example.controller.ActionArea;
+import org.example.controller.ActionLine;
+import org.example.controller.ActionStation;
 import org.example.model.Line;
-import org.junit.jupiter.api.Test;
 import org.example.view.MainWindow;
+import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

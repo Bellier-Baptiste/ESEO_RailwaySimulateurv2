@@ -25,11 +25,12 @@
 package org.example.model;
 
 import org.example.data.Data;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
-
 /**
  * Test-case of {@link Area} model.
  *
@@ -39,9 +40,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @date N/A
  * @since 2.0
  */
+@TestMethodOrder(org.junit.jupiter.api.MethodOrderer.OrderAnnotation.class)
 public class AreaTest {
 
 	@Test
+	@Order(1)
 	public void testConstructor() {
 		Area area = new Area(10,10,20,20);
 		assertEquals(0, area.getId());
@@ -50,22 +53,23 @@ public class AreaTest {
 		assertEquals(20, area.getWidth());
 		assertEquals(20, area.getHeight());
 	}
-	
+
 	@Test
 	public void testSetNewPart() {
 		Area area = new Area(10,10,20,20);
-		area.setNewPart(Data.AREA_TOURIST, 20);
-		area.setNewPart(Data.AREA_STUDENT, 20);
-		area.setNewPart(Data.AREA_BUSINESSMAN, 20);
-		area.setNewPart(Data.AREA_CHILD, 20);
-		area.setNewPart(Data.AREA_WORKER, 60);
+		area.setNewPopulationPart(Data.AREA_TOURIST, 20);
+		area.setNewPopulationPart(Data.AREA_STUDENT, 20);
+		area.setNewPopulationPart(Data.AREA_BUSINESSMAN, 20);
+		area.setNewPopulationPart(Data.AREA_CHILD, 20);
+		area.setNewPopulationPart(Data.AREA_WORKER, 20);
+		area.setNewPopulationPart(Data.AREA_UNEMPLOYED, 0);
 
-		int touristAmount = area.getDistribution().get(Data.AREA_TOURIST);
-		int studentAmount = area.getDistribution().get(Data.AREA_STUDENT);
-		int businessmannAmount = area.getDistribution().get(Data.AREA_BUSINESSMAN);
-		int childAmount = area.getDistribution().get(Data.AREA_CHILD);
-		int workerAmount = area.getDistribution().get(Data.AREA_WORKER);
-		int unemployedAmount = area.getDistribution().get(Data.AREA_UNEMPLOYED);
+		int touristAmount = area.getDistributionPopulation().get(Data.AREA_TOURIST);
+		int studentAmount = area.getDistributionPopulation().get(Data.AREA_STUDENT);
+		int businessmannAmount = area.getDistributionPopulation().get(Data.AREA_BUSINESSMAN);
+		int childAmount = area.getDistributionPopulation().get(Data.AREA_CHILD);
+		int workerAmount = area.getDistributionPopulation().get(Data.AREA_WORKER);
+		int unemployedAmount = area.getDistributionPopulation().get(Data.AREA_UNEMPLOYED);
 
 		assertEquals(20, touristAmount);
 		assertEquals(20, studentAmount);
@@ -74,7 +78,7 @@ public class AreaTest {
 		assertEquals(20, workerAmount);
 		assertEquals(0, unemployedAmount);
 	}
-	
+
 	@Test
 	public void testExtend() {
 		Area area = new Area(10,10,20,20);

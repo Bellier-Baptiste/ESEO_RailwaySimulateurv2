@@ -26,6 +26,8 @@ package org.example.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.example.view.EditConfigDialog;
+import org.example.view.EditConfigParamPanel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
@@ -33,8 +35,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.Mockito;
-import org.example.view.EditConfigDialog;
-import org.example.view.EditConfigParamPanel;
 
 import java.io.File;
 import java.io.IOException;

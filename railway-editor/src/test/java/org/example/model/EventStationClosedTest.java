@@ -24,7 +24,6 @@
 
 package org.example.model;
 
-
 import org.junit.Test;
 
 
