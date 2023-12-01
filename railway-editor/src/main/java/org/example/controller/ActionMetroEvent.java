@@ -220,9 +220,11 @@ public class ActionMetroEvent {
     this.addEventBetween2Stations(eventLineDelay, eventColor, eventStringTab);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.invokeLater(() ->
-        SwingUtilities.updateComponentTreeUI(MainWindow.getInstance())
-    );
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
@@ -250,9 +252,11 @@ public class ActionMetroEvent {
     this.addEventBetween2Stations(eventLineClosed, eventColor, eventStringTab);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.invokeLater(() ->
-        SwingUtilities.updateComponentTreeUI(MainWindow.getInstance())
-    );
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
@@ -359,9 +363,11 @@ public class ActionMetroEvent {
     }
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.invokeLater(() ->
-        SwingUtilities.updateComponentTreeUI(MainWindow.getInstance())
-    );
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
@@ -390,9 +396,11 @@ public class ActionMetroEvent {
         eventStringTab[TRAIN_HOUR_TRAIN_NUMBER_INDEX]);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.invokeLater(() ->
-        SwingUtilities.updateComponentTreeUI(MainWindow.getInstance())
-    );
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
@@ -441,9 +449,11 @@ public class ActionMetroEvent {
     }
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.invokeLater(() ->
-        SwingUtilities.updateComponentTreeUI(MainWindow.getInstance())
-    );
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 }
