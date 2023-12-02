@@ -343,7 +343,7 @@ func (s *Simulator) CreateEventsAttendancePeak() {
 			continue
 		}
 		s.eventsAttendancePeak[i] = models.NewEventAttendancePeak(startEv,
-			endEv, peakEv, ev.StationId, ev.Size)
+			endEv, peakEv, ev.StationId, ev.PeakSize, ev.PeakWidth)
 	}
 }
 
@@ -1972,12 +1972,11 @@ func (s *Simulator) makeEventAttendancePeakDistribution(startMinutes,
 	passengerDistribution := make([]int, endMinutes-startMinutes)
 
 	// calcultate asymetrical gaussian distribution
-	peakWidth := float64(endMinutes-startMinutes) / 10.0
-	peakArea := float64(event.GetSize())
-	peakHeight := peakArea / (peakWidth * math.Sqrt(2*math.Pi))
+	peakArea := float64(event.GetPeakSize())
+	peakHeight := peakArea / (float64(event.GetPeakWidth()) * math.Sqrt(2*math.Pi))
 	for minute := startMinutes; minute < endMinutes; minute++ {
 		exponent := -math.Pow(float64(minute-peakMinutes), 2) /
-			(2 * math.Pow(peakWidth, 2))
+			(2 * math.Pow(float64(event.GetPeakWidth()), 2))
 		passengerDistribution[minute-startMinutes] = int(peakHeight *
 			math.Exp(exponent))
 	}
@@ -1990,19 +1989,22 @@ func (s *Simulator) makeEventAttendancePeakDistribution(startMinutes,
 
 	// add missing passengers to the distribution or remove passengers if
 	// there are too many
-	missingPassengers := event.GetSize() - totalPassengers
-	if missingPassengers > 0 {
+	value := event.GetPeakSize() > totalPassengers
+	print(value)
+	if event.GetPeakSize() > totalPassengers {
+		missingPassengers := event.GetPeakSize() - totalPassengers
 		// add missing passengers
 		for missingPassengers > 0 {
 			passengerDistribution[rand.Intn(len(passengerDistribution))]++
 			missingPassengers--
 		}
 	}
-	if missingPassengers < 0 {
+	if event.GetPeakSize() < totalPassengers {
+		missingPassengers := totalPassengers - event.GetPeakSize()
 		// remove passengers
-		for missingPassengers < 0 {
+		for missingPassengers > 0 {
 			passengerDistribution[rand.Intn(len(passengerDistribution))]--
-			missingPassengers++
+			missingPassengers--
 		}
 	}
 

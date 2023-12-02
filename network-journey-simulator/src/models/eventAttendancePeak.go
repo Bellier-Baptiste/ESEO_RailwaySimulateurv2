@@ -66,7 +66,8 @@ type EventAttendancePeak struct {
 	end       time.Time
 	peak      time.Time
 	idStation int
-	size      int
+	peakSize  int
+	peakWidth int
 	finished  bool
 }
 
@@ -84,13 +85,14 @@ Return :
   - EventAttendancePeak : the new EventAttendancePeak struct
 */
 func NewEventAttendancePeak(start time.Time, end time.Time, peak time.Time,
-	idStation int, size int) EventAttendancePeak {
+	idStation int, size int, width int) EventAttendancePeak {
 	return EventAttendancePeak{
 		start:     start,
 		end:       end,
 		peak:      peak,
 		idStation: idStation,
-		size:      size,
+		peakSize:  size,
+		peakWidth: width,
 		finished:  false,
 	}
 }
@@ -186,27 +188,51 @@ func (eap *EventAttendancePeak) SetIdStation(id int) {
 }
 
 /*
-GetSize returns the size attribute of the EventAttendancePeak struct.
+GetPeakSize returns the size attribute of the EventAttendancePeak struct.
 
 Param :
   - eap *EventAttendancePeak : the EventAttendancePeak struct
 
 Return :
-  - int : the size attribute of the EventAttendancePeak struct
+  - int : the peakSize attribute of the EventAttendancePeak struct
 */
-func (eap *EventAttendancePeak) GetSize() int {
-	return eap.size
+func (eap *EventAttendancePeak) GetPeakSize() int {
+	return eap.peakSize
 }
 
 /*
-SetSize sets the size attribute of the EventAttendancePeak struct.
+SetPeakSize sets the size attribute of the EventAttendancePeak struct.
 
 Param :
   - eap *EventAttendancePeak : the EventAttendancePeak struct
   - s int : the new value of the size attribute
 */
-func (eap *EventAttendancePeak) SetSize(s int) {
-	eap.size = s
+func (eap *EventAttendancePeak) SetPeakSize(s int) {
+	eap.peakSize = s
+}
+
+/*
+GetPeakWidth returns the width attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+
+Return :
+  - int : the peakWidth attribute of the EventAttendancePeak struct
+*/
+func (eap *EventAttendancePeak) GetPeakWidth() int {
+	return eap.peakWidth
+}
+
+/*
+SetPeakWidth sets the width attribute of the EventAttendancePeak struct.
+
+Param :
+  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - w int : the new value of the width attribute
+*/
+func (eap *EventAttendancePeak) SetPeakWidth(w int) {
+	eap.peakWidth = w
 }
 
 /*

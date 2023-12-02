@@ -584,7 +584,7 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 			EndString:   eventAttendancePeak.end.String(),
 			PeakString:  eventAttendancePeak.peak.String(),
 			StationId:   eventAttendancePeak.idStation,
-			Size:        eventAttendancePeak.size,
+			PeakSize:    eventAttendancePeak.peakSize,
 		}
 		mapC.EventsAttendancePeak = append(mapC.EventsAttendancePeak,
 			attendancePeakEventsC)

@@ -212,7 +212,8 @@ Attributes :
   - EndString string
   - PeakString string
   - StationId int
-  - Size int
+  - PeakSize int
+  - PeakWidth int
 
 Methods :
   - None
@@ -223,7 +224,8 @@ type ConfigAttendancePeakEvent struct {
 	EndString   string   `xml:"end"`
 	PeakString  string   `xml:"peakTime"`
 	StationId   int      `xml:"stationId"`
-	Size        int      `xml:"size"`
+	PeakSize    int      `xml:"peakSize"`
+	PeakWidth   int      `xml:"peakWidth"`
 }
 
 /*
