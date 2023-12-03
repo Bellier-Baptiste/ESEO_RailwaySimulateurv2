@@ -27,7 +27,12 @@ package org.example.controller;
 import org.example.data.Data;
 import org.example.model.Area;
 import org.example.model.Station;
-import org.example.view.*;
+import org.example.view.AreaSetDistribution;
+import org.example.view.AreaView;
+import org.example.view.LineView;
+import org.example.view.MainWindow;
+import org.example.view.Popup;
+import org.example.view.StationView;
 
 import java.awt.Cursor;
 import java.awt.Point;
