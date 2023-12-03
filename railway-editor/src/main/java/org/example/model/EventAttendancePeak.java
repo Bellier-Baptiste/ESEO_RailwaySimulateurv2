@@ -36,7 +36,7 @@ import java.time.format.DateTimeParseException;
  * @author Aurélie Chamouleau
  * @author Alexis BONAMY
  * @file EventAttendancePeak.java
- * @date 2023/11/12
+ * @date N/A
  * @since 2.0
  */
 public class EventAttendancePeak extends Event {

@@ -58,10 +58,11 @@ func TestEventAttendancePeakModel(t *testing.T) {
 	peak := time.Now()
 	idStation := 1
 	size := 10
+	peakWidth := 10
 
 	// create a new eventAttendancePeak
 	eventAttendancePeak := NewEventAttendancePeak(start, end, peak,
-		idStation, size)
+		idStation, size, peakWidth)
 
 	// check if the eventAttendancePeak is created
 	assert.NotNil(t, eventAttendancePeak, "eventAttendancePeak should not be nil")
@@ -71,6 +72,7 @@ func TestEventAttendancePeakModel(t *testing.T) {
 	assert.Equal(t, end, eventAttendancePeak.GetEnd(), "Bad End time")
 	assert.Equal(t, peak, eventAttendancePeak.GetEnd(), "Bad Peak time")
 	assert.Equal(t, idStation, eventAttendancePeak.GetIdStation(), "Bad Start station id")
-	assert.Equal(t, size, eventAttendancePeak.GetSize(), "Bad population size")
+	assert.Equal(t, size, eventAttendancePeak.GetPeakSize(), "Bad population size")
+	assert.Equal(t, peakWidth, eventAttendancePeak.GetPeakWidth(), "Bad peak width")
 	assert.False(t, eventAttendancePeak.IsFinished(), "Bad event status")
 }

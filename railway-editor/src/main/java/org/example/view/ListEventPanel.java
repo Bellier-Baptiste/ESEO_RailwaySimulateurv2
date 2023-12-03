@@ -71,7 +71,7 @@ import java.util.Properties;
  * @author Aurélie Chamouleau
  * @author Alexis BONAMY
  * @file ListEventPanel.java
- * @date 2023/11/12
+ * @date N/A
  * @since 2.0
  */
 public final class ListEventPanel extends JPanel {

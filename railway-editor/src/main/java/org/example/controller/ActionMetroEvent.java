@@ -57,7 +57,7 @@ import java.awt.event.WindowEvent;
  * @author Aurélie Chamouleau
  * @author Alexis BONAMY
  * @file ActionMetroEvent.java
- * @date 2023-11-12
+ * @date 2023-10-02
  * @since 3.0
  */
 public class ActionMetroEvent {

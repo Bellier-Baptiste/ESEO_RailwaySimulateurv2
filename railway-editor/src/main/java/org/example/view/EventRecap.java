@@ -44,7 +44,7 @@ import java.awt.event.ActionEvent;
  * @author Aurélie Chamouleau
  * @author Alexis BONAMY
  * @file ClockView.java
- * @date 2023/11/12
+ * @date N/A
  * @since 2.0
  */
 public final class EventRecap extends JScrollPane {
