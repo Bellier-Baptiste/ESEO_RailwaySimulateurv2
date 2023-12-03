@@ -45,7 +45,6 @@ import org.example.view.StationView;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 
 /**
  * A class for creating events {@link org.example.model.Event} on the map.
@@ -240,14 +239,8 @@ public class ActionMetroEvent {
         stationEnd = stationStart;
         stationStart = aux;
       }
-      ArrayList<StationView> stationViewsInEvent = this.getStationViews(line,
-              stationStart, stationEnd);
-      ArrayList<Integer> stationsInEvent = new ArrayList<>();
-      for(StationView stationView : stationViewsInEvent) {
-        stationView.setCenterCircleColor(eventColor);
-        stationsInEvent.add(stationView.getStation().getId());
-      }
-      event.setIdStations(stationsInEvent);
+      this.colorStationViews(line, stationStart, stationEnd,
+              eventColor);
       EventWindow.getInstance().dispatchEvent(new WindowEvent(
               EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
       MainWindow.getInstance().getMainPanel().repaint();
@@ -266,17 +259,16 @@ public class ActionMetroEvent {
     }
   }
 
-  private ArrayList<StationView> getStationViews(final LineView line,
-                                                 final Station stationStart,
-                                                 final Station stationEnd) {
-    ArrayList<StationView> stationViews = new ArrayList<>();
+  private void colorStationViews(final LineView line,
+                                 final Station stationStart,
+                                 final Station stationEnd,
+                                 final Color eventColor) {
     for (StationView stationView : line.getStationViews()) {
       if (this.isInDelta(stationView.getStation(), stationStart, stationEnd,
               line.getLine())) {
-        stationViews.add(stationView);
+        stationView.setCenterCircleColor(eventColor);
       }
     }
-    return stationViews;
   }
 
   /** Add an attendance peak event. */
@@ -394,3 +386,4 @@ public class ActionMetroEvent {
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 }
+

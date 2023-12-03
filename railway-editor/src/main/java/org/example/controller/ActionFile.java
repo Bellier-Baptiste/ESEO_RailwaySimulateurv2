@@ -243,17 +243,12 @@ public class ActionFile {
         case "lineClosed":
           EventLineClosed eventLineClosed = (EventLineClosed) event;
 
-          Element stationStartClosed = document.createElement("stationIdStart");
-          stationStartClosed.appendChild(
-              document.createTextNode(Integer.toString(eventLineClosed
-                  .getIdStationStart())));
-          eventName.appendChild(stationStartClosed);
-
-          Element stationEndClosed = document.createElement("stationIdEnd");
-          stationEndClosed
-              .appendChild(document.createTextNode(Integer.toString(
-                  eventLineClosed.getIdStationEnd())));
-          eventName.appendChild(stationEndClosed);
+          for(int i=0;i<eventLineClosed.getIdStations().size();i++) {
+            Element stationClosed = document.createElement("station"+i);
+            stationClosed.appendChild(document.createTextNode(Integer.toString(
+                    eventLineClosed.getIdStations().get(i))));
+            eventName.appendChild(stationClosed);
+          }
           break;
         case "attendancePeak":
           EventAttendancePeak eventAttendancePeak = (EventAttendancePeak) event;
