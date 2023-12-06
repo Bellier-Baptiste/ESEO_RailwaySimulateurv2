@@ -37,6 +37,7 @@ package models
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -166,9 +167,114 @@ func TestPopulation_OutsideSortedPopAllBefore(t *testing.T) {
 }
 
 func TestPopulation_StationExitPop(t *testing.T) {
+	aMap, _ := CreateMap()
+	population := NewPopulation(1, 0, 1, aMap)
+	stations := aMap.Stations()
+	trainDeparture := time.Date(2018, 10, 12, 20, 00, 0, 0, time.UTC)
+	population.UpdateOutsideToStations(trainDeparture)
 
+	waitingEmpty := population.InStation()[stations[0].Id()]
+
+	/*
+		Get the passenger and check if he is outside
+	*/
+	myPop := population.Passengers()
+	testString := population.FindPassenger(*myPop["0"])
+	assert.Equal(t, "outside", testString)
+
+	/*
+		Set the current trip of the passenger to the next trip
+	*/
+	myPop["0"].SetCurrentTrip(myPop["0"].NextTrip())
+	trip := myPop["0"].CurrentTrip()
+	fmt.Println(trip)
+
+	/*
+		Transfer the passenger to the station and check if he is in the station
+	*/
+	population.transferFromPopulationToStation(myPop["0"], aMap.Stations2()[0], trainDeparture)
+	testString = population.FindPassenger(*myPop["0"])
+	assert.Equal(t, "inStation #0", testString)
+
+	/*
+		Check if the station is not empty
+	*/
+	waiting := population.InStation()[stations[0].Id()]
+	assert.NotNil(t, waiting)
+
+	/*
+		Transfer the passenger to the outside and check if he is outside
+	*/
+	population.StationExitPop(trainDeparture, aMap.Stations2()[0])
+	testString = population.FindPassenger(*myPop["0"])
+	assert.Equal(t, "outside", testString)
+
+	/*
+		Check if the station is empty
+	*/
+	waiting = population.InStation()[stations[0].Id()]
+	fmt.Println(waiting)
+	assert.Equal(t, waitingEmpty, waiting)
 }
 
 func TestPopulation_AllStationExitPop(t *testing.T) {
+	/*
+		Set the population and the map
+		Size should be inferior or equal to the number of stations
+	*/
+	size := 2
+	aMap, _ := CreateMap()
+	population := NewPopulation(size, 0, 1, aMap)
+	stations := aMap.Stations()
+	trainDeparture := time.Date(2018, 10, 12, 20, 00, 0, 0, time.UTC)
+	population.UpdateOutsideToStations(trainDeparture)
 
+	waitingEmpty := population.InStation()[stations[0].Id()]
+
+	i := 0
+	for i < size {
+		/*
+			Get the passenger and check if he is outside
+		*/
+		myPop := population.Passengers()
+		testString := population.FindPassenger(*myPop[strconv.Itoa(i)])
+		assert.Equal(t, "outside", testString)
+
+		/*
+			Set the current trip of the passenger to the next trip
+		*/
+		myPop[strconv.Itoa(i)].SetCurrentTrip(myPop[strconv.Itoa(i)].NextTrip())
+		trip := myPop[strconv.Itoa(i)].CurrentTrip()
+		fmt.Println(trip)
+
+		/*
+			Transfer the passenger to the station and check if he is in the station
+		*/
+		population.transferFromPopulationToStation(myPop[strconv.Itoa(i)], aMap.Stations2()[i], trainDeparture)
+		testString = population.FindPassenger(*myPop[strconv.Itoa(i)])
+		strTest := "inStation #" + strconv.Itoa(i)
+		assert.Equal(t, strTest, testString)
+
+		/*
+			Check if the station is not empty
+		*/
+		waiting := population.InStation()[stations[i].Id()]
+		assert.NotNil(t, waiting)
+
+		/*
+			Transfer the passenger to the outside and check if he is outside
+		*/
+		population.AllStationExitPop(trainDeparture, &aMap)
+		testString = population.FindPassenger(*myPop[strconv.Itoa(i)])
+		assert.Equal(t, "outside", testString)
+
+		/*
+			Check if the station is empty
+		*/
+		waiting = population.InStation()[stations[i].Id()]
+		fmt.Println(waiting)
+		assert.Equal(t, waitingEmpty, waiting)
+
+		i++
+	}
 }

@@ -37,7 +37,6 @@ SOFTWARE.
 package models
 
 import (
-	"fmt"
 	"log"
 	"math"
 	"math/rand"
@@ -943,7 +942,9 @@ Param :
   - station *MetroStation : the station
 */
 func (p *Population) StationExitPop(aTime time.Time, station *MetroStation) {
-	fmt.Println(station.name)
+	/*
+		fmt.Println(station.name)
+	*/
 	for i := range p.inStation[station.Id()] {
 		passenger := p.inStation[station.Id()][i]
 		var trip = passenger.CurrentTrip()
@@ -954,8 +955,10 @@ func (p *Population) StationExitPop(aTime time.Time, station *MetroStation) {
 		passenger.ClearCurrentTrip()
 		passenger.calculateNextTrip()
 		p.OutsideSortedInsertPassenger(passenger)
-		//use after the transfer from station to pop
-		//println("station->outside: passenger #"+passenger.id)
+		/*
+			use after the transfer from station to pop
+			println("station->outside: passenger #"+passenger.id)
+		*/
 	}
 }
 
@@ -969,11 +972,15 @@ Param :
   - mapO *Map : the map of the network
 */
 func (p *Population) AllStationExitPop(aTime time.Time, mapO *Map) {
-	fmt.Println("\rTest end of simulation")
-	fmt.Println(p.InStation())
-	fmt.Println(p.InTrains())
+	/*
+		fmt.Println("\rTest end of simulation")
+		fmt.Println(p.InStation())
+		fmt.Println(p.InTrains())
+	*/
 	for _, station := range mapO.Stations() {
 		p.StationExitPop(aTime, &station)
 	}
-	fmt.Println(p.InStation())
+	/*
+		fmt.Println(p.InStation())
+	*/
 }
