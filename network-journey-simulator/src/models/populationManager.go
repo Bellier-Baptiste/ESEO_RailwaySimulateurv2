@@ -10,7 +10,7 @@ Date : 24/01/2019
 Author :
   - Team v1
   - Team v2
-  - Paul TRÉMOUREUX (quality check)
+  - Paul TRÉMOUREUX
 
 License : MIT License
 
@@ -37,11 +37,13 @@ SOFTWARE.
 package models
 
 import (
+	"fmt"
 	"log"
 	"math"
 	"math/rand"
 	"network-journey-simulator/src/configs"
 	"network-journey-simulator/src/tools"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -957,13 +959,13 @@ func (p *Population) StationExitPop(aTime time.Time, station *MetroStation) {
 		p.OutsideSortedInsertPassenger(passenger)
 		/*
 			use after the transfer from station to pop
-			println("station->outside: passenger #"+passenger.id)
+			fmt.Println("station->outside: passenger #" + passenger.id)
 		*/
 	}
 }
 
 /*
-AllStationExitPop transfer all passengers in all stations to the general
+AllStationsExitPop transfer all passengers in all stations to the general
 population.
 
 Param :
@@ -971,16 +973,57 @@ Param :
   - aTime time.Time : the time of the transfer
   - mapO *Map : the map of the network
 */
-func (p *Population) AllStationExitPop(aTime time.Time, mapO *Map) {
+func (p *Population) AllStationsExitPop(aTime time.Time, mapO *Map) {
+
+	fmt.Println("\rTest end of simulation")
+	fmt.Println(p.InStation())
+	fmt.Println(p.InTrains())
+
 	/*
-		fmt.Println("\rTest end of simulation")
-		fmt.Println(p.InStation())
-		fmt.Println(p.InTrains())
+		Call StationExitPop for each station
 	*/
 	for _, station := range mapO.Stations() {
-		p.StationExitPop(aTime, &station)
+		if !p.IsStationEmpty(&station) {
+			p.StationExitPop(aTime, &station)
+		}
 	}
 	/*
 		fmt.Println(p.InStation())
 	*/
+}
+
+/*
+IsStationEmpty return true if the station is empty, false otherwise.
+
+Param :
+  - p *Population : the population
+  - station *MetroStation : the station
+
+Return :
+  - bool : true if the station is empty, false otherwise
+*/
+func (p *Population) IsStationEmpty(station *MetroStation) bool {
+	emptyStation := map[string]*Passenger{}
+	if reflect.DeepEqual(p.inStation[station.Id()], emptyStation) {
+		return true
+	}
+	return false
+}
+
+/*
+IsTrainEmpty return true if the train is empty, false otherwise.
+
+Param :
+  - p *Population : the population
+  - train *MetroTrain : the station
+
+Return :
+  - bool : true if the station is empty, false otherwise
+*/
+func (p *Population) IsTrainEmpty(train *MetroTrain) bool {
+	emptyTrain := map[string]*Passenger{}
+	if reflect.DeepEqual(p.inTrain[train.Id()], emptyTrain) {
+		return true
+	}
+	return false
 }
