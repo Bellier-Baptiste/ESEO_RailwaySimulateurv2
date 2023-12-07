@@ -73,6 +73,7 @@ import java.util.Map;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
  * @file ActionFile.java
  * @date 2023/09/22
  * @see org.example.data.Data
@@ -313,16 +314,30 @@ public class ActionFile {
         case "attendancePeak":
           EventAttendancePeak eventAttendancePeak = (EventAttendancePeak) event;
 
+          String peakTime = eventAttendancePeak.getPeakTime();
+          peakTime = peakTime.replace("-", "T");
+          peakTime = peakTime.replace("/", "-");
+          peakTime = peakTime + END_TIME_STRING;
+
+          Element peakTimeElement = document.createElement("peakTime");
+          peakTimeElement.appendChild(document.createTextNode(peakTime));
+          eventName.appendChild(peakTimeElement);
+
           Element stationId = document.createElement("stationId");
           stationId
               .appendChild(document.createTextNode(Integer.toString(
                   eventAttendancePeak.getIdStation())));
           eventName.appendChild(stationId);
 
-          Element sizePeak = document.createElement("size");
+          Element sizePeak = document.createElement("peakSize");
           sizePeak.appendChild(document.createTextNode(Integer.toString(
               eventAttendancePeak.getSize())));
           eventName.appendChild(sizePeak);
+
+          Element peakWidth = document.createElement("peakWidth");
+          peakWidth.appendChild(document.createTextNode(Integer.toString(
+              eventAttendancePeak.getPeakWidth())));
+          eventName.appendChild(peakWidth);
           break;
         case "stationClosed":
           EventStationClosed eventStationClosed = (EventStationClosed) event;
@@ -360,13 +375,21 @@ public class ActionFile {
    */
   private void exportAreas(final Document document, final Element root) {
     // Areas of the Map
-    Element areas = document.createElement("areas");
-    root.appendChild(areas);
     for (AreaView areaView : MainWindow.getInstance().getMainPanel()
         .getAreaViews()) {
+
+      // if the current area is the first of the list
+      Element areas = null;
+      if (areaView.getArea().getId() == 0) {
+        areas = document.createElement("areas");
+        root.appendChild(areas);
+      }
+
       // one area of the map
       Element area = document.createElement("area");
-      areas.appendChild(area);
+      if (areas != null) {
+        areas.appendChild(area);
+      }
 
       // id of the area
       Element id = document.createElement("id");

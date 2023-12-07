@@ -50,6 +50,7 @@ public final class ActionLine {
   public static final String INCREMENT_LINE = "INCREMENT_LINE";
   /** String of the decrement action name. */
   public static final String DECREMENT_LINE = "DECREMENT_LINE";
+  /** String of the delete action name. */
   public static final String DELETE_LINE = "DELETE_LINE";
   /** Singleton instance of the class. */
   private static ActionLine instance;
@@ -96,8 +97,8 @@ public final class ActionLine {
 
   /**
    * Creates a {@link Line} with its linked {@link LineView} created and
-   * add this {@link LineView} to the {@link org.example.view.MainPanel} thanks to
-   * {@link LineController}.
+   * add this {@link LineView} to the {@link org.example.view.MainPanel} thanks
+   * to {@link LineController}.
    */
   public void addLine() {
     int lineIndex = MainWindow.getInstance().getMainPanel().getLineViews()

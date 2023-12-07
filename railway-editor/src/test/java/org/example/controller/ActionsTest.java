@@ -42,11 +42,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @date N/A
  * @since 2.0
  */
-public class ActionsTest {
+class ActionsTest {
 
 
   @Test
-  public void testAddLine() {
+  void testAddLine() {
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
     int nbLineView = MainWindow.getInstance().getMainPanel().getLineViews()
@@ -65,7 +65,7 @@ public class ActionsTest {
   }
 
   @Test
-  public void testAddStation() {
+  void testAddStation() {
     MainWindow.getInstance().getMainPanel().getLineViews().clear();
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
@@ -86,7 +86,7 @@ public class ActionsTest {
   }
 
   @Test
-  public void testAddArea() {
+  void testAddArea() {
     ActionArea actionArea = new ActionArea();
     int nbAreaView = MainWindow.getInstance().getMainPanel().getAreaViews()
         .size();
@@ -99,7 +99,7 @@ public class ActionsTest {
   }
 
   @Test
-  public void testLineSwitch() {
+  void testLineSwitch() {
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
     actionLine.addLine();

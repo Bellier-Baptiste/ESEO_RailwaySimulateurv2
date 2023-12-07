@@ -69,6 +69,7 @@ import java.util.Properties;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
  * @file ListEventPanel.java
  * @date N/A
  * @since 2.0
@@ -245,6 +246,14 @@ public final class ListEventPanel extends JPanel {
 
   //eventAttendancePeakAttribute
   /**
+   * date picker peak.
+   */
+  private JDatePickerImpl datePickerPeak;
+  /**
+   * clock panel peak.
+   */
+  private ClockPanel clockPanelPeak;
+  /**
    * edit station concerned text field.
    */
   private JTextField editStationConcerned;
@@ -253,10 +262,14 @@ public final class ListEventPanel extends JPanel {
    */
   private JTextField editPeakNumber;
   /**
-   * edit station closed concerned text field.
+   * edit peak width text field.
    */
+  private JTextField editPeakWidth;
 
   //eventStationClosedAttribute
+  /**
+   * edit station closed concerned text field.
+   */
   private JTextField editStationClosedConcerned;
   /**
    * edit train number text field.
@@ -285,6 +298,7 @@ public final class ListEventPanel extends JPanel {
     editStationConcerned = new JTextField();
     editLineSelected = new JTextField();
     editPeakNumber = new JTextField();
+    editPeakWidth = new JTextField();
     editStationEnd = new JTextField();
     editStationStart = new JTextField();
     editTrainNumber = new JTextField();
@@ -360,7 +374,7 @@ public final class ListEventPanel extends JPanel {
               c.fill = GridBagConstraints.HORIZONTAL;
               c.gridwidth = GRID_WIDTH;
               c.gridx = GRID_X_POSITION;
-              c.gridy = GRID_Y_POSITION;
+              c.gridy = GRID_Y_POSITION + 3;
               c.weighty = GRID_WIDTH;
               confirmEventBtn.addActionListener(e ->
                   ActionMetroEvent.getInstance().addAttendancePeak(
@@ -708,7 +722,7 @@ public final class ListEventPanel extends JPanel {
   private void initAttendancePeak(final GridBagConstraints c) {
     JLabel timeStart = new JLabel(START_TIME);
     JLabel timeEnd = new JLabel(END_TIME);
-
+    JLabel peakTime = new JLabel("Peak Time: ");
 
     Properties p = new Properties();
     p.put(PROPERTIES_TEXT_TODAY, PROPERTIES_TEXT_TODAY_VALUE);
@@ -717,21 +731,31 @@ public final class ListEventPanel extends JPanel {
 
     JPanel viewDateStart = new JPanel();
     JPanel viewDateEnd = new JPanel();
+    JPanel viewDatePeak = new JPanel();
     viewDateStart.setBorder(new BevelBorder(BevelBorder.RAISED));
     viewDateEnd.setBorder(new BevelBorder(BevelBorder.RAISED));
+    viewDatePeak.setBorder(new BevelBorder(BevelBorder.RAISED));
 
     UtilDateModel model = new UtilDateModel();
     UtilDateModel model2 = new UtilDateModel();
+    UtilDateModel model3 = new UtilDateModel();
     JDatePanelImpl datePanelStart = new JDatePanelImpl(model, p);
     Properties p2 = new Properties();
     JDatePanelImpl datePanelEnd = new JDatePanelImpl(model2, p2);
+    Properties p3 = new Properties();
+    JDatePanelImpl datePanelPeak = new JDatePanelImpl(model3, p3);
+
     datePickerStart = new JDatePickerImpl(datePanelStart,
         new DateLabelFormatter());
     datePickerEnd = new JDatePickerImpl(datePanelEnd, new DateLabelFormatter());
+    datePickerPeak = new JDatePickerImpl(datePanelPeak,
+        new DateLabelFormatter());
     viewDateStart.add(datePickerStart, BorderLayout.CENTER);
     viewDateEnd.add(datePickerEnd, BorderLayout.CENTER);
+    viewDatePeak.add(datePickerPeak, BorderLayout.CENTER);
     clockPanelStart = new ClockPanel();
     clockPanelEnd = new ClockPanel();
+    clockPanelPeak = new ClockPanel();
 
     JLabel stationConcerned = new JLabel("Id station concerned: ");
     editStationConcerned = new JTextField();
@@ -749,77 +773,80 @@ public final class ListEventPanel extends JPanel {
       stationConcernedPicker.setPreferredSize(new Dimension(
           SELECT_STATION_BTN_WIDTH, SELECT_STATION_BTN_HEIGHT));
       editPeakNumber = new JTextField();
+      editPeakWidth = new JTextField();
 
       c.anchor = GridBagConstraints.NORTHWEST;
-      c.fill = GridBagConstraints.VERTICAL;
-      c.gridwidth = 3;
-      c.gridx = 0;
-      c.gridy = 0;
-      c.gridheight = 1;
-      c.weightx = 3;
-      c.weighty = 0.1;
+      setUpGridBagConstraint(c, GridBagConstraints.VERTICAL, 3, 0, 3, 0.1);
       view.add(timeStart, c);
 
-      c.fill = GridBagConstraints.BOTH;
-      c.gridwidth = 1;
-      c.gridx = 0;
-      c.gridy = 1;
-      c.gridheight = 1;
-      c.weightx = 3;
-      c.weighty = 0.1;
+      setUpGridBagConstraint(c, GridBagConstraints.BOTH, 1, 1, 3, 0.1);
       view.add(viewDateStart, c);
       c.gridx = 1;
       c.gridy = 1;
       c.weighty = 0.1;
       view.add(clockPanelStart, c);
 
-      c.fill = GridBagConstraints.VERTICAL;
-      c.gridwidth = 3;
-      c.gridx = 0;
-      c.gridy = 2;
-      c.gridheight = 1;
-      c.weightx = 3;
-      c.weighty = 0.1;
+      setUpGridBagConstraint(c, GridBagConstraints.VERTICAL, 3, 2, 3, 0.1);
       view.add(timeEnd, c);
 
-      c.fill = GridBagConstraints.BOTH;
-      c.gridwidth = 1;
-      c.gridx = 0;
-      c.gridy = 3;
-      c.gridheight = 1;
-      c.weightx = 3;
-      c.weighty = 0.4;
+      setUpGridBagConstraint(c, GridBagConstraints.BOTH, 1, 3, 3, 0.4);
       view.add(viewDateEnd, c);
       c.gridx = 1;
       c.gridy = 3;
       c.weighty = 0.4;
       view.add(clockPanelEnd, c);
 
-      c.fill = GridBagConstraints.HORIZONTAL;
-      c.gridx = 0;
-      c.gridy = 4;
-      c.weighty = 0.1;
-      c.insets = new Insets(15, 0, 0, 0);
-      view.add(stationConcerned, c);
-      c.gridx = 0;
-      c.gridy = 5;
-      c.weighty = 0.2;
-      view.add(editStationConcerned, c);
-      c.fill = GridBagConstraints.CENTER;
+      setUpGridBagConstraint(c, GridBagConstraints.HORIZONTAL, 1, 4, 3, 0.1);
+      view.add(peakTime, c);
+
+      setUpGridBagConstraint(c, GridBagConstraints.BOTH, 1, 5, 3, 0.4);
+      view.add(viewDatePeak, c);
       c.gridx = 1;
       c.gridy = 5;
-      c.weighty = 0.2;
-      view.add(stationConcernedPicker, c);
+      c.weighty = 0.4;
+      view.add(clockPanelPeak, c);
+
       c.fill = GridBagConstraints.HORIZONTAL;
       c.gridx = 0;
       c.gridy = 6;
       c.weighty = 0.1;
-      JLabel peakNumber = new JLabel("peakNumber: ");
-      view.add(peakNumber, c);
+      c.insets = new Insets(15, 0, 0, 0);
+      view.add(stationConcerned, c);
       c.gridx = 0;
       c.gridy = 7;
       c.weighty = 0.2;
+      view.add(editStationConcerned, c);
+      c.fill = GridBagConstraints.CENTER;
+      c.gridx = 1;
+      c.gridy = 7;
+      c.weighty = 0.2;
+      view.add(stationConcernedPicker, c);
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.gridx = 0;
+      c.gridy = 8;
+      c.weighty = 0.1;
+      JLabel peakNumber = new JLabel("peakNumber: ");
+      view.add(peakNumber, c);
+      c.gridx = 0;
+      c.gridy = 9;
+      c.weighty = 0.2;
       view.add(editPeakNumber, c);
+      c.gridx = 0;
+      c.gridy = 10;
+      c.weighty = 0;
+      JLabel peakWidth = new JLabel("peakWidth: ");
+      view.add(peakWidth, c);
+      JLabel peakWidthExample = new JLabel("Regular peak: 10:00-10:30 => "
+          + "peakWidth = 3");
+      peakWidthExample.setFont(peakWidthExample.getFont().deriveFont(10f));
+      c.gridx = 0;
+      c.gridy = 11;
+      c.weighty = 0.2;
+      view.add(peakWidthExample, c);
+      c.gridx = 0;
+      c.gridy = 12;
+      c.weighty = 0.2;
+      view.add(editPeakWidth, c);
 
 
       eventConfig.revalidate();
@@ -829,6 +856,33 @@ public final class ListEventPanel extends JPanel {
       e.printStackTrace();
     }
   }
+
+
+  /**
+   * Update the view.
+   *
+   * @param c         grid bag constraints
+   * @param fill      fill
+   * @param gridWidth grid width
+   * @param gridY     grid y
+   * @param weightX   weight x
+   * @param weightY   weight y
+   */
+  public void setUpGridBagConstraint(final GridBagConstraints c,
+                                      final int fill,
+                                      final int gridWidth,
+                                      final int gridY,
+                                      final int weightX,
+                                      final double weightY) {
+    c.fill = fill;
+    c.gridwidth = gridWidth;
+    c.gridx = 0;
+    c.gridy = gridY;
+    c.gridheight = 1;
+    c.weightx = weightX;
+    c.weighty = weightY;
+  }
+
 
   /**
    * edition fields for event Station Closed.
@@ -1119,14 +1173,18 @@ public final class ListEventPanel extends JPanel {
 
     String dateStart = df.format((Date) datePickerStart.getModel().getValue());
     String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String datePeak = df.format((Date) datePickerPeak.getModel().getValue());
     String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
+    String timePeak = dfTime.format(clockPanelPeak.getTimeSpinner().getValue());
     String stationConcerned = editStationConcerned.getText();
     String peakNb = editPeakNumber.getText();
+    String peakWidth = editPeakWidth.getText();
 
-    return dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
-        + stationConcerned + "," + peakNb;
+    return dateStart + "," + timeStart + "," + dateEnd + ","
+        + timeEnd + "," + datePeak + "," + timePeak + "," + stationConcerned
+        + "," + peakNb + "," + peakWidth;
   }
 
   /**
