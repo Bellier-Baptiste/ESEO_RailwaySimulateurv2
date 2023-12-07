@@ -108,10 +108,6 @@ public class ActionFile {
    * Number of letters in alphabet.
    */
   private static final int ALPHABET_SIZE = 26;
-  
-  /** Seconds. */
-  private static final String SECONDS = ":00.000Z";
-  
   /**
    * End of time string.
    */
@@ -321,7 +317,7 @@ public class ActionFile {
           String peakTime = eventAttendancePeak.getPeakTime();
           peakTime = peakTime.replace("-", "T");
           peakTime = peakTime.replace("/", "-");
-          peakTime = peakTime + SECONDS;
+          peakTime = peakTime + END_TIME_STRING;
 
           Element peakTimeElement = document.createElement("peakTime");
           peakTimeElement.appendChild(document.createTextNode(peakTime));
