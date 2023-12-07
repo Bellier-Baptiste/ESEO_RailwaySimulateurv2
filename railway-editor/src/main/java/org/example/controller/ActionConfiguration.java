@@ -30,9 +30,12 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.view.EditConfigDialog;
 import org.example.view.EditConfigParamPanel;
+import org.example.view.MainWindow;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -70,6 +73,10 @@ public class ActionConfiguration {
    */
   public ActionConfiguration(final EditConfigDialog editConfigDialogToSet) {
     this.editConfigDialog = editConfigDialogToSet;
+  }
+
+  public ActionConfiguration(){
+    this.editConfigDialog = null;
   }
 
   /**
@@ -150,4 +157,26 @@ public class ActionConfiguration {
       Thread.currentThread().interrupt();
     }
   }
+
+  public void showExportConfigDialog() {
+    JFileChooser fileChooser = new JFileChooser();
+
+    fileChooser.setDialogTitle("Specify a file to save");
+
+    int userSelection = fileChooser.showSaveDialog(MainWindow.getInstance());
+
+    if (userSelection == JFileChooser.APPROVE_OPTION) {
+      File fileToSave = fileChooser.getSelectedFile();
+      this.exportConfig(fileToSave);
+    }
+  }
+
+  public void exportConfig(File fileToSave) {
+    try {
+      Files.copy(new File(JSON_FILE_PATH).toPath(), fileToSave.toPath());
+    } catch (IOException e) {
+      Thread.currentThread().interrupt();
+    }
+  }
+
 }

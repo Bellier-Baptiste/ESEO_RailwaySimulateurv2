@@ -24,6 +24,7 @@
 
 package org.example.view;
 
+import org.example.controller.ActionConfiguration;
 import org.example.controller.ActionFile;
 import org.example.controller.ActionThemeMode;
 
@@ -87,6 +88,8 @@ public final class MenuBar extends JMenuBar {
     config.add(openConfig);
     JMenuItem exportConfig = new JMenuItem(EXPORT_TEXT);
     exportConfig.setName(EXPORT_TEXT);
+    exportConfig.addActionListener(e ->
+      new ActionConfiguration().showExportConfigDialog());
     config.add(exportConfig);
 
     // Theme menu
