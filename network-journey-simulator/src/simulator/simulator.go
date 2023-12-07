@@ -1596,6 +1596,13 @@ func (s *Simulator) executeELCStartEventROSetPassengerStart(trip *models.Trip,
 			}
 			var j = newStartingStation.Id()
 			var k = trip.Path().EndStation().Id()
+			if j == k {
+				s.population.Outside()[i].RemoveTrip(trip)
+				if s.config.PrintDebug() {
+					fmt.Println(" - deleted path")
+				}
+				return
+			}
 			s.population.Outside()[i].NextTrip().SetPath(
 				*s.mapObject.Graph()[j][k])
 			if s.config.PrintDebug() {
@@ -1626,7 +1633,7 @@ Return :
 */
 func (s *Simulator) executeELCStartEventROSetPath(trip *models.Trip,
 	pass *models.Passenger, i string) *models.Trip {
-	trip = pass.NextTrip()
+	//trip = pass.NextTrip()
 	var j = trip.Path().StartStation().Id()
 	var k = trip.Path().EndStation().Id()
 	path := s.mapObject.Graph()[j][k]
@@ -1681,7 +1688,9 @@ func (s *Simulator) executeELCStartEventRerouteOutside(
 			}
 			s.executeELCStartEventROSetPassengerStart(trip, nearestStation, i)
 
-			trip = s.executeELCStartEventROSetPath(trip, pass, i)
+			if trip != nil {
+				trip = s.executeELCStartEventROSetPath(trip, pass, i)
+			}
 		}
 	}
 }
@@ -2170,9 +2179,9 @@ func (s *Simulator) getEventsLineClosed(start,
 
 	for i := range s.eventsLineClosed {
 		if (s.eventsLineClosed[i].Start().Before(end) &&
-			s.eventsStationClosed[i].Start().After(start)) ||
+			s.eventsLineClosed[i].Start().After(start)) ||
 			(s.eventsLineClosed[i].End().Before(end) &&
-				s.eventsStationClosed[i].End().After(start)) {
+				s.eventsLineClosed[i].End().After(start)) {
 			output = append(output, &s.eventsLineClosed[i])
 		}
 	}

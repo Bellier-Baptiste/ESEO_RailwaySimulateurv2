@@ -25,8 +25,8 @@
 package org.example.model;
 
 /**
- * Model class extending {@link org.example.model.EventBetween2Stations} which describes a
- * delay between two stations {@link org.example.model.Station}.
+ * Model class extending {@link org.example.model.EventBetween2Stations} which
+ * describes a delay between two stations {@link org.example.model.Station}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
@@ -35,7 +35,9 @@ package org.example.model;
  * @since 2.0
  */
 public class EventLineDelay extends EventBetween2Stations {
-  /** Delay in minutes for attendance peak events. */
+  /**
+   * Delay in minutes for attendance peak events.
+   */
   private int delay;
 
   /**
@@ -48,8 +50,7 @@ public class EventLineDelay extends EventBetween2Stations {
    */
   public EventLineDelay(final int id, final String startTime,
                         final String endTime, final EventType type) {
-    super(id, startTime, endTime, type);
-    super.setEventName(EventName.LINE_DELAYED);
+    super(id, startTime, endTime, type, EventName.LINE_DELAYED);
   }
 
   /**
