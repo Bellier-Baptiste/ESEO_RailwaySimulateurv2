@@ -53,6 +53,13 @@
 # .idea/modules.xml
  .idea/*.iml
 # .idea/modules
+*.iml
+
+# target
+target/
+
+# Sonar
+.scannerwork/
 
 # CMake
 cmake-build-*/
@@ -93,3 +100,5 @@ tools/testGlobalTimetableCSV\.csv
 output/
 
 *.csv
+
+archives/

@@ -1,0 +1,265 @@
+<map>
+  <stations>
+    <station>
+      <id>0</id>
+      <name>Agapanthe</name>
+      <position>
+        <latitude>0</latitude>
+        <longitude>0</longitude>
+      </position>
+      <lines>
+        <line id="0" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>1</id>
+      <name>Bleuet</name>
+      <position>
+        <latitude>-0.07861428811085497</latitude>
+        <longitude>0.030136697460629257</longitude>
+      </position>
+      <lines>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>2</id>
+      <name>Coquelicot</name>
+      <position>
+        <latitude>-0.009238795325112865</latitude>
+        <longitude>0.0038268343236509033</longitude>
+      </position>
+      <lines>
+        <line id="0" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>3</id>
+      <name>Dahlia</name>
+      <position>
+        <latitude>-0.06937549278574211</latitude>
+        <longitude>0.026309863136978355</longitude>
+      </position>
+      <lines>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>4</id>
+      <name>Edelweiss</name>
+      <position>
+        <latitude>-0.01847759065022573</latitude>
+        <longitude>3.0357660829594124e-18</longitude>
+      </position>
+      <lines>
+        <line id="0" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>5</id>
+      <name>Ficaire</name>
+      <position>
+        <latitude>-0.06554865846209121</latitude>
+        <longitude>0.017071067811865487</longitude>
+      </position>
+      <lines>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>6</id>
+      <name>Grebera</name>
+      <position>
+        <latitude>-0.02847759065022573</latitude>
+        <longitude>4.87273628168044e-18</longitude>
+      </position>
+      <lines>
+        <line id="0" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>7</id>
+      <name>Hortensia</name>
+      <position>
+        <latitude>-0.06554865846209121</latitude>
+        <longitude>0.0070710678118654875</longitude>
+      </position>
+      <lines>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>8</id>
+      <name>Iris</name>
+      <position>
+        <latitude>-0.03847759065022573</latitude>
+        <longitude>6.709706480401467e-18</longitude>
+      </position>
+      <lines>
+        <line id="0" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>9</id>
+      <name>Jasmin</name>
+      <position>
+        <latitude>-0.05847759065022574</latitude>
+        <longitude>1.0383646877843522e-17</longitude>
+      </position>
+      <lines>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>10</id>
+      <name>Kalmie</name>
+      <position>
+        <latitude>-0.048477590650225735</latitude>
+        <longitude>8.546676679122494e-18</longitude>
+      </position>
+      <lines>
+        <line id="0" platform=""></line>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>11</id>
+      <name>Lys</name>
+      <position>
+        <latitude>-0.04140652283836026</latitude>
+        <longitude>-0.0070710678118654675</longitude>
+      </position>
+      <lines>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>12</id>
+      <name>Marguerite</name>
+      <position>
+        <latitude>-0.05847759065022574</latitude>
+        <longitude>1.0383646877843522e-17</longitude>
+      </position>
+      <lines>
+        <line id="0" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>13</id>
+      <name>Narcisse</name>
+      <position>
+        <latitude>-0.04140652283836026</latitude>
+        <longitude>-0.017071067811865466</longitude>
+      </position>
+      <lines>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>14</id>
+      <name>Ophrys</name>
+      <position>
+        <latitude>-0.0677163859753386</latitude>
+        <longitude>-0.00382683432365089</longitude>
+      </position>
+      <lines>
+        <line id="0" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>15</id>
+      <name>Petunia</name>
+      <position>
+        <latitude>-0.048477590650225735</latitude>
+        <longitude>-0.02414213562373094</longitude>
+      </position>
+      <lines>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>16</id>
+      <name>Quinoa</name>
+      <position>
+        <latitude>-0.07695518130045147</latitude>
+        <longitude>1.3444106938820255e-17</longitude>
+      </position>
+      <lines>
+        <line id="0" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>17</id>
+      <name>Renoncule</name>
+      <position>
+        <latitude>-0.057716385975338604</latitude>
+        <longitude>-0.02796896994738184</longitude>
+      </position>
+      <lines>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>18</id>
+      <name>Scabieuse</name>
+      <position>
+        <latitude>-0.08695518130045146</latitude>
+        <longitude>1.528107713754128e-17</longitude>
+      </position>
+      <lines>
+        <line id="0" platform=""></line>
+      </lines>
+    </station>
+    <station>
+      <id>19</id>
+      <name>Tulipe</name>
+      <position>
+        <latitude>-0.06478745378720407</latitude>
+        <longitude>-0.035040037759247314</longitude>
+      </position>
+      <lines>
+        <line id="1" platform=""></line>
+      </lines>
+    </station>
+  </stations>
+  <lines>
+    <line>
+      <id>0</id>
+      <name>Black</name>
+      <numberOfTrain>4</numberOfTrain>
+      <stations>
+        <station id="0" order="0"></station>
+        <station id="2" order="1"></station>
+        <station id="4" order="2"></station>
+        <station id="6" order="3"></station>
+        <station id="8" order="4"></station>
+        <station id="10" order="5"></station>
+        <station id="12" order="6"></station>
+        <station id="14" order="7"></station>
+        <station id="16" order="8"></station>
+        <station id="18" order="9"></station>
+      </stations>
+    </line>
+    <line>
+      <id>1</id>
+      <name>Cyan</name>
+      <numberOfTrain>4</numberOfTrain>
+      <stations>
+        <station id="1" order="0"></station>
+        <station id="3" order="1"></station>
+        <station id="5" order="2"></station>
+        <station id="7" order="3"></station>
+        <station id="9" order="4"></station>
+        <station id="10" order="5"></station>
+        <station id="11" order="6"></station>
+        <station id="13" order="7"></station>
+        <station id="15" order="8"></station>
+        <station id="17" order="9"></station>
+        <station id="19" order="10"></station>
+      </stations>
+    </line>
+  </lines>
+  <events></events>
+  <areas></areas>
+  <area></area>
+</map>
