@@ -370,3 +370,41 @@ func TestPopulation_AllStationExitPop(t *testing.T) {
 		i++
 	}
 }
+
+func TestPopulation_IsStationEmpty(t *testing.T) {
+	aMap, _ := CreateMap()
+	population := NewPopulation(1, 0, 1, aMap)
+	stations := aMap.Stations()
+	trainDeparture := time.Date(2018, 10, 12, 20, 00, 0, 0, time.UTC)
+
+	waitingEmpty := map[string]*Passenger{}
+	myPop := population.Passengers()
+
+	/*
+		Check if the station is empty
+	*/
+	waiting := population.InStation()[stations[0].Id()]
+	assert.Equal(t, waitingEmpty, waiting)
+
+	/*
+		Set the current trip of the passenger to the next trip
+	*/
+	myPop["0"].SetCurrentTrip(myPop["0"].NextTrip())
+	trip := myPop["0"].CurrentTrip()
+	fmt.Println(trip)
+
+	/*
+		Transfer the passenger to the station and check if he is in the station
+	*/
+	population.transferFromPopulationToStation(myPop["0"], aMap.Stations2()[0], trainDeparture)
+
+	/*
+		Check if the station is not empty
+	*/
+	waiting = population.InStation()[stations[0].Id()]
+	assert.NotNil(t, waiting)
+}
+
+func TestPopulation_IsTrainEmpty(t *testing.T) {
+
+}
