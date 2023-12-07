@@ -119,7 +119,7 @@ public final class ListEventPanel extends JPanel {
   public static final String FORMAT_TIME = "HH:mm";
   /** selection png path. */
   @SuppressWarnings("squid:S1075")
-  public static final String SELECTION_PNG_PATH = "/resources/selection.png";
+  public static final String SELECTION_PNG_PATH = "/images/selection.png";
   /** list event panel column names. */
   private static final String[] COLUMN_NAMES = {"Event Name", "Type",
       "Event Description"};

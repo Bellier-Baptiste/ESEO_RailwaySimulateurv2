@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 /**
  * Model class which describes a generic event between two
- * {@link model.Station}.
+ * {@link org.example.model.Station}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

@@ -26,7 +26,7 @@ package org.example.model;
 
 /**
  * Model class extending {@link Event} which describes an attendance peak on a
- * {@link model.Station}.
+ * {@link org.example.model.Station}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

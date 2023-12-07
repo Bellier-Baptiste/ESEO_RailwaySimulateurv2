@@ -6,10 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
     </content>
   </component>
-  <component name="CheckStyle-IDEA-Module" serialisationVersion="2">
-    <option name="activeLocationsIds" />
-  </component>
   <component name="SonarLintModuleSettings">
-    <option name="uniqueId" value="b842abfa-910e-42f6-a293-23c8fdee33d4" />
+    <option name="uniqueId" value="7a23a33e-b3fe-4878-ba02-65885c02f1f4" />
   </component>
 </module>

@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package unittests.testmodel;
+package org.example.unittests.testmodel;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

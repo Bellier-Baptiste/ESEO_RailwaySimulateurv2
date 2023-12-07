@@ -34,16 +34,16 @@ import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
 import org.example.model.Station;
+import org.example.view.AreaView;
+import org.example.view.LineView;
+import org.example.view.MainWindow;
+import org.example.view.StationView;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.example.view.AreaView;
-import org.example.view.LineView;
-import org.example.view.MainWindow;
-import org.example.view.StationView;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -60,6 +60,7 @@ import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -69,30 +70,45 @@ import java.util.Map;
  * A class for performing actions related to the file menu.
  * Linked to menu items in {@link org.example.view.MenuBar}.
  *
- * @see org.example.data.Data
- *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
  * @file ActionFile.java
  * @date 2023/09/22
+ * @see org.example.data.Data
  * @since 3.0
  */
 public class ActionFile {
-  /** Name of the export action. */
+  /**
+   * Name of the export action.
+   */
   public static final String EXPORT_NAME = "Export";
-  /** Name of the import action. */
+  /**
+   * Name of the import action.
+   */
   public static final String IMPORT_NAME = "Open";
-  /** String of the position tag. */
+  /**
+   * String of the position tag.
+   */
   public static final String POSITION = "position";
-  /** String of the lines tag. */
+  /**
+   * String of the lines tag.
+   */
   public static final String LINES = "lines";
-  /** String of the stations tag. */
+  /**
+   * String of the stations tag.
+   */
   public static final String STATIONS = "stations";
-  /** String of the station tag. */
+  /**
+   * String of the station tag.
+   */
   public static final String STATION = "station";
-  /** Number of letters in alphabet. */
+  /**
+   * Number of letters in alphabet.
+   */
   private static final int ALPHABET_SIZE = 26;
-  /** Singleton instance. */
+  /**
+   * Singleton instance.
+   */
   private static ActionFile instance;
 
   /**
@@ -189,7 +205,7 @@ public class ActionFile {
    * Generate the xml part of the events.
    *
    * @param document the document to add the events
-   * @param root the root element of the document
+   * @param root     the root element of the document
    */
   private void exportEvents(final Document document, final Element root) {
     // Events
@@ -296,7 +312,7 @@ public class ActionFile {
    * Generates the xml part of the areas.
    *
    * @param document the document to add the areas
-   * @param root the root element of the document
+   * @param root     the root element of the document
    */
   private void exportAreas(final Document document, final Element root) {
     // Areas of the Map
@@ -316,84 +332,105 @@ public class ActionFile {
 
       // position of the area
       Element position = document.createElement(POSITION);
-      Attr posX = document.createAttribute("posX");
-      posX.setValue(Integer.toString(areaView.getArea().getPosX()));
-      position.setAttributeNode(posX);
-      Attr posY = document.createAttribute("posY");
-      posY.setValue(Integer.toString(areaView.getArea().getPosY()));
-      position.setAttributeNode(posY);
+      Attr latitudeTop = document.createAttribute("latitudeTop");
+      latitudeTop.setValue(Double.toString(areaView.getArea()
+          .getLatitudeTop()));
+      position.setAttributeNode(latitudeTop);
+      Attr longitudeTop = document.createAttribute("longitudeTop");
+      longitudeTop.setValue(Double.toString(areaView.getArea()
+          .getLongitudeTop()));
+      position.setAttributeNode(longitudeTop);
+      Attr latitudeBot = document.createAttribute("latitudeBot");
+      latitudeBot.setValue(Double.toString(areaView.getArea()
+          .getLatitudeBot()));
+      position.setAttributeNode(latitudeBot);
+      Attr longitudeBot = document.createAttribute("longitudeBot");
+      longitudeBot.setValue(Double.toString(areaView.getArea()
+          .getLongitudeBot()));
+      position.setAttributeNode(longitudeBot);
       area.appendChild(position);
 
-      // size of the area
-      Element size = document.createElement("size");
-      Attr width = document.createAttribute("width");
-      width.setValue(Integer.toString(areaView.getArea().getWidth()));
-      size.setAttributeNode(width);
-      Attr height = document.createAttribute("height");
-      height.setValue(Integer.toString(areaView.getArea().getHeight()));
-      size.setAttributeNode(height);
-      area.appendChild(size);
-
-      // type of the area (Stations destination)
-      Element areaType = document.createElement("type");
-      areaType.appendChild(document.createTextNode(areaView.getArea()
-          .getDestination()));
-      area.appendChild(areaType);
-
-      // distribution of the area
-      Element distribution = document.createElement("distribution");
-      // tourist Attribute
-      Attr attrTourist = document.createAttribute(Data.AREA_TOURIST);
-      attrTourist.setValue(Integer.toString(areaView.getArea()
-          .getDistribution().get(Data.AREA_TOURIST)));
-      distribution.setAttributeNode(attrTourist);
-
-      // Student attribute
-      Attr attrStudent = document.createAttribute(Data.AREA_STUDENT);
-      attrStudent.setValue(Integer.toString(areaView.getArea()
-          .getDistribution().get(Data.AREA_STUDENT)));
-      distribution.setAttributeNode(attrStudent);
-
-      // Businessman attribute
-      Attr attrBusinessman = document.createAttribute(Data.AREA_BUSINESSMAN);
-      attrBusinessman
-          .setValue(Integer.toString(areaView.getArea().getDistribution()
-              .get(Data.AREA_BUSINESSMAN)));
-      distribution.setAttributeNode(attrBusinessman);
-
-      // worker attribute
-      Attr attrWorker = document.createAttribute(Data.AREA_WORKER);
-      attrWorker.setValue(Integer.toString(areaView.getArea().getDistribution()
-          .get(Data.AREA_WORKER)));
-      distribution.setAttributeNode(attrWorker);
-
-      // child attribute
-      Attr attrChild = document.createAttribute(Data.AREA_CHILD);
-      attrChild.setValue(Integer.toString(areaView.getArea().getDistribution()
-          .get(Data.AREA_CHILD)));
-      distribution.setAttributeNode(attrChild);
-
-      // retired attribute
-      Attr attrRetired = document.createAttribute(Data.AREA_RETIRED);
-      attrRetired.setValue(Integer.toString(areaView.getArea().getDistribution()
-          .get(Data.AREA_RETIRED)));
-      distribution.setAttributeNode(attrRetired);
-
-      // unemployed attribute
-      Attr attrUnemployed = document.createAttribute(Data.AREA_UNEMPLOYED);
-      attrUnemployed
-          .setValue(Integer.toString(areaView.getArea().getDistribution()
-              .get(Data.AREA_UNEMPLOYED)));
-      distribution.setAttributeNode(attrUnemployed);
-      area.appendChild(distribution);
+      this.exportDistributions(document, areaView, area);
     }
+  }
+
+  /**
+   * Export the distributions elements of an area or a station
+   * that doesn't have an area.
+   *
+   * @param document the document to add the distributions
+   * @param areaView the area view, null if it's for a station
+   * @param element the element to add the distributions
+   */
+  private void exportDistributions(final Document document,
+                                   final AreaView areaView,
+                                   final Element element) {
+    List<String> distributionPopulationElements = Arrays.asList(
+        Data.AREA_TOURIST,
+        Data.AREA_STUDENT,
+        Data.AREA_BUSINESSMAN,
+        Data.AREA_WORKER,
+        Data.AREA_CHILD,
+        Data.AREA_RETIRED,
+        Data.AREA_UNEMPLOYED
+    );
+
+    List<String> distributionDestinationElements = Arrays.asList(
+        Data.AREA_RESIDENTIAL,
+        Data.AREA_COMMERCIAL,
+        Data.AREA_OFFICE,
+        Data.AREA_INDUSTRIAL,
+        Data.AREA_TOURISTIC,
+        Data.AREA_LEISURE,
+        Data.AREA_EDUCATIONAL
+    );
+
+    /* Export population distribution. */
+    Element populationDistribution = document.createElement(
+        "populationDistribution");
+    for (String distributionPopulationElement
+        : distributionPopulationElements) {
+
+      Attr attr = document.createAttribute(distributionPopulationElement
+          .toLowerCase());
+      if (areaView != null) {
+        attr.setValue(Integer.toString(areaView.getArea()
+            .getDistributionPopulation()
+            .get(distributionPopulationElement)));
+      } else {
+        attr.setValue(String.valueOf(Area.getDefaultPopulationDistribution(
+            distributionPopulationElement)));
+      }
+      populationDistribution.setAttributeNode(attr);
+    }
+    element.appendChild(populationDistribution);
+
+    /* Export destination distribution. */
+    Element destinationDistribution = document.createElement(
+        "destinationDistribution");
+    for (String distributionDestinationElement
+        : distributionDestinationElements) {
+
+      Attr attr = document.createAttribute(distributionDestinationElement
+          .toLowerCase());
+      if (areaView != null) {
+        attr.setValue(Integer.toString(areaView.getArea()
+                .getDistributionDestination()
+            .get(distributionDestinationElement)));
+      } else {
+        attr.setValue(String.valueOf(Area.getDefaultDestinationDistribution(
+            distributionDestinationElement)));
+      }
+      destinationDistribution.setAttributeNode(attr);
+    }
+    element.appendChild(destinationDistribution);
   }
 
   /**
    * Generates the xml part of the lines.
    *
    * @param document the document to add the lines
-   * @param root the root element of the document
+   * @param root     the root element of the document
    */
   private void exportLines(final Document document, final Element root) {
     // lines of map
@@ -449,7 +486,7 @@ public class ActionFile {
    * Generates the xml part of the stations.
    *
    * @param document the document to add the stations
-   * @param root the root element of the document
+   * @param root     the root element of the document
    */
   private void exportStations(final Document document, final Element root) {
     // stations of map
@@ -498,68 +535,14 @@ public class ActionFile {
 
           this.exportStationsLines(document, station, stationView);
 
-          // Station destination element
-          Element destination = document.createElement("destination");
+          // id area element
           if (stationView.getStation().getArea() != null) {
-            destination.appendChild(
-                document.createTextNode(stationView.getStation().getArea()
-                    .getDestination()));
-            station.appendChild(destination);
-
-            // station distribution element
-            Element areaDistribution = document.createElement(
-                "areaDistribution");
-            // tourist Attribute
-            Attr attrTourist = document.createAttribute("tourist");
-            attrTourist.setValue(Integer
-                .toString(stationView.getStation().getArea().getDistribution()
-                    .get(Data.AREA_TOURIST)));
-            areaDistribution.setAttributeNode(attrTourist);
-
-            // Student attribute
-            Attr attrStudent = document.createAttribute("student");
-            attrStudent.setValue(Integer
-                .toString(stationView.getStation().getArea().getDistribution()
-                    .get(Data.AREA_STUDENT)));
-            areaDistribution.setAttributeNode(attrStudent);
-
-            // Businessman attribute
-            Attr attrBusinessman = document.createAttribute(
-                "businessman");
-            attrBusinessman.setValue(Integer.toString(
-                stationView.getStation().getArea().getDistribution().get(
-                    Data.AREA_BUSINESSMAN)));
-            areaDistribution.setAttributeNode(attrBusinessman);
-
-            // worker attribute
-            Attr attrWorker = document.createAttribute("worker");
-            attrWorker.setValue(Integer
-                .toString(stationView.getStation().getArea().getDistribution()
-                    .get(Data.AREA_WORKER)));
-            areaDistribution.setAttributeNode(attrWorker);
-
-            // child attribute
-            Attr attrChild = document.createAttribute("child");
-            attrChild.setValue(Integer
-                .toString(stationView.getStation().getArea().getDistribution()
-                    .get(Data.AREA_CHILD)));
-            areaDistribution.setAttributeNode(attrChild);
-
-            // retired attribute
-            Attr attrRetired = document.createAttribute("retired");
-            attrRetired.setValue(Integer
-                .toString(stationView.getStation().getArea().getDistribution()
-                    .get(Data.AREA_RETIRED)));
-            areaDistribution.setAttributeNode(attrRetired);
-
-            // unemployed attribute
-            Attr attrUnemployed = document.createAttribute("unemployed");
-            attrUnemployed.setValue(Integer.toString(
-                stationView.getStation().getArea().getDistribution().get(
-                    Data.AREA_UNEMPLOYED)));
-            areaDistribution.setAttributeNode(attrUnemployed);
-
-            station.appendChild(areaDistribution);
+            Element idArea = document.createElement("idArea");
+            idArea.appendChild(document.createTextNode(Integer.toString(
+                stationView.getStation().getArea().getId())));
+            station.appendChild(idArea);
+          } else {
+            this.exportDistributions(document, null, station);
           }
           stationIds.add(stationView.getStation().getId());
         }
@@ -570,8 +553,8 @@ public class ActionFile {
   /**
    * Generates the xml part of the stations lines.
    *
-   * @param document the document to add the stations lines
-   * @param station the station element
+   * @param document    the document to add the stations lines
+   * @param station     the station element
    * @param stationView the station view
    */
   private void exportStationsLines(final Document document,
@@ -636,27 +619,16 @@ public class ActionFile {
 
       List<Line> lineModelList = new ArrayList<>();
 
-      int linesNumber = Collections.max(linesId) + 1;
-      for (int i = 0; i < linesNumber; i++) {
-        Line line = new Line(i, new ArrayList<>());
-        lineModelList.add(line);
+      if (!linesId.isEmpty()) {
+        int linesNumber = Collections.max(linesId) + 1;
+        for (int i = 0; i < linesNumber; i++) {
+          Line line = new Line(i, new ArrayList<>());
+          lineModelList.add(line);
+        }
       }
 
-      for (Map.Entry<Integer, String[]> entry : linesMatchStations.entrySet()) {
-        int stationId = Integer.parseInt(linesMatchStations.get(entry
-            .getKey())[0]);
-        int lineId = Integer.parseInt(linesMatchStations.get(entry
-            .getKey())[1]);
-        Station station = null;
-        for (Station stationL : stationsToLoad) {
-          if (stationL.getId() == stationId) {
-            station = stationL;
-          }
-        }
-        if (station != null) {
-          lineModelList.get(lineId).addStation(station);
-        }
-      }
+      this.addStationsToLines(stationsToLoad, linesMatchStations,
+          lineModelList);
 
       for (Line line : lineModelList) {
         List<StationView> stationsViews = new ArrayList<>();
@@ -671,6 +643,27 @@ public class ActionFile {
       }
     } catch (ParserConfigurationException | SAXException | IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void addStationsToLines(final List<Station> stationsToLoad,
+                                  final HashMap<Integer, String[]>
+                                      linesMatchStations,
+                                  final List<Line> lineModelList) {
+    for (Map.Entry<Integer, String[]> entry : linesMatchStations.entrySet()) {
+      int stationId = Integer.parseInt(linesMatchStations.get(entry
+          .getKey())[0]);
+      int lineId = Integer.parseInt(linesMatchStations.get(entry
+          .getKey())[1]);
+      Station station = null;
+      for (Station stationL : stationsToLoad) {
+        if (stationL.getId() == stationId) {
+          station = stationL;
+        }
+      }
+      if (station != null) {
+        lineModelList.get(lineId).addStation(station);
+      }
     }
   }
 
@@ -713,8 +706,8 @@ public class ActionFile {
   /**
    * Load the areas section of the xml file and generate the view for each area.
    *
-   * @param doc the document to read
-   * @param areasToLoad  the list of areas to load
+   * @param doc         the document to read
+   * @param areasToLoad the list of areas to load
    */
   private void readAreasSection(final Document doc,
                                 final List<Area> areasToLoad) {
@@ -728,43 +721,43 @@ public class ActionFile {
         Node nthNodeA2 = areaList.item(i);
         if (nthNodeA2.getNodeType() == Node.ELEMENT_NODE) {
           Element areaElement = (Element) nthNodeA2;
-          Element distributions = (Element) areaElement.getElementsByTagName(
-              "distribution").item(0);
+          Element populationDistribution = (Element) areaElement
+              .getElementsByTagName("populationDistribution").item(0);
 
           // format number
           String touristAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_TOURIST));
+              populationDistribution.getAttribute(Data.AREA_TOURIST));
           String studentAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_STUDENT));
+              populationDistribution.getAttribute(Data.AREA_STUDENT));
           String businessManAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_BUSINESSMAN));
+              populationDistribution.getAttribute(Data.AREA_BUSINESSMAN));
           String childAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_CHILD));
+              populationDistribution.getAttribute(Data.AREA_CHILD));
           String retiredAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_RETIRED));
+              populationDistribution.getAttribute(Data.AREA_RETIRED));
           String unemployedAmount = this.formatNumber(
-              distributions.getAttribute(Data.AREA_UNEMPLOYED));
+              populationDistribution.getAttribute(Data.AREA_UNEMPLOYED));
           Element positions = (Element) areaElement.getElementsByTagName(
               POSITION).item(0);
-          String posX = positions.getAttribute("posX");
-          String posY = positions.getAttribute("posY");
-          Element size = (Element) areaElement.getElementsByTagName("size")
-              .item(0);
-          String width = size.getAttribute("width");
-          String height = size.getAttribute("height");
-          Area area = new Area(Integer.parseInt(posX), Integer.parseInt(posY),
-              Integer.parseInt(width), Integer.parseInt(height));
-          area.setNewPart(Data.AREA_TOURIST, Integer.parseInt(touristAmount));
-          area.setNewPart(Data.AREA_STUDENT, Integer.parseInt(studentAmount));
-          area.setNewPart(Data.AREA_BUSINESSMAN,
+          String latitudeTop = positions.getAttribute("latitudeTop");
+          String longitudeTop = positions.getAttribute("longitudeTop");
+          String latitudeBot = positions.getAttribute("latitudeBot");
+          String longitudeBot = positions.getAttribute("longitudeBot");
+          Area area = new Area(Double.parseDouble(latitudeTop),
+              Double.parseDouble(longitudeTop), Double.parseDouble(latitudeBot),
+              Double.parseDouble(longitudeBot));
+          area.setNewPopulationPart(Data.AREA_TOURIST, Integer.parseInt(
+              touristAmount));
+          area.setNewPopulationPart(Data.AREA_STUDENT, Integer.parseInt(
+              studentAmount));
+          area.setNewPopulationPart(Data.AREA_BUSINESSMAN,
               Integer.parseInt(businessManAmount));
-          area.setNewPart(Data.AREA_CHILD, Integer.parseInt(childAmount));
-          area.setNewPart(Data.AREA_RETIRED, Integer.parseInt(retiredAmount));
-          area.setNewPart(Data.AREA_UNEMPLOYED,
+          area.setNewPopulationPart(Data.AREA_CHILD, Integer.parseInt(
+              childAmount));
+          area.setNewPopulationPart(Data.AREA_RETIRED, Integer.parseInt(
+              retiredAmount));
+          area.setNewPopulationPart(Data.AREA_UNEMPLOYED,
               Integer.parseInt(unemployedAmount));
-          String type = areaElement.getElementsByTagName("type").item(0)
-              .getTextContent();
-          area.setDestination(type);
           areasToLoad.add(area);
         }
       }
@@ -775,7 +768,6 @@ public class ActionFile {
    * Format the number to avoid empty string.
    *
    * @param populationAmount the population amount to format
-   *
    * @return the formatted number
    */
   private String formatNumber(final String populationAmount) {
@@ -790,8 +782,8 @@ public class ActionFile {
    * Load the stations section of the xml file and generate the view for each.
    *
    * @param stationsToLoad the list of stations to load
-   * @param linesId the list of lines id
-   * @param doc the document to read
+   * @param linesId        the list of lines id
+   * @param doc            the document to read
    */
   private void readStationsSection(final List<Station> stationsToLoad,
                                    final List<Integer> linesId,
@@ -842,7 +834,7 @@ public class ActionFile {
    * Load the lines section of the xml file and generate the view for each line.
    *
    * @param linesMatchStations the map of lines match stations
-   * @param nthNodeL the node to read
+   * @param nthNodeL           the node to read
    */
   public void readLinesSection(final Map<Integer, String[]> linesMatchStations,
                                final Node nthNodeL) {
@@ -897,8 +889,7 @@ public class ActionFile {
    * check if a station is in an Area.
    *
    * @param stationView station to check
-   * @param areaView   area to check
-   *
+   * @param areaView    area to check
    * @return true if the station is in the area
    */
   private boolean isInArea(final StationView stationView,

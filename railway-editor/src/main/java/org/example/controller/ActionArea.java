@@ -67,8 +67,8 @@ public class ActionArea {
 
   /**
    * Creates a {@link Area} with its linked {@link AreaView} created and
-   * add this {@link AreaView} to the {@link view.MainPanel} with
-   * {@link view.MainPanel#addAreaView(AreaView)}.
+   * add this {@link AreaView} to the {@link org.example.view.MainPanel} with
+   * {@link org.example.view.MainPanel#addAreaView(AreaView)}.
    */
   public void addArea() {
     Area area = new Area(AREA_POS_X_DEFAULT,
