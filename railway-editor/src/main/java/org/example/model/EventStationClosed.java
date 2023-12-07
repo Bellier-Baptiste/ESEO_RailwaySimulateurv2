@@ -34,7 +34,9 @@ package org.example.model;
  * @since 2.0
  */
 public class EventStationClosed extends Event {
-  /** Station id. */
+  /**
+   * Station id.
+   */
   private int idStation;
 
   /**
@@ -47,8 +49,7 @@ public class EventStationClosed extends Event {
    */
   public EventStationClosed(final int id, final String startTime,
                             final String endTime, final EventType type) {
-    super(id, startTime, endTime, type);
-    super.setEventName(EventName.STATION_CLOSED);
+    super(id, startTime, endTime, type, EventName.STATION_CLOSED);
   }
 
   /**

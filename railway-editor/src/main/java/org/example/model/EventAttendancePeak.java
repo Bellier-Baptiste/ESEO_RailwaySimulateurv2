@@ -35,9 +35,13 @@ package org.example.model;
  * @since 2.0
  */
 public class EventAttendancePeak extends Event {
-  /** Station id. */
+  /**
+   * Station id.
+   */
   private int idStation;
-  /** Peak size. */
+  /**
+   * Peak size.
+   */
   private int size;
 
   /**
@@ -51,8 +55,7 @@ public class EventAttendancePeak extends Event {
   public EventAttendancePeak(final int id, final String startTime,
                              final String endTime,
                              final EventType type) {
-    super(id, startTime, endTime, type);
-    super.setEventName(EventName.ATTENDANCE_PEAK);
+    super(id, startTime, endTime, type, EventName.ATTENDANCE_PEAK);
   }
 
   /**
