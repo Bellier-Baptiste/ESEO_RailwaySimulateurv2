@@ -100,3 +100,5 @@ tools/testGlobalTimetableCSV\.csv
 output/
 
 *.csv
+
+archives/
