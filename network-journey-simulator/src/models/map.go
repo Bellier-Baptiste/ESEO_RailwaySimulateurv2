@@ -12,6 +12,7 @@ Author :
   - Team v2
   - Paul TRÉMOUREUX (quality check)
   - Alexis BONAMY
+  - Paul TRÉMOUREUX
 
 License : MIT License
 
@@ -98,9 +99,9 @@ Methods :
   - AddDelay(idStation1 int, idStation2 int, delay int) : add a delay
   - ExportMapToAdConfig() configs.AdvancedConfig : export the map to an
     advanced config
-  - generateSingleLineRailway(config configs.ConfigurationObject) error :
+  - generateSingleLineRailway(config configs.ConfigurationType) error :
     generate a single line railway
-  - generateDoubleLineRailway(config configs.ConfigurationObject) error :
+  - generateDoubleLineRailway(config configs.ConfigurationType) error :
     generate a double line railway
   - checkUnreachable(i, j int, graph [][]*PathStation,
     hasBeenModified bool) ([][]*PathStation, bool) : check if we can reach
@@ -451,6 +452,7 @@ func CreateMapAdvanced(adConfig configs.AdvancedConfig) Map {
 			id:     station.Id, //should be equal to i
 			number: station.Id + 1,
 			code:   strings.ToUpper(station.Name[0:3]),
+			idArea: station.IdArea,
 		}
 
 		m.stations[i].position = Point{
@@ -600,12 +602,12 @@ generateLines generate the lines of the map.
 
 Param :
   - mapPointer *Map : the map
-  - config configs.ConfigurationObject : the configuration object
+  - config configs.ConfigurationType : the configuration object
 
 Return :
   - error : an error if something went wrong
 */
-func generateLines(mapPointer *Map, config configs.ConfigurationObject) error {
+func generateLines(mapPointer *Map, config configs.ConfigurationType) error {
 
 	linesName := config.NameLineList()
 
@@ -628,13 +630,13 @@ generateSingleLineRailway generate a single line railway.
 
 Param :
   - mapPointer *Map : the map
-  - config configs.ConfigurationObject : the configuration object
+  - config configs.ConfigurationType : the configuration object
 
 Return :
   - error : an error if something went wrong
 */
 func (mapPointer *Map) generateSingleLineRailway(
-	config configs.ConfigurationObject) error {
+	config configs.ConfigurationType) error {
 
 	err := generateLines(mapPointer, config)
 
@@ -687,13 +689,13 @@ generateDoubleLineRailway generate a double line railway.
 
 Param :
   - mapPointer *Map : the map
-  - config configs.ConfigurationObject : the configuration object
+  - config configs.ConfigurationType : the configuration object
 
 Return :
   - error : an error if something went wrong
 */
 func (mapPointer *Map) generateDoubleLineRailway(
-	config configs.ConfigurationObject) error {
+	config configs.ConfigurationType) error {
 	//TODO that
 	err := generateLines(mapPointer, config)
 
@@ -774,7 +776,7 @@ func (mapPointer *Map) generateDoubleLineRailway(
 /*
 Unused function
 func (mapPointer *Map) fillMultipleLineRailway(
-	config configs.ConfigurationObject) error {
+	config configs.ConfigurationType) error {
 	return nil
 }
 */

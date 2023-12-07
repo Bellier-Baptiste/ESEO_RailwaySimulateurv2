@@ -1,4 +1,8 @@
 /*
+ *
+ * Author :
+ * 	- Benoît VAVASSEUR
+ *
  * License : MIT License
  *
  * Copyright (c) 2023 Team PFE_2023_16
@@ -22,39 +26,31 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testmodel;
+package models
 
-import org.example.model.Line;
-import org.example.model.Station;
-import org.junit.Test;
+type Area struct {
+	id                      int
+	populationDistribution  PopulationDistribution
+	destinationDistribution DestinationDistribution
+}
 
-import java.util.ArrayList;
-import java.util.List;
+func NewArea(id int, populationDistribution PopulationDistribution,
+	destinationDistribution DestinationDistribution) Area {
+	return Area{
+		id:                      id,
+		populationDistribution:  populationDistribution,
+		destinationDistribution: destinationDistribution,
+	}
+}
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+func (a *Area) Id() int {
+	return a.id
+}
 
-/**
- * Test-case of {@link Line} model.
- *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
- * @file LineTest.java
- * @date N/A
- * @since 2.0
- */
-public class LineTest {
+func (a *Area) PopulationDistribution() PopulationDistribution {
+	return a.populationDistribution
+}
 
-  public static final String NAME = "eglantine";
-
-  @Test
-  public void testLine() {
-    Station station = new Station(0, 5, 5, NAME);
-    List<Station> stations = new ArrayList<>();
-    Line line = new Line(0, stations);
-    assertEquals(0, line.getId());
-    assertTrue(line.getStations().isEmpty());
-    line.addStation(station);
-    assertEquals(1, line.getStations().size());
-  }
+func (a *Area) DestinationDistribution() DestinationDistribution {
+	return a.destinationDistribution
 }

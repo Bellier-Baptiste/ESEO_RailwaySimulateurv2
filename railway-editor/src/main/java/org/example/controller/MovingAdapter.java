@@ -43,8 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class which manage all actions relative to the {@link org.example.view.MainPanel}
- * using mouse.
+ * Class which manage all actions relative to the {@link
+ * org.example.view.MainPanel} using mouse.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
@@ -118,21 +118,13 @@ public class MovingAdapter extends MouseAdapter {
    * area being extended.
    */
   private Area extendedArea;
-  /**
-   * form to set the distribution of the area.
-   */
-  private final AreaSetDistribution form;
 
   /**
    * MovingAdapter constructor.
    */
   public MovingAdapter() {
     super();
-    this.form = new AreaSetDistribution();
   }
-
-
-  // Mouse Event
 
   /**
    * Action when mouse is pressed.
@@ -277,14 +269,16 @@ public class MovingAdapter extends MouseAdapter {
           popup.pop();
         }
       } else if (clickedArea != null) {
-        form.pop(clickedArea.getArea());
+        AreaSetDistribution form =
+            new AreaSetDistribution(clickedArea.getArea());
+        form.pop();
       }
     }
 
     StationView clickedStation = this.getClickedStation(e.getX(), e.getY());
     // if we want to delete the selected station
     if (e.getButton() == MouseEvent.BUTTON3 && !selectSecStation
-      && clickedStation != null) {
+        && clickedStation != null) {
       deleteStation(clickedStation);
       MainWindow.getInstance().getMainPanel().repaint();
     }
@@ -402,7 +396,7 @@ public class MovingAdapter extends MouseAdapter {
    * @param clickedCoordY y click coordinates
    * @return the station we clicked on
    */
-  private StationView getClickedStation(final int clickedCoordX,
+  protected StationView getClickedStation(final int clickedCoordX,
                                         final int clickedCoordY) {
     List<LineView> lineViews = MainWindow.getInstance().getMainPanel()
         .getLineViews();
@@ -430,7 +424,7 @@ public class MovingAdapter extends MouseAdapter {
    * @param clickedCoordY y click coordinates
    * @return the area we clicked on
    */
-  private AreaView getClickedArea(final int clickedCoordX,
+  protected AreaView getClickedArea(final int clickedCoordX,
                                   final int clickedCoordY) {
 
     List<AreaView> areaViews = MainWindow.getInstance().getMainPanel()

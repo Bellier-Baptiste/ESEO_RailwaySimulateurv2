@@ -82,19 +82,18 @@ public final class ActionRunSimulation {
       // If yes, return -1 (did not run the simulation)
       return -1;
     }
-    //TODO change java and go root
     String rootProjectPath = System.getProperty("user.dir");
+    rootProjectPath = rootProjectPath.replace("\\railway-editor", "");
     String rootGoProjectPath = rootProjectPath + "\\network-journey-simulator";
 
     File runThisSimulation = new File(
         rootGoProjectPath + "\\src\\configs"
-                + "\\runThisSimulation.xml");
+            + "\\runThisSimulation.xml");
     this.actionFile.export(runThisSimulation);
 
     // create a new list of arguments for our process
     String[] commands = {"cmd", "/C",
-        "start metro_simulator.exe -configname "
-                + "runThisSimulation.xml"};
+        "start metro_simulator.exe -configname runThisSimulation.xml"};
     // create the process builder
     ProcessBuilder pb = new ProcessBuilder(commands);
     // set the working directory of the process

@@ -1,4 +1,8 @@
 /*
+ *
+ * Author :
+ * 	- Benoît VAVASSEUR
+ *
  * License : MIT License
  *
  * Copyright (c) 2023 Team PFE_2023_16
@@ -22,39 +26,24 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testmodel;
+package models
 
-import org.example.model.Line;
-import org.example.model.Station;
-import org.junit.Test;
+import (
+	"github.com/stretchr/testify/assert"
+	"testing"
+)
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-/**
- * Test-case of {@link Line} model.
- *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
- * @file LineTest.java
- * @date N/A
- * @since 2.0
- */
-public class LineTest {
-
-  public static final String NAME = "eglantine";
-
-  @Test
-  public void testLine() {
-    Station station = new Station(0, 5, 5, NAME);
-    List<Station> stations = new ArrayList<>();
-    Line line = new Line(0, stations);
-    assertEquals(0, line.getId());
-    assertTrue(line.getStations().isEmpty());
-    line.addStation(station);
-    assertEquals(1, line.getStations().size());
-  }
+/*
+TestAreaDistribution tests the PopulationDistribution struct
+*/
+func TestPopulationDistribution(t *testing.T) {
+	var ad = NewPopulationDistribution(10, 10, 10,
+		10, 10, 40, 10)
+	assert.Equal(t, 10, ad.Businessman())
+	assert.Equal(t, 10, ad.Child())
+	assert.Equal(t, 10, ad.Retired())
+	assert.Equal(t, 10, ad.Student())
+	assert.Equal(t, 10, ad.Tourist())
+	assert.Equal(t, 40, ad.Unemployed())
+	assert.Equal(t, 10, ad.Worker())
 }
