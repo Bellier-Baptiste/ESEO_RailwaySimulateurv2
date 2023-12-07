@@ -22,12 +22,12 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testmodel;
+package org.example.model;
 
-import org.example.model.EventStationClosed;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test-case of {@link EventStationClosed} model.

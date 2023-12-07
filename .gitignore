@@ -53,6 +53,7 @@
 # .idea/modules.xml
  .idea/*.iml
 # .idea/modules
+*.iml
 
 # target
 target/
@@ -99,3 +100,5 @@ tools/testGlobalTimetableCSV\.csv
 output/
 
 *.csv
+
+archives/

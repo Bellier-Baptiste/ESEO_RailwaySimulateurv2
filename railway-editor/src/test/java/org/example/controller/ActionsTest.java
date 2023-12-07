@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testcontroller;
+package org.example.controller;
 
 import org.example.controller.ActionArea;
 import org.example.controller.ActionLine;

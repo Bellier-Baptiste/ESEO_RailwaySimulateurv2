@@ -22,9 +22,8 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testcontroller;
+package org.example.controller;
 
-import org.example.controller.ActionFile;
 import org.example.model.Area;
 import org.example.view.AreaView;
 import org.junit.jupiter.params.ParameterizedTest;
