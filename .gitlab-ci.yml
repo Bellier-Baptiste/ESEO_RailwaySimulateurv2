@@ -66,24 +66,24 @@ before_script:
   #- sed -i "s/server.ssl.key-alias=.*/server.ssl.key-alias=${KEY_STORE_ALIAS}/" src/main/resources/application.properties
 
 # java_build job: build repository code, using maven 3.8.1 docker image, and package compiled code to a .war downloadable artifact
-java_build:
-  stage: build
+#java_build:
+#  stage: build
   # Cache downloaded dependencies and plugins between builds.
   # The key here separates one cache per branch/tag ($CI_COMMIT_REF_SLUG)
-  image: maven:3.8.6-jdk-11
-  cache:
-    key: "maven-$CI_COMMIT_REF_SLUG"
-    paths:
-      - .m2/repository
-  script:
-    - mvn $MAVEN_CLI_OPTS package -DskipTests=true
+#  image: maven:3.8.6-jdk-11
+#  cache:
+#    key: "maven-$CI_COMMIT_REF_SLUG"
+#    paths:
+#      - .m2/repository
+#  script:
+#    - mvn $MAVEN_CLI_OPTS package -DskipTests=true
 #  artifacts:
 #    name: "Maven artifacts from $CI_PROJECT_NAME on $CI_COMMIT_REF_SLUG"
 #    paths:
 #      - "**/target/*.war"
 #    expire_in: 3 days
-  only:
-    - master
-    - dev
-    - mgt_37_bbel
+#  only:
+#    - master
+#    - dev
+#    - mgt_37_bbel
 
