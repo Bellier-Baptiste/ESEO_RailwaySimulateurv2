@@ -241,7 +241,7 @@ public final class Data {
     this.initLineColors();
     this.selectType = null;
     this.currentCity = "";
-    areaId = 0;
+    areaId = -1;
     this.eventList = new ArrayList<>();
   }
 

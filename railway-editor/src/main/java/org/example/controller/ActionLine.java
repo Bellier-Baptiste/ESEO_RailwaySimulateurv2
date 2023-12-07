@@ -91,7 +91,7 @@ public final class ActionLine {
    *
    * @param lineToUpdateIndexToSet line to update index
    */
-  private void setLineToUpdateIndex(final int lineToUpdateIndexToSet) {
+  void setLineToUpdateIndex(final int lineToUpdateIndexToSet) {
     this.lineToUpdateIndex = lineToUpdateIndexToSet;
   }
 
@@ -112,8 +112,7 @@ public final class ActionLine {
     @SuppressWarnings("unused")
     LineController lineController = new LineController(lineview);
     MainWindow.getInstance().getToolBarPanel().getLineId().setText(
-        Integer.toString(lineIndex)); // change line id
-    // displayed in the
+        Integer.toString(lineIndex)); // change line id displayed in the
     // toolBar Panel
     MainWindow.getInstance().getMainPanel().repaint();
   }
@@ -123,7 +122,6 @@ public final class ActionLine {
    */
   public void incrementLine() {
     JLabel lineId = MainWindow.getInstance().getToolBarPanel().getLineId();
-
     if (!lineId.getText().equals("none")) { // if a line exists
       int currentLineId = Integer.parseInt(lineId.getText());
       if (currentLineId < MainWindow.getInstance().getMainPanel().getLineViews()

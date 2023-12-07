@@ -353,7 +353,8 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addLineDelay());
+                  ActionMetroEvent.getInstance().addLineDelay(ListEventPanel
+                      .getInstance().eventLineDelayToString()));
               view.add(confirmEventBtn, c);
               break;
             case "LineClosed":
@@ -364,7 +365,8 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addLineClosed());
+                  ActionMetroEvent.getInstance().addLineClosed(ListEventPanel
+                      .getInstance().eventLineClosedToString()));
               view.add(confirmEventBtn, c);
               break;
             case "AttendancePeak":
@@ -375,7 +377,9 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION + 3;
               c.weighty = GRID_WIDTH;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addAttendancePeak());
+                  ActionMetroEvent.getInstance().addAttendancePeak(
+                      ListEventPanel.getInstance()
+                          .eventAttendancePeakToString()));
               view.add(confirmEventBtn, c);
               break;
             case "TrainHour":
@@ -386,7 +390,8 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addTrainHour());
+                  ActionMetroEvent.getInstance().addTrainHour(ListEventPanel
+                      .getInstance().eventTrainHourToString()));
               view.add(confirmEventBtn, c);
               break;
             case "StationClosed":
@@ -397,7 +402,8 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addStationClosed());
+                  ActionMetroEvent.getInstance().addStationClosed(ListEventPanel
+                      .getInstance().eventStationClosedToString()));
               view.add(confirmEventBtn, c);
               break;
             default:

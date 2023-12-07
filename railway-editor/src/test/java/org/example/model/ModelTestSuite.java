@@ -24,49 +24,11 @@
 
 package org.example.model;
 
-/**
- * Model class extending event which describes a station closing.
- *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
- * @file EventStationClosed.java
- * @date N/A
- * @since 2.0
- */
-public class EventStationClosed extends Event {
-  /**
-   * Station id.
-   */
-  private int idStation;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-  /**
-   * Constructor.
-   *
-   * @param id        event id
-   * @param startTime event startTime
-   * @param endTime   event endTime
-   * @param type      eventType
-   */
-  public EventStationClosed(final int id, final String startTime,
-                            final String endTime, final EventType type) {
-    super(id, startTime, endTime, type, EventName.STATION_CLOSED);
-  }
-
-  /**
-   * get the id of the station concerned by the peak.
-   *
-   * @return int id
-   */
-  public int getIdStation() {
-    return idStation;
-  }
-
-  /**
-   * set the id of the station concerned.
-   *
-   * @param eventIdStation id station concerned by the peak
-   */
-  public void setIdStation(final int eventIdStation) {
-    this.idStation = eventIdStation;
-  }
+@RunWith(Suite.class)
+@SuiteClasses({ AreaTest.class, LineTest.class, StationTest.class })
+public class ModelTestSuite {
 }

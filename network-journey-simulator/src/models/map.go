@@ -248,7 +248,8 @@ Return :
   - [][]*PathStation : the graph of the map
 */
 func (mapPointer *Map) Graph() [][]*PathStation {
-
+	println("is mapPointer.graph nil ? " + strconv.FormatBool(
+		mapPointer.graph == nil))
 	clone := make([][]*PathStation, len(mapPointer.graph))
 
 	for i := range mapPointer.graph {
