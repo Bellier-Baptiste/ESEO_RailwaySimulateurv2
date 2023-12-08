@@ -200,7 +200,7 @@ func TestPopulation_StationExitPop_1Passenger(t *testing.T) {
 	/*
 		Transfer the passenger to the station and check if he is in the station
 	*/
-	population.transferFromPopulationToStation(myPop["0"], aMap.Stations2()[0], trainDeparture)
+	population.TransferFromPopulationToStation(myPop["0"], aMap.Stations2()[0], trainDeparture)
 	testString = population.FindPassenger(*myPop["0"])
 	assert.Equal(t, "inStation #0", testString)
 
@@ -260,7 +260,7 @@ func TestPopulation_StationExitPop_2Passengers(t *testing.T) {
 		/*
 			Transfer the passenger to the station and check if he is in the station
 		*/
-		population.transferFromPopulationToStation(myPop[strconv.Itoa(i)], aMap.Stations2()[0], trainDeparture)
+		population.TransferFromPopulationToStation(myPop[strconv.Itoa(i)], aMap.Stations2()[0], trainDeparture)
 		testString = population.FindPassenger(*myPop[strconv.Itoa(i)])
 		assert.Equal(t, "inStation #0", testString)
 
@@ -337,7 +337,7 @@ func TestPopulation_AllStationExitPop(t *testing.T) {
 		/*
 			Transfer the passenger to the station and check if he is in the station
 		*/
-		population.transferFromPopulationToStation(myPop[strconv.Itoa(i)], aMap.Stations2()[i], trainDeparture)
+		population.TransferFromPopulationToStation(myPop[strconv.Itoa(i)], aMap.Stations2()[i], trainDeparture)
 		testString = population.FindPassenger(*myPop[strconv.Itoa(i)])
 		strTest := "inStation #" + strconv.Itoa(i)
 		assert.Equal(t, strTest, testString)
@@ -395,7 +395,7 @@ func TestPopulation_IsStationEmpty(t *testing.T) {
 	/*
 		Transfer the passenger to the station
 	*/
-	population.transferFromPopulationToStation(myPop["0"], aMap.Stations2()[0], trainDeparture)
+	population.TransferFromPopulationToStation(myPop["0"], aMap.Stations2()[0], trainDeparture)
 
 	/*
 		Check if the station is not empty
@@ -428,7 +428,7 @@ func TestPopulation_IsTrainEmpty(t *testing.T) {
 	/*
 		Transfer the passenger to the train
 	*/
-	population.transferFromPopulationToStation(myPop["0"], aMap.Stations2()[0], trainDeparture)
+	population.TransferFromPopulationToStation(myPop["0"], aMap.Stations2()[0], trainDeparture)
 	population.transferFromStationToTrain(myPop["0"], train, aMap.Stations2()[0])
 
 	/*
