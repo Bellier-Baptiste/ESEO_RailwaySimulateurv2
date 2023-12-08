@@ -6,6 +6,7 @@ File : area.go
 Brief : This file contains the Area struct and its methods.
 
 Date : 15/11/2023
+
 Author :
   - Benoît VAVASSEUR
 
