@@ -625,8 +625,8 @@ Param :
   - aTime time.Time : the time of the transfer
 */
 func (p *Population) TransferFromStationToPopulation(passenger *Passenger,
-	stationPt *MetroStation, aTime time.Time) {
-	info := prepareCSVline(*passenger, stationPt, aTime, "USE")
+	stationPt *MetroStation, aTime time.Time, typeTicket string) {
+	info := prepareCSVline(*passenger, stationPt, aTime, typeTicket)
 	p.output.Write(info)
 	p.outside[passenger.Id()] = passenger
 	delete(p.inStation[stationPt.Id()], passenger.Id())
@@ -769,7 +769,7 @@ func (p *Population) UpdateStationToOutside(aTime time.Time,
 				Before(aTime)) {
 			trip.SetArrivalTime(aTime)
 			var typeTicket = "USE"
-			p.transferFromStationToPopulation(passenger, station, aTime, typeTicket)
+			p.TransferFromStationToPopulation(passenger, station, aTime, typeTicket)
 
 			passenger.ClearCurrentTrip()
 			passenger.calculateNextTrip()
@@ -794,7 +794,7 @@ func (p *Population) StationToOutside(aTime time.Time, station *MetroStation,
 	var trip = passenger.CurrentTrip()
 	trip.SetArrivalTime(aTime)
 	var typeTicket = "USE"
-	p.transferFromStationToPopulation(passenger, station, aTime, typeTicket)
+	p.TransferFromStationToPopulation(passenger, station, aTime, typeTicket)
 
 	passenger.ClearCurrentTrip()
 	passenger.calculateNextTrip()
@@ -952,7 +952,7 @@ func (p *Population) StationExitPop(aTime time.Time, station *MetroStation) {
 		var trip = passenger.CurrentTrip()
 		trip.SetArrivalTime(aTime)
 		var typeTicket = "USE"
-		p.transferFromStationToPopulation(passenger, station, aTime, typeTicket)
+		p.TransferFromStationToPopulation(passenger, station, aTime, typeTicket)
 
 		passenger.ClearCurrentTrip()
 		passenger.calculateNextTrip()

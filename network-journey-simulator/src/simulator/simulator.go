@@ -125,8 +125,9 @@ type Simulator struct {
 }
 
 const (
-	strErr      = " error : "
-	strEacParse = "EventAttendancePeak : couldn't parse date : "
+	strErr        = " error : "
+	strEacParse   = "EventAttendancePeak : couldn't parse date : "
+	strDeletePath = " - deleted path"
 )
 
 /*
@@ -558,8 +559,8 @@ func (s *Simulator) AddTrainLinePeer(line *models.MetroLine,
 	shift, count, aux1, aux2 int) (*models.MetroLine, int, int, int, int) {
 	for k := 0; k < line.TrainNumber()/2; k++ {
 		shift = k * (models.LineTimeLength(line,
-			s.MapObject.GraphTimeBetweenStation(),
-			s.MapObject.GraphDelay(),
+			s.mapObject.GraphTimeBetweenStation(),
+			s.mapObject.GraphDelay(),
 			len(line.Stations()),
 			s.config.TimeInStation()) / len(s.trains))
 		//count in base N
@@ -574,8 +575,8 @@ func (s *Simulator) AddTrainLinePeer(line *models.MetroLine,
 		s.trains[count].SetTimeArrivalNextStation(
 			s.trains[count].TimeArrivalCurrentStation().Add(
 				time.Duration(
-					s.MapObject.GraphTimeBetweenStation()[aux1][aux2]+
-						s.MapObject.GraphDelay()[aux1][aux2]) * time.Second))
+					s.mapObject.GraphTimeBetweenStation()[aux1][aux2]+
+						s.mapObject.GraphDelay()[aux1][aux2]) * time.Second))
 		s.trains[count].SetId(count)
 		count++
 		s.trains[count] = models.NewMetroTrain(line, "down")
@@ -589,8 +590,8 @@ func (s *Simulator) AddTrainLinePeer(line *models.MetroLine,
 		s.trains[count].SetTimeArrivalNextStation(
 			s.trains[count].TimeArrivalCurrentStation().Add(
 				time.Duration(
-					s.MapObject.GraphTimeBetweenStation()[aux1][aux2]+
-						s.MapObject.GraphDelay()[aux1][aux2]) * time.Second))
+					s.mapObject.GraphTimeBetweenStation()[aux1][aux2]+
+						s.mapObject.GraphDelay()[aux1][aux2]) * time.Second))
 		s.trains[count].SetId(count)
 		count++
 
@@ -620,10 +621,10 @@ Return :
 func (s *Simulator) AddTrainLineOdd(line *models.MetroLine,
 	shift, count, aux1, aux2, j int) (*models.MetroLine, int, int, int, int) {
 	for l := 0; l < line.TrainNumber(); l++ {
-		shift = l * (models.LineTimeLength(s.MapObject.Lines()[j],
-			s.MapObject.GraphTimeBetweenStation(),
-			s.MapObject.GraphDelay(),
-			len(s.MapObject.Lines()[j].Stations()),
+		shift = l * (models.LineTimeLength(s.mapObject.Lines()[j],
+			s.mapObject.GraphTimeBetweenStation(),
+			s.mapObject.GraphDelay(),
+			len(s.mapObject.Lines()[j].Stations()),
 			s.config.TimeInStation()) / (2 * len(s.trains)))
 		if l%2 == 0 {
 			s.trains[count] = models.NewMetroTrain(line, "up")
@@ -637,8 +638,8 @@ func (s *Simulator) AddTrainLineOdd(line *models.MetroLine,
 			s.trains[count].SetTimeArrivalNextStation(
 				s.trains[count].TimeArrivalCurrentStation().Add(
 					time.Duration(
-						s.MapObject.GraphTimeBetweenStation()[aux1][aux2]+
-							s.MapObject.GraphDelay()[aux1][aux2]) * time.Second))
+						s.mapObject.GraphTimeBetweenStation()[aux1][aux2]+
+							s.mapObject.GraphDelay()[aux1][aux2]) * time.Second))
 			s.trains[count].SetId(count)
 		} else {
 			s.trains[count] = models.NewMetroTrain(line, "down")
@@ -958,7 +959,7 @@ func (s *Simulator) executeESCStartEventROSetPassengerStart(trip *models.Trip,
 			//remove the trip totally
 			s.population.Outside()[i].RemoveTrip(trip)
 			if s.config.PrintDebug() {
-				fmt.Println(" - deleted path")
+				fmt.Println(strDeletePath)
 			}
 			return
 		}
@@ -1592,6 +1593,38 @@ func (s *Simulator) executeEventsLineDelay(events []*models.EventLineDelay,
 }
 
 /*
+checkNewStationIsFinalStation is used to check if the new station is the final
+station.
+
+Param :
+  - s *Simulator : the simulator
+  - trip *models.Trip : the trip
+  - i string : the id of the passenger
+  - nearestStation *models.MetroStation : the nearest station
+  - newStartingStation *models.MetroStation : the new starting station
+  - j int : the id of the new starting station
+  - k int : the id of the final station
+
+Return :
+  - bool : true if the new station is the final station
+*/
+func (s *Simulator) checkNewStationIsFinalStation(trip *models.Trip, i string,
+	nearestStation, newStartingStation *models.MetroStation, j, k int) bool {
+	var isFinal = false
+	if newStartingStation.StatusIsClosed() {
+		newStartingStation = nearestStation
+	}
+	if j == k {
+		isFinal = true
+		s.population.Outside()[i].RemoveTrip(trip)
+		if s.config.PrintDebug() {
+			fmt.Println(strDeletePath)
+		}
+	}
+	return isFinal
+}
+
+/*
 executeELCStartEventROSetPassengerStart is used to set the path of a passenger.
 
 Param :
@@ -1606,16 +1639,10 @@ func (s *Simulator) executeELCStartEventROSetPassengerStart(trip *models.Trip,
 		//passenger starts at a closed station
 		if len(trip.Path().Stations()) > 2 {
 			var newStartingStation = trip.Path().Stations()[1]
-			if newStartingStation.StatusIsClosed() {
-				newStartingStation = nearestStation
-			}
 			var j = newStartingStation.Id()
 			var k = trip.Path().EndStation().Id()
-			if j == k {
-				s.population.Outside()[i].RemoveTrip(trip)
-				if s.config.PrintDebug() {
-					fmt.Println(" - deleted path")
-				}
+			if s.checkNewStationIsFinalStation(trip, i, nearestStation,
+				newStartingStation, j, k) {
 				return
 			}
 			s.population.Outside()[i].NextTrip().SetPath(
@@ -1627,7 +1654,7 @@ func (s *Simulator) executeELCStartEventROSetPassengerStart(trip *models.Trip,
 			//delete the trip
 			s.population.Outside()[i].RemoveTrip(trip)
 			if s.config.PrintDebug() {
-				fmt.Println(" - deleted path")
+				fmt.Println(strDeletePath)
 			}
 			return
 		}
@@ -1647,8 +1674,7 @@ Return :
   - *models.Trip : the trip
 */
 func (s *Simulator) executeELCStartEventROSetPath(trip *models.Trip,
-	pass *models.Passenger, i string) *models.Trip {
-	//trip = pass.NextTrip()
+	i string) *models.Trip {
 	var j = trip.Path().StartStation().Id()
 	var k = trip.Path().EndStation().Id()
 	path := s.mapObject.Graph()[j][k]
@@ -1704,7 +1730,7 @@ func (s *Simulator) executeELCStartEventRerouteOutside(
 			s.executeELCStartEventROSetPassengerStart(trip, nearestStation, i)
 
 			if trip != nil {
-				trip = s.executeELCStartEventROSetPath(trip, pass, i)
+				trip = s.executeELCStartEventROSetPath(trip, i)
 			}
 		}
 	}
