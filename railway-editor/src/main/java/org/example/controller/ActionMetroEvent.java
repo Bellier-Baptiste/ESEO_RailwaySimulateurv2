@@ -50,6 +50,7 @@ import java.awt.event.WindowEvent;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
  * @file ActionMetroEvent.java
  * @date 2023-10-02
  * @see org.example.view.EventWindow
@@ -98,9 +99,13 @@ public class ActionMetroEvent {
    * Ending time index.
    */
   private static final int ENDING_TIME_INDEX = 3;
-  /**
-   * Train hour train number index.
-   */
+  /** Peak date index. */
+  private static final int PEAK_DATE_INDEX = 4;
+  /** Peak time index. */
+  private static final int PEAK_TIME_INDEX = 5;
+  /** Peak width index. */
+  private static final int PEAK_WIDTH_INDEX = 8;
+  /** Train hour train number index. */
   private static final int TRAIN_HOUR_TRAIN_NUMBER_INDEX = 3;
   /**
    * Starting station index.
@@ -333,12 +338,18 @@ public class ActionMetroEvent {
     String endTime =
         eventStringTab[ENDING_DATE_INDEX] + "-" + eventStringTab[
             ENDING_TIME_INDEX];
+    String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
+            + eventStringTab[PEAK_TIME_INDEX];
+    String peakWidth = eventStringTab[PEAK_WIDTH_INDEX];
+
     EventAttendancePeak eventAttendancePeak = new EventAttendancePeak(
         this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
+    eventAttendancePeak.setPeakTime(peakTime);
     eventAttendancePeak.setIdStation(Integer.parseInt(eventStringTab[
-        STATION_CONCERNED_INDEX]));
+        STATION_CONCERNED_INDEX + 2]));
     eventAttendancePeak.setSize(Integer.parseInt(eventStringTab[
-        PEAK_NUMBER_INDEX]));
+        PEAK_NUMBER_INDEX + 2]));
+    eventAttendancePeak.setPeakWidth(Integer.parseInt(peakWidth));
     Data.getInstance().getEventList().add(eventAttendancePeak);
 
     Station stationConcerned = null;
@@ -357,9 +368,9 @@ public class ActionMetroEvent {
     MainWindow.getInstance().getMainPanel().repaint();
     if (stationConcerned != null) {
       MainWindow.getInstance().getEventRecapPanel().createEventAttendancePeak(
-          this.getCurrentId(), startTime, endTime,
+          this.getCurrentId(), startTime, endTime, peakTime,
           Integer.toString(stationConcerned.getId()),
-          eventStringTab[PEAK_NUMBER_INDEX]);
+          eventStringTab[PEAK_NUMBER_INDEX + 2], peakWidth);
     }
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();

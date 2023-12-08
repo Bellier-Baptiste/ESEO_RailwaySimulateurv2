@@ -22,13 +22,39 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testmodel;
+package org.example.model;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.junit.Test;
 
-@RunWith(Suite.class)
-@SuiteClasses({ AreaTest.class, LineTest.class, StationTest.class })
-public class ModelTestSuite {
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Test-case of {@link Station} model.
+ *
+ * @author Arthur Lagarce
+ * @author Aurélie Chamouleau
+ * @file StationTest.java
+ * @date N/A
+ * @since 2.0
+ */
+public class StationTest {
+    public static final String NAME = "eglantine";
+
+
+    @Test
+    public void testConstructeur() {
+        Station station = new Station(0, 5, 5, NAME);
+        assertEquals(0, station.getId());
+        assertEquals(5, station.getPosX());
+        assertEquals(5, station.getPosY());
+        assertEquals("eglantine", station.getName());
+    }
+
+    @Test
+    public void testMoveStation() {
+        Station station = new Station(0, 5, 5, NAME);
+        station.moveStation(3, 3);
+        assertEquals(8, station.getPosX());
+        assertEquals(8, station.getPosY());
+    }
 }

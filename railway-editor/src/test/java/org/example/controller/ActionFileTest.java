@@ -22,9 +22,8 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testcontroller;
+package org.example.controller;
 
-import org.example.controller.ActionFile;
 import org.example.data.Data;
 import org.example.main.RailwayEditor;
 import org.example.model.Area;
@@ -63,6 +62,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Test-cases of exporting and importing metro networks map files (xml).
  *
  * @author Aurélie Chamouleau
+ * @author Baptiste BELLIER
  * @file ActionFile.java
  * @date 2023-11-16
  * @since 3.0
@@ -133,12 +133,11 @@ class ActionFileTest {
               + "population distribution should be " + expectedValue);
     }
   }
-
   @Test
   void testImportMap() {
     RailwayEditor.main(new String[]{});
     File fileToImport = new File("src/test/java/org/example/"
-        + "unittests/testcontroller/angers.xml");
+        + "controller/angers.xml");
     ActionFile.getInstance().importMap(fileToImport);
 
     // Check network location and zoom
@@ -205,41 +204,41 @@ class ActionFileTest {
       switch (event.getEventName()) {
         case STATION_CLOSED:
           assertEquals(12, ((EventStationClosed) event)
-                  .getIdStation(), "The station concerned by this event should"
+              .getIdStation(), "The station concerned by this event should"
               + " be the number 12");
           break;
         case LINE_CLOSED:
           assertEquals(39, ((EventLineClosed) event)
-                  .getIdStationStart(), "The starting station concerned by "
+              .getIdStationStart(), "The starting station concerned by "
               + "this event should be the number 39");
           assertEquals(41, ((EventLineClosed) event)
-                  .getIdStationEnd(), "The ending station concerned by this "
+              .getIdStationEnd(), "The ending station concerned by this "
               + "event should be the number 41");
           break;
         case LINE_DELAYED:
           assertEquals(4, ((EventLineDelay) event)
-                  .getIdStationStart(), "The starting station concerned by "
+              .getIdStationStart(), "The starting station concerned by "
               + "this event should be the number 4");
           assertEquals(7, ((EventLineDelay) event)
-                  .getIdStationEnd(), "The ending station concerned by this "
+              .getIdStationEnd(), "The ending station concerned by this "
               + "event should be the number 7");
           assertEquals(60, ((EventLineDelay) event)
-                  .getDelay(), "The delay of this event should be 60 minutes");
+              .getDelay(), "The delay of this event should be 60 minutes");
           break;
         case TRAIN_HOUR:
           assertEquals(0, ((EventHour) event)
-                  .getIdLine(), "The line concerned by this event should"
+              .getIdLine(), "The line concerned by this event should"
               + " be the number 0");
           assertEquals(13, ((EventHour) event)
-                  .getTrainNumber(), "The number of trains added to this line "
+              .getTrainNumber(), "The number of trains added to this line "
               + "should be the number 13");
           break;
         case ATTENDANCE_PEAK:
           assertEquals(30, ((EventAttendancePeak) event)
-                  .getIdStation(), "The station concerned by this event should"
+              .getIdStation(), "The station concerned by this event should"
               + " be the number 30");
           assertEquals(200, ((EventAttendancePeak) event)
-                  .getSize(), "The attendance peak in this station should be "
+              .getSize(), "The attendance peak in this station should be "
               + "of 200 people");
           break;
         default:

@@ -22,39 +22,13 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testmodel;
+package org.example.model;
 
-import org.example.model.Line;
-import org.example.model.Station;
-import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-/**
- * Test-case of {@link Line} model.
- *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
- * @file LineTest.java
- * @date N/A
- * @since 2.0
- */
-public class LineTest {
-
-  public static final String NAME = "eglantine";
-
-  @Test
-  public void testLine() {
-    Station station = new Station(0, 5, 5, NAME);
-    List<Station> stations = new ArrayList<>();
-    Line line = new Line(0, stations);
-    assertEquals(0, line.getId());
-    assertTrue(line.getStations().isEmpty());
-    line.addStation(station);
-    assertEquals(1, line.getStations().size());
-  }
+@RunWith(Suite.class)
+@SuiteClasses({ AreaTest.class, LineTest.class, StationTest.class })
+public class ModelTestSuite {
 }

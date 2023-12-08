@@ -10,6 +10,8 @@ Date : 24/01/2019
 Author :
   - Team v1
   - Team v2
+  - Paul TRÉMOUREUX (quality check)
+  - Alexis BONAMY
   - Paul TRÉMOUREUX
 
 License : MIT License
@@ -246,7 +248,8 @@ Return :
   - [][]*PathStation : the graph of the map
 */
 func (mapPointer *Map) Graph() [][]*PathStation {
-	println("is mapPointer.graph nil ? " + strconv.FormatBool(mapPointer.graph == nil))
+	println("is mapPointer.graph nil ? " + strconv.FormatBool(
+		mapPointer.graph == nil))
 	clone := make([][]*PathStation, len(mapPointer.graph))
 
 	for i := range mapPointer.graph {
@@ -580,9 +583,11 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 	var attendancePeakEventsC configs.ConfigAttendancePeakEvent
 	for _, eventAttendancePeak := range mapPointer.eventsAttendancePeak {
 		attendancePeakEventsC = configs.ConfigAttendancePeakEvent{
-			TimeString: eventAttendancePeak.time.String(),
-			StationId:  eventAttendancePeak.idStation,
-			Size:       eventAttendancePeak.size,
+			StartString: eventAttendancePeak.start.String(),
+			EndString:   eventAttendancePeak.end.String(),
+			PeakString:  eventAttendancePeak.peak.String(),
+			StationId:   eventAttendancePeak.idStation,
+			PeakSize:    eventAttendancePeak.peakSize,
 		}
 		mapC.EventsAttendancePeak = append(mapC.EventsAttendancePeak,
 			attendancePeakEventsC)

@@ -22,11 +22,8 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testcontroller;
+package org.example.controller;
 
-import org.example.controller.ActionArea;
-import org.example.controller.ActionLine;
-import org.example.controller.ActionStation;
 import org.example.model.Line;
 import org.example.view.MainWindow;
 import org.junit.Test;
@@ -38,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Baptiste BELLIER
  * @file ActionsTest.java
  * @date N/A
  * @since 2.0

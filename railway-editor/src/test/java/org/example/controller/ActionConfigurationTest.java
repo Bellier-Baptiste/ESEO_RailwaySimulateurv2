@@ -22,11 +22,10 @@
  * SOFTWARE.
  */
 
-package org.example.unittests.testcontroller;
+package org.example.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import org.example.controller.ActionConfiguration;
 import org.example.view.EditConfigDialog;
 import org.example.view.EditConfigParamPanel;
 import org.junit.jupiter.api.AfterEach;
@@ -50,6 +49,7 @@ import java.util.Map;
  * Test-case of editing the configuration of the simulation from the Java HMI.
  *
  * @author Aurélie Chamouleau
+ * @author Baptiste BELLIER
  * @file ActionConfigurationTest.java
  * @date 2023-10-23
  * @since 3.0
@@ -74,8 +74,8 @@ class ActionConfigurationTest {
 
     // Use introspection to get the JSON_FILE_PATH field
     Field jsonFilePathField = getJsonFilePathField(actionConfiguration);
-    jsonFilePathField.set(actionConfiguration, "src/test/java/org/example/"
-        + "unittests/testcontroller/configTest.json");
+    jsonFilePathField.set(actionConfiguration, "src/test/java/org/example/controller/"
+        + "configTest.json");
 
     // Running tested method
     actionConfiguration.readJsonFile();
