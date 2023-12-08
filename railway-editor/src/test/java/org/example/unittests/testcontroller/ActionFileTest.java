@@ -31,7 +31,7 @@ import org.example.model.Area;
 import org.example.model.Event;
 import org.example.model.EventAttendancePeak;
 import org.example.model.EventHour;
-import org.example.model.EventLineClosed;
+import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.view.AreaView;
@@ -208,11 +208,11 @@ class ActionFileTest {
                   .getIdStation(), "The station concerned by this event should"
               + " be the number 12");
           break;
-        case LINE_CLOSED:
-          assertEquals(39, ((EventLineClosed) event)
+        case MULTIPLE_STATIONS_CLOSED:
+          assertEquals(39, ((EventMultipleStationsClosed) event)
                   .getIdStationStart(), "The starting station concerned by "
               + "this event should be the number 39");
-          assertEquals(41, ((EventLineClosed) event)
+          assertEquals(41, ((EventMultipleStationsClosed) event)
                   .getIdStationEnd(), "The ending station concerned by this "
               + "event should be the number 41");
           break;

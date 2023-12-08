@@ -1,13 +1,14 @@
 /*
-File : eventLineClose_test.go
+File : eventMultipleStationsClosed_test.go
 
-Brief : eventLineClose_test.go runs tests on the eventLineClose.go file.
+Brief : eventMultipleStationsClosed_test.go runs tests on the eventMultipleStationsClosed.go file.
 
 Date : 10/02/2020
 
 Author :
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Marie BORDET
 
 License : MIT License
 
@@ -42,7 +43,7 @@ import (
 )
 
 /*
-TestEventLineClosed tests the EventLineClosed struct and its methods.
+TestEventMultipleStationsClosed tests the EventMultipleStationsClosed struct and its methods.
 
 # It tests if the struct and its methods work properly
 
@@ -50,29 +51,29 @@ Input : t *testing.T
 
 Expected : The struct and its methods work properly
 */
-func TestEventLineClosed(t *testing.T) {
-	println("*** eventLineClosed_test.go ***")
+func TestEventMultipleStationsClosed(t *testing.T) {
+	println("*** EventMultipleStationsClosed_test.go ***")
 	start, err := time.Parse("15:04", "00:01")
 	end, err := time.Parse("15:04", "00:02")
 	if err != nil {
-		log.Fatal("Failed to initialize line closed times", err)
+		log.Fatal("Failed to initialize multiple stations closed times", err)
 	}
 
-	lineClosed := NewEventLineClosed(0, 1, start, end)
+	multipleStationsClosed := NewEventMultipleStationsClosed(0, 1, start, end)
 
-	assert.Equal(t, 0, lineClosed.IdStationStart(), "Bad Start station id")
-	lineClosed.SetIdStationStart(2)
-	assert.Equal(t, 2, lineClosed.IdStationStart(), "Bad Start station id")
+	assert.Equal(t, 0, multipleStationsClosed.IdStationStart(), "Bad Start station id")
+	multipleStationsClosed.SetIdStationStart(2)
+	assert.Equal(t, 2, multipleStationsClosed.IdStationStart(), "Bad Start station id")
 
-	assert.Equal(t, 1, lineClosed.IdStationEnd(), "Bad End station id")
-	lineClosed.SetIdStationEnd(3)
-	assert.Equal(t, 3, lineClosed.IdStationEnd(), "Bad End station id")
+	assert.Equal(t, 1, multipleStationsClosed.IdStationEnd(), "Bad End station id")
+	multipleStationsClosed.SetIdStationEnd(3)
+	assert.Equal(t, 3, multipleStationsClosed.IdStationEnd(), "Bad End station id")
 
-	assert.Equal(t, "0000-01-01 00:01:00 +0000 UTC", lineClosed.Start().String(), "Bad Start time")
-	assert.Equal(t, "0000-01-01 00:02:00 +0000 UTC", lineClosed.End().String(), "Bad Start time")
+	assert.Equal(t, "0000-01-01 00:01:00 +0000 UTC", multipleStationsClosed.Start().String(), "Bad Start time")
+	assert.Equal(t, "0000-01-01 00:02:00 +0000 UTC", multipleStationsClosed.End().String(), "Bad Start time")
 
-	assert.False(t, lineClosed.Finished(), "Bad event status")
-	lineClosed.SetFinished(true)
-	assert.True(t, lineClosed.Finished(), "Bad event status")
+	assert.False(t, multipleStationsClosed.Finished(), "Bad event status")
+	multipleStationsClosed.SetFinished(true)
+	assert.True(t, multipleStationsClosed.Finished(), "Bad event status")
 
 }

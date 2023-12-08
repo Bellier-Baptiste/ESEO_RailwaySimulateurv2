@@ -231,13 +231,12 @@ public class ActionMetroEvent {
   }
 
   /**
-   * Add a line closed event.
+   * Add a multiple stations closed event.
    *
    * @param eventString event string
    */
   public void addMultipleStationsClosed(final String eventString) {
     MainWindow.getInstance().toFront();
-    String eventString = ListEventPanel.getInstance().eventMultipleStationsClosedToString();
     String[] eventStringTab = eventString.split(",");
     String startTime =
         eventStringTab[STARTING_DATE_INDEX] + "-" + eventStringTab[
@@ -245,11 +244,11 @@ public class ActionMetroEvent {
     String endTime =
         eventStringTab[ENDING_DATE_INDEX] + "-" + eventStringTab[
             ENDING_TIME_INDEX];
-      EventMultipleStationsClosed eventLineClosed = new EventMultipleStationsClosed(this.getCurrentId(),
+    EventMultipleStationsClosed eventMultipleStationsClosed = new EventMultipleStationsClosed(this.getCurrentId(),
         startTime, endTime, Event.EventType.LINE);
-    eventLineClosed.setIdStationStart(Integer.parseInt(eventStringTab[
+    eventMultipleStationsClosed.setIdStationStart(Integer.parseInt(eventStringTab[
         STARTING_STATION_INDEX]));
-    eventLineClosed.setIdStationEnd(Integer.parseInt(eventStringTab[
+    eventMultipleStationsClosed.setIdStationEnd(Integer.parseInt(eventStringTab[
         ENDING_STATION_INDEX]));
     Color eventColor = Color.RED;
     this.addEventBetween2Stations(eventMultipleStationsClosed, eventColor, eventStringTab);
@@ -302,8 +301,8 @@ public class ActionMetroEvent {
             event.getStartTime(), event.getEndTime(), locationsStr,
             eventStringTab[eventStringTab.length - 1],
             Integer.toString(line.getLine().getId()));
-      } else if (event.getEventName() == EventName.LINE_CLOSED) {
-        EventRecap.getInstance().createEventLineClosed(this.getCurrentId(),
+      } else if (event.getEventName() == EventName.MULTIPLE_STATIONS_CLOSED) {
+        EventRecap.getInstance().createEventMultipleStationsClosed(this.getCurrentId(),
             event.getStartTime(), event.getEndTime(), locationsStr,
             Integer.toString(line.getLine().getId()));
       }
@@ -329,8 +328,6 @@ public class ActionMetroEvent {
    */
   public void addAttendancePeak(final String eventString) {
     MainWindow.getInstance().toFront();
-    String eventString = ListEventPanel.getInstance()
-        .eventAttendancePeakToString();
     String[] eventStringTab = eventString.split(",");
     String startTime =
         eventStringTab[STARTING_DATE_INDEX] + "-" + eventStringTab[
@@ -383,7 +380,6 @@ public class ActionMetroEvent {
    */
   public void addTrainHour(final String eventString) {
     MainWindow.getInstance().toFront();
-    String eventString = ListEventPanel.getInstance().eventTrainHourToString();
     String[] eventStringTab = eventString.split(",");
     String startTime = eventStringTab[STARTING_TIME_INDEX_TRAIN_HOUR];
     String endTime = eventStringTab[ENDING_TIME_INDEX_TRAIN_HOUR];

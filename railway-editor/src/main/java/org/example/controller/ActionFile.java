@@ -29,7 +29,7 @@ import org.example.model.Area;
 import org.example.model.Event;
 import org.example.model.EventAttendancePeak;
 import org.example.model.EventHour;
-import org.example.model.EventLineClosed;
+import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;

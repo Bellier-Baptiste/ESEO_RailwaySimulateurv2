@@ -353,7 +353,7 @@ public final class ListEventPanel extends JPanel {
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
                   ActionMetroEvent.getInstance().addMultipleStationsClosed(ListEventPanel
-                      .getInstance().eventLineClosedToString()));
+                      .getInstance().eventMultipleStationsClosedToString()));
               view.add(confirmEventBtn, c);
               break;
             case "AttendancePeak":

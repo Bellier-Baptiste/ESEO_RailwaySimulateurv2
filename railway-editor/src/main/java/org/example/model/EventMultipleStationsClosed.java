@@ -47,7 +47,6 @@ public class EventMultipleStationsClosed extends EventBetween2Stations {
    */
   public EventMultipleStationsClosed(final int id, final String startTime,
                          final String endTime, final EventType type) {
-    super(id, startTime, endTime, type);
--    super(id, startTime, endTime, type, EventName.MULTIPLE_STATIONS_CLOSED);
+    super(id, startTime, endTime, type, EventName.MULTIPLE_STATIONS_CLOSED);
   }
 }
