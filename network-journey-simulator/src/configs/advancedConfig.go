@@ -14,6 +14,8 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Alexis BONAMY
+  - Benoît VAVASSEUR
 
 License : MIT License
 
@@ -61,15 +63,22 @@ Attributes :
   - EventsLineDelay []ConfigLineDelayEvent : the events of line delay
   - EventsLineClosed []ConfigLineClosedEvent : the events of line closed
   - EventsAttendancePeak []ConfigAttendancePeakEvent : the events of attendance
+    peak
+  - Areas []ConfigArea : the areas linking stations
+  - PopulationDistribution []ConfigPopulationDistribution : the population
+    distribution of an area
 */
 type ConfigMap struct {
-	XMLName              xml.Name                    `xml:"map"`
-	Stations             []ConfigStation             `xml:"stations>station"`
-	Lines                []ConfigLine                `xml:"lines>line"`
-	EventsStationClosed  []ConfigStationClosedEvent  `xml:"events>stationClosed"`
-	EventsLineDelay      []ConfigLineDelayEvent      `xml:"events>lineDelay"`
-	EventsLineClosed     []ConfigLineClosedEvent     `xml:"events>lineClosed"`
-	EventsAttendancePeak []ConfigAttendancePeakEvent `xml:"events>attendancePeak"`
+	XMLName                 xml.Name                        `xml:"map"`
+	Stations                []ConfigStation                 `xml:"stations>station"`
+	Lines                   []ConfigLine                    `xml:"lines>line"`
+	EventsStationClosed     []ConfigStationClosedEvent      `xml:"events>stationClosed"`
+	EventsLineDelay         []ConfigLineDelayEvent          `xml:"events>lineDelay"`
+	EventsLineClosed        []ConfigLineClosedEvent         `xml:"events>lineClosed"`
+	EventsAttendancePeak    []ConfigAttendancePeakEvent     `xml:"events>attendancePeak"`
+	Areas                   []ConfigArea                    `xml:"areas>area"`
+	PopulationDistribution  []ConfigPopulationDistribution  `xml:"area>populationDistribution"`
+	DestinationDistribution []ConfigDestinationDistribution `xml:"area>destinationDistribution"`
 }
 
 /*
@@ -81,6 +90,7 @@ Attributes :
   - Name string
   - Position Pos
   - Lines []Line
+  - IdArea *int
 */
 type ConfigStation struct {
 	XMLName  xml.Name `xml:"station"`
@@ -88,6 +98,72 @@ type ConfigStation struct {
 	Name     string   `xml:"name"`
 	Position Pos      `xml:"position"`
 	Lines    []Line   `xml:"lines>line"`
+	IdArea   *int     `xml:"idArea"`
+}
+
+/*
+ConfigArea is the structure that contains the configuration of an area.
+
+Attributes :
+  - XMLName xml.Name
+  - Id int
+  - PopulationDistribution ConfigPopulationDistribution
+*/
+type ConfigArea struct {
+	XMLName                 xml.Name                      `xml:"area"`
+	Id                      int                           `xml:"id"`
+	PopulationDistribution  ConfigPopulationDistribution  `xml:"populationDistribution"`
+	DestinationDistribution ConfigDestinationDistribution `xml:"destinationDistribution"`
+}
+
+/*
+ConfigPopulationDistribution is the structure that contains the configuration
+of the population distribution.
+
+Attributes :
+  - XMLName xml.Name
+  - Businessman int
+  - Child int
+  - Retired int
+  - Student int
+  - Tourist int
+  - Unemployed int
+  - Worker int
+*/
+type ConfigPopulationDistribution struct {
+	XMLName     xml.Name `xml:"populationDistribution"`
+	Businessman int      `xml:"businessman,attr"`
+	Child       int      `xml:"child,attr"`
+	Retired     int      `xml:"retired,attr"`
+	Student     int      `xml:"student,attr"`
+	Tourist     int      `xml:"tourist,attr"`
+	Unemployed  int      `xml:"unemployed,attr"`
+	Worker      int      `xml:"worker,attr"`
+}
+
+/*
+ConfigDestinationDistribution is the structure that contains the configuration
+of the destination distribution.
+
+Attributes :
+  - XMLName xml.Name
+  - Commercial int
+  - Educational int
+  - Industrial int
+  - Leisure int
+  - Office int
+  - Residential int
+  - Touristic int
+*/
+type ConfigDestinationDistribution struct {
+	XMLName     xml.Name `xml:"destinationDistribution"`
+	Commercial  int      `xml:"commercial,attr"`
+	Educational int      `xml:"educational,attr"`
+	Industrial  int      `xml:"industrial,attr"`
+	Leisure     int      `xml:"leisure,attr"`
+	Office      int      `xml:"office,attr"`
+	Residential int      `xml:"residential,attr"`
+	Touristic   int      `xml:"touristic,attr"`
 }
 
 /*
@@ -207,18 +283,24 @@ an attendance peak event.
 
 Attributes :
   - XMLName xml.Name
-  - TimeString string
+  - StartString string
+  - EndString string
+  - PeakString string
   - StationId int
-  - Size int
+  - PeakSize int
+  - PeakWidth int
 
 Methods :
   - None
 */
 type ConfigAttendancePeakEvent struct {
-	XMLName    xml.Name `xml:"attendancePeak"`
-	TimeString string   `xml:"time"`
-	StationId  int      `xml:"stationId"`
-	Size       int      `xml:"size"`
+	XMLName     xml.Name `xml:"attendancePeak"`
+	StartString string   `xml:"start"`
+	EndString   string   `xml:"end"`
+	PeakString  string   `xml:"peakTime"`
+	StationId   int      `xml:"stationId"`
+	PeakSize    int      `xml:"peakSize"`
+	PeakWidth   int      `xml:"peakWidth"`
 }
 
 /*

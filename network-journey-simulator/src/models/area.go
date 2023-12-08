@@ -1,4 +1,8 @@
 /*
+ *
+ * Author :
+ * 	- Benoît VAVASSEUR
+ *
  * License : MIT License
  *
  * Copyright (c) 2023 Team PFE_2023_16
@@ -22,51 +26,31 @@
  * SOFTWARE.
  */
 
-package org.example.model;
+package models
 
-/**
- * Model class extending event which describes a station closing.
- *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
- * @file EventStationClosed.java
- * @date N/A
- * @since 2.0
- */
-public class EventStationClosed extends Event {
-  /**
-   * Station id.
-   */
-  private int idStation;
+type Area struct {
+	id                      int
+	populationDistribution  PopulationDistribution
+	destinationDistribution DestinationDistribution
+}
 
-  /**
-   * Constructor.
-   *
-   * @param id        event id
-   * @param startTime event startTime
-   * @param endTime   event endTime
-   * @param type      eventType
-   */
-  public EventStationClosed(final int id, final String startTime,
-                            final String endTime, final EventType type) {
-    super(id, startTime, endTime, type, EventName.STATION_CLOSED);
-  }
+func NewArea(id int, populationDistribution PopulationDistribution,
+	destinationDistribution DestinationDistribution) Area {
+	return Area{
+		id:                      id,
+		populationDistribution:  populationDistribution,
+		destinationDistribution: destinationDistribution,
+	}
+}
 
-  /**
-   * get the id of the station concerned by the peak.
-   *
-   * @return int id
-   */
-  public int getIdStation() {
-    return idStation;
-  }
+func (a *Area) Id() int {
+	return a.id
+}
 
-  /**
-   * set the id of the station concerned.
-   *
-   * @param eventIdStation id station concerned by the peak
-   */
-  public void setIdStation(final int eventIdStation) {
-    this.idStation = eventIdStation;
-  }
+func (a *Area) PopulationDistribution() PopulationDistribution {
+	return a.populationDistribution
+}
+
+func (a *Area) DestinationDistribution() DestinationDistribution {
+	return a.destinationDistribution
 }

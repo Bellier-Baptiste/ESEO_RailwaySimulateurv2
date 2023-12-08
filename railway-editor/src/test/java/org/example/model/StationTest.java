@@ -24,49 +24,37 @@
 
 package org.example.model;
 
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
 /**
- * Model class extending event which describes a station closing.
+ * Test-case of {@link Station} model.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @file EventStationClosed.java
+ * @file StationTest.java
  * @date N/A
  * @since 2.0
  */
-public class EventStationClosed extends Event {
-  /**
-   * Station id.
-   */
-  private int idStation;
+public class StationTest {
+    public static final String NAME = "eglantine";
 
-  /**
-   * Constructor.
-   *
-   * @param id        event id
-   * @param startTime event startTime
-   * @param endTime   event endTime
-   * @param type      eventType
-   */
-  public EventStationClosed(final int id, final String startTime,
-                            final String endTime, final EventType type) {
-    super(id, startTime, endTime, type, EventName.STATION_CLOSED);
-  }
 
-  /**
-   * get the id of the station concerned by the peak.
-   *
-   * @return int id
-   */
-  public int getIdStation() {
-    return idStation;
-  }
+    @Test
+    public void testConstructeur() {
+        Station station = new Station(0, 5, 5, NAME);
+        assertEquals(0, station.getId());
+        assertEquals(5, station.getPosX());
+        assertEquals(5, station.getPosY());
+        assertEquals("eglantine", station.getName());
+    }
 
-  /**
-   * set the id of the station concerned.
-   *
-   * @param eventIdStation id station concerned by the peak
-   */
-  public void setIdStation(final int eventIdStation) {
-    this.idStation = eventIdStation;
-  }
+    @Test
+    public void testMoveStation() {
+        Station station = new Station(0, 5, 5, NAME);
+        station.moveStation(3, 3);
+        assertEquals(8, station.getPosX());
+        assertEquals(8, station.getPosY());
+    }
 }

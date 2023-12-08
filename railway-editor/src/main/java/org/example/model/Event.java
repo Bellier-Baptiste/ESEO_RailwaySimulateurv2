@@ -25,6 +25,7 @@
 package org.example.model;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
@@ -75,16 +76,18 @@ public abstract class Event {
    * @param eventStartTime event startTime
    * @param eventEndTime   event endTime
    * @param eventType      event type
+   * @param name           event name
    */
   protected Event(final int eventId, final String eventStartTime,
-                  final String eventEndTime, final EventType eventType) {
-    super();
-    if (isTimeValid(eventStartTime) && isTimeValid(eventEndTime)
-        && isStartTimeAfterEndTime(eventStartTime, eventEndTime)) {
+                  final String eventEndTime, final EventType eventType,
+                  final EventName name) {
+    if (isTimeValid(eventStartTime, name) && isTimeValid(eventEndTime,
+        name) && isStartTimeAfterEndTime(eventStartTime, eventEndTime)) {
       this.startTime = eventStartTime;
       this.endTime = eventEndTime;
       this.type = eventType;
       this.id = eventId;
+      this.eventName = name;
     } else {
       throw new IllegalArgumentException("Invalid start time or end time.");
     }
@@ -109,8 +112,8 @@ public abstract class Event {
    *                                  endTime
    */
   public void setStartTime(final String startTimeToSet) {
-    if (isTimeValid(startTimeToSet) && isStartTimeAfterEndTime(startTimeToSet,
-        this.endTime)) {
+    if (isTimeValid(startTimeToSet, eventName)
+        && isStartTimeAfterEndTime(startTimeToSet, this.endTime)) {
       this.startTime = startTimeToSet;
     } else {
       throw new IllegalArgumentException("Invalid start time.");
@@ -136,8 +139,8 @@ public abstract class Event {
    *                                  or before startTime
    */
   public void setEndTime(final String endTimeToSet) {
-    if (isTimeValid(endTimeToSet) && isStartTimeAfterEndTime(this.startTime,
-        endTimeToSet)) {
+    if (isTimeValid(endTimeToSet, eventName)
+        && isStartTimeAfterEndTime(this.startTime, endTimeToSet)) {
       this.endTime = endTimeToSet;
     } else {
       throw new IllegalArgumentException("Invalid end time.");
@@ -202,18 +205,28 @@ public abstract class Event {
   }
 
   /**
-    * Parses a given string to a LocalDateTime using the custom format
-    * "yyyy/MM/dd_HH:mm".
-    *
-    * @param time The date-time string to be parsed.
-    * @return LocalDateTime representation of the provided string or null if
-    *         parsing fails.
-    */
-  private LocalDateTime parseTime(final String time) {
+   * Parses a given string to a LocalDateTime using the custom format
+   * "yyyy/MM/dd_HH:mm".
+   *
+   * @param date The date-time string to be parsed.
+   * @return LocalDateTime representation of the provided string or null if
+   *         parsing fails.
+   */
+  private LocalDateTime parseDate(final String date) {
     DateTimeFormatter formatter =
         DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm");
     try {
-      return LocalDateTime.parse(time, formatter);
+      return LocalDateTime.parse(date, formatter);
+    } catch (DateTimeParseException e) {
+      return null;
+    }
+  }
+
+  private LocalTime parseTime(final String time) {
+    DateTimeFormatter formatter =
+        DateTimeFormatter.ofPattern("HH:mm");
+    try {
+      return LocalTime.parse(time, formatter);
     } catch (DateTimeParseException e) {
       return null;
     }
@@ -224,11 +237,15 @@ public abstract class Event {
    * format "yyyy/MM/dd_HH:mm".
    *
    * @param time The date-time string to be validated.
-   *
+   * @param name The name of the event to be validated.
    * @return true if the string is a valid date-time, false otherwise.
    */
-  private boolean isTimeValid(final String time) {
-    return parseTime(time) != null;
+  private boolean isTimeValid(final String time, final EventName name) {
+    if (name == EventName.TRAIN_HOUR) {
+      return parseTime(time) != null;
+    } else {
+      return parseDate(time) != null;
+    }
   }
 
   /**
@@ -237,14 +254,13 @@ public abstract class Event {
    *
    * @param startTimeToCheck The start date-time string to be compared.
    * @param endTimeToCheck   The end date-time string to be compared.
-   *
    * @return true if the startTime is after endTime, false otherwise or if
    *         either time is invalid.
    */
   private boolean isStartTimeAfterEndTime(final String startTimeToCheck,
                                           final String endTimeToCheck) {
-    LocalDateTime start = parseTime(startTimeToCheck);
-    LocalDateTime end = parseTime(endTimeToCheck);
+    LocalDateTime start = parseDate(startTimeToCheck);
+    LocalDateTime end = parseDate(endTimeToCheck);
     return start == null || end == null || !start.isAfter(end);
   }
 

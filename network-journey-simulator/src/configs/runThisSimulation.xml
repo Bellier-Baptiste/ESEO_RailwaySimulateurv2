@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<map>
+    <location>
+        <latitude>47.47405524758028</latitude>
+        <longitude>-0.545196533203125</longitude>
+        <zoom>14</zoom>
+    </location>
+    <stations>
+        <station>
+            <id>0</id>
+            <name>Heyley</name>
+            <position>
+                <latitude>47.48339483597721</latitude>
+                <longitude>-0.5597019195556641</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>1</id>
+            <name>Buzundin</name>
+            <position>
+                <latitude>47.48194469821279</latitude>
+                <longitude>-0.55755615234375</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>2</id>
+            <name>Pavot</name>
+            <position>
+                <latitude>47.48049452041884</latitude>
+                <longitude>-0.5554103851318359</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+    </stations>
+    <lines>
+        <line>
+            <id>0</id>
+            <name>A</name>
+            <numberOfTrain>30</numberOfTrain>
+            <stations>
+                <station id="0" order="0"/>
+                <station id="1" order="1"/>
+                <station id="2" order="2"/>
+            </stations>
+        </line>
+    </lines>
+    <events>
+        <attendancePeak>
+            <start>2023-12-08T08:00:00.000Z</start>
+            <end>2023-12-08T17:30:00.000Z</end>
+            <peakTime>2023-12-08T12:00:00.000Z</peakTime>
+            <stationId>1</stationId>
+            <peakSize>4</peakSize>
+            <peakWidth>3</peakWidth>
+        </attendancePeak>
+    </events>
+</map>

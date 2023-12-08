@@ -178,6 +178,34 @@ public final class Data {
    * String for unemployed label.
    */
   public static final String AREA_UNEMPLOYED = "Unemployed";
+  /**
+   * String for residential area.
+   */
+  public static final String AREA_RESIDENTIAL = "Residential";
+  /**
+   * String for commercial area.
+   */
+  public static final String AREA_COMMERCIAL = "Commercial";
+  /**
+   * String for industrial area.
+   */
+  public static final String AREA_OFFICE = "Office";
+  /**
+   * String for industrial area.
+   */
+  public static final String AREA_INDUSTRIAL = "Industrial";
+  /**
+   * String for educational area.
+   */
+  public static final String AREA_EDUCATIONAL = "Educational";
+  /**
+   * String for hospital area.
+   */
+  public static final String AREA_TOURISTIC = "Touristic";
+  /**
+   * String for hospital area.
+   */
+  public static final String AREA_LEISURE = "Leisure";
 
   //event attributes
   /** List of all event created. */
@@ -213,7 +241,7 @@ public final class Data {
     this.initLineColors();
     this.selectType = null;
     this.currentCity = "";
-    areaId = 0;
+    areaId = -1;
     this.eventList = new ArrayList<>();
   }
 

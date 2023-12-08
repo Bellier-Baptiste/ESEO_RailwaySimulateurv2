@@ -26,7 +26,7 @@ package org.example.model;
 
 /**
  * Model class extending {@link Event} which describes a change of trains
- * number on a {@link model.Line} at a certain hour of the day.
+ * number on a {@link org.example.model.Line} at a certain hour of the day.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
@@ -54,8 +54,7 @@ public class EventHour extends Event {
    */
   public EventHour(final int id, final String startTime, final String endTime,
                    final EventType type) {
-    super(id, startTime, endTime, type);
-    super.setEventName(EventName.TRAIN_HOUR);
+    super(id, startTime, endTime, type, EventName.TRAIN_HOUR);
   }
 
   /**

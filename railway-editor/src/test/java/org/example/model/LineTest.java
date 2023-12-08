@@ -24,49 +24,35 @@
 
 package org.example.model;
 
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 /**
- * Model class extending event which describes a station closing.
+ * Test-case of {@link Line} model.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @file EventStationClosed.java
+ * @file LineTest.java
  * @date N/A
  * @since 2.0
  */
-public class EventStationClosed extends Event {
-  /**
-   * Station id.
-   */
-  private int idStation;
+public class LineTest {
 
-  /**
-   * Constructor.
-   *
-   * @param id        event id
-   * @param startTime event startTime
-   * @param endTime   event endTime
-   * @param type      eventType
-   */
-  public EventStationClosed(final int id, final String startTime,
-                            final String endTime, final EventType type) {
-    super(id, startTime, endTime, type, EventName.STATION_CLOSED);
-  }
+  public static final String NAME = "eglantine";
 
-  /**
-   * get the id of the station concerned by the peak.
-   *
-   * @return int id
-   */
-  public int getIdStation() {
-    return idStation;
-  }
-
-  /**
-   * set the id of the station concerned.
-   *
-   * @param eventIdStation id station concerned by the peak
-   */
-  public void setIdStation(final int eventIdStation) {
-    this.idStation = eventIdStation;
+  @Test
+  public void testLine() {
+    Station station = new Station(0, 5, 5, NAME);
+    List<Station> stations = new ArrayList<>();
+    Line line = new Line(0, stations);
+    assertEquals(0, line.getId());
+    assertTrue(line.getStations().isEmpty());
+    line.addStation(station);
+    assertEquals(1, line.getStations().size());
   }
 }

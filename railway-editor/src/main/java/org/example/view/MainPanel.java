@@ -24,12 +24,16 @@
 
 package org.example.view;
 
+import org.example.controller.CustomMapController;
 import org.example.controller.MovingAdapter;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
 import java.util.ArrayList;
 import java.util.List;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
@@ -67,6 +71,9 @@ public final class MainPanel extends JMapViewer {
   private transient List<LineView> lineViews;
   /** List of areaViews. */
   private transient List<AreaView> areaViews;
+  /** MovingAdapter. */
+  private final transient MovingAdapter movingAdapter;
+
   /** Boolean to know if the HUD is hidden or not. */
   private boolean hideHud;
 
@@ -74,12 +81,25 @@ public final class MainPanel extends JMapViewer {
    * MainPanel constructor.
    */
   private MainPanel() {
+    super();
+    for (MouseListener mouseListener : this.getMouseListeners()) {
+      this.removeMouseListener(mouseListener);
+    }
+    for (MouseMotionListener motionListener : this.getMouseMotionListeners()) {
+      this.removeMouseMotionListener(motionListener);
+    }
+    for (MouseWheelListener wheelListener : this.getMouseWheelListeners()) {
+      this.removeMouseWheelListener(wheelListener);
+    }
+    new CustomMapController(this);
+
     Dimension dim = new Dimension(MainPanel.PANEL_WIDTH_DEFAULT,
         MainPanel.PANEL_HEIGHT_DEFAULT);
     this.setPreferredSize(dim);
     this.lineViews = new ArrayList<>();
     this.areaViews = new ArrayList<>();
     MovingAdapter ma = new MovingAdapter();
+    this.movingAdapter = ma;
     addMouseMotionListener(ma);
     addMouseWheelListener(ma);
     addMouseListener(ma);
@@ -166,6 +186,14 @@ public final class MainPanel extends JMapViewer {
     return mainPanelHud;
   }
 
+  /**
+   * get the movingAdapter.
+   *
+   * @return movingAdapter
+   */
+  public MovingAdapter getMovingAdapter() {
+    return movingAdapter;
+  }
 
   /**
    * return if the hud is hide or not.
@@ -212,5 +240,14 @@ public final class MainPanel extends JMapViewer {
         areaView.display(g2D);
       }
     }
+  }
+
+  /**
+   * Clean the map: remove all the elements.
+   */
+  public void cleanMap() {
+    this.lineViews = new ArrayList<>();
+    this.areaViews = new ArrayList<>();
+    EventRecap.getInstance().cleanEvents();
   }
 }
