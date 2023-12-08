@@ -74,6 +74,7 @@ import java.util.Map;
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
  * @author Alexis BONAMY
+ * @author Baptiste BELLIER
  * @file ActionFile.java
  * @date 2023/09/22
  * @see org.example.data.Data
@@ -797,12 +798,18 @@ public class ActionFile {
                 .getTextContent());
             break;
           case "attendancePeak":
+            String peakTime = eventElement.getElementsByTagName("peakTime")
+                .item(0).getTextContent();
+            String[] peakTimeSplit = this.formatDate(peakTime);
             ActionMetroEvent.getInstance().addAttendancePeak(
                 startTimeSplit[0] + "," + startTimeSplit[1] + ","
                     + endTimeSplit[0] + "," + endTimeSplit[1] + ","
+                    + peakTimeSplit[0] + "," + peakTimeSplit[1] + ","
                     + eventElement.getElementsByTagName("stationId")
                     .item(0).getTextContent() + ","
-                    + eventElement.getElementsByTagName("size")
+                    + eventElement.getElementsByTagName("peakSize")
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName("peakWidth")
                     .item(0).getTextContent()
             );
             break;
