@@ -81,6 +81,7 @@ Attributes :
   - eventsLineClosed []*EventLineClosed : the events of line closed
   - eventsGaussianPeak []*EventGaussianPeak : the events of gaussian
     peak
+  - eventsRampPeak []*EventRampPeak : the events of ramp peak
 
 Methods :
   - Stations() []MetroStation : return the stations of the map
@@ -140,6 +141,7 @@ type Map struct {
 	graph                   [][]*PathStation
 	eventsLineClosed        []*EventLineClosed
 	eventsGaussianPeak      []*EventGaussianPeak
+	eventsRampPeak          []*EventRampPeak
 }
 
 /*
@@ -588,9 +590,23 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 			PeakString:  eventGaussianPeak.peak.String(),
 			StationId:   eventGaussianPeak.idStation,
 			PeakSize:    eventGaussianPeak.peakSize,
+			PeakWidth:   eventGaussianPeak.peakWidth,
 		}
 		mapC.EventsGaussianPeak = append(mapC.EventsGaussianPeak,
 			gaussianPeakEventsC)
+	}
+
+	var rampPeakEventsC configs.ConfigRampPeakEvent
+	for _, eventRampPeak := range mapPointer.eventsRampPeak {
+		rampPeakEventsC = configs.ConfigRampPeakEvent{
+			StartString: eventRampPeak.start.String(),
+			EndString:   eventRampPeak.end.String(),
+			PeakString:  eventRampPeak.peak.String(),
+			StationId:   eventRampPeak.idStation,
+			PeakSize:    eventRampPeak.peakSize,
+		}
+		mapC.EventsRampPeak = append(mapC.EventsRampPeak,
+			rampPeakEventsC)
 	}
 
 	adConfig.MapC = mapC

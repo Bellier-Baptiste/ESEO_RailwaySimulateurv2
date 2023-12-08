@@ -64,6 +64,7 @@ Attributes :
   - EventsLineClosed []ConfigLineClosedEvent : the events of line closed
   - EventsGaussianPeak []ConfigGaussianPeakEvent : the events of gaussian
     peak
+  - EventsRampPeak []ConfigRampPeakEvent : the events of ramp peak
   - Areas []ConfigArea : the areas linking stations
   - PopulationDistribution []ConfigPopulationDistribution : the population
     distribution of an area
@@ -76,6 +77,7 @@ type ConfigMap struct {
 	EventsLineDelay         []ConfigLineDelayEvent          `xml:"events>lineDelay"`
 	EventsLineClosed        []ConfigLineClosedEvent         `xml:"events>lineClosed"`
 	EventsGaussianPeak      []ConfigGaussianPeakEvent       `xml:"events>gaussianPeak"`
+	EventsRampPeak          []ConfigRampPeakEvent           `xml:"events>rampPeak"`
 	Areas                   []ConfigArea                    `xml:"areas>area"`
 	PopulationDistribution  []ConfigPopulationDistribution  `xml:"area>populationDistribution"`
 	DestinationDistribution []ConfigDestinationDistribution `xml:"area>destinationDistribution"`
@@ -301,6 +303,30 @@ type ConfigGaussianPeakEvent struct {
 	StationId   int      `xml:"stationId"`
 	PeakSize    int      `xml:"peakSize"`
 	PeakWidth   int      `xml:"peakWidth"`
+}
+
+/*
+ConfigRampPeakEvent is the structure that contains the configuration of
+an ramp peak event.
+
+Attributes :
+  - XMLName xml.Name
+  - StartString string
+  - EndString string
+  - PeakString string
+  - StationId int
+  - PeakSize int
+
+Methods :
+  - None
+*/
+type ConfigRampPeakEvent struct {
+	XMLName     xml.Name `xml:"rampPeak"`
+	StartString string   `xml:"start"`
+	EndString   string   `xml:"end"`
+	PeakString  string   `xml:"peakTime"`
+	StationId   int      `xml:"stationId"`
+	PeakSize    int      `xml:"peakSize"`
 }
 
 /*
