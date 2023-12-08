@@ -48,12 +48,13 @@ import (
 )
 
 const (
-	timeStart        = "2018-10-26T10:01:00Z"
+	timeStart        = "2018-10-26T09:01:00Z"
 	timeEnd          = "2018-10-26T10:02:00Z"
 	elc_stationStart = 1
 	elc_stationEnd   = 19
 	eap_stationStart = 2
-	eap_size         = 10
+	eap_size         = 600
+	eap_width        = 6
 )
 
 /*
@@ -329,9 +330,14 @@ func TestSimulator_EventAttendancePeak(t *testing.T) {
 
 	assert.True(t, len(eventsAttendancePeak) != 0, "Array of events (attendance peak) not initialized")
 
-	assert.Equal(t, timeStart, eventsAttendancePeak[0].Time().Format(time.RFC3339), "Bad Time attribut")
-	assert.Equal(t, eap_stationStart, eventsAttendancePeak[0].IdStation(), "Bad station id attribut")
-	assert.Equal(t, eap_size, eventsAttendancePeak[0].Size(), "Bad size attribut")
+	assert.Equal(t, timeStart, eventsAttendancePeak[0].GetStart().Format(time.
+		RFC3339), "Bad Time attribute")
+	assert.Equal(t, eap_stationStart, eventsAttendancePeak[0].GetIdStation(),
+		"Bad station id attribute")
+	assert.Equal(t, eap_size, eventsAttendancePeak[0].GetPeakSize(),
+		"Bad size attribute")
+	assert.Equal(t, eap_width, eventsAttendancePeak[0].GetPeakWidth(),
+		"Bad width attribute")
 }
 
 /*
