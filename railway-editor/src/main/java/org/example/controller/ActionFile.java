@@ -29,7 +29,7 @@ import org.example.model.Area;
 import org.example.model.Event;
 import org.example.model.EventAttendancePeak;
 import org.example.model.EventHour;
-import org.example.model.EventLineClosed;
+import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
@@ -72,6 +72,7 @@ import java.util.Map;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Marie Bordet
  * @file ActionFile.java
  * @date 2023/09/22
  * @see org.example.data.Data
@@ -106,6 +107,16 @@ public class ActionFile {
    * Number of letters in alphabet.
    */
   private static final int ALPHABET_SIZE = 26;
+
+  /**
+   * Station id start xml marker.
+   */
+  private static final String STATION_ID_START = "stationIdStart";
+  /**
+   * Station id end xml marker.
+   */
+  private static final String STATION_ID_END = "stationIdEnd";
+
   /**
    * Singleton instance.
    */
@@ -256,16 +267,22 @@ public class ActionFile {
           eventName.appendChild(delay);
           break;
 
-        case "lineClosed":
-          EventLineClosed eventLineClosed = (EventLineClosed) event;
+        case "multipleStationsClosed":
+          EventMultipleStationsClosed eventMultipleStationsClosed = (EventMultipleStationsClosed) event;
 
-          for(int i=0;i<eventLineClosed.getIdStations().size();i++) {
-            Element stationClosed = document.createElement("station"+i);
-            stationClosed.appendChild(document.createTextNode(Integer.toString(
-                    eventLineClosed.getIdStations().get(i))));
-            eventName.appendChild(stationClosed);
-          }
+          Element stationStartClosed = document.createElement(STATION_ID_START);
+          stationStartClosed.appendChild(
+                  document.createTextNode(Integer.toString(eventMultipleStationsClosed
+                          .getIdStationStart())));
+          eventName.appendChild(stationStartClosed);
+
+          Element stationEndClosed = document.createElement(STATION_ID_END);
+          stationEndClosed
+                  .appendChild(document.createTextNode(Integer.toString(
+                          eventMultipleStationsClosed.getIdStationEnd())));
+          eventName.appendChild(stationEndClosed);
           break;
+
         case "attendancePeak":
           EventAttendancePeak eventAttendancePeak = (EventAttendancePeak) event;
 
@@ -684,8 +701,8 @@ public class ActionFile {
           case "lineDelay":
             ActionMetroEvent.getInstance().addLineDelay();
             break;
-          case "lineClosed":
-            ActionMetroEvent.getInstance().addLineClosed();
+          case "multipleStationsClosed":
+            ActionMetroEvent.getInstance().addMultipleStationsClosed();
             break;
           case "attendancePeak":
             ActionMetroEvent.getInstance().addAttendancePeak();

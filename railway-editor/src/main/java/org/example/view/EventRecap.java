@@ -42,6 +42,7 @@ import java.awt.event.ActionEvent;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Marie Bordet
  * @file ClockView.java
  * @date N/A
  * @since 2.0
@@ -177,7 +178,7 @@ public final class EventRecap extends JScrollPane {
   }
 
   /**
-   * create a recap for event line closed.
+   * create a recap for event multiple stations closed.
    *
    * @param id           event id
    * @param startDateStr event start date
@@ -185,13 +186,13 @@ public final class EventRecap extends JScrollPane {
    * @param locationsStr stations concerned
    * @param lineStr      line concerned
    */
-  public void createEventLineClosed(final int id, final String startDateStr,
+  public void createEventMultipleStationsClosed(final int id, final String startDateStr,
                                     final String endDateStr,
                                     final String locationsStr,
                                     final String lineStr) {
     JXTaskPane taskpane = new JXTaskPane();
     // create a taskpane, and set it's title and icon
-    taskpane.setTitle("Line Closed");
+    taskpane.setTitle("Multiple Stations Closed");
 
     JXLabel startDate = new JXLabel();
     startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));

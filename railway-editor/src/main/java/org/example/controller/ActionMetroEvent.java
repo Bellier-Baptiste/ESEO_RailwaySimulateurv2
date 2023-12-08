@@ -29,7 +29,7 @@ import org.example.model.Event;
 import org.example.model.EventAttendancePeak;
 import org.example.model.EventBetween2Stations;
 import org.example.model.EventHour;
-import org.example.model.EventLineClosed;
+import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
@@ -55,6 +55,7 @@ import java.awt.event.WindowEvent;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Marie Bordet
  * @file ActionMetroEvent.java
  * @date 2023-10-02
  * @since 3.0
@@ -187,10 +188,10 @@ public class ActionMetroEvent {
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
-  /** Add a line closed event. */
-  public void addLineClosed() {
+  /** Add a multiple stations closed event. */
+  public void addMultipleStationsClosed() {
     MainWindow.getInstance().toFront();
-    String eventString = ListEventPanel.getInstance().eventLineClosedToString();
+    String eventString = ListEventPanel.getInstance().eventMultipleStationsClosedToString();
     String[] eventStringTab = eventString.split(",");
     String startTime =
             eventStringTab[STARTING_DATE_INDEX] + "-" + eventStringTab[
@@ -198,14 +199,14 @@ public class ActionMetroEvent {
     String endTime =
             eventStringTab[ENDING_DATE_INDEX] + "-" + eventStringTab[
                     ENDING_TIME_INDEX];
-    EventLineClosed eventLineClosed = new EventLineClosed(this.getCurrentId(),
+    EventMultipleStationsClosed eventMultipleStationsClosed = new EventMultipleStationsClosed(this.getCurrentId(),
             startTime, endTime, Event.EventType.LINE);
-    eventLineClosed.setIdStationStart(Integer.parseInt(eventStringTab[
+    eventMultipleStationsClosed.setIdStationStart(Integer.parseInt(eventStringTab[
             STARTING_STATION_INDEX]));
-    eventLineClosed.setIdStationEnd(Integer.parseInt(eventStringTab[
+    eventMultipleStationsClosed.setIdStationEnd(Integer.parseInt(eventStringTab[
             ENDING_STATION_INDEX]));
     Color eventColor = Color.RED;
-    this.addEventBetween2Stations(eventLineClosed, eventColor, eventStringTab);
+    this.addEventBetween2Stations(eventMultipleStationsClosed, eventColor, eventStringTab);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
     SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
@@ -251,8 +252,8 @@ public class ActionMetroEvent {
                 event.getStartTime(), event.getEndTime(), locationsStr,
                 eventStringTab[eventStringTab.length - 1],
                 Integer.toString(line.getLine().getId()));
-      } else if (event.getEventName() == EventName.LINE_CLOSED) {
-        EventRecap.getInstance().createEventLineClosed(this.getCurrentId(),
+      } else if (event.getEventName() == EventName.MULTIPLE_STATIONS_CLOSED) {
+        EventRecap.getInstance().createEventMultipleStationsClosed(this.getCurrentId(),
                 event.getStartTime(), event.getEndTime(), locationsStr,
                 Integer.toString(line.getLine().getId()));
       }

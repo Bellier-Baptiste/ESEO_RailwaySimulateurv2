@@ -30,11 +30,12 @@ package org.example.model;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @file EventLineClosed.java
+ * @author Marie Bordet
+ * @file EventMultipleStationsClosed.java
  * @date N/A
  * @since 2.0
  */
-public class EventLineClosed extends EventBetween2Stations {
+public class EventMultipleStationsClosed extends EventBetween2Stations {
 
   /**
    * Constructor.
@@ -44,9 +45,9 @@ public class EventLineClosed extends EventBetween2Stations {
    * @param endTime   event endTime
    * @param type      event eventType
    */
-  public EventLineClosed(final int id, final String startTime,
+  public EventMultipleStationsClosed(final int id, final String startTime,
                          final String endTime, final EventType type) {
     super(id, startTime, endTime, type);
-    super.setEventName(EventName.LINE_CLOSED);
+    super.setEventName(EventName.MULTIPLE_STATIONS_CLOSED);
   }
 }

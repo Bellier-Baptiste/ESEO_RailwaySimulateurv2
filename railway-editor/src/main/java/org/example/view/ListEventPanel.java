@@ -69,6 +69,7 @@ import java.util.Properties;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Marie Bordet
  * @file ListEventPanel.java
  * @date N/A
  * @since 2.0
@@ -135,7 +136,7 @@ public final class ListEventPanel extends JPanel {
   private static final Object[][] TABLE_DATA = {
     {"LineDelayed", "Line", "configure a delay between 2 stations of a line"},
     {"StationClosed", "Station", "close a station"},
-    {"LineClosed", "Line", "close an entire line of the map"},
+    {"MultipleStationsClosed", "Line", "close multiple stations of a line"},
     {"AttendancePeak", "Station", "configure a big raise of population on a"
         + " defined station"},
     {"TrainHour", "Line", "configure a new train flow on a line"}};
@@ -256,15 +257,15 @@ public final class ListEventPanel extends JPanel {
                   ActionMetroEvent.getInstance().addLineDelay());
               view.add(confirmEventBtn, c);
               break;
-            case "LineClosed":
-              initLineClosed(c);
+            case "MultipleStationsClosed":
+              initMultipleStationsClosed(c);
               c.fill = GridBagConstraints.HORIZONTAL;
               c.gridwidth = GRID_WIDTH;
               c.gridx = GRID_X_POSITION;
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addLineClosed());
+                  ActionMetroEvent.getInstance().addMultipleStationsClosed());
               view.add(confirmEventBtn, c);
               break;
             case "AttendancePeak":
@@ -465,11 +466,11 @@ public final class ListEventPanel extends JPanel {
   }
 
   /**
-   * Edition fields for event line Closed.
+   * Edition fields for event multiple stations closed.
    *
    * @param c grid bag constraints
    */
-  private void initLineClosed(final GridBagConstraints c) {
+  private void initMultipleStationsClosed(final GridBagConstraints c) {
     JLabel timeStart = new JLabel(START_TIME);
     JLabel timeEnd = new JLabel(END_TIME);
 
@@ -990,11 +991,11 @@ public final class ListEventPanel extends JPanel {
   }
 
   /**
-   * get the info of the edition fields recap as a String for eventLineClosed.
+   * get the info of the edition fields recap as a String for eventMultipleStationsClosed.
    *
    * @return String
    */
-  public String eventLineClosedToString() {
+  public String eventMultipleStationsClosedToString() {
     DateFormat df = new SimpleDateFormat(FORMAT_DATE);
     DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
 
