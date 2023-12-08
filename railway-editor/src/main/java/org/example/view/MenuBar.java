@@ -24,6 +24,7 @@
 
 package org.example.view;
 
+import org.example.controller.ActionArchive;
 import org.example.controller.ActionConfiguration;
 import org.example.controller.ActionFile;
 import org.example.controller.ActionThemeMode;
@@ -101,9 +102,13 @@ public final class MenuBar extends JMenuBar {
     JMenu archives = new JMenu("Archives");
     JMenuItem openArchives = new JMenuItem("Open");
     openArchives.setName("Open");
+    openArchives.addActionListener(e ->
+      new ActionArchive().showOpenDialogJSONandXML());
     archives.add(openArchives);
     JMenuItem exportArchives = new JMenuItem(EXPORT_TEXT);
     exportArchives.setName(EXPORT_TEXT);
+    exportArchives.addActionListener(e ->
+      new ActionArchive().showExportDialogJSONandXML());
     archives.add(exportArchives);
 
     // Theme menu

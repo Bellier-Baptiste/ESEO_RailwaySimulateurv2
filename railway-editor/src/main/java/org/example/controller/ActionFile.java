@@ -134,7 +134,7 @@ public class ActionFile {
   /**
    * path to the archives folder
    */
-  private static final String ARCHIVES_PATH = System.getProperty("user.dir")
+  public static final String ARCHIVES_PATH = System.getProperty("user.dir")
     + File.separator + "archives";
 
   /**

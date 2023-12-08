@@ -62,7 +62,7 @@ public class ActionConfiguration {
   /**
    * Path of the json file.
    */
-  private static final String JSON_FILE_PATH = System.getProperty("user.dir")
+  public static final String JSON_FILE_PATH = System.getProperty("user.dir")
     + File.separator + "network-journey-simulator" + File.separator + "src"
     + File.separator + "configs" + File.separator + "config.json";
 
@@ -71,6 +71,7 @@ public class ActionConfiguration {
    */
   private static final String ARCHIVES_PATH = System.getProperty("user.dir")
     + File.separator + "archives";
+
   /**
    * EditConfigDialog that calls this class methods.
    */
