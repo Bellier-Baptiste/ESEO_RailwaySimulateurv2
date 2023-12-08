@@ -26,7 +26,7 @@ package org.example.controller;
 
 import org.example.data.Data;
 import org.example.model.Event;
-import org.example.model.EventAttendancePeak;
+import org.example.model.EventGaussianPeak;
 import org.example.model.EventBetween2Stations;
 import org.example.model.EventHour;
 import org.example.model.EventLineClosed;
@@ -325,11 +325,11 @@ public class ActionMetroEvent {
   }
 
   /**
-   * Add an attendance peak event.
+   * Add an gaussian peak event.
    *
    * @param eventString event string
    */
-  public void addAttendancePeak(final String eventString) {
+  public void addGaussianPeak(final String eventString) {
     MainWindow.getInstance().toFront();
     String[] eventStringTab = eventString.split(",");
     String startTime =
@@ -342,21 +342,21 @@ public class ActionMetroEvent {
             + eventStringTab[PEAK_TIME_INDEX];
     String peakWidth = eventStringTab[PEAK_WIDTH_INDEX];
 
-    EventAttendancePeak eventAttendancePeak = new EventAttendancePeak(
+    EventGaussianPeak eventGaussianPeak = new EventGaussianPeak(
         this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
-    eventAttendancePeak.setPeakTime(peakTime);
-    eventAttendancePeak.setIdStation(Integer.parseInt(eventStringTab[
+    eventGaussianPeak.setPeakTime(peakTime);
+    eventGaussianPeak.setIdStation(Integer.parseInt(eventStringTab[
         STATION_CONCERNED_INDEX + 2]));
-    eventAttendancePeak.setSize(Integer.parseInt(eventStringTab[
+    eventGaussianPeak.setSize(Integer.parseInt(eventStringTab[
         PEAK_NUMBER_INDEX + 2]));
-    eventAttendancePeak.setPeakWidth(Integer.parseInt(peakWidth));
-    Data.getInstance().getEventList().add(eventAttendancePeak);
+    eventGaussianPeak.setPeakWidth(Integer.parseInt(peakWidth));
+    Data.getInstance().getEventList().add(eventGaussianPeak);
 
     Station stationConcerned = null;
     for (LineView lineView : MainWindow.getInstance().getMainPanel()
         .getLineViews()) {
       for (StationView stationView : lineView.getStationViews()) {
-        if (stationView.getStation().getId() == eventAttendancePeak
+        if (stationView.getStation().getId() == eventGaussianPeak
             .getIdStation()) {
           stationConcerned = stationView.getStation();
           stationView.setCenterCircleColor(Color.YELLOW);
@@ -367,7 +367,7 @@ public class ActionMetroEvent {
         EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
     MainWindow.getInstance().getMainPanel().repaint();
     if (stationConcerned != null) {
-      MainWindow.getInstance().getEventRecapPanel().createEventAttendancePeak(
+      MainWindow.getInstance().getEventRecapPanel().createEventGaussianPeak(
           this.getCurrentId(), startTime, endTime, peakTime,
           Integer.toString(stationConcerned.getId()),
           eventStringTab[PEAK_NUMBER_INDEX + 2], peakWidth);

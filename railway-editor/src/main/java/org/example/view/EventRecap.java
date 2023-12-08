@@ -272,7 +272,7 @@ public final class EventRecap extends JScrollPane {
   }
 
   /**
-   * create a recap for event attendancePeak.
+   * create a recap for event gaussianPeak.
    *
    * @param id           event id
    * @param startDateStr event start date
@@ -282,7 +282,7 @@ public final class EventRecap extends JScrollPane {
    * @param peakStr      peak amount
    * @param peakWidthStr peak width
    */
-  public void createEventAttendancePeak(final int id, final String startDateStr,
+  public void createEventGaussianPeak(final int id, final String startDateStr,
                                         final String endDateStr,
                                         final String peakDateStr,
                                         final String stationStr,
@@ -291,7 +291,7 @@ public final class EventRecap extends JScrollPane {
     JXTaskPane taskpane = new JXTaskPane();
 
     // create a taskpane, and set it's title and icon
-    taskpane.setTitle("Attendance Peak");
+    taskpane.setTitle("Gaussian Peak");
 
     JXLabel startDate = new JXLabel();
     startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));

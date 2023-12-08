@@ -27,7 +27,7 @@ package org.example.controller;
 import org.example.data.Data;
 import org.example.model.Area;
 import org.example.model.Event;
-import org.example.model.EventAttendancePeak;
+import org.example.model.EventGaussianPeak;
 import org.example.model.EventHour;
 import org.example.model.EventLineClosed;
 import org.example.model.EventLineDelay;
@@ -312,10 +312,10 @@ public class ActionFile {
                   eventLineClosed.getIdStationEnd())));
           eventName.appendChild(stationEndClosed);
           break;
-        case "attendancePeak":
-          EventAttendancePeak eventAttendancePeak = (EventAttendancePeak) event;
+        case "gaussianPeak":
+          EventGaussianPeak eventGaussianPeak = (EventGaussianPeak) event;
 
-          String peakTime = eventAttendancePeak.getPeakTime();
+          String peakTime = eventGaussianPeak.getPeakTime();
           peakTime = peakTime.replace("-", "T");
           peakTime = peakTime.replace("/", "-");
           peakTime = peakTime + END_TIME_STRING;
@@ -327,17 +327,17 @@ public class ActionFile {
           Element stationId = document.createElement("stationId");
           stationId
               .appendChild(document.createTextNode(Integer.toString(
-                  eventAttendancePeak.getIdStation())));
+                  eventGaussianPeak.getIdStation())));
           eventName.appendChild(stationId);
 
           Element sizePeak = document.createElement("peakSize");
           sizePeak.appendChild(document.createTextNode(Integer.toString(
-              eventAttendancePeak.getSize())));
+              eventGaussianPeak.getSize())));
           eventName.appendChild(sizePeak);
 
           Element peakWidth = document.createElement("peakWidth");
           peakWidth.appendChild(document.createTextNode(Integer.toString(
-              eventAttendancePeak.getPeakWidth())));
+              eventGaussianPeak.getPeakWidth())));
           eventName.appendChild(peakWidth);
           break;
         case "stationClosed":
@@ -797,11 +797,11 @@ public class ActionFile {
                 + eventElement.getElementsByTagName(STATION_ID_END).item(0)
                 .getTextContent());
             break;
-          case "attendancePeak":
+          case "gaussianPeak":
             String peakTime = eventElement.getElementsByTagName("peakTime")
                 .item(0).getTextContent();
             String[] peakTimeSplit = this.formatDate(peakTime);
-            ActionMetroEvent.getInstance().addAttendancePeak(
+            ActionMetroEvent.getInstance().addGaussianPeak(
                 startTimeSplit[0] + "," + startTimeSplit[1] + ","
                     + endTimeSplit[0] + "," + endTimeSplit[1] + ","
                     + peakTimeSplit[0] + "," + peakTimeSplit[1] + ","

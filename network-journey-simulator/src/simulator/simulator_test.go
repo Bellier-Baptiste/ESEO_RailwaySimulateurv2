@@ -308,30 +308,30 @@ func TestSimulator_EventStationClosed(t *testing.T) {
 }
 
 /*
-TestSimulator_EventAttendancePeak() tests the GetAllEventsAttendancePeak() method of the Simulator struct.
+TestSimulator_EventGaussianPeak() tests the GetAllEventsGaussianPeak() method of the Simulator struct.
 
-# It tests if the GetAllEventsAttendancePeak() method works properly
+# It tests if the GetAllEventsGaussianPeak() method works properly
 
 Input : t *testing.T
 
-Expected : The GetAllEventsAttendancePeak() method works properly
+Expected : The GetAllEventsGaussianPeak() method works properly
 */
-func TestSimulator_EventAttendancePeak(t *testing.T) {
-	println("TestSimulator_EventAttendancePeak")
+func TestSimulator_EventGaussianPeak(t *testing.T) {
+	println("TestSimulator_EventGaussianPeak")
 	sim := NewSimulator()
 	output, err := sim.Init("working day")
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	eventsAttendancePeak := sim.GetAllEventsAttendancePeak()
+	eventsGaussianPeak := sim.GetAllEventsGaussianPeak()
 
-	println("len : ", len(eventsAttendancePeak))
+	println("len : ", len(eventsGaussianPeak))
 
-	assert.True(t, len(eventsAttendancePeak) != 0, "Array of events (attendance peak) not initialized")
+	assert.True(t, len(eventsGaussianPeak) != 0, "Array of events (gaussian peak) not initialized")
 
-	assert.Equal(t, timeStart, eventsAttendancePeak[0].Time().Format(time.RFC3339), "Bad Time attribut")
-	assert.Equal(t, eap_stationStart, eventsAttendancePeak[0].IdStation(), "Bad station id attribut")
-	assert.Equal(t, eap_size, eventsAttendancePeak[0].Size(), "Bad size attribut")
+	assert.Equal(t, timeStart, eventsGaussianPeak[0].Time().Format(time.RFC3339), "Bad Time attribut")
+	assert.Equal(t, eap_stationStart, eventsGaussianPeak[0].IdStation(), "Bad station id attribut")
+	assert.Equal(t, eap_size, eventsGaussianPeak[0].Size(), "Bad size attribut")
 }
 
 /*

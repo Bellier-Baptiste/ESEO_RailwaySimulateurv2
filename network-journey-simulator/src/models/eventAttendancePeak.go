@@ -1,9 +1,9 @@
 /*
 Package models
 
-File : eventAttendancePeak.go
+File : eventGaussianPeak.go
 
-Brief : This file contains the EventAttendancePeak struct and its methods.
+Brief : This file contains the EventGaussianPeak struct and its methods.
 
 Date : 10/02/2020
 
@@ -41,8 +41,8 @@ import (
 )
 
 /*
-EventAttendancePeak is the structure that manage the event of a peak of
-attendance.
+EventGaussianPeak is the structure that manage the event of a peak of
+gaussian.
 
 Attributes :
   - start time.Time : the start time of the event
@@ -61,7 +61,7 @@ Methods :
   - Size() int : return the size of the peak
   - SetSize(s int) : set the size of the peak
 */
-type EventAttendancePeak struct {
+type EventGaussianPeak struct {
 	start     time.Time
 	end       time.Time
 	peak      time.Time
@@ -72,7 +72,7 @@ type EventAttendancePeak struct {
 }
 
 /*
-NewEventAttendancePeak creates a new EventAttendancePeak struct.
+NewEventGaussianPeak creates a new EventGaussianPeak struct.
 
 Param :
   - start time.Time : the start time of the event
@@ -82,11 +82,11 @@ Param :
   - size int : the size of the peak
 
 Return :
-  - EventAttendancePeak : the new EventAttendancePeak struct
+  - EventGaussianPeak : the new EventGaussianPeak struct
 */
-func NewEventAttendancePeak(start time.Time, end time.Time, peak time.Time,
-	idStation int, size int, width int) EventAttendancePeak {
-	return EventAttendancePeak{
+func NewEventGaussianPeak(start time.Time, end time.Time, peak time.Time,
+	idStation int, size int, width int) EventGaussianPeak {
+	return EventGaussianPeak{
 		start:     start,
 		end:       end,
 		peak:      peak,
@@ -98,163 +98,163 @@ func NewEventAttendancePeak(start time.Time, end time.Time, peak time.Time,
 }
 
 /*
-GetStart returns the start attribute of the EventAttendancePeak struct.
+GetStart returns the start attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
 
 Return :
-  - time.Time : the start attribute of the EventAttendancePeak struct
+  - time.Time : the start attribute of the EventGaussianPeak struct
 */
-func (eap *EventAttendancePeak) GetStart() time.Time {
+func (eap *EventGaussianPeak) GetStart() time.Time {
 	return eap.start
 }
 
 /*
-SetStart sets the start attribute of the EventAttendancePeak struct.
+SetStart sets the start attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
   - start time.Time : the new value of the start attribute
 */
-func (eap *EventAttendancePeak) SetStart(start time.Time) {
+func (eap *EventGaussianPeak) SetStart(start time.Time) {
 	eap.start = start
 }
 
 /*
-GetEnd returns the end attribute of the EventAttendancePeak struct.
+GetEnd returns the end attribute of the EventGaussianPeak struct.
 */
-func (eap *EventAttendancePeak) GetEnd() time.Time {
+func (eap *EventGaussianPeak) GetEnd() time.Time {
 	return eap.end
 }
 
 /*
-SetEnd sets the end attribute of the EventAttendancePeak struct.
+SetEnd sets the end attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
   - end time.Time : the new value of the end attribute
 */
-func (eap *EventAttendancePeak) SetEnd(end time.Time) {
+func (eap *EventGaussianPeak) SetEnd(end time.Time) {
 	eap.end = end
 }
 
 /*
-GetPeak returns the peak attribute of the EventAttendancePeak struct.
+GetPeak returns the peak attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
 
 Return :
-  - time.Time : the peak attribute of the EventAttendancePeak struct
+  - time.Time : the peak attribute of the EventGaussianPeak struct
 */
-func (eap *EventAttendancePeak) GetPeak() time.Time {
+func (eap *EventGaussianPeak) GetPeak() time.Time {
 	return eap.peak
 }
 
 /*
-SetPeak sets the peak attribute of the EventAttendancePeak struct.
+SetPeak sets the peak attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
   - peak time.Time : the new value of the peak attribute
 */
-func (eap *EventAttendancePeak) SetPeak(peak time.Time) {
+func (eap *EventGaussianPeak) SetPeak(peak time.Time) {
 	eap.peak = peak
 }
 
 /*
-GetIdStation returns the idStation attribute of the EventAttendancePeak struct.
+GetIdStation returns the idStation attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
 
 Return :
-  - int : the idStation attribute of the EventAttendancePeak struct
+  - int : the idStation attribute of the EventGaussianPeak struct
 */
-func (eap *EventAttendancePeak) GetIdStation() int {
+func (eap *EventGaussianPeak) GetIdStation() int {
 	return eap.idStation
 }
 
 /*
-SetIdStation sets the idStation attribute of the EventAttendancePeak struct.
+SetIdStation sets the idStation attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
   - id int : the new value of the idStation attribute
 */
-func (eap *EventAttendancePeak) SetIdStation(id int) {
+func (eap *EventGaussianPeak) SetIdStation(id int) {
 	eap.idStation = id
 }
 
 /*
-GetPeakSize returns the size attribute of the EventAttendancePeak struct.
+GetPeakSize returns the size attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
 
 Return :
-  - int : the peakSize attribute of the EventAttendancePeak struct
+  - int : the peakSize attribute of the EventGaussianPeak struct
 */
-func (eap *EventAttendancePeak) GetPeakSize() int {
+func (eap *EventGaussianPeak) GetPeakSize() int {
 	return eap.peakSize
 }
 
 /*
-SetPeakSize sets the size attribute of the EventAttendancePeak struct.
+SetPeakSize sets the size attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
   - s int : the new value of the size attribute
 */
-func (eap *EventAttendancePeak) SetPeakSize(s int) {
+func (eap *EventGaussianPeak) SetPeakSize(s int) {
 	eap.peakSize = s
 }
 
 /*
-GetPeakWidth returns the width attribute of the EventAttendancePeak struct.
+GetPeakWidth returns the width attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
 
 Return :
-  - int : the peakWidth attribute of the EventAttendancePeak struct
+  - int : the peakWidth attribute of the EventGaussianPeak struct
 */
-func (eap *EventAttendancePeak) GetPeakWidth() int {
+func (eap *EventGaussianPeak) GetPeakWidth() int {
 	return eap.peakWidth
 }
 
 /*
-SetPeakWidth sets the width attribute of the EventAttendancePeak struct.
+SetPeakWidth sets the width attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
   - w int : the new value of the width attribute
 */
-func (eap *EventAttendancePeak) SetPeakWidth(w int) {
+func (eap *EventGaussianPeak) SetPeakWidth(w int) {
 	eap.peakWidth = w
 }
 
 /*
-IsFinished returns the finished attribute of the EventAttendancePeak struct.
+IsFinished returns the finished attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
 
 Return :
-  - bool : the finished attribute of the EventAttendancePeak struct
+  - bool : the finished attribute of the EventGaussianPeak struct
 */
-func (eap *EventAttendancePeak) IsFinished() bool {
+func (eap *EventGaussianPeak) IsFinished() bool {
 	return eap.finished
 }
 
 /*
-SetFinished sets the finished attribute of the EventAttendancePeak struct.
+SetFinished sets the finished attribute of the EventGaussianPeak struct.
 
 Param :
-  - eap *EventAttendancePeak : the EventAttendancePeak struct
+  - eap *EventGaussianPeak : the EventGaussianPeak struct
   - f bool : the new value of the finished attribute
 */
-func (eap *EventAttendancePeak) SetFinished(f bool) {
+func (eap *EventGaussianPeak) SetFinished(f bool) {
 	eap.finished = f
 }

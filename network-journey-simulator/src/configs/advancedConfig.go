@@ -62,7 +62,7 @@ Attributes :
     closed
   - EventsLineDelay []ConfigLineDelayEvent : the events of line delay
   - EventsLineClosed []ConfigLineClosedEvent : the events of line closed
-  - EventsAttendancePeak []ConfigAttendancePeakEvent : the events of attendance
+  - EventsGaussianPeak []ConfigGaussianPeakEvent : the events of gaussian
     peak
   - Areas []ConfigArea : the areas linking stations
   - PopulationDistribution []ConfigPopulationDistribution : the population
@@ -75,7 +75,7 @@ type ConfigMap struct {
 	EventsStationClosed     []ConfigStationClosedEvent      `xml:"events>stationClosed"`
 	EventsLineDelay         []ConfigLineDelayEvent          `xml:"events>lineDelay"`
 	EventsLineClosed        []ConfigLineClosedEvent         `xml:"events>lineClosed"`
-	EventsAttendancePeak    []ConfigAttendancePeakEvent     `xml:"events>attendancePeak"`
+	EventsGaussianPeak      []ConfigGaussianPeakEvent       `xml:"events>gaussianPeak"`
 	Areas                   []ConfigArea                    `xml:"areas>area"`
 	PopulationDistribution  []ConfigPopulationDistribution  `xml:"area>populationDistribution"`
 	DestinationDistribution []ConfigDestinationDistribution `xml:"area>destinationDistribution"`
@@ -278,8 +278,8 @@ type ConfigLineClosedEvent struct {
 }
 
 /*
-ConfigAttendancePeakEvent is the structure that contains the configuration of
-an attendance peak event.
+ConfigGaussianPeakEvent is the structure that contains the configuration of
+an gaussian peak event.
 
 Attributes :
   - XMLName xml.Name
@@ -293,8 +293,8 @@ Attributes :
 Methods :
   - None
 */
-type ConfigAttendancePeakEvent struct {
-	XMLName     xml.Name `xml:"attendancePeak"`
+type ConfigGaussianPeakEvent struct {
+	XMLName     xml.Name `xml:"gaussianPeak"`
 	StartString string   `xml:"start"`
 	EndString   string   `xml:"end"`
 	PeakString  string   `xml:"peakTime"`

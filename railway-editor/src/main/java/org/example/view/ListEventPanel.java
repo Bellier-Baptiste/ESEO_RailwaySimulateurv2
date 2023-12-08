@@ -193,7 +193,7 @@ public final class ListEventPanel extends JPanel {
       {"LineDelayed", "Line", "configure a delay between 2 stations of a line"},
       {"StationClosed", "Station", "close a station"},
       {"LineClosed", "Line", "close an entire line of the map"},
-      {"AttendancePeak", "Station", "configure a big raise of population on a"
+      {"GaussianPeak", "Station", "configure a big raise of population on a"
           + " defined station"},
       {"TrainHour", "Line", "configure a new train flow on a line"}};
   /**
@@ -244,7 +244,7 @@ public final class ListEventPanel extends JPanel {
    */
   private JTextField editStationEnd;
 
-  //eventAttendancePeakAttribute
+  //eventGaussianPeakAttribute
   /**
    * date picker peak.
    */
@@ -369,17 +369,17 @@ public final class ListEventPanel extends JPanel {
                       .getInstance().eventLineClosedToString()));
               view.add(confirmEventBtn, c);
               break;
-            case "AttendancePeak":
-              initAttendancePeak(c);
+            case "GaussianPeak":
+              initGaussianPeak(c);
               c.fill = GridBagConstraints.HORIZONTAL;
               c.gridwidth = GRID_WIDTH;
               c.gridx = GRID_X_POSITION;
               c.gridy = GRID_Y_POSITION + 3;
               c.weighty = GRID_WIDTH;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addAttendancePeak(
+                  ActionMetroEvent.getInstance().addGaussianPeak(
                       ListEventPanel.getInstance()
-                          .eventAttendancePeakToString()));
+                          .eventGaussianPeakToString()));
               view.add(confirmEventBtn, c);
               break;
             case "TrainHour":
@@ -715,11 +715,11 @@ public final class ListEventPanel extends JPanel {
   }
 
   /**
-   * Edition fields for event Attendance peak.
+   * Edition fields for event Gaussian peak.
    *
    * @param c grid bag constraints
    */
-  private void initAttendancePeak(final GridBagConstraints c) {
+  private void initGaussianPeak(final GridBagConstraints c) {
     JLabel timeStart = new JLabel(START_TIME);
     JLabel timeEnd = new JLabel(END_TIME);
     JLabel peakTime = new JLabel("Peak Time: ");
@@ -1163,11 +1163,11 @@ public final class ListEventPanel extends JPanel {
 
   /**
    * get the info of the edition fields recap as a String for
-   * eventAttendancePeak.
+   * eventGaussianPeak.
    *
    * @return String
    */
-  public String eventAttendancePeakToString() {
+  public String eventGaussianPeakToString() {
     DateFormat df = new SimpleDateFormat(FORMAT_DATE);
     DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
 

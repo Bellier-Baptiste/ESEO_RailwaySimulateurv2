@@ -25,20 +25,19 @@
 package org.example.model;
 
 /**
- * Model class extending {@link org.example.model.EventBetween2Stations} which
- * describes a delay between two stations {@link org.example.model.Station}.
+ * Model class extending {@link Event} which describes an gaussian peak on a
+ * Station.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @file EventLineDelay.java
+ * @author Alexis BONAMY
+ * @file EventGaussianPeak.java
  * @date N/A
  * @since 2.0
  */
-public class EventLineDelay extends EventBetween2Stations {
-  /**
-   * Delay in minutes for gaussian peak events.
-   */
-  private int delay;
+public class EventGaussianPeak extends EventPeak {
+  /** Peak width. */
+  private int peakWidth;
 
   /**
    * Constructor.
@@ -46,28 +45,32 @@ public class EventLineDelay extends EventBetween2Stations {
    * @param id        event id
    * @param startTime event startTime
    * @param endTime   event endTime
-   * @param type      event eventType
+   * @param type      eventType
    */
-  public EventLineDelay(final int id, final String startTime,
-                        final String endTime, final EventType type) {
-    super(id, startTime, endTime, type, EventName.LINE_DELAYED);
+  public EventGaussianPeak(final int id, final String startTime,
+                             final String endTime,
+                             final EventType type) {
+    super(id, startTime, endTime, type, EventName.GAUSSIAN_PEAK);
   }
 
   /**
-   * get the delay in second.
+   * get the peak width.
    *
-   * @return int delay
+   * @return int peakWidth
    */
-  public int getDelay() {
-    return delay;
+  public int getPeakWidth() {
+    return peakWidth;
   }
 
   /**
-   * set the delay.
+   * set the peak width.
    *
-   * @param eventDelay event delay
+   * @param paramPeakWidth width of the peak
    */
-  public void setDelay(final int eventDelay) {
-    this.delay = eventDelay;
+  public void setPeakWidth(final int paramPeakWidth) {
+    if (paramPeakWidth < 0) {
+      throw new IllegalArgumentException("Peak width is not valid");
+    }
+    this.peakWidth = paramPeakWidth;
   }
 }

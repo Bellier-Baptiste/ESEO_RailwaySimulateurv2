@@ -79,7 +79,7 @@ Attributes :
   - stations []*MetroStation : the stations of the map
   - graph [][]*PathStation : the graph of the map
   - eventsLineClosed []*EventLineClosed : the events of line closed
-  - eventsAttendancePeak []*EventAttendancePeak : the events of attendance
+  - eventsGaussianPeak []*EventGaussianPeak : the events of gaussian
     peak
 
 Methods :
@@ -139,7 +139,7 @@ type Map struct {
 	stations                []*MetroStation
 	graph                   [][]*PathStation
 	eventsLineClosed        []*EventLineClosed
-	eventsAttendancePeak    []*EventAttendancePeak
+	eventsGaussianPeak      []*EventGaussianPeak
 }
 
 /*
@@ -580,17 +580,17 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 		mapC.EventsLineClosed = append(mapC.EventsLineClosed, lineClosedEventsC)
 	}
 
-	var attendancePeakEventsC configs.ConfigAttendancePeakEvent
-	for _, eventAttendancePeak := range mapPointer.eventsAttendancePeak {
-		attendancePeakEventsC = configs.ConfigAttendancePeakEvent{
-			StartString: eventAttendancePeak.start.String(),
-			EndString:   eventAttendancePeak.end.String(),
-			PeakString:  eventAttendancePeak.peak.String(),
-			StationId:   eventAttendancePeak.idStation,
-			PeakSize:    eventAttendancePeak.peakSize,
+	var gaussianPeakEventsC configs.ConfigGaussianPeakEvent
+	for _, eventGaussianPeak := range mapPointer.eventsGaussianPeak {
+		gaussianPeakEventsC = configs.ConfigGaussianPeakEvent{
+			StartString: eventGaussianPeak.start.String(),
+			EndString:   eventGaussianPeak.end.String(),
+			PeakString:  eventGaussianPeak.peak.String(),
+			StationId:   eventGaussianPeak.idStation,
+			PeakSize:    eventGaussianPeak.peakSize,
 		}
-		mapC.EventsAttendancePeak = append(mapC.EventsAttendancePeak,
-			attendancePeakEventsC)
+		mapC.EventsGaussianPeak = append(mapC.EventsGaussianPeak,
+			gaussianPeakEventsC)
 	}
 
 	adConfig.MapC = mapC

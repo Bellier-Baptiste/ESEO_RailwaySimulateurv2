@@ -650,13 +650,13 @@
             <idLine>0</idLine>
             <trainNumber>13</trainNumber>
         </hour>
-        <attendancePeak>
+        <gaussianPeak>
             <start>2023-11-01T18:51:00.000Z</start>
             <end>2023-11-01T22:51:00.000Z</end>
             <peakTime>2023-11-01T20:51:00.000Z</peakTime>
             <stationId>30</stationId>
             <peakSize>200</peakSize>
             <peakWidth>3</peakWidth>
-        </attendancePeak>
+        </gaussianPeak>
     </events>
 </map>

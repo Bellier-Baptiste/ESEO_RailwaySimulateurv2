@@ -43,9 +43,13 @@ public enum EventName {
    */
   LINE_CLOSED("lineClosed"),
   /**
-   * Attendance peak event name.
+   * Gaussian peak event name.
    */
-  ATTENDANCE_PEAK("attendancePeak"),
+  GAUSSIAN_PEAK("gaussianPeak"),
+  /**
+   * Ramp peak event name.
+   */
+  RAMP_PEAK("rampPeak"),
   /**
    * Train hour event name.
    */

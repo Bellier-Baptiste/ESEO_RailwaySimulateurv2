@@ -40,7 +40,7 @@ import "time"
 
 /*
 EventTimetableTrain is the structure that manage the event of a peak of
-attendance.
+gaussian.
 
 Attributes :
   - line *MetroLine : the line of the train
