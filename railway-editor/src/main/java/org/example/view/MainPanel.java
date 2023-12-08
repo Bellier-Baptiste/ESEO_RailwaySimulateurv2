@@ -241,4 +241,13 @@ public final class MainPanel extends JMapViewer {
       }
     }
   }
+
+  /**
+   * Clean the map: remove all the elements.
+   */
+  public void cleanMap() {
+    this.lineViews = new ArrayList<>();
+    this.areaViews = new ArrayList<>();
+    EventRecap.getInstance().cleanEvents();
+  }
 }

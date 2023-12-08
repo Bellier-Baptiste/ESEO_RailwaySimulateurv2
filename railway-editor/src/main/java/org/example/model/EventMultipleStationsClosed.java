@@ -25,8 +25,8 @@
 package org.example.model;
 
 /**
- * Model class extends {@link org.example.model.EventBetween2Stations} which describes the
- * closing between two stations {@link org.example.model.Station}.
+ * Model class extends {@link org.example.model.EventBetween2Stations} which
+ * describes the closing between two stations {@link org.example.model.Station}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
@@ -48,6 +48,6 @@ public class EventMultipleStationsClosed extends EventBetween2Stations {
   public EventMultipleStationsClosed(final int id, final String startTime,
                          final String endTime, final EventType type) {
     super(id, startTime, endTime, type);
-    super.setEventName(EventName.MULTIPLE_STATIONS_CLOSED);
+-    super(id, startTime, endTime, type, EventName.MULTIPLE_STATIONS_CLOSED);
   }
 }

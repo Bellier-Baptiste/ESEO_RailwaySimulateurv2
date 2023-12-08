@@ -25,8 +25,12 @@
 package org.example.model;
 
 import org.example.data.Data;
+import org.example.view.MainPanel;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.example.view.MainWindow;
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
+
+import java.awt.Point;
 
 /**
  * Model class to describe a station.
@@ -80,6 +84,33 @@ public class Station {
     this.posX = stationPosX;
     this.posY = stationPosY;
     this.name = stationName;
+    ICoordinate latLon = MainWindow.getInstance().getMainPanel()
+        .getPosition(this.posX, this.posY);
+    this.latitude = latLon.getLat();
+    this.longitude = latLon.getLon();
+  }
+
+  /**
+   * Constructor with position in latitude and longitude.
+   *
+   * @param stationId    station id
+   * @param posLatitude  station latitude
+   * @param posLongitude station longitude
+   * @param stationName  station name
+   */
+  public Station(final int stationId, final double posLatitude,
+                 final double posLongitude, final String stationName) {
+    super();
+    this.id = stationId;
+    this.latitude = posLatitude;
+    this.longitude = posLongitude;
+    this.name = stationName;
+    Point stationPosition =
+        MainPanel.getInstance().getMapPosition(this.latitude, this.longitude);
+    if (stationPosition != null) {
+      this.posX = stationPosition.x;
+      this.posY = stationPosition.y;
+    }
   }
 
   //accessors
@@ -219,8 +250,8 @@ public class Station {
 
 
   /**
-   * Moves the station of dx and dy and update latitudes and longitudes
-   * in consequences.
+   * Moves the station of dx and dy and update latitudes and longitudes in
+   * consequences.
    *
    * @param dx deltaX
    * @param dy deltaY

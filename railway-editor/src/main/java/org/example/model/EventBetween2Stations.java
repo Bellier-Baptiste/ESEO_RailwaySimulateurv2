@@ -37,9 +37,13 @@ import java.util.ArrayList;
  * @since 2.0
  */
 public abstract class EventBetween2Stations extends Event {
-  /** Id of the starting station. */
+  /**
+   * Id of the starting station.
+   */
   private int idStationStart;
-  /** Id of the ending station. */
+  /**
+   * Id of the ending station.
+   */
   private int idStationEnd;
 
   /** List of all the id of stations of the event. */
@@ -52,10 +56,12 @@ public abstract class EventBetween2Stations extends Event {
    * @param startTime event startTime
    * @param endTime   event endTime
    * @param type      event type
+   * @param name      event name
    */
   protected EventBetween2Stations(final int id, final String startTime,
-                                  final String endTime, final EventType type) {
-    super(id, startTime, endTime, type);
+                                  final String endTime, final EventType type,
+                                  final EventName name) {
+    super(id, startTime, endTime, type, name);
   }
 
   /**

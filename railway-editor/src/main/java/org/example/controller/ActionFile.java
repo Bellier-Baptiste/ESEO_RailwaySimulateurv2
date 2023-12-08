@@ -29,7 +29,7 @@ import org.example.model.Area;
 import org.example.model.Event;
 import org.example.model.EventAttendancePeak;
 import org.example.model.EventHour;
-import org.example.model.EventMultipleStationsClosed;
+import org.example.model.EventLineClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
@@ -38,6 +38,8 @@ import org.example.view.AreaView;
 import org.example.view.LineView;
 import org.example.view.MainWindow;
 import org.example.view.StationView;
+import org.openstreetmap.gui.jmapviewer.Coordinate;
+import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -72,7 +74,6 @@ import java.util.Map;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @author Marie Bordet
  * @file ActionFile.java
  * @date 2023/09/22
  * @see org.example.data.Data
@@ -107,7 +108,10 @@ public class ActionFile {
    * Number of letters in alphabet.
    */
   private static final int ALPHABET_SIZE = 26;
-
+  /**
+   * End of time string.
+   */
+  private static final String END_TIME_STRING = ":00.000Z";
   /**
    * Station id start xml marker.
    */
@@ -116,7 +120,14 @@ public class ActionFile {
    * Station id end xml marker.
    */
   private static final String STATION_ID_END = "stationIdEnd";
-
+  /**
+   * Longitude marker.
+   */
+  private static final String LONGITUDE = "longitude";
+  /**
+   * Latitude marker.
+   */
+  private static final String LATITUDE = "latitude";
   /**
    * Singleton instance.
    */
@@ -184,6 +195,24 @@ public class ActionFile {
       Element root = document.createElement("map");
       document.appendChild(root);
 
+      // Export the location (with zoom and center)
+      ICoordinate centerCoordinate =
+          MainWindow.getInstance().getMainPanel().getPosition();
+      Element zoom = document.createElement("zoom");
+      zoom.appendChild(document.createTextNode(Integer.toString(
+          MainWindow.getInstance().getMainPanel().getZoom())));
+      Element latitude = document.createElement(LATITUDE);
+      latitude.appendChild(document.createTextNode(Double.toString(
+          centerCoordinate.getLat())));
+      Element longitude = document.createElement(LONGITUDE);
+      longitude.appendChild(document.createTextNode(Double.toString(
+          centerCoordinate.getLon())));
+      Element location = document.createElement("location");
+      location.appendChild(latitude);
+      location.appendChild(longitude);
+      location.appendChild(zoom);
+      root.appendChild(location);
+
       this.exportStations(document, root);
       this.exportLines(document, root);
       this.exportAreas(document, root);
@@ -228,12 +257,12 @@ public class ActionFile {
       String timeStart = event.getStartTime();
       timeStart = timeStart.replace("-", "T");
       timeStart = timeStart.replace("/", "-");
-      timeStart = timeStart + ":00.000Z";
+      timeStart = timeStart + END_TIME_STRING;
 
       String timeEnd = event.getEndTime();
       timeEnd = timeEnd.replace("-", "T");
       timeEnd = timeEnd.replace("/", "-");
-      timeEnd = timeEnd + ":00.000Z";
+      timeEnd = timeEnd + END_TIME_STRING;
 
       Element eventName = document.createElement(event.getEventName()
           .getString());
@@ -250,13 +279,13 @@ public class ActionFile {
         case "lineDelay":
           EventLineDelay eventLineDelay = (EventLineDelay) event;
 
-          Element stationStart = document.createElement("stationIdStart");
+          Element stationStart = document.createElement(STATION_ID_START);
           stationStart
               .appendChild(document.createTextNode(Integer.toString(
                   eventLineDelay.getIdStationStart())));
           eventName.appendChild(stationStart);
 
-          Element stationEnd = document.createElement("stationIdEnd");
+          Element stationEnd = document.createElement(STATION_ID_END);
           stationEnd.appendChild(document.createTextNode(Integer.toString(
               eventLineDelay.getIdStationEnd())));
           eventName.appendChild(stationEnd);
@@ -282,7 +311,6 @@ public class ActionFile {
                           eventMultipleStationsClosed.getIdStationEnd())));
           eventName.appendChild(stationEndClosed);
           break;
-
         case "attendancePeak":
           EventAttendancePeak eventAttendancePeak = (EventAttendancePeak) event;
 
@@ -377,7 +405,7 @@ public class ActionFile {
    *
    * @param document the document to add the distributions
    * @param areaView the area view, null if it's for a station
-   * @param element the element to add the distributions
+   * @param element  the element to add the distributions
    */
   private void exportDistributions(final Document document,
                                    final AreaView areaView,
@@ -432,7 +460,7 @@ public class ActionFile {
           .toLowerCase());
       if (areaView != null) {
         attr.setValue(Integer.toString(areaView.getArea()
-                .getDistributionDestination()
+            .getDistributionDestination()
             .get(distributionDestinationElement)));
       } else {
         attr.setValue(String.valueOf(Area.getDefaultDestinationDistribution(
@@ -468,8 +496,7 @@ public class ActionFile {
 
       // line name element
       Element name = document.createElement("name");
-      name.appendChild(document.createTextNode(ActionFile.toAlphabetic(lineView
-          .getLine().getId())));
+      name.appendChild(document.createTextNode(lineView.getLine().getName()));
       line.appendChild(name);
 
       // line number of train element
@@ -537,14 +564,14 @@ public class ActionFile {
           station.appendChild(position);
 
           // position latitude element
-          Element latitude = document.createElement("latitude");
+          Element latitude = document.createElement(LATITUDE);
           double latitudeValue = stationView.getStation().getLatitude();
           latitude.appendChild(document.createTextNode(Double.toString(
               latitudeValue)));
           position.appendChild(latitude);
 
           // position longitude element
-          Element longitude = document.createElement("longitude");
+          Element longitude = document.createElement(LONGITUDE);
           double longitudeValue = stationView.getStation().getLongitude();
           longitude.appendChild(document.createTextNode(Double.toString(
               longitudeValue)));
@@ -622,20 +649,37 @@ public class ActionFile {
       dbFactory.setExpandEntityReferences(false);
       DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
       Document doc = docBuilder.parse(fileToLoad);
+      // Get location
+      NodeList location = doc.getElementsByTagName("location");
+      Node nthNodeLocation = location.item(0);
+      if (nthNodeLocation != null && nthNodeLocation.getNodeType()
+          == Node.ELEMENT_NODE) {
+        Element locationElement = (Element) nthNodeLocation;
+        Element latitude = (Element) locationElement.getElementsByTagName(
+            LATITUDE).item(0);
+        Element longitude = (Element) locationElement.getElementsByTagName(
+            LONGITUDE).item(0);
+        Element zoom = (Element) locationElement.getElementsByTagName("zoom")
+            .item(0);
+        ICoordinate coordinate = new Coordinate(
+            Double.parseDouble(latitude.getTextContent()),
+            Double.parseDouble(longitude.getTextContent()));
+        MainWindow.getInstance().getMainPanel().setDisplayPosition(coordinate,
+            Integer.parseInt(zoom.getTextContent()));
+        MainWindow.getInstance().getMainPanel().setZoom(Integer.parseInt(
+            zoom.getTextContent()));
+      }
+
       List<Station> stationsToLoad = new ArrayList<>();
       List<Integer> linesId = new ArrayList<>();
       NodeList linesList = doc.getElementsByTagName(LINES);
       HashMap<Integer, String[]> linesMatchStations = new HashMap<>();
       Node nthNodeL = linesList.item(linesList.getLength() - 1);
-      List<Area> areasToLoad = new ArrayList<>();
 
       this.readStationsSection(stationsToLoad, linesId, doc);
       this.readLinesSection(linesMatchStations, nthNodeL);
-      this.readAreasSection(doc, areasToLoad);
-      this.readEventsSection(doc);
 
       List<Line> lineModelList = new ArrayList<>();
-
       if (!linesId.isEmpty()) {
         int linesNumber = Collections.max(linesId) + 1;
         for (int i = 0; i < linesNumber; i++) {
@@ -643,10 +687,8 @@ public class ActionFile {
           lineModelList.add(line);
         }
       }
-
       this.addStationsToLines(stationsToLoad, linesMatchStations,
           lineModelList);
-
       for (Line line : lineModelList) {
         List<StationView> stationsViews = new ArrayList<>();
         for (Station station : line.getStations()) {
@@ -655,9 +697,15 @@ public class ActionFile {
         LineView lineView = new LineView(line, stationsViews);
         MainWindow.getInstance().getMainPanel().addLineView(lineView);
       }
+
+      List<Area> areasToLoad = new ArrayList<>();
+      this.readAreasSection(doc, areasToLoad);
       for (Area area : areasToLoad) {
         MainWindow.getInstance().getMainPanel().addAreaView(new AreaView(area));
       }
+
+      this.readEventsSection(doc);
+
     } catch (ParserConfigurationException | SAXException | IOException e) {
       e.printStackTrace();
     }
@@ -697,27 +745,79 @@ public class ActionFile {
       Node childNode = childList.item(j);
       if (childNode.getNodeType() == Node.ELEMENT_NODE) {
         Element eventElement = (Element) childNode;
+        String startTime = eventElement.getElementsByTagName("start")
+            .item(0).getTextContent();
+        String endTime = eventElement.getElementsByTagName("end")
+            .item(0).getTextContent();
+        String[] startTimeSplit = this.formatDate(startTime);
+        String[] endTimeSplit = this.formatDate(endTime);
         switch (eventElement.getTagName()) {
           case "lineDelay":
-            ActionMetroEvent.getInstance().addLineDelay();
+            ActionMetroEvent.getInstance().addLineDelay(
+                startTimeSplit[0] + "," + startTimeSplit[1] + ","
+                    + endTimeSplit[0] + "," + endTimeSplit[1] + ","
+                    + eventElement.getElementsByTagName(STATION_ID_START)
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName(STATION_ID_END)
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName("delay")
+                    .item(0).getTextContent()
+            );
             break;
           case "multipleStationsClosed":
-            ActionMetroEvent.getInstance().addMultipleStationsClosed();
+            ActionMetroEvent.getInstance().addMultipleStationsClosed(startTimeSplit[0]
+                + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
+                + endTimeSplit[1] + "," + eventElement.getElementsByTagName(
+                    STATION_ID_START).item(0).getTextContent() + ","
+                + eventElement.getElementsByTagName(STATION_ID_END).item(0)
+                    .getTextContent());
             break;
           case "attendancePeak":
-            ActionMetroEvent.getInstance().addAttendancePeak();
+            ActionMetroEvent.getInstance().addAttendancePeak(
+                startTimeSplit[0] + "," + startTimeSplit[1] + ","
+                    + endTimeSplit[0] + "," + endTimeSplit[1] + ","
+                    + eventElement.getElementsByTagName("stationId")
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName("size")
+                    .item(0).getTextContent()
+            );
             break;
           case "stationClosed":
-            ActionMetroEvent.getInstance().addStationClosed();
+            ActionMetroEvent.getInstance().addStationClosed(startTimeSplit[0]
+                + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
+                + endTimeSplit[1] + "," + eventElement.getElementsByTagName(
+                    "idStation").item(0).getTextContent()
+            );
             break;
           case "hour":
-            ActionMetroEvent.getInstance().addTrainHour();
+            String startHour = startTime.replace(END_TIME_STRING, "");
+            String endHour = endTime.replace(END_TIME_STRING, "");
+            ActionMetroEvent.getInstance().addTrainHour(startHour + ","
+                + endHour + "," + eventElement.getElementsByTagName("idLine")
+                .item(0).getTextContent() + ","
+                + eventElement.getElementsByTagName("trainNumber").item(0)
+                    .getTextContent());
             break;
           default:
             break;
         }
       }
     }
+  }
+
+  /**
+   * Format the date of the xml to be able to use it in the HMI.
+   *
+   * @param date the date from the xml file to format
+   *
+   * @return the formatted date
+   */
+  private String[] formatDate(final String date) {
+    String result = date;
+    result = result.replace(END_TIME_STRING, "");
+    result = result.replace("-", "/");
+    result = result.replace("T", "-");
+    return result.split("-");
   }
 
   /**
@@ -740,20 +840,8 @@ public class ActionFile {
           Element areaElement = (Element) nthNodeA2;
           Element populationDistribution = (Element) areaElement
               .getElementsByTagName("populationDistribution").item(0);
-
-          // format number
-          String touristAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_TOURIST));
-          String studentAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_STUDENT));
-          String businessManAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_BUSINESSMAN));
-          String childAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_CHILD));
-          String retiredAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_RETIRED));
-          String unemployedAmount = this.formatNumber(
-              populationDistribution.getAttribute(Data.AREA_UNEMPLOYED));
+          Element destinationDistribution = (Element) areaElement
+              .getElementsByTagName("destinationDistribution").item(0);
           Element positions = (Element) areaElement.getElementsByTagName(
               POSITION).item(0);
           String latitudeTop = positions.getAttribute("latitudeTop");
@@ -763,6 +851,21 @@ public class ActionFile {
           Area area = new Area(Double.parseDouble(latitudeTop),
               Double.parseDouble(longitudeTop), Double.parseDouble(latitudeBot),
               Double.parseDouble(longitudeBot));
+          // format number
+          String touristAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_TOURIST.toLowerCase()));
+          String studentAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_STUDENT.toLowerCase()));
+          String businessManAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_BUSINESSMAN.toLowerCase()));
+          String childAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_CHILD.toLowerCase()));
+          String retiredAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_RETIRED.toLowerCase()));
+          String unemployedAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_UNEMPLOYED.toLowerCase()));
+          String workerAmount = this.formatNumber(populationDistribution
+              .getAttribute(Data.AREA_WORKER.toLowerCase()));
           area.setNewPopulationPart(Data.AREA_TOURIST, Integer.parseInt(
               touristAmount));
           area.setNewPopulationPart(Data.AREA_STUDENT, Integer.parseInt(
@@ -775,6 +878,39 @@ public class ActionFile {
               retiredAmount));
           area.setNewPopulationPart(Data.AREA_UNEMPLOYED,
               Integer.parseInt(unemployedAmount));
+          area.setNewPopulationPart(Data.AREA_WORKER, Integer.parseInt(
+              workerAmount));
+
+          // format number
+          String touristicAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_TOURISTIC.toLowerCase()));
+          String educationalAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_EDUCATIONAL.toLowerCase()));
+          String officeAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_OFFICE.toLowerCase()));
+          String leisureAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_LEISURE.toLowerCase()));
+          String commercialAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_COMMERCIAL.toLowerCase()));
+          String residentialAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_RESIDENTIAL.toLowerCase()));
+          String industrialAmount = this.formatNumber(destinationDistribution
+              .getAttribute(Data.AREA_INDUSTRIAL.toLowerCase()));
+          area.setNewDestinationPart(Data.AREA_TOURISTIC, Integer.parseInt(
+              touristicAmount));
+          area.setNewDestinationPart(Data.AREA_EDUCATIONAL, Integer.parseInt(
+              educationalAmount));
+          area.setNewDestinationPart(Data.AREA_OFFICE, Integer.parseInt(
+              officeAmount));
+          area.setNewDestinationPart(Data.AREA_LEISURE, Integer.parseInt(
+              leisureAmount));
+          area.setNewDestinationPart(Data.AREA_COMMERCIAL, Integer.parseInt(
+              commercialAmount));
+          area.setNewDestinationPart(Data.AREA_RESIDENTIAL, Integer.parseInt(
+              residentialAmount));
+          area.setNewDestinationPart(Data.AREA_INDUSTRIAL, Integer.parseInt(
+              industrialAmount));
+
           areasToLoad.add(area);
         }
       }
@@ -822,25 +958,20 @@ public class ActionFile {
               .item(0).getTextContent();
           Element positions = (Element) stationElement
               .getElementsByTagName(POSITION).item(0);
-          String latitude = positions.getElementsByTagName("latitude")
+          String latitude = positions.getElementsByTagName(LATITUDE)
               .item(0).getTextContent();
-          String longitude = positions.getElementsByTagName("longitude")
+          String longitude = positions.getElementsByTagName(LONGITUDE)
               .item(0).getTextContent();
           Element lines = (Element) stationElement.getElementsByTagName(LINES)
               .item(0);
           Element line = (Element) lines.getElementsByTagName("line")
               .item(0);
           String lineId = line.getAttribute("id");
-          Point pos = MainWindow.getInstance().getMainPanel()
-              .getMapPosition(Double.parseDouble(latitude),
-                  Double.parseDouble(longitude), false);
-          int stationPosX = (int) pos.getX();
 
-          int stationPosY = (int) pos.getY();
-
-
-          stationsToLoad.add(new Station(Integer.parseInt(id), stationPosX,
-              stationPosY, name));
+          Station station = new Station(Integer.parseInt(id),
+              Double.parseDouble(latitude), Double.parseDouble(longitude),
+              name);
+          stationsToLoad.add(station);
           linesId.add(Integer.valueOf(lineId));
         }
       }
@@ -861,13 +992,19 @@ public class ActionFile {
       int counter = 0;
       for (int i = 0; i < lineList.getLength(); i++) {
         Node nodeL = lineList.item(i);
+
         if (nodeL.getNodeType() == Node.ELEMENT_NODE) {
           Element lineElement = (Element) nodeL;
           String lineId = lineElement.getElementsByTagName("id")
               .item(0).getTextContent();
+          MainWindow.getInstance().getToolBarPanel().getLineId().setText(
+              lineId);
+          ActionLine.getInstance().setLineToUpdateIndex(Integer.parseInt(
+              lineId));
           Element stations = (Element) lineElement
               .getElementsByTagName(STATIONS).item(0);
           NodeList stationL = stations.getElementsByTagName(STATION);
+
           for (int j = 0; j < stationL.getLength(); j++) {
             Node nodeS = stationL.item(j);
             if (nodeS.getNodeType() == Node.ELEMENT_NODE) {
