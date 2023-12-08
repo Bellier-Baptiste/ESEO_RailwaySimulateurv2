@@ -24,5 +24,38 @@
 
 package org.example.controller;
 
+import org.example.controller.ActionConfiguration;
+import org.example.controller.ActionFile;
+
+/**
+ * A class for performing actions related to the archive menu.
+ * Linked to menu items in {@link org.example.view.MenuBar}.
+ *
+ * @author Benoît VAVASSEUR
+ * @file ActionArchive.java
+ * @date 2023/12/08
+ * @see org.example.data.Data
+ * @since 3.0
+ */
 public class ActionArchive {
+
+  public ActionArchive() {}
+
+
+  /**
+   * showExportDialogJSONandXML
+   */
+  public void showExportDialogJSONandXML() {
+
+
+  }
+
+  /**
+   * showOpenDialogJSONandXML
+   */
+  public void showOpenDialogJSONandXML() {
+
+  }
+
+
 }

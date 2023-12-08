@@ -32,17 +32,22 @@ import org.example.view.EditConfigDialog;
 import org.example.view.EditConfigParamPanel;
 import org.example.view.MainWindow;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controller to read and save the json configuration parameters.
  *
- * @author Aurélie Chamouleau
+ * @author Aurélie CHAMOULEAU
+ * @author Benoît VAVASSEUR
  * @file ActionConfiguration.java
  * @date 2023-10-20
  * @see EditConfigParamPanel
@@ -58,12 +63,22 @@ public class ActionConfiguration {
    * Path of the json file.
    */
   private static final String JSON_FILE_PATH = System.getProperty("user.dir")
-      + "\\network-journey-simulator\\src\\configs\\config.json";
+    + File.separator + "network-journey-simulator" + File.separator + "src"
+    + File.separator + "configs" + File.separator + "config.json";
 
+  /**
+   * path to the archives folder
+   */
+  private static final String ARCHIVES_PATH = System.getProperty("user.dir")
+    + File.separator + "archives";
   /**
    * EditConfigDialog that calls this class methods.
    */
   private final EditConfigDialog editConfigDialog;
+
+  private static final Logger LOGGER =
+    Logger.getLogger(ActionConfiguration.class.getName());
+
 
   /**
    * Constructor of the class.
@@ -158,24 +173,73 @@ public class ActionConfiguration {
     }
   }
 
-  public void showExportConfigDialog() {
-    JFileChooser fileChooser = new JFileChooser();
-
+  /**
+   * Prompts the export dialog to choose the location to export the json config.
+   */
+  public void showExportDialogJSON() {
+    JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
+    FileNameExtensionFilter filter =
+      new FileNameExtensionFilter("JSON FILES", "json");
+    fileChooser.setFileFilter(filter);
     fileChooser.setDialogTitle("Specify a file to save");
+
+    File defaultFile = new File("example.json");
+    fileChooser.setSelectedFile(defaultFile);
 
     int userSelection = fileChooser.showSaveDialog(MainWindow.getInstance());
 
     if (userSelection == JFileChooser.APPROVE_OPTION) {
       File fileToSave = fileChooser.getSelectedFile();
-      this.exportConfig(fileToSave);
+      if (!fileToSave.getAbsolutePath().endsWith(".json")) {
+        fileToSave = new File(fileToSave + ".json");
+      }
+      this.copyFile(JSON_FILE_PATH, fileToSave.getAbsolutePath());
     }
   }
 
-  public void exportConfig(File fileToSave) {
+  /**
+   * Prompts the open dialog to select which json file to import.
+   */
+  public void showOpenDialogJSON() {
+    JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+      "json files", "json");
+    fileChooser.setFileFilter(filter);
+    int returnVal = fileChooser.showOpenDialog(MainWindow.getInstance()
+      .getMainPanel());
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+      File file = fileChooser.getSelectedFile();
+      deleteFile(JSON_FILE_PATH);
+      this.copyFile(file.getAbsolutePath(), JSON_FILE_PATH);
+    }
+  }
+
+  /**
+   * Copy a file to the selected location.
+   *
+   * @param sourcePath the path of the file to copy
+   * @param destPath   the path of the destination file
+   */
+  public void copyFile(String sourcePath, String destPath) {
     try {
-      Files.copy(new File(JSON_FILE_PATH).toPath(), fileToSave.toPath());
+      Files.copy(Paths.get(sourcePath), Paths.get(destPath));
     } catch (IOException e) {
+      LOGGER.log(Level.SEVERE, "Error copying file", e);
       Thread.currentThread().interrupt();
+    }
+  }
+
+  /**
+   * Delete a file.
+   *
+   * @param fileToDelete the path of the file to delete
+   */
+  public void deleteFile(String fileToDelete) {
+    try {
+      Files.deleteIfExists(Paths.get(fileToDelete));
+    } catch (IOException e) {
+      LOGGER.log(Level.SEVERE, "Impossible to delete the existing file: "
+        + fileToDelete, e);
     }
   }
 
