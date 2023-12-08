@@ -25,15 +25,7 @@
 package org.example.controller;
 
 import org.example.data.Data;
-import org.example.model.Area;
-import org.example.model.Event;
-import org.example.model.EventGaussianPeak;
-import org.example.model.EventHour;
-import org.example.model.EventLineClosed;
-import org.example.model.EventLineDelay;
-import org.example.model.EventStationClosed;
-import org.example.model.Line;
-import org.example.model.Station;
+import org.example.model.*;
 import org.example.view.AreaView;
 import org.example.view.LineView;
 import org.example.view.MainWindow;
@@ -105,6 +97,18 @@ public class ActionFile {
    * String of the station tag.
    */
   public static final String STATION = "station";
+  /**
+   * String of the station id tag.
+   */
+  public static final String STATION_ID = "stationId";
+  /**
+   * String of the peakTime tag.
+   */
+  public static final String PEAK_TIME = "peakTime";
+  /*
+  * String of the peakSize tag.
+   */
+  public static final String PEAK_SIZE = "peakSize";
   /**
    * Number of letters in alphabet.
    */
@@ -312,34 +316,63 @@ public class ActionFile {
                   eventLineClosed.getIdStationEnd())));
           eventName.appendChild(stationEndClosed);
           break;
+
         case "gaussianPeak":
           EventGaussianPeak eventGaussianPeak = (EventGaussianPeak) event;
 
-          String peakTime = eventGaussianPeak.getPeakTime();
-          peakTime = peakTime.replace("-", "T");
-          peakTime = peakTime.replace("/", "-");
-          peakTime = peakTime + END_TIME_STRING;
+          String gaussianPeakTime = eventGaussianPeak.getPeakTime();
+          gaussianPeakTime = gaussianPeakTime.replace("-", "T");
+          gaussianPeakTime = gaussianPeakTime.replace("/", "-");
+          gaussianPeakTime = gaussianPeakTime + END_TIME_STRING;
 
-          Element peakTimeElement = document.createElement("peakTime");
-          peakTimeElement.appendChild(document.createTextNode(peakTime));
-          eventName.appendChild(peakTimeElement);
+          Element gaussianPeakTimeElement = document.createElement(PEAK_TIME);
+          gaussianPeakTimeElement.appendChild(
+                  document.createTextNode(gaussianPeakTime));
+          eventName.appendChild(gaussianPeakTimeElement);
 
-          Element stationId = document.createElement("stationId");
-          stationId
+          Element stationIdGaussian = document.createElement(STATION_ID);
+          stationIdGaussian
               .appendChild(document.createTextNode(Integer.toString(
                   eventGaussianPeak.getIdStation())));
-          eventName.appendChild(stationId);
+          eventName.appendChild(stationIdGaussian);
 
-          Element sizePeak = document.createElement("peakSize");
-          sizePeak.appendChild(document.createTextNode(Integer.toString(
+          Element sizeGaussianPeak = document.createElement(PEAK_SIZE);
+          sizeGaussianPeak.appendChild(document.createTextNode(Integer.toString(
               eventGaussianPeak.getSize())));
-          eventName.appendChild(sizePeak);
+          eventName.appendChild(sizeGaussianPeak);
 
-          Element peakWidth = document.createElement("peakWidth");
-          peakWidth.appendChild(document.createTextNode(Integer.toString(
-              eventGaussianPeak.getPeakWidth())));
-          eventName.appendChild(peakWidth);
+          Element gaussianPeakWidth = document.createElement("peakWidth");
+          gaussianPeakWidth
+                  .appendChild(document.createTextNode(Integer.toString(
+                          eventGaussianPeak.getPeakWidth())));
+          eventName.appendChild(gaussianPeakWidth);
           break;
+
+        case "rampPeak":
+          EventRampPeak eventRampPeak = (EventRampPeak) event;
+
+          String rampPeakTime = eventRampPeak.getPeakTime();
+          rampPeakTime = rampPeakTime.replace("-", "T");
+          rampPeakTime = rampPeakTime.replace("/", "-");
+          rampPeakTime = rampPeakTime + END_TIME_STRING;
+
+          Element rampPeakTimeElement = document.createElement(PEAK_TIME);
+          rampPeakTimeElement.appendChild(
+                  document.createTextNode(rampPeakTime));
+          eventName.appendChild(rampPeakTimeElement);
+
+          Element stationIdRamp = document.createElement(STATION_ID);
+          stationIdRamp
+              .appendChild(document.createTextNode(Integer.toString(
+                  eventRampPeak.getIdStation())));
+          eventName.appendChild(stationIdRamp);
+
+          Element sizeRampPeak = document.createElement(PEAK_SIZE);
+          sizeRampPeak.appendChild(document.createTextNode(Integer.toString(
+              eventRampPeak.getSize())));
+          eventName.appendChild(sizeRampPeak);
+          break;
+
         case "stationClosed":
           EventStationClosed eventStationClosed = (EventStationClosed) event;
 
@@ -349,6 +382,7 @@ public class ActionFile {
               eventStationClosed.getIdStation())));
           eventName.appendChild(stationClosedId);
           break;
+
         case "hour":
           EventHour eventHour = (EventHour) event;
 
@@ -362,6 +396,7 @@ public class ActionFile {
               eventHour.getTrainNumber())));
           eventName.appendChild(trainNumber);
           break;
+
         default:
           break;
       }
@@ -789,6 +824,7 @@ public class ActionFile {
                     .item(0).getTextContent()
             );
             break;
+
           case "lineClosed":
             ActionMetroEvent.getInstance().addLineClosed(startTimeSplit[0]
                 + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
@@ -797,22 +833,39 @@ public class ActionFile {
                 + eventElement.getElementsByTagName(STATION_ID_END).item(0)
                 .getTextContent());
             break;
+
           case "gaussianPeak":
-            String peakTime = eventElement.getElementsByTagName("peakTime")
-                .item(0).getTextContent();
-            String[] peakTimeSplit = this.formatDate(peakTime);
+            String gaussianPeakTime = eventElement.getElementsByTagName(
+                    PEAK_TIME).item(0).getTextContent();
+            String[] gaussianPeakTimeSplit = this.formatDate(gaussianPeakTime);
             ActionMetroEvent.getInstance().addGaussianPeak(
                 startTimeSplit[0] + "," + startTimeSplit[1] + ","
                     + endTimeSplit[0] + "," + endTimeSplit[1] + ","
-                    + peakTimeSplit[0] + "," + peakTimeSplit[1] + ","
-                    + eventElement.getElementsByTagName("stationId")
+                    + gaussianPeakTimeSplit[0] + "," + gaussianPeakTimeSplit[1]
+                    + "," + eventElement.getElementsByTagName(STATION_ID)
                     .item(0).getTextContent() + ","
-                    + eventElement.getElementsByTagName("peakSize")
+                    + eventElement.getElementsByTagName(PEAK_SIZE)
                     .item(0).getTextContent() + ","
                     + eventElement.getElementsByTagName("peakWidth")
                     .item(0).getTextContent()
             );
             break;
+
+          case "rampPeak":
+            String rampPeakTime = eventElement.getElementsByTagName(PEAK_TIME)
+                .item(0).getTextContent();
+            String[] rampPeakTimeSplit = this.formatDate(rampPeakTime);
+            ActionMetroEvent.getInstance().addRampPeak(
+                startTimeSplit[0] + "," + startTimeSplit[1] + ","
+                    + endTimeSplit[0] + "," + endTimeSplit[1] + ","
+                    + rampPeakTimeSplit[0] + "," + rampPeakTimeSplit[1] + ","
+                    + eventElement.getElementsByTagName(STATION_ID)
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName(PEAK_SIZE)
+                    .item(0).getTextContent()
+            );
+            break;
+
           case "stationClosed":
             ActionMetroEvent.getInstance().addStationClosed(startTimeSplit[0]
                 + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
@@ -820,6 +873,7 @@ public class ActionFile {
                 "idStation").item(0).getTextContent()
             );
             break;
+
           case "hour":
             String startHour = startTime.replace(END_TIME_STRING, "");
             String endHour = endTime.replace(END_TIME_STRING, "");
@@ -829,6 +883,7 @@ public class ActionFile {
                 + eventElement.getElementsByTagName("trainNumber").item(0)
                 .getTextContent());
             break;
+
           default:
             break;
         }

@@ -25,20 +25,15 @@
 package org.example.model;
 
 /**
- * Model class extending {@link Event} which describes a gaussian peak on a
+ * Model class extending {@link Event} which describes a ramp peak on a
  * Station.
  *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
  * @author Alexis BONAMY
- * @file EventGaussianPeak.java
- * @date N/A
- * @since 2.0
+ * @file EventRampPeak.java
+ * @date 08/12/2023
+ * @since 3.0
  */
-public class EventGaussianPeak extends EventPeak {
-  /** Peak width. */
-  private int peakWidth;
-
+public class EventRampPeak extends EventPeak {
   /**
    * Constructor.
    *
@@ -47,30 +42,9 @@ public class EventGaussianPeak extends EventPeak {
    * @param endTime   event endTime
    * @param type      eventType
    */
-  public EventGaussianPeak(final int id, final String startTime,
-                             final String endTime,
-                             final EventType type) {
-    super(id, startTime, endTime, type, EventName.GAUSSIAN_PEAK);
-  }
-
-  /**
-   * get the peak width.
-   *
-   * @return int peakWidth
-   */
-  public int getPeakWidth() {
-    return peakWidth;
-  }
-
-  /**
-   * set the peak width.
-   *
-   * @param paramPeakWidth width of the peak
-   */
-  public void setPeakWidth(final int paramPeakWidth) {
-    if (paramPeakWidth < 0) {
-      throw new IllegalArgumentException("Peak width is not valid");
-    }
-    this.peakWidth = paramPeakWidth;
+  public EventRampPeak(final int id, final String startTime,
+                       final String endTime,
+                       final EventType type) {
+    super(id, startTime, endTime, type, EventName.RAMP_PEAK);
   }
 }
