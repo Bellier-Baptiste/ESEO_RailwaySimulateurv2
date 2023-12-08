@@ -62,6 +62,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Test-cases of exporting and importing metro networks map files (xml).
  *
  * @author Aurélie Chamouleau
+ * @author Baptiste BELLIER
  * @file ActionFile.java
  * @date 2023-11-16
  * @since 3.0

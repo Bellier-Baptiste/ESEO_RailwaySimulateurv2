@@ -49,6 +49,7 @@ import java.util.Map;
  * Test-case of editing the configuration of the simulation from the Java HMI.
  *
  * @author Aurélie Chamouleau
+ * @author Baptiste BELLIER
  * @file ActionConfigurationTest.java
  * @date 2023-10-23
  * @since 3.0
