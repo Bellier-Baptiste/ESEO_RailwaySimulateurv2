@@ -24,9 +24,6 @@
 
 package org.example.controller;
 
-import org.example.controller.ActionArea;
-import org.example.controller.ActionLine;
-import org.example.controller.ActionStation;
 import org.example.model.Line;
 import org.example.view.MainWindow;
 import org.junit.Test;
@@ -38,15 +35,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Baptiste BELLIER
  * @file ActionsTest.java
  * @date N/A
  * @since 2.0
  */
-class ActionsTest {
+public class ActionsTest {
 
 
   @Test
-  void testAddLine() {
+  public void testAddLine() {
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
     int nbLineView = MainWindow.getInstance().getMainPanel().getLineViews()
@@ -65,7 +63,7 @@ class ActionsTest {
   }
 
   @Test
-  void testAddStation() {
+  public void testAddStation() {
     MainWindow.getInstance().getMainPanel().getLineViews().clear();
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
@@ -86,7 +84,7 @@ class ActionsTest {
   }
 
   @Test
-  void testAddArea() {
+  public void testAddArea() {
     ActionArea actionArea = new ActionArea();
     int nbAreaView = MainWindow.getInstance().getMainPanel().getAreaViews()
         .size();
@@ -99,7 +97,7 @@ class ActionsTest {
   }
 
   @Test
-  void testLineSwitch() {
+  public void testLineSwitch() {
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
     actionLine.addLine();
