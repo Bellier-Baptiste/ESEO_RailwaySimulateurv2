@@ -269,43 +269,50 @@ public class ActionMetroEvent {
     Data.getInstance().getEventList().add(event);
     Station stationStart = null;
     Station stationEnd = null;
-    LineView line = null;
+    LineView lineStart = null;
+    LineView lineEnd = null;
     for (LineView lineView : MainWindow.getInstance().getMainPanel()
         .getLineViews()) {
       for (StationView stationView : lineView.getStationViews()) {
         if (stationView.getStation().getId() == event
             .getIdStationStart()) {
-          line = lineView;
+          lineStart = lineView;
           stationStart = stationView.getStation();
         } else if (stationView.getStation().getId() == event
             .getIdStationEnd()) {
+          lineEnd = lineView;
           stationEnd = stationView.getStation();
         }
       }
     }
-    if (line != null && stationStart != null && stationEnd != null) {
-      if (stationEnd.getId() < stationStart.getId()) {
-        Station aux = stationEnd;
-        stationEnd = stationStart;
-        stationStart = aux;
+    if (lineStart != null && lineEnd!= null && stationStart != null && stationEnd != null) {
+      if(lineStart.getLine().getId() == lineEnd.getLine().getId()) {
+        if (stationEnd.getId() < stationStart.getId()) {
+          Station aux = stationEnd;
+          stationEnd = stationStart;
+          stationStart = aux;
+        }
+        this.colorStationViews(lineStart, stationStart, stationEnd,
+            eventColor);
+        EventWindow.getInstance().dispatchEvent(new WindowEvent(
+            EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
+        MainWindow.getInstance().getMainPanel().repaint();
+        String locationsStr = "from " + stationStart.getName() + " to "
+            + stationEnd.getName();
+        if (event.getEventName() == EventName.LINE_DELAYED) {
+          EventRecap.getInstance().createEventLineDelayed(this.getCurrentId(),
+              event.getStartTime(), event.getEndTime(), locationsStr,
+              eventStringTab[eventStringTab.length - 1],
+              Integer.toString(lineStart.getLine().getId()));
+        } else if (event.getEventName() == EventName.MULTIPLE_STATIONS_CLOSED) {
+          EventRecap.getInstance().createEventMultipleStationsClosed(this.getCurrentId(),
+              event.getStartTime(), event.getEndTime(), locationsStr,
+              Integer.toString(lineStart.getLine().getId()));
+        }
+      } else {
+        throw new IllegalArgumentException("The stations must be on the same line");
       }
-      this.colorStationViews(line, stationStart, stationEnd,
-          eventColor);
-      EventWindow.getInstance().dispatchEvent(new WindowEvent(
-          EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
-      MainWindow.getInstance().getMainPanel().repaint();
-      String locationsStr = "from " + stationStart.getName() + " to "
-          + stationEnd.getName();
-      if (event.getEventName() == EventName.LINE_DELAYED) {
-        EventRecap.getInstance().createEventLineDelayed(this.getCurrentId(),
-            event.getStartTime(), event.getEndTime(), locationsStr,
-            eventStringTab[eventStringTab.length - 1],
-            Integer.toString(line.getLine().getId()));
-      } else if (event.getEventName() == EventName.MULTIPLE_STATIONS_CLOSED) {
-        EventRecap.getInstance().createEventMultipleStationsClosed(this.getCurrentId(),
-            event.getStartTime(), event.getEndTime(), locationsStr,
-            Integer.toString(line.getLine().getId()));
-      }
+
     }
   }
 

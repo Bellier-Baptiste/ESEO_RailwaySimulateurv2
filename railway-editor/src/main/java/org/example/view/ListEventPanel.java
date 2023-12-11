@@ -1076,7 +1076,7 @@ public final class ListEventPanel extends JPanel {
     DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
 
     String dateStart = df.format((Date) datePickerStart.getModel().getValue());
-    String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String dateEnd = df.format((Date) datePickerEnd.getModel().getValue());
     String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
@@ -1098,7 +1098,7 @@ public final class ListEventPanel extends JPanel {
     DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
 
     String dateStart = df.format((Date) datePickerStart.getModel().getValue());
-    String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String dateEnd = df.format((Date) datePickerEnd.getModel().getValue());
     String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
@@ -1119,7 +1119,7 @@ public final class ListEventPanel extends JPanel {
     DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
 
     String dateStart = df.format((Date) datePickerStart.getModel().getValue());
-    String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String dateEnd = df.format((Date) datePickerEnd.getModel().getValue());
     String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
@@ -1140,7 +1140,7 @@ public final class ListEventPanel extends JPanel {
     DateFormat df = new SimpleDateFormat(FORMAT_DATE);
     DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
     String dateStart = df.format((Date) datePickerStart.getModel().getValue());
-    String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String dateEnd = df.format((Date) datePickerEnd.getModel().getValue());
     String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
