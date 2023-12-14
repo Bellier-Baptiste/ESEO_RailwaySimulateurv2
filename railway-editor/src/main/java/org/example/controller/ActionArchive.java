@@ -83,8 +83,8 @@ public class ActionArchive {
         DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
       String baseFolderName = now.format(formatter);
       String folderName = baseFolderName;
-      File exportFolder = new File(ARCHIVES_PATH +
-        File.separator + folderName);
+      File exportFolder = new File(ARCHIVES_PATH
+        + File.separator + folderName);
       int increment = 1;
 
       while (exportFolder.exists()) {

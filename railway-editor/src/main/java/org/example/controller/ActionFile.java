@@ -132,7 +132,7 @@ public class ActionFile {
   private static final String LATITUDE = "latitude";
 
   /**
-   * path to the archives folder
+   * Path to the archives' folder.
    */
   public static final String ARCHIVES_PATH = System.getProperty("user.dir")
     + File.separator + "archives";

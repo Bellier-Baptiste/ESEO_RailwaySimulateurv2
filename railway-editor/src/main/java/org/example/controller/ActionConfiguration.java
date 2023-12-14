@@ -69,7 +69,7 @@ public class ActionConfiguration {
     + File.separator + "configs" + File.separator + "config.json";
 
   /**
-   * path to the archives folder
+   * Path to the archives' folder.
    */
   private static final String ARCHIVES_PATH = System.getProperty("user.dir")
     + File.separator + "archives";
@@ -82,7 +82,7 @@ public class ActionConfiguration {
   /**
    * Logger, to display or save information.
    */
-  private static final Logger logger =
+  private static final Logger LOGGER =
     Logger.getLogger(ActionConfiguration.class.getName());
 
   /**
@@ -99,7 +99,7 @@ public class ActionConfiguration {
    * Constructor of the class.
    */
 
-  public ActionConfiguration(){
+  public ActionConfiguration() {
     this.editConfigDialog = null;
   }
 
@@ -229,7 +229,7 @@ public class ActionConfiguration {
    * @param sourcePath the path of the file to copy
    * @param destPath   the path of the destination file
    */
-  public void copyFile(String sourcePath, String destPath) {
+  public void copyFile(final String sourcePath, final String destPath) {
     Path destination = Paths.get(destPath);
     try {
       if (Files.exists(destination)) {
@@ -237,7 +237,7 @@ public class ActionConfiguration {
       }
       Files.copy(Paths.get(sourcePath), destination);
     } catch (IOException e) {
-      logger.log(Level.SEVERE, "Error copying file", e);
+      LOGGER.log(Level.SEVERE, "Error copying file", e);
       Thread.currentThread().interrupt();
     }
   }
@@ -247,12 +247,12 @@ public class ActionConfiguration {
    *
    * @param fileToDelete the path of the file to delete
    */
-  public void deleteFile(String fileToDelete) {
+  public void deleteFile(final String fileToDelete) {
     try {
       Files.deleteIfExists(Paths.get(fileToDelete));
     } catch (IOException e) {
-      logger.log(Level.SEVERE, e, () -> "Impossible to delete the existing " +
-        "file: " + fileToDelete);
+      LOGGER.log(Level.SEVERE, e, () -> "Impossible to delete the existing "
+        + "file: " + fileToDelete);
     }
   }
 
