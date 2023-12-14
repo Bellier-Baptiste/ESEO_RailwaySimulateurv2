@@ -24,11 +24,10 @@
 
 package org.example.controller;
 
-import org.example.controller.ActionConfiguration;
-import org.example.controller.ActionFile;
+
 import org.example.view.MainWindow;
 
-import javax.swing.*;
+import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.nio.file.Files;
@@ -57,7 +56,8 @@ public class ActionArchive {
   /**
    * ActionConfiguration instance.
    */
-  private ActionConfiguration actionConfiguration = new ActionConfiguration();
+  private final ActionConfiguration actionConfiguration =
+    new ActionConfiguration();
 
   /**
    * Path to the XML file.
@@ -67,20 +67,14 @@ public class ActionArchive {
     + File.separator + "configs" + File.separator + "runThisSimulation.xml";
 
   /**
-   * Logger.
+   * Logger, to display or save informations.
    */
-  private static final Logger LOGGER =
+  private final Logger logger =
     Logger.getLogger(ActionArchive.class.getName());
 
 
   /**
-   *  Constructor of the class
-   */
-  public ActionArchive() {}
-
-
-  /**
-   * showExportDialogJSONandXML
+   * Prompts the export dialog to choose the location to export the configs.
    */
   public void showExportDialogJSONandXML() {
     try {
@@ -111,13 +105,13 @@ public class ActionArchive {
           + "RunThisSimulation.xml"),
         StandardCopyOption.REPLACE_EXISTING);
     } catch (Exception e) {
-      LOGGER.log(Level.SEVERE,
+      logger.log(Level.SEVERE,
         "Error exporting files", e);
     }
   }
 
   /**
-   * showOpenDialogJSONandXML
+   * Prompts the open dialog to select which configs to open.
    */
   public void showOpenDialogJSONandXML() {
     JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
@@ -139,6 +133,7 @@ public class ActionArchive {
           if (i > 0) {
             String extension = fileName.substring(i + 1);
             if ("json".equalsIgnoreCase(extension)) {
+              actionConfiguration.deleteFile(JSON_FILE_PATH);
               actionConfiguration.copyFile(file.getAbsolutePath(),
                 JSON_FILE_PATH);
             } else if ("xml".equalsIgnoreCase(extension)) {
@@ -146,14 +141,11 @@ public class ActionArchive {
             }
           }
         } catch (Exception e) {
-          LOGGER.log(Level.SEVERE, "Error processing file: " +
-            file.getName(), e);
+          logger.log(Level.SEVERE, e, () -> "Error processing file: "
+            + file.getName());
         }
       }
     }
   }
-
-
-
 
 }

@@ -37,6 +37,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -59,6 +60,7 @@ public class ActionConfiguration {
    * LinkedHashMap with the parameters of the configuration.
    */
   private LinkedHashMap<String, Object> jsonMap;
+
   /**
    * Path of the json file.
    */
@@ -77,9 +79,11 @@ public class ActionConfiguration {
    */
   private final EditConfigDialog editConfigDialog;
 
-  private static final Logger LOGGER =
+  /**
+   * Logger, to display or save information.
+   */
+  private static final Logger logger =
     Logger.getLogger(ActionConfiguration.class.getName());
-
 
   /**
    * Constructor of the class.
@@ -90,6 +94,10 @@ public class ActionConfiguration {
   public ActionConfiguration(final EditConfigDialog editConfigDialogToSet) {
     this.editConfigDialog = editConfigDialogToSet;
   }
+
+  /**
+   * Constructor of the class.
+   */
 
   public ActionConfiguration(){
     this.editConfigDialog = null;
@@ -142,7 +150,7 @@ public class ActionConfiguration {
     // and update the json map and the json file
     this.jsonMap.clear();
     for (EditConfigParamPanel editConfigParamPanel
-        : this.editConfigDialog.getEditConfigParamPanelList()) {
+      : this.editConfigDialog.getEditConfigParamPanelList()) {
       String key = editConfigParamPanel.getParamName();
       String value = editConfigParamPanel.getParamValue();
       // Check if the value is an integer, a double or a boolean and
@@ -222,10 +230,14 @@ public class ActionConfiguration {
    * @param destPath   the path of the destination file
    */
   public void copyFile(String sourcePath, String destPath) {
+    Path destination = Paths.get(destPath);
     try {
-      Files.copy(Paths.get(sourcePath), Paths.get(destPath));
+      if (Files.exists(destination)) {
+        deleteFile(destPath);
+      }
+      Files.copy(Paths.get(sourcePath), destination);
     } catch (IOException e) {
-      LOGGER.log(Level.SEVERE, "Error copying file", e);
+      logger.log(Level.SEVERE, "Error copying file", e);
       Thread.currentThread().interrupt();
     }
   }
@@ -239,8 +251,8 @@ public class ActionConfiguration {
     try {
       Files.deleteIfExists(Paths.get(fileToDelete));
     } catch (IOException e) {
-      LOGGER.log(Level.SEVERE, "Impossible to delete the existing file: "
-        + fileToDelete, e);
+      logger.log(Level.SEVERE, e, () -> "Impossible to delete the existing " +
+        "file: " + fileToDelete);
     }
   }
 
