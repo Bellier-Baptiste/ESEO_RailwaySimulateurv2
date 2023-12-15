@@ -341,7 +341,7 @@ func TestSimulator_EventAttendancePeak(t *testing.T) {
 }
 
 /*
-TestSimulator_GetAllPopulationsDistribution() tests the
+TestSimulator_GetAllPopDistribution() tests the
 GetAllPopulationsDistribution() method of the Simulator struct.
 
 # It tests if the GetAllPopulationsDistribution() method works properly
@@ -350,7 +350,7 @@ Input : t *testing.T
 
 Expected : The GetAllPopulationsDistribution() method works properly
 */
-func TestSimulator_GetAllPopulationsDistribution(t *testing.T) {
+func TestSimulator_GetAllPopDistribution(t *testing.T) {
 	println("TestSimulator_GetAllPopulationsDistribution")
 	sim := NewSimulator()
 	output, err := sim.Init("working day")
@@ -391,7 +391,7 @@ func TestSimulator_GetAllPopulationsDistribution(t *testing.T) {
 }
 
 /*
-TestSimulator_GetAllDestinationDistribution() tests the
+TestSimulator_GetAllDestDistribution() tests the
 GetAllDestinationDistribution() method of the Simulator struct.
 
 # It tests if the GetAllDestinationDistribution() method works properly
@@ -400,7 +400,7 @@ Input : t *testing.T
 
 Expected : The GetAllDestinationDistribution() method works properly
 */
-func TestSimulator_GetAllDestinationDistribution(t *testing.T) {
+func TestSimulator_GetAllDestDistribution(t *testing.T) {
 	println("TestSimulator_GetAllDestinationDistribution")
 	sim := NewSimulator()
 	output, err := sim.Init("working day")
