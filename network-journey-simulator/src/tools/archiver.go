@@ -52,11 +52,6 @@ end of the simulation.
 
 Param :
   - basePath string : The base path of the project
-  - outputFolderPath string : The path of the output folder
-  - configFolderPath string : The path of the config folder
-  - archivesFolderPath string : The path of the archives folder
-  - timestamp string : The current timestamp
-  - archiveFolderPath string : The path of the archive folder
 */
 func ArchiveOutputAndConfigFiles(basePath string) {
 	outputFolderPath := filepath.Join(basePath, "network-journey-simulator",
