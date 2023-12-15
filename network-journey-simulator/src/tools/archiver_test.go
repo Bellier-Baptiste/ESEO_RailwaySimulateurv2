@@ -54,8 +54,7 @@ Expected : The output and config files are archived properly
 func TestArchiveOutputAndConfigFiles(t *testing.T) {
 	basePath, err := setupTestEnvironment()
 	if err != nil {
-		t.Fatalf("Erreur lors de la configuration de l'environnement "+
-			"de test: %v", err)
+		t.Fatalf("Error when configuring the test environment: %v", err)
 	}
 	defer func(basePath string) {
 		err := teardownTestEnvironment(basePath)
@@ -71,13 +70,72 @@ func TestArchiveOutputAndConfigFiles(t *testing.T) {
 	archiveFolderPath := filepath.Join(archivesFolderPath, timestamp)
 
 	if _, err := os.Stat(archiveFolderPath); os.IsNotExist(err) {
-		t.Fatalf("Le dossier d'archive %s n'a pas été créé",
+		t.Fatalf("The archive folder %s was not created",
 			archiveFolderPath)
 	}
 
 	archivedFile := filepath.Join(archiveFolderPath, "config.json")
 	if _, err := os.Stat(archivedFile); os.IsNotExist(err) {
 		t.Errorf("Le fichier %s n'a pas été archivé", archivedFile)
+	}
+}
+
+/*
+TestIncrementFolderName tests the incrementFolderName function.
+
+# It tests if the folder name is incremented properly
+
+Input : t *testing.T
+
+Expected : The folder name is incremented properly
+*/
+func TestIncrementFolderName(t *testing.T) {
+	basePath, err := setupTestEnvironment()
+	if err != nil {
+		t.Fatalf("Error setting up test environment: %v", err)
+	}
+	defer func(basePath string) {
+		err := teardownTestEnvironment(basePath)
+		if err != nil {
+
+		}
+	}(basePath)
+
+	originalPath := filepath.Join(basePath, "testFolder")
+	err = os.Mkdir(originalPath, 0777)
+	if err != nil {
+		return
+	}
+
+	incrementedPath := incrementFolderName(originalPath)
+
+	if incrementedPath == originalPath {
+		t.Errorf("IncrementFolderName did not change the folder name")
+	}
+
+}
+
+/*
+TestGetBasePath tests the GetBasePath function.
+
+# It tests if the base path is returned properly
+
+Input : t *testing.T
+
+Expected : The base path is returned properly
+*/
+func TestGetBasePath(t *testing.T) {
+	expectedBasePath, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("Error getting current directory: %v", err)
+	}
+	expectedBasePath = filepath.Dir(expectedBasePath)
+
+	actualBasePath := GetBasePath()
+
+	if actualBasePath != expectedBasePath {
+		t.Errorf("GetBasePath returned %s; want %s", actualBasePath,
+			expectedBasePath)
 	}
 }
 

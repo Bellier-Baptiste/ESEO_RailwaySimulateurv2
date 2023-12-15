@@ -71,8 +71,8 @@ public class AreaTest {
 		assertEquals(20, studentAmount);
 		assertEquals(20, businessmannAmount);
 		assertEquals(20, childAmount);
-		assertEquals(20, workerAmount);
-		assertEquals(0, unemployedAmount);
+		assertEquals(60, workerAmount);
+		assertEquals(14, unemployedAmount);
 	}
 	
 	@Test

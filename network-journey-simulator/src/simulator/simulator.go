@@ -67,8 +67,8 @@ Attributes :
   - eventsLineClosed []models.EventLineClosed : the events of the simulator
   - eventsAttendancePeak []models.EventAttendancePeak : the events of the
     simulator
-  - areasDistribution []models.PopulationDistribution : the population distribution of
-    an area
+  - areasDistribution []models.PopulationDistribution : the population
+    distribution of an area
   - tripNumberCounter int : the trip number counter of the simulator
 
 Methods :
@@ -245,7 +245,8 @@ Return :
   - []models.PopulationDistribution : the population distribution of all the
     areas
 */
-func (s *Simulator) GetAllPopulationsDistribution() []models.PopulationDistribution {
+func (s *Simulator) GetAllPopulationsDistribution() []models.
+	PopulationDistribution {
 	return s.populationsDistributions
 }
 
@@ -260,7 +261,8 @@ Return :
   - []models.DestinationDistribution : the destination distribution of all the
     areas
 */
-func (s *Simulator) GetAllDestinationDistribution() []models.DestinationDistribution {
+func (s *Simulator) GetAllDestinationDistribution() []models.
+	DestinationDistribution {
 	return s.destinationDistributions
 }
 
@@ -276,7 +278,8 @@ Return :
   - models.PopulationDistribution : the population distribution of the
     area
 */
-func (s *Simulator) GetPopulationDistributionArea(id int) models.PopulationDistribution {
+func (s *Simulator) GetPopulationDistributionArea(id int) models.
+	PopulationDistribution {
 	return s.populationsDistributions[id]
 }
 
@@ -291,7 +294,8 @@ Return :
   - []models.DestinationDistribution : the destination distribution of the
     areas
 */
-func (s *Simulator) GetDestinationDistributionArea(id int) models.DestinationDistribution {
+func (s *Simulator) GetDestinationDistributionArea(id int) models.
+	DestinationDistribution {
 	return s.destinationDistributions[id]
 }
 
@@ -309,10 +313,12 @@ Return :
   - models.PopulationDistribution : the population distribution of the
     station
 */
-func (s *Simulator) GetPopulationDistributionStation(id int) models.PopulationDistribution {
+func (s *Simulator) GetPopulationDistributionStation(id int) models.
+	PopulationDistribution {
 	ms := s.adConfig.MapC.Stations[id]
 	if ms.IdArea == nil {
-		return models.NewPopulationDistribution(14, 14, 14, 15, 14, 14, 15)
+		return models.NewPopulationDistribution(14, 14,
+			14, 15, 14, 14, 15)
 	}
 	idArea := *ms.IdArea
 	return s.populationsDistributions[idArea]
@@ -332,10 +338,12 @@ Return :
   - models.DestinationDistribution : the destination distribution of the
     station
 */
-func (s *Simulator) GetDestinationDistributionStation(id int) models.DestinationDistribution {
+func (s *Simulator) GetDestinationDistributionStation(id int) models.
+	DestinationDistribution {
 	ms := s.adConfig.MapC.Stations[id]
 	if ms.IdArea == nil {
-		return models.NewDestinationDistribution(15, 14, 14, 14, 15, 14, 14)
+		return models.NewDestinationDistribution(15, 14,
+			14, 14, 15, 14, 14)
 	}
 	idArea := *ms.IdArea
 	return s.destinationDistributions[idArea]
@@ -489,29 +497,48 @@ func (s *Simulator) CreateEventsAttendancePeak() {
 }
 
 /*
-CreateAreasDistribution is used to create "area distribution"
+CreatePopulationsDistribution is used to create the population distribution of
+the areas.
+
+Param :
+  - s *Simulator : the simulator
 */
 func (s *Simulator) CreatePopulationsDistribution() {
 	s.populationsDistributions = make([]models.PopulationDistribution,
 		len(s.adConfig.MapC.Areas))
 	for i, pd := range s.adConfig.MapC.Areas {
 		s.populationsDistributions[i] =
-			models.NewPopulationDistribution(pd.PopulationDistribution.Businessman,
-				pd.PopulationDistribution.Child, pd.PopulationDistribution.Retired,
-				pd.PopulationDistribution.Student, pd.PopulationDistribution.Tourist,
-				pd.PopulationDistribution.Unemployed, pd.PopulationDistribution.Worker)
+			models.NewPopulationDistribution(
+				pd.PopulationDistribution.Businessman,
+				pd.PopulationDistribution.Child,
+				pd.PopulationDistribution.Retired,
+				pd.PopulationDistribution.Student,
+				pd.PopulationDistribution.Tourist,
+				pd.PopulationDistribution.Unemployed,
+				pd.PopulationDistribution.Worker)
 	}
 }
 
+/*
+CreateDestinationDistribution is used to create the destination distribution of
+the areas.
+
+Param :
+  - s *Simulator : the simulator
+*/
 func (s *Simulator) CreateDestinationDistribution() {
 	s.destinationDistributions = make([]models.DestinationDistribution,
 		len(s.adConfig.MapC.Areas))
 	for i, dd := range s.adConfig.MapC.Areas {
 		s.destinationDistributions[i] =
-			models.NewDestinationDistribution(dd.DestinationDistribution.Commercial,
-				dd.DestinationDistribution.Educational, dd.DestinationDistribution.Industrial,
-				dd.DestinationDistribution.Leisure, dd.DestinationDistribution.Office,
-				dd.DestinationDistribution.Residential, dd.DestinationDistribution.Touristic)
+			models.NewDestinationDistribution(
+				dd.DestinationDistribution.Commercial,
+				dd.DestinationDistribution.Educational,
+				dd.DestinationDistribution.Industrial,
+				dd.DestinationDistribution.Leisure,
+				dd.DestinationDistribution.Office,
+				dd.DestinationDistribution.Residential,
+				dd.DestinationDistribution.Touristic)
 	}
 }
 
