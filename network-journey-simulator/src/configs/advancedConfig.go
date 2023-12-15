@@ -14,7 +14,9 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Alexis BONAMY
   - Benoît VAVASSEUR
+  - Aurélie CHAMOULEAU
 
 License : MIT License
 
@@ -282,18 +284,24 @@ an attendance peak event.
 
 Attributes :
   - XMLName xml.Name
-  - TimeString string
+  - StartString string
+  - EndString string
+  - PeakString string
   - StationId int
-  - Size int
+  - PeakSize int
+  - PeakWidth int
 
 Methods :
   - None
 */
 type ConfigAttendancePeakEvent struct {
-	XMLName    xml.Name `xml:"attendancePeak"`
-	TimeString string   `xml:"time"`
-	StationId  int      `xml:"stationId"`
-	Size       int      `xml:"size"`
+	XMLName     xml.Name `xml:"attendancePeak"`
+	StartString string   `xml:"start"`
+	EndString   string   `xml:"end"`
+	PeakString  string   `xml:"peakTime"`
+	StationId   int      `xml:"stationId"`
+	PeakSize    int      `xml:"peakSize"`
+	PeakWidth   int      `xml:"peakWidth"`
 }
 
 /*

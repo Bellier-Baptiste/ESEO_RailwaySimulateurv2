@@ -24,21 +24,34 @@
 
 package org.example.model;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 /**
  * Model class extending {@link Event} which describes an attendance peak on a
- * {@link org.example.model.Station}.
+ * Station.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
  * @file EventAttendancePeak.java
  * @date N/A
  * @since 2.0
  */
 public class EventAttendancePeak extends Event {
-  /** Station id. */
+  /**
+   * Station id.
+   */
   private int idStation;
-  /** Peak size. */
+  /**
+   * Peak size.
+   */
   private int size;
+  /** Peak time. */
+  private String peakTime;
+  /** Peak width. */
+  private int peakWidth;
 
   /**
    * Constructor.
@@ -51,8 +64,7 @@ public class EventAttendancePeak extends Event {
   public EventAttendancePeak(final int id, final String startTime,
                              final String endTime,
                              final EventType type) {
-    super(id, startTime, endTime, type);
-    super.setEventName(EventName.ATTENDANCE_PEAK);
+    super(id, startTime, endTime, type, EventName.ATTENDANCE_PEAK);
   }
 
   /**
@@ -88,6 +100,79 @@ public class EventAttendancePeak extends Event {
    * @param peakSize size of the peak
    */
   public void setSize(final int peakSize) {
+    if (peakSize < 0) {
+      throw new IllegalArgumentException("Peak size is not valid");
+    }
     this.size = peakSize;
+  }
+
+  /**
+   * get the peak time.
+   *
+   * @return String peakTime
+   */
+  public String getPeakTime() {
+    return peakTime;
+  }
+
+  /**
+   * set the peak time.
+   *
+   * @param paramPeakTime time of the peak
+   */
+  public void setPeakTime(final String paramPeakTime) {
+    if (isPeakTimeValid(paramPeakTime)) {
+      this.peakTime = paramPeakTime;
+    } else {
+      throw new IllegalArgumentException("Peak time is not valid");
+    }
+  }
+
+  /**
+   * get the peak width.
+   *
+   * @return int peakWidth
+   */
+  public int getPeakWidth() {
+    return peakWidth;
+  }
+
+  /**
+   * set the peak width.
+   *
+   * @param paramPeakWidth width of the peak
+   */
+  public void setPeakWidth(final int paramPeakWidth) {
+    if (paramPeakWidth < 0) {
+      throw new IllegalArgumentException("Peak width is not valid");
+    }
+    this.peakWidth = paramPeakWidth;
+  }
+
+  /**
+   * check if peak time is between start time and end time. The peak time should
+   * be equal or after the start time and equal or before the end time.
+   *
+   * @param paramPeakTime peak time
+   * @return boolean true if peak time is valid, false otherwise
+   */
+  private boolean isPeakTimeValid(final String paramPeakTime) {
+    try {
+      DateTimeFormatter formatter =
+              DateTimeFormatter.ofPattern("yyyy/MM/dd-HH:mm");
+      LocalDateTime peakTimeDate = LocalDateTime.parse(
+              paramPeakTime, formatter);
+      LocalDateTime startTimeDate = LocalDateTime.parse(
+              getStartTime(), formatter);
+      LocalDateTime endTimeDate = LocalDateTime.parse(
+              getEndTime(), formatter);
+
+      return (peakTimeDate.isEqual(startTimeDate)
+              || peakTimeDate.isAfter(startTimeDate))
+              && (peakTimeDate.isEqual(endTimeDate)
+              || peakTimeDate.isBefore(endTimeDate));
+    } catch (DateTimeParseException e) {
+      return false;
+    }
   }
 }
