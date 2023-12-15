@@ -2166,18 +2166,15 @@ func (s *Simulator) executeEventsGaussianPeak(
 	for _, event := range events {
 		// get minutes
 		startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
-		endMinutes := event.GetEnd().Hour()*60 + event.GetEnd().Minute()
-		peakMinutes := event.GetPeak().Hour()*60 + event.GetPeak().Minute()
 		oldMinutes := oldTime.Hour()*60 + oldTime.Minute()
 		currentMinutes := currentTime.Hour()*60 + currentTime.Minute()
 
 		// get passenger distribution
-		passengerDistribution := s.makeEventGaussianPeakDistribution(startMinutes,
-			endMinutes, peakMinutes, event)
+		passengerDistribution := s.makeEventGaussianPeakDistribution(event)
 
 		// determine the number of passengers for the current minute by taking the
 		// difference between the current time and the old time
-		currentPassengers := s.pickEventGaussianPeakCurrentPassengers(
+		currentPassengers := s.pickEventPeakCurrentPassengers(
 			passengerDistribution, oldMinutes, currentMinutes, startMinutes)
 
 		// execute the event
@@ -2223,20 +2220,21 @@ passengers for an event "gaussian peak".
 
 Param :
   - s *Simulator : the simulator
-  - startMinutes int : the start minutes
-  - endMinutes int : the end minutes
-  - peakMinutes int : the peak minutes
   - event *models.EventGaussianPeak : the event
 
 Return :
   - []int : the distribution
 */
-func (s *Simulator) makeEventGaussianPeakDistribution(startMinutes,
-	endMinutes, peakMinutes int, event *models.EventGaussianPeak) []int {
+func (s *Simulator) makeEventGaussianPeakDistribution(
+	event *models.EventGaussianPeak) []int {
+	startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+	endMinutes := event.GetEnd().Hour()*60 + event.GetEnd().Minute()
+	peakMinutes := event.GetPeak().Hour()*60 + event.GetPeak().Minute()
+
 	// create a table to store the number of passengers for each minute
 	passengerDistribution := make([]int, endMinutes-startMinutes)
 
-	// calcultate asymetrical gaussian distribution
+	// calculate asymetrical gaussian distribution
 	peakArea := float64(event.GetPeakSize())
 	peakHeight := peakArea / (float64(event.GetPeakWidth()) * math.Sqrt(2*math.Pi))
 	for minute := startMinutes; minute < endMinutes; minute++ {
@@ -2276,7 +2274,7 @@ func (s *Simulator) makeEventGaussianPeakDistribution(startMinutes,
 	return passengerDistribution
 }
 
-func (s *Simulator) pickEventGaussianPeakCurrentPassengers(
+func (s *Simulator) pickEventPeakCurrentPassengers(
 	passengerDistribution []int, oldMinutes, currentMinutes,
 	startMinutes int) int {
 
@@ -2303,10 +2301,120 @@ func (s *Simulator) executeEventsRampPeak(
 	events []*models.EventRampPeak, oldTime time.Time,
 	currentTime time.Time) {
 	for _, event := range events {
-		println("event ramp peak")
-		println("start : ", event.GetStart().String())
+		// get minutes
+		startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+		oldMinutes := oldTime.Hour()*60 + oldTime.Minute()
+		currentMinutes := currentTime.Hour()*60 + currentTime.Minute()
+
+		// get passenger distribution
+		passengerDistribution := s.makeEventRampPeakDistribution(event)
+
+		// determine the number of passengers for the current minute by taking the
+		// difference between the current time and the old time
+		currentPassengers := s.pickEventPeakCurrentPassengers(
+			passengerDistribution, oldMinutes, currentMinutes, startMinutes)
+
+		// execute the event
+		for i := 0; i < currentPassengers; i++ {
+			// get total population
+			var totalPopulation int
+			totalPopulation += len(s.population.Outside())
+			for _, station := range s.population.InStation() {
+				totalPopulation += len(station)
+			}
+			for _, train := range s.population.InTrains() {
+				totalPopulation += len(train)
+			}
+
+			departureStation := s.mapObject.FindStationById(event.GetIdStation())
+			// create arrival station, different from departure station
+			arrivalStation := departureStation
+			for arrivalStation == departureStation {
+				arrivalStation = s.mapObject.FindStationById(rand.Intn(
+					len(s.mapObject.Stations())))
+			}
+
+			ps, _ := s.mapObject.GetPathStation(*departureStation, *arrivalStation)
+			trip := models.NewTrip(currentTime, ps)
+
+			passenger := models.NewPassenger(strconv.Itoa(totalPopulation),
+				models.PickAKind())
+			passenger.SetTrips([]*models.Trip{&trip})
+			passenger.SetCurrentTrip(&trip)
+
+			s.population.Outside()[passenger.Id()] = &passenger
+			s.population.TransferFromPopulationToStation(&passenger, departureStation,
+				currentTime)
+			s.population.InStation()[event.GetIdStation()][passenger.Id()] =
+				&passenger
+		}
 	}
-	//	TODO: create the function
+}
+
+/*
+makeEventGaussianPeakDistribution is used to create a distribution of
+passengers for an event "gaussian peak".
+
+Param :
+  - s *Simulator : the simulator
+  - event *models.EventRampPeak : the event
+
+Return :
+  - []int : the distribution
+*/
+func (s *Simulator) makeEventRampPeakDistribution(
+	event *models.EventRampPeak) []int {
+	startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+	endMinutes := event.GetEnd().Hour()*60 + event.GetEnd().Minute()
+	peakMinutes := event.GetPeak().Hour()*60 + event.GetPeak().Minute()
+
+	// create a table to store the number of passengers for each minute
+	passengerDistribution := make([]int, endMinutes-startMinutes)
+
+	// calculate the ramp peak distribution
+	peakArea := float64(event.GetPeakSize())
+	divider := float64((peakMinutes-startMinutes)/2 + (endMinutes-peakMinutes)/2)
+	peakMaxHeight := peakArea / divider
+	for minute := startMinutes; minute < endMinutes; minute++ {
+		if minute < peakMinutes {
+			passengerDistribution[minute-startMinutes] =
+				int(peakMaxHeight / float64(peakMinutes-startMinutes) *
+					float64(minute-startMinutes))
+		}
+		if minute >= peakMinutes {
+			passengerDistribution[minute-startMinutes] =
+				int(peakMaxHeight / (float64(peakMinutes - endMinutes)) *
+					(float64(minute - endMinutes)))
+		}
+	}
+
+	totalPassengers := 0
+	for _, passengers := range passengerDistribution {
+		totalPassengers += passengers
+	}
+
+	// add missing passengers to the distribution or remove passengers if
+	// there are too many
+	value := event.GetPeakSize() > totalPassengers
+	print(value)
+	if event.GetPeakSize() > totalPassengers {
+		missingPassengers := event.GetPeakSize() - totalPassengers
+		// add missing passengers
+		for missingPassengers > 0 {
+			passengerDistribution[rand.Intn(len(passengerDistribution))]++
+			missingPassengers--
+		}
+	}
+	if event.GetPeakSize() < totalPassengers {
+		missingPassengers := totalPassengers - event.GetPeakSize()
+		// remove passengers
+		for missingPassengers > 0 {
+			passengerDistribution[rand.Intn(len(passengerDistribution))]--
+			missingPassengers--
+		}
+	}
+
+	return passengerDistribution
 }
 
 /*
