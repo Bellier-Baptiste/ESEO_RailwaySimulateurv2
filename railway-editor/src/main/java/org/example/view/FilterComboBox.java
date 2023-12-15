@@ -133,13 +133,14 @@ public class FilterComboBox extends JComboBox {
     ClassLoader classLoader = ClassLoader.getSystemClassLoader();
     InputStream file = classLoader.getResourceAsStream("cities.txt");
     try {
-      assert file != null;
-      try (BufferedReader br = new BufferedReader(new InputStreamReader(
-          file))) {
-        for (String line; (line = br.readLine()) != null;) {
-          test.add(line.split(";")[0]);
+      if (file != null) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(
+            file))) {
+          for (String line; (line = br.readLine()) != null;) {
+            test.add(line.split(";")[0]);
+          }
+          // line is not visible here.
         }
-        // line is not visible here.
       }
     } catch (IOException e) {
       e.printStackTrace();

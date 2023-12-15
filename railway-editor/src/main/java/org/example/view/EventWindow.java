@@ -83,7 +83,7 @@ public class EventWindow extends JFrame {
     try {
       BufferedImage source = ImageIO.read(
           Objects.requireNonNull(getClass().getResource(
-          "/images/railwayEditorIcon3.png")));
+          "/images/flower_hong_kong.png")));
       ImageIcon img = new ImageIcon(source);
       this.setIconImage(img.getImage());
     } catch (IOException e) {
