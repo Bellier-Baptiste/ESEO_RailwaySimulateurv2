@@ -24,9 +24,13 @@
 
 package org.example.controller;
 
+import org.example.data.Data;
 import org.example.model.Line;
+import org.example.view.EventRecap;
 import org.example.view.MainWindow;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -40,11 +44,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @date N/A
  * @since 2.0
  */
-public class ActionsTest {
+class ActionsTest {
+
+  @BeforeEach
+  void setUp() {
+    MainWindow.getInstance().getMainPanel().getLineViews().clear();
+    MainWindow.getInstance().getMainPanel().getAreaViews().clear();
+    EventRecap.getInstance().cleanEvents();
+    Data.getInstance().getEventList().clear();
+  }
 
 
   @Test
-  public void testAddLine() {
+  void testAddLine() {
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
     int nbLineView = MainWindow.getInstance().getMainPanel().getLineViews()
@@ -63,7 +75,7 @@ public class ActionsTest {
   }
 
   @Test
-  public void testAddStation() {
+  void testAddStation() {
     MainWindow.getInstance().getMainPanel().getLineViews().clear();
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
@@ -84,7 +96,7 @@ public class ActionsTest {
   }
 
   @Test
-  public void testAddArea() {
+  void testAddArea() {
     ActionArea actionArea = new ActionArea();
     int nbAreaView = MainWindow.getInstance().getMainPanel().getAreaViews()
         .size();
@@ -97,7 +109,7 @@ public class ActionsTest {
   }
 
   @Test
-  public void testLineSwitch() {
+  void testLineSwitch() {
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
     actionLine.addLine();

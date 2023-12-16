@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<map>
+    <stations>
+        <station>
+            <id>0</id>
+            <name>Jane</name>
+            <position>
+                <latitude>47.50653361720931</latitude>
+                <longitude>-0.589141845703125</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>1</id>
+            <name>Kater</name>
+            <position>
+                <latitude>47.500735381381254</latitude>
+                <longitude>-0.5805587768554688</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>2</id>
+            <name>Undar</name>
+            <position>
+                <latitude>47.49493650511712</latitude>
+                <longitude>-0.5719757080078125</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+    </stations>
+    <lines>
+        <line>
+            <id>0</id>
+            <name>A</name>
+            <numberOfTrain>30</numberOfTrain>
+            <stations>
+                <station id="0" order="0"/>
+                <station id="1" order="1"/>
+                <station id="2" order="2"/>
+            </stations>
+        </line>
+    </lines>
+    <areas/>
+    <events/>
+</map>
