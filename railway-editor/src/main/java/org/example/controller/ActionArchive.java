@@ -67,12 +67,10 @@ public class ActionArchive {
     + File.separator + "configs" + File.separator + "runThisSimulation.xml";
 
   /**
-   * Logger, to display or save informations.
+   * Logger, to display or save information.
    */
   private final Logger logger =
     Logger.getLogger(ActionArchive.class.getName());
-
-
   /**
    * Prompts the export dialog to choose the location to export the configs.
    */

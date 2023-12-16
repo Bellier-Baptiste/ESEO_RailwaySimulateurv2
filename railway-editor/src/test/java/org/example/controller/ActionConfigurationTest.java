@@ -77,7 +77,8 @@ class ActionConfigurationTest {
 
     // Use introspection to get the JSON_FILE_PATH field
     Field jsonFilePathField = getJsonFilePathField(actionConfiguration);
-    jsonFilePathField.set(actionConfiguration, "src/test/java/org/example/controller/"
+    jsonFilePathField.set(actionConfiguration, "src/test/java/org/example" +
+      "/controller/"
         + "configTest.json");
 
     // Running tested method
@@ -366,10 +367,10 @@ class ActionConfigurationTest {
     actionConfiguration.copyFile(source.toString(), target.toString());
 
     // Assertions
-    Assertions.assertTrue(Files.exists(target), "Target file should " +
-      "still exist after copy");
-    Assertions.assertTrue(Files.exists(source), "Source file should " +
-      "still exist after copy");
+    Assertions.assertTrue(Files.exists(target), "Target file should "
+      + "still exist after copy");
+    Assertions.assertTrue(Files.exists(source), "Source file should "
+      + "still exist after copy");
 
     // Verify that deleteFile and copyFile were called
     Mockito.verify(actionConfiguration).deleteFile(target.toString());

@@ -98,7 +98,6 @@ public class ActionConfiguration {
   /**
    * Constructor of the class.
    */
-
   public ActionConfiguration() {
     this.editConfigDialog = null;
   }
