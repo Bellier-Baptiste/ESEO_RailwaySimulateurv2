@@ -41,11 +41,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @since 2.0
  */
 @TestMethodOrder(org.junit.jupiter.api.MethodOrderer.OrderAnnotation.class)
-public class AreaTest {
+class AreaTest {
 
 	@Test
 	@Order(1)
-	public void testConstructor() {
+	void testConstructor() {
 		Area area = new Area(10,10,20,20);
 		assertEquals(0, area.getId());
 		assertEquals(10, area.getPosX());
@@ -55,7 +55,7 @@ public class AreaTest {
 	}
 
 	@Test
-	public void testSetNewPart() {
+	void testSetNewPart() {
 		Area area = new Area(10,10,20,20);
 		area.setNewPopulationPart(Data.AREA_TOURIST, 20);
 		area.setNewPopulationPart(Data.AREA_STUDENT, 20);
@@ -80,7 +80,7 @@ public class AreaTest {
 	}
 
 	@Test
-	public void testExtend() {
+	void testExtend() {
 		Area area = new Area(10,10,20,20);
 		area.extendRightSide(10);
 		assertEquals(30, area.getWidth());

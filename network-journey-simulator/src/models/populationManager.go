@@ -10,7 +10,7 @@ Date : 24/01/2019
 Author :
   - Team v1
   - Team v2
-  - Paul TRÉMOUREUX (quality check)
+  - Paul TRÉMOUREUX
   - Alexis BONAMY
   - Paul TRÉMOUREUX
 
@@ -39,11 +39,13 @@ SOFTWARE.
 package models
 
 import (
+	"fmt"
 	"log"
 	"math"
 	"math/rand"
 	"network-journey-simulator/src/configs"
 	"network-journey-simulator/src/tools"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -623,8 +625,8 @@ Param :
   - aTime time.Time : the time of the transfer
 */
 func (p *Population) TransferFromStationToPopulation(passenger *Passenger,
-	stationPt *MetroStation, aTime time.Time) {
-	info := prepareCSVline(*passenger, stationPt, aTime, "USE")
+	stationPt *MetroStation, aTime time.Time, typeTicket string) {
+	info := prepareCSVline(*passenger, stationPt, aTime, typeTicket)
 	p.output.Write(info)
 	p.outside[passenger.Id()] = passenger
 	delete(p.inStation[stationPt.Id()], passenger.Id())
@@ -766,11 +768,14 @@ func (p *Population) UpdateStationToOutside(aTime time.Time,
 			(passenger.timeArrivalLastStation.Add(p.maxTimeInStationPassenger).
 				Before(aTime)) {
 			trip.SetArrivalTime(aTime)
-			p.TransferFromStationToPopulation(passenger, station, aTime)
+			var typeTicket = "USE"
+			p.TransferFromStationToPopulation(passenger, station, aTime, typeTicket)
 
 			passenger.ClearCurrentTrip()
 			passenger.calculateNextTrip()
 			p.OutsideSortedInsertPassenger(passenger)
+			//use after the transfer from station to pop
+			//println("station->outside: passenger #"+passenger.id)
 		}
 	}
 }
@@ -788,7 +793,8 @@ func (p *Population) StationToOutside(aTime time.Time, station *MetroStation,
 	passenger *Passenger) {
 	var trip = passenger.CurrentTrip()
 	trip.SetArrivalTime(aTime)
-	p.TransferFromStationToPopulation(passenger, station, aTime)
+	var typeTicket = "USE"
+	p.TransferFromStationToPopulation(passenger, station, aTime, typeTicket)
 
 	passenger.ClearCurrentTrip()
 	passenger.calculateNextTrip()
@@ -927,4 +933,97 @@ func (p *Population) createColumnsTitles() {
 		"machine_id",
 		"is_2nd_leg_intermodel"}
 	p.output = tools.NewFile("tickets", columnsNames)
+}
+
+/*
+StationExitPop transfer all passengers in a station to the general population.
+
+Param :
+  - p *Population : the population
+  - aTime time.Time : the time of the transfer
+  - station *MetroStation : the station
+*/
+func (p *Population) StationExitPop(aTime time.Time, station *MetroStation) {
+	/*
+		fmt.Println(station.name)
+	*/
+	for i := range p.inStation[station.Id()] {
+		passenger := p.inStation[station.Id()][i]
+		var trip = passenger.CurrentTrip()
+		trip.SetArrivalTime(aTime)
+		var typeTicket = "USE"
+		p.TransferFromStationToPopulation(passenger, station, aTime, typeTicket)
+
+		passenger.ClearCurrentTrip()
+		passenger.calculateNextTrip()
+		p.OutsideSortedInsertPassenger(passenger)
+		/*
+			use after the transfer from station to pop
+			fmt.Println("station->outside: passenger #" + passenger.id)
+		*/
+	}
+}
+
+/*
+AllStationsExitPop transfer all passengers in all stations to the general
+population.
+
+Param :
+  - p *Population : the population
+  - aTime time.Time : the time of the transfer
+  - mapO *Map : the map of the network
+*/
+func (p *Population) AllStationsExitPop(aTime time.Time, mapO *Map) {
+
+	fmt.Println("\rTest end of simulation")
+	fmt.Println(p.InStation())
+	fmt.Println(p.InTrains())
+
+	/*
+		Call StationExitPop for each station
+	*/
+	for _, station := range mapO.Stations() {
+		if !p.IsStationEmpty(&station) {
+			p.StationExitPop(aTime, &station)
+		}
+	}
+	/*
+		fmt.Println(p.InStation())
+	*/
+}
+
+/*
+IsStationEmpty return true if the station is empty, false otherwise.
+
+Param :
+  - p *Population : the population
+  - station *MetroStation : the station
+
+Return :
+  - bool : true if the station is empty, false otherwise
+*/
+func (p *Population) IsStationEmpty(station *MetroStation) bool {
+	emptyStation := map[string]*Passenger{}
+	if reflect.DeepEqual(p.inStation[station.Id()], emptyStation) {
+		return true
+	}
+	return false
+}
+
+/*
+IsTrainEmpty return true if the train is empty, false otherwise.
+
+Param :
+  - p *Population : the population
+  - train *MetroTrain : the station
+
+Return :
+  - bool : true if the station is empty, false otherwise
+*/
+func (p *Population) IsTrainEmpty(train *MetroTrain) bool {
+	emptyTrain := map[string]*Passenger{}
+	if reflect.DeepEqual(p.inTrain[train.Id()], emptyTrain) {
+		return true
+	}
+	return false
 }
