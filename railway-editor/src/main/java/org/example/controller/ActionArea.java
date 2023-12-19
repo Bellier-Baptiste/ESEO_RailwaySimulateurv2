@@ -40,17 +40,29 @@ import org.example.view.MainWindow;
  * @since 3.0
  */
 public class ActionArea {
-  /** Action name. */
+  /**
+   * Action name.
+   */
   public static final String ACTION_NAME = "ADD_AREA";
-  /** Default area x position. */
+  /**
+   * Default area x position.
+   */
   private static final int AREA_POS_X_DEFAULT = 150;
-  /** Default area y position. */
+  /**
+   * Default area y position.
+   */
   private static final int AREA_POS_Y_DEFAULT = 150;
-  /** Default area width. */
+  /**
+   * Default area width.
+   */
   private static final int AREA_WIDTH_DEFAULT = 75;
-  /** Default area height. */
+  /**
+   * Default area height.
+   */
   private static final int AREA_HEIGHT_DEFAULT = 75;
-  /** Singleton instance. */
+  /**
+   * Singleton instance.
+   */
   private static ActionArea instance;
 
   /**
@@ -81,7 +93,7 @@ public class ActionArea {
 
     Coordinate latLonBot = (Coordinate) MainWindow.getInstance().getMainPanel()
         .getPosition(area.getPosX() + area.getWidth(),
-        area.getPosY() + area.getHeight());
+            area.getPosY() + area.getHeight());
     area.setLatitudeBot(latLonBot.getLat());
     area.setLongitudeBot(latLonBot.getLon());
 
