@@ -11,6 +11,7 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX
+  - Aurélie CHAMOULEAU
 
 License : MIT License
 
@@ -170,6 +171,56 @@ func checkFinishedTrips(sim *simulator.Simulator) (int, int) {
 }
 
 /*
+checkNetworkNotEmpty is used to check how many stations and trains are not empty
+in the simulation.
+
+Param :
+  - sim *simulator.Simulator : the current simulation
+
+Return :
+  - int : the number of stations not empty (stationsNotEmpty)
+  - int : the number of trains not empty (trainsNotEmpty)
+*/
+func checkNetworkNotEmpty(sim *simulator.Simulator) (int, int) {
+	var stationsNotEmpty, trainsNotEmpty = 0, 0
+	for _, station := range sim.MapObject.Stations() {
+		if !sim.Population().IsStationEmpty(&station) {
+			stationsNotEmpty++
+		}
+	}
+	for _, train := range sim.GetTrains() {
+		if !sim.Population().IsTrainEmpty(train) {
+			trainsNotEmpty++
+		}
+	}
+	return stationsNotEmpty, trainsNotEmpty
+}
+
+/*
+checkPassengersInNetwork is used to check how many passengers are in stations
+and trains in the simulation.
+
+Param :
+  - sim *simulator.Simulator : the current simulation
+
+Return :
+  - int : the number of passengers in stations (passInStations)
+  - int : the number of passengers in trains (passInTrains)
+*/
+func checkPassengersInNetwork(sim *simulator.Simulator) (int, int) {
+	var passInStations, passInTrains = 0, 0
+	for _, passenger := range sim.Population().Passengers() {
+		position := sim.Population().FindPassenger(*passenger)
+		if strings.HasPrefix(position, "inStation #") {
+			passInStations++
+		} else if strings.HasPrefix(position, "inTrain #") {
+			passInTrains++
+		}
+	}
+	return passInStations, passInTrains
+}
+
+/*
 main is the main function of the metro simulator.
 
 It is used to launch the simulation.
@@ -291,10 +342,16 @@ func main() {
 	elapsedTime = time.Since(startTime)
 
 	tripsNotFinished, tripsFinished := checkFinishedTrips(newSimulator)
+	stationsNotEmpty, trainsNotEmpty := checkNetworkNotEmpty(newSimulator)
+	passInStations, passInTrains := checkPassengersInNetwork(newSimulator)
 
 	fmt.Println("")
 	printHeader("Simulation completed")
 	fmt.Println("run time : ", runTime.String())
 	fmt.Println("trips completed : ", tripsFinished)
 	fmt.Println("trips not completed :", tripsNotFinished)
+	fmt.Println("stations not empty : ", stationsNotEmpty)
+	fmt.Println("passengers in stations : ", passInStations)
+	fmt.Println("trains not empty :", trainsNotEmpty)
+	fmt.Println("passengers in trains :", passInTrains)
 }

@@ -285,9 +285,12 @@
       <stationIdEnd>19</stationIdEnd>
     </multipleStationsClosed>
     <attendancePeak>
-      <time>2018-10-26T10:01:00Z</time>
+      <start>2018-10-26T09:01:00Z</start>
+      <end>2018-10-26T10:02:00Z</end>
+      <peakTime>2018-10-26T09:30:00Z</peakTime>
       <stationId>2</stationId>
-      <size>10</size>
+      <peakSize>600</peakSize>
+      <peakWidth>6</peakWidth>
     </attendancePeak>
     <lineDelay>
       <start>2018-10-12T00:19:00Z</start>
@@ -298,7 +301,7 @@
     </lineDelay>
     <stationClosed>
       <idStation>2</idStation>
-      <start>2018-10-26T10:01:00Z</start>
+      <start>2018-10-26T09:01:00Z</start>
       <end>2018-10-26T10:02:00Z</end>
     </stationClosed>
   </events>

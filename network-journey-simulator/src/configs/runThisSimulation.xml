@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<map>
+    <location>
+        <latitude>47.040182144806664</latitude>
+        <longitude>0.0</longitude>
+        <zoom>2</zoom>
+    </location>
+    <stations>
+        <station>
+            <id>0</id>
+            <name>Theli</name>
+            <position>
+                <latitude>67.20403234340081</latitude>
+                <longitude>-138.515625</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>1</id>
+            <name>Mahyrst</name>
+            <position>
+                <latitude>63.54855223203644</latitude>
+                <longitude>-129.7265625</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>2</id>
+            <name>Thrufinwe</name>
+            <position>
+                <latitude>59.355596110016315</latitude>
+                <longitude>-120.9375</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>3</id>
+            <name>Othrog</name>
+            <position>
+                <latitude>54.57206165565852</latitude>
+                <longitude>-112.1484375</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>4</id>
+            <name>Earien</name>
+            <position>
+                <latitude>49.15296965617039</latitude>
+                <longitude>-103.359375</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>5</id>
+            <name>Prixeda</name>
+            <position>
+                <latitude>43.068887774169625</latitude>
+                <longitude>-94.5703125</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+        <station>
+            <id>6</id>
+            <name>Kurdu</name>
+            <position>
+                <latitude>36.31512514748051</latitude>
+                <longitude>-85.78125</longitude>
+            </position>
+            <lines>
+                <line id="0" platform=""/>
+            </lines>
+            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
+            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
+        </station>
+    </stations>
+    <lines>
+        <line>
+            <id>0</id>
+            <name>A</name>
+            <numberOfTrain>30</numberOfTrain>
+            <stations>
+                <station id="0" order="0"/>
+                <station id="1" order="1"/>
+                <station id="2" order="2"/>
+                <station id="3" order="3"/>
+                <station id="4" order="4"/>
+                <station id="5" order="5"/>
+                <station id="6" order="6"/>
+            </stations>
+        </line>
+    </lines>
+    <events>
+        <attendancePeak>
+            <start>2018-10-12T13:05:00.000Z</start>
+            <end>2018-10-12T16:05:00.000Z</end>
+            <peakTime>2018-10-12T14:05:00.000Z</peakTime>
+            <stationId>3</stationId>
+            <peakSize>600</peakSize>
+            <peakWidth>18</peakWidth>
+        </attendancePeak>
+    </events>
+</map>
