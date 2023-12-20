@@ -46,6 +46,7 @@ import (
 	"network-journey-simulator/src/configs"
 	"network-journey-simulator/src/models"
 	"network-journey-simulator/src/simulator"
+	"network-journey-simulator/src/tools"
 	"os"
 	"path/filepath"
 	"strings"
@@ -354,4 +355,6 @@ func main() {
 	fmt.Println("passengers in stations : ", passInStations)
 	fmt.Println("trains not empty :", trainsNotEmpty)
 	fmt.Println("passengers in trains :", passInTrains)
+	tools.ArchiveOutputAndConfigFiles(tools.GetBasePath())
+
 }
