@@ -24,6 +24,7 @@
 
 package org.example.data;
 
+import org.example.model.Area;
 import org.example.model.Event;
 
 import java.awt.Color;
@@ -230,6 +231,10 @@ public final class Data {
   //map Attribute
   /** String for map type. */
   private String currentCity;
+  /**
+   * List of all area created.
+   */
+  private List<Area> areaList = new ArrayList<>();
 
   /**
    * Private Data Constructor.
@@ -339,7 +344,7 @@ public final class Data {
    * @return int newAreaId
    */
   public int getNewAreaId() {
-    this.areaId += 1;
+    this.areaId = this.areaList.size();
     return areaId;
   }
 
@@ -435,5 +440,14 @@ public final class Data {
    */
   public void setEventList(final List<Event> eventListToSet) {
     this.eventList = eventListToSet;
+  }
+
+  /**
+   * get the list of all area created.
+   *
+   * @return List of areas areaList
+   */
+  public List<Area> getAreaList() {
+    return this.areaList;
   }
 }

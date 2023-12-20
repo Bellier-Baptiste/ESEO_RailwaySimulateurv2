@@ -24,6 +24,7 @@
 
 package org.example.controller;
 
+import org.example.data.Data;
 import org.example.model.Area;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.example.view.AreaView;
@@ -85,6 +86,7 @@ public class ActionArea {
     area.setLatitudeBot(latLonBot.getLat());
     area.setLongitudeBot(latLonBot.getLon());
 
+    Data.getInstance().getAreaList().add(area);
     AreaView areaView = new AreaView(area);
     MainWindow.getInstance().getMainPanel().addAreaView(areaView);
     MainWindow.getInstance().getMainPanel().repaint();
