@@ -25,12 +25,15 @@
 package org.example.model;
 
 import org.example.data.Data;
+import org.example.view.EventRecap;
+import org.example.view.MainWindow;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * Test-case of {@link Area} model.
  *
@@ -43,54 +46,63 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @TestMethodOrder(org.junit.jupiter.api.MethodOrderer.OrderAnnotation.class)
 class AreaTest {
 
-	@Test
-	@Order(1)
-	void testConstructor() {
-		Area area = new Area(10,10,20,20);
-		assertEquals(0, area.getId());
-		assertEquals(10, area.getPosX());
-		assertEquals(10, area.getPosY());
-		assertEquals(20, area.getWidth());
-		assertEquals(20, area.getHeight());
-	}
+  @BeforeEach
+  void setUp() {
+    MainWindow.getInstance().getMainPanel().getLineViews().clear();
+    MainWindow.getInstance().getMainPanel().getAreaViews().clear();
+    EventRecap.getInstance().cleanEvents();
+    Data.getInstance().getEventList().clear();
+    Data.getInstance().getAreaList().clear();
+  }
 
-	@Test
-	void testSetNewPart() {
-		Area area = new Area(10,10,20,20);
-		area.setNewPopulationPart(Data.AREA_TOURIST, 20);
-		area.setNewPopulationPart(Data.AREA_STUDENT, 20);
-		area.setNewPopulationPart(Data.AREA_BUSINESSMAN, 20);
-		area.setNewPopulationPart(Data.AREA_CHILD, 20);
-		area.setNewPopulationPart(Data.AREA_WORKER, 20);
-		area.setNewPopulationPart(Data.AREA_UNEMPLOYED, 0);
+  @Test
+  @Order(1)
+  void testConstructor() {
+    Area area = new Area(10, 10, 20, 20);
+    assertEquals(0, area.getId());
+    assertEquals(10, area.getPosX());
+    assertEquals(10, area.getPosY());
+    assertEquals(20, area.getWidth());
+    assertEquals(20, area.getHeight());
+  }
 
-		int touristAmount = area.getDistributionPopulation().get(Data.AREA_TOURIST);
-		int studentAmount = area.getDistributionPopulation().get(Data.AREA_STUDENT);
-		int businessmannAmount = area.getDistributionPopulation().get(Data.AREA_BUSINESSMAN);
-		int childAmount = area.getDistributionPopulation().get(Data.AREA_CHILD);
-		int workerAmount = area.getDistributionPopulation().get(Data.AREA_WORKER);
-		int unemployedAmount = area.getDistributionPopulation().get(Data.AREA_UNEMPLOYED);
+  @Test
+  void testSetNewPart() {
+    Area area = new Area(10, 10, 20, 20);
+    area.setNewPopulationPart(Data.AREA_TOURIST, 20);
+    area.setNewPopulationPart(Data.AREA_STUDENT, 20);
+    area.setNewPopulationPart(Data.AREA_BUSINESSMAN, 20);
+    area.setNewPopulationPart(Data.AREA_CHILD, 20);
+    area.setNewPopulationPart(Data.AREA_WORKER, 20);
+    area.setNewPopulationPart(Data.AREA_UNEMPLOYED, 0);
 
-		assertEquals(20, touristAmount);
-		assertEquals(20, studentAmount);
-		assertEquals(20, businessmannAmount);
-		assertEquals(20, childAmount);
-		assertEquals(20, workerAmount);
-		assertEquals(0, unemployedAmount);
-	}
+    int touristAmount = area.getDistributionPopulation().get(Data.AREA_TOURIST);
+    int studentAmount = area.getDistributionPopulation().get(Data.AREA_STUDENT);
+    int businessmannAmount = area.getDistributionPopulation().get(Data.AREA_BUSINESSMAN);
+    int childAmount = area.getDistributionPopulation().get(Data.AREA_CHILD);
+    int workerAmount = area.getDistributionPopulation().get(Data.AREA_WORKER);
+    int unemployedAmount = area.getDistributionPopulation().get(Data.AREA_UNEMPLOYED);
 
-	@Test
-	void testExtend() {
-		Area area = new Area(10,10,20,20);
-		area.extendRightSide(10);
-		assertEquals(30, area.getWidth());
-		area.extendLeftSide(-10);
-		assertEquals(0,area.getPosX());
-		assertEquals(40, area.getWidth());
-		area.extendBotSide(10);
-		assertEquals(30, area.getHeight());
-		area.extendTopSide(-10);
-		assertEquals(0, area.getPosY());
-		assertEquals(40, area.getHeight());
-	}
+    assertEquals(20, touristAmount);
+    assertEquals(20, studentAmount);
+    assertEquals(20, businessmannAmount);
+    assertEquals(20, childAmount);
+    assertEquals(20, workerAmount);
+    assertEquals(0, unemployedAmount);
+  }
+
+  @Test
+  void testExtend() {
+    Area area = new Area(10, 10, 20, 20);
+    area.extendRightSide(10);
+    assertEquals(30, area.getWidth());
+    area.extendLeftSide(-10);
+    assertEquals(0, area.getPosX());
+    assertEquals(40, area.getWidth());
+    area.extendBotSide(10);
+    assertEquals(30, area.getHeight());
+    area.extendTopSide(-10);
+    assertEquals(0, area.getPosY());
+    assertEquals(40, area.getHeight());
+  }
 }
