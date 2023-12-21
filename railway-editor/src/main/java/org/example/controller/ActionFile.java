@@ -308,12 +308,13 @@ public class ActionFile {
           break;
 
         case "multipleStationsClosed":
-          EventMultipleStationsClosed eventMultipleStationsClosed = (EventMultipleStationsClosed) event;
+          EventMultipleStationsClosed eventMultipleStationsClosed =
+              (EventMultipleStationsClosed) event;
 
           Element stationStartClosed = document.createElement(STATION_ID_START);
           stationStartClosed.appendChild(
-                  document.createTextNode(Integer.toString(eventMultipleStationsClosed
-                          .getIdStationStart())));
+                  document.createTextNode(Integer.toString(
+                      eventMultipleStationsClosed.getIdStationStart())));
           eventName.appendChild(stationStartClosed);
 
           Element stationEndClosed = document.createElement(STATION_ID_END);
@@ -800,7 +801,8 @@ public class ActionFile {
             );
             break;
           case "multipleStationsClosed":
-            ActionMetroEvent.getInstance().addMultipleStationsClosed(startTimeSplit[0]
+            ActionMetroEvent.getInstance().addMultipleStationsClosed(
+                startTimeSplit[0]
                 + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
                 + endTimeSplit[1] + "," + eventElement.getElementsByTagName(
                     STATION_ID_START).item(0).getTextContent() + ","

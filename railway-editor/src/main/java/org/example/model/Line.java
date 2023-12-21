@@ -40,6 +40,7 @@ import java.util.List;
  * @since 2.0
  */
 public class Line {
+  /** Line name. */
   private final String name;
   //attributes
   /** Line id. */
@@ -138,21 +139,6 @@ public class Line {
   public void addStation(final Station station) {
     this.stations.add(station);
   }
-
-  /**
-   * Check if a station is in the line.
-   * @param station
-   * @return true if the station is in the line, false otherwise
-   */
-  public boolean isStationInLine(Station station) {
-    for (Station s : stations) {
-      if (s.getId() == station.getId()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
 
 }
 

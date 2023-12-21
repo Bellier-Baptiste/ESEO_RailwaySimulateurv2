@@ -70,7 +70,7 @@ func TestEventAttendancePeakModel(t *testing.T) {
 	// check if the eventAttendancePeak is created with the right values
 	assert.Equal(t, start, eventAttendancePeak.GetStart(), "Bad Start time")
 	assert.Equal(t, end, eventAttendancePeak.GetEnd(), "Bad End time")
-	assert.Equal(t, peak, eventAttendancePeak.GetEnd(), "Bad Peak time")
+	assert.Equal(t, peak, eventAttendancePeak.GetPeak(), "Bad Peak time")
 	assert.Equal(t, idStation, eventAttendancePeak.GetIdStation(), "Bad Start station id")
 	assert.Equal(t, size, eventAttendancePeak.GetPeakSize(), "Bad population size")
 	assert.Equal(t, peakWidth, eventAttendancePeak.GetPeakWidth(), "Bad peak width")

@@ -79,7 +79,8 @@ Attributes :
   - lines []*MetroLine : the lines of the map
   - stations []*MetroStation : the stations of the map
   - graph [][]*PathStation : the graph of the map
-  - EventMultipleStationsClosed []*EventMultipleStationsClosed : the events of multiple stations closed
+  - EventMultipleStationsClosed []*EventMultipleStationsClosed : the events
+    of multiple stations closed
   - eventsAttendancePeak []*EventAttendancePeak : the events of attendance
     peak
 
@@ -571,14 +572,16 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 
 	//add events
 	var multipleStationsClosedEventsC configs.ConfigMultipleStationsClosedEvent
-	for _, eventMultipleStationsClosed := range mapPointer.eventMultipleStationsClosed {
+	for _, eventMultipleStationsClosed := range mapPointer.
+		eventMultipleStationsClosed {
 		multipleStationsClosedEventsC = configs.ConfigMultipleStationsClosedEvent{
 			StartString:    eventMultipleStationsClosed.start.String(),
 			EndString:      eventMultipleStationsClosed.end.String(),
 			StationIdStart: eventMultipleStationsClosed.idStationStart,
 			StationIdEnd:   eventMultipleStationsClosed.idStationEnd,
 		}
-		mapC.EventsMultipleStationsClosed = append(mapC.EventsMultipleStationsClosed, multipleStationsClosedEventsC)
+		mapC.EventsMultipleStationsClosed = append(mapC.EventsMultipleStationsClosed,
+			multipleStationsClosedEventsC)
 	}
 
 	var attendancePeakEventsC configs.ConfigAttendancePeakEvent

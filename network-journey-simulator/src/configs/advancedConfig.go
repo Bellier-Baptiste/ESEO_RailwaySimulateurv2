@@ -63,7 +63,8 @@ Attributes :
   - EventsStationClosed []ConfigStationClosedEvent : the events of station
     closed
   - EventsLineDelay []ConfigLineDelayEvent : the events of line delay
-  - EventsMultipleStationsClosed []ConfigMultipleStationsClosedEvent : the events of multiple stations closed
+  - EventsMultipleStationsClosed []ConfigMultipleStationsClosedEvent :
+    the events of multiple stations closed
   - EventsAttendancePeak []ConfigAttendancePeakEvent : the events of attendance
     peak
   - Areas []ConfigArea : the areas linking stations

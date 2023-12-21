@@ -366,8 +366,9 @@ public final class ListEventPanel extends JPanel {
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addMultipleStationsClosed(ListEventPanel
-                      .getInstance().eventMultipleStationsClosedToString()));
+                  ActionMetroEvent.getInstance().addMultipleStationsClosed(
+                      ListEventPanel.getInstance()
+                              .eventMultipleStationsClosedToString()));
               view.add(confirmEventBtn, c);
               break;
             case "AttendancePeak":
@@ -1145,7 +1146,8 @@ public final class ListEventPanel extends JPanel {
   }
 
   /**
-   * get the info of the edition fields recap as a String for eventMultipleStationsClosed.
+   * get the info of the edition fields recap as a
+   * String for eventMultipleStationsClosed.
    *
    * @return String
    */

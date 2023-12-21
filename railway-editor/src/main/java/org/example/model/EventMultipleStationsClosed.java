@@ -32,7 +32,7 @@ package org.example.model;
  * @author Aurélie Chamouleau
  * @author Marie Bordet
  * @file EventMultipleStationsClosed.java
- * @date N/A
+ * @date 2023_12_20
  * @since 2.0
  */
 public class EventMultipleStationsClosed extends EventBetween2Stations {

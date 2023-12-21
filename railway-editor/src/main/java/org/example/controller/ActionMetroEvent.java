@@ -35,7 +35,6 @@ import org.example.model.EventName;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
 import org.example.model.Station;
-import org.example.model.EventName;
 import org.example.view.EventRecap;
 import org.example.view.EventWindow;
 import org.example.view.LineView;
@@ -269,6 +268,13 @@ public class ActionMetroEvent {
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
+  /**
+   * Add an event between 2 stations.
+   *
+   * @param event          event to add
+   * @param eventColor     event color
+   * @param eventStringTab event string tab
+   */
   private void addEventBetween2Stations(final EventBetween2Stations event,
                                         final Color eventColor,
                                         final String[] eventStringTab) {
@@ -349,6 +355,14 @@ public class ActionMetroEvent {
     }
   }
 
+  /**
+   * Color the station views between the starting and ending station.
+   *
+   * @param line line concerned
+   * @param stationStart starting station
+   * @param stationEnd ending station
+   * @param eventColor color of the event
+   */
   private void colorStationViews(final LineView line,
                                  final Station stationStart,
                                  final Station stationEnd,

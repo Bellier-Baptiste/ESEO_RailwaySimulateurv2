@@ -3,7 +3,8 @@ Package models
 
 File : eventMultipleStationsClosed.go
 
-Brief : This file contains the EventMultipleStationsClosed struct and its methods.
+Brief : This file contains the EventMultipleStationsClosed struct
+and its methods.
 
 Date : 10/02/2020
 
@@ -39,7 +40,8 @@ package models
 import "time"
 
 /*
-EventMultipleStationsClosed is the structure that manage the event of multiple stations closed.
+EventMultipleStationsClosed is the structure that manage the event
+of multiple stations closed.
 
 Attributes :
   - start time.Time : the start time of the event
@@ -90,7 +92,8 @@ func NewEventMultipleStationsClosed(idStationStart, idStationEnd int,
 }
 
 /*
-Finished returns the finished attribute of the EventMultipleStationsClosed struct.
+Finished returns the finished attribute of the
+EventMultipleStationsClosed struct.
 
 Param :
   - elc *EventMultipleStationsClosed : the EventMultipleStationsClosed struct
@@ -103,7 +106,8 @@ func (elc *EventMultipleStationsClosed) Finished() bool {
 }
 
 /*
-SetFinished sets the finished attribute of the EventMultipleStationsClosed struct.
+SetFinished sets the finished attribute of the
+EventMultipleStationsClosed struct.
 
 Param :
   - elc *EventMultipleStationsClosed : the EventMultipleStationsClosed struct
@@ -142,8 +146,8 @@ func (elc *EventMultipleStationsClosed) End() time.Time {
 }
 
 /*
-IdStationStart returns the idStationStart attribute of the EventMultipleStationsClosed
-struct.
+IdStationStart returns the idStationStart attribute of the
+EventMultipleStationsClosed struct.
 
 Param :
   - elc *EventMultipleStationsClosed : the EventMultipleStationsClosed struct
@@ -156,8 +160,8 @@ func (elc *EventMultipleStationsClosed) IdStationStart() int {
 }
 
 /*
-SetIdStationStart sets the idStationStart attribute of the EventMultipleStationsClosed
-struct.
+SetIdStationStart sets the idStationStart attribute of the
+EventMultipleStationsClosed struct.
 
 Param :
   - elc *EventMultipleStationsClosed : the EventMultipleStationsClosed struct
@@ -170,7 +174,8 @@ func (elc *EventMultipleStationsClosed) SetIdStationStart(id int) {
 }
 
 /*
-IdStationEnd returns the idStationEnd attribute of the EventMultipleStationsClosed struct.
+IdStationEnd returns the idStationEnd attribute of the
+EventMultipleStationsClosed struct.
 
 Param :
   - elc *EventMultipleStationsClosed : the EventMultipleStationsClosed struct
@@ -183,7 +188,8 @@ func (elc *EventMultipleStationsClosed) IdStationEnd() int {
 }
 
 /*
-SetIdStationEnd sets the idStationEnd attribute of the EventMultipleStationsClosed struct.
+SetIdStationEnd sets the idStationEnd attribute of the
+EventMultipleStationsClosed struct.
 
 Param :
   - elc *EventMultipleStationsClosed : the EventMultipleStationsClosed struct

@@ -67,7 +67,8 @@ Attributes :
   - eventsStationClosed []models.EventStationClosed : the events of the
     simulator
   - eventsLineDelay []models.EventLineDelay : the events of the simulator
-  - eventMultipleStationsClosed []models.EventMultipleStationsClosed : the events of the simulator
+  - eventMultipleStationsClosed []models.EventMultipleStationsClosed :
+    the events of the simulator
   - eventsAttendancePeak []models.EventAttendancePeak : the events of the
     simulator
   - areasDistribution []models.PopulationDistribution : the population
@@ -79,14 +80,16 @@ Methods :
     simulator
   - GetTrains() []*models.MetroTrain : get the trains of the simulator
   - Population() *models.Population : get the population of the simulator
-  - GetAllEventsMultipleStationsClosed() []models.EventMultipleStationsClosed : get the multiple stations closed
+  - GetAllEventsMultipleStationsClosed() []models.EventMultipleStationsClosed :
+    get the multiple stations closed
     events of the simulator
   - GetAllEventsAttendancePeak() []models.EventAttendancePeak : get the
     attendance peak events of the simulator
   - CreateEventsStationClose() : create "station close" event of the
     simulator
   - CreateEventsLineDelay() : create "line delay" event of the simulator
-  - CreateEventsMultipleStationsClose() : create "multiple stations close" event of the simulator
+  - CreateEventsMultipleStationsClose() : create "multiple stations close"
+    event of the simulator
   - CreateEventsAttendancePeak() : create "attendance peak" event of the
     simulator
   - AddTrainLinePeer(line *models.MetroLine, shift, count, aux1, aux2 int)
@@ -199,7 +202,8 @@ func (s *Simulator) Population() *models.Population {
 }
 
 /*
-GetAllEventsMultipleStationsClosed is used to get the multiple stations closed events of the simulator.
+GetAllEventsMultipleStationsClosed is used to get the multiple
+stations closed events of the simulator.
 
 Param :
   - s *Simulator : the simulator
@@ -207,7 +211,8 @@ Param :
 Return :
   - []models.EventMultipleStationsClosed : the events of the simulator
 */
-func (s *Simulator) GetAllEventsMultipleStationsClosed() []models.EventMultipleStationsClosed {
+func (s *Simulator) GetAllEventsMultipleStationsClosed() []models.
+	EventMultipleStationsClosed {
 	return s.eventsMultipleStationsClosed
 }
 
@@ -448,7 +453,8 @@ func (s *Simulator) CreateEventsLineDelay() {
 }
 
 /*
-CreateEventsMultipleStationsClose is used to create "multiple stations close" event of the simulator.
+CreateEventsMultipleStationsClose is used to create "multiple stations close"
+event of the simulator.
 
 Param :
   - s *Simulator : the simulator
@@ -470,8 +476,8 @@ func (s *Simulator) CreateEventsMultipleStationsClose() {
 			continue
 		}
 
-		s.eventsMultipleStationsClosed[i] = models.NewEventMultipleStationsClosed(ev.StationIdStart,
-			ev.StationIdEnd, start, end)
+		s.eventsMultipleStationsClosed[i] = models.NewEventMultipleStationsClosed(
+			ev.StationIdStart, ev.StationIdEnd, start, end)
 	}
 }
 
@@ -833,9 +839,10 @@ func (s *Simulator) RunOnce() {
 	eventsLineDelay = s.executeEventsLineDelay(eventsLineDelay,
 		oldTime, newCurrentTime)
 
-	var eventMultipleStationsClosed = s.getEventsMultipleStationsClosed(oldTime, newCurrentTime)
-	eventMultipleStationsClosed = s.executeEventsMultipleStationsClosed(eventMultipleStationsClosed,
-		oldTime, newCurrentTime)
+	var eventMultipleStationsClosed = s.getEventsMultipleStationsClosed(oldTime,
+		newCurrentTime)
+	eventMultipleStationsClosed = s.executeEventsMultipleStationsClosed(
+		eventMultipleStationsClosed, oldTime, newCurrentTime)
 
 	var eventsAttendancePeak = s.getEventsAttendancePeak(oldTime, newCurrentTime)
 	s.executeEventsAttendancePeak(eventsAttendancePeak, oldTime, newCurrentTime)
@@ -1641,9 +1648,6 @@ func (s *Simulator) executeEMSCStartEventROSetPassengerStart(trip *models.Trip,
 		//passenger starts at a closed station
 		if len(trip.Path().Stations()) > 2 {
 			var newStartingStation = trip.Path().Stations()[1]
-			if newStartingStation.StatusIsClosed() {
-				newStartingStation = nearestStation
-			}
 			var j = newStartingStation.Id()
 			var k = trip.Path().EndStation().Id()
 			if s.checkNewStationIsFinalStation(trip, i, nearestStation,
@@ -1735,15 +1739,15 @@ func (s *Simulator) executeEMSCStartEventRerouteOutside(
 			s.executeEMSCStartEventROSetPassengerStart(trip, nearestStation, i)
 
 			if trip != nil {
-				trip = s.executeEMSCStartEventROSetPath(trip, pass, i)
+				trip = s.executeEMSCStartEventROSetPath(trip, i)
 			}
 		}
 	}
 }
 
 /*
-executeEMSCStartEventRerouteCloseMultipleStations is used to reroute passengers in closed
-multiple stations.
+executeEMSCStartEventRerouteCloseMultipleStations is used to reroute passengers
+in closed multiple stations.
 
 Param :
   - s *Simulator : the simulator
@@ -1751,8 +1755,9 @@ Param :
   - stationEvent *models.MetroStation : the station
   - nearestStation *models.MetroStation : the nearest station
 */
-func (s *Simulator) executeEMSCStartEventRerouteCloseMultipleStations(currentTime time.Time,
-	stationEvent, nearestStation *models.MetroStation) {
+func (s *Simulator) executeEMSCStartEventRerouteCloseMultipleStations(
+	currentTime time.Time, stationEvent,
+	nearestStation *models.MetroStation) {
 	for i := range s.population.InStation()[stationEvent.Id()] {
 		pass := s.population.InStation()[stationEvent.Id()][i]
 		currentPath := pass.CurrentTrip().Path()
@@ -1784,8 +1789,8 @@ func (s *Simulator) executeEMSCStartEventRerouteCloseMultipleStations(currentTim
 }
 
 /*
-executeEMSCStartEventRerouteWaitingLoop is used to reroute passengers in stations
-waiting for train (loop).
+executeEMSCStartEventRerouteWaitingLoop is used to reroute passengers in
+stations waiting for train (loop).
 
 Param :
   - s *Simulator : the simulator
@@ -1878,8 +1883,8 @@ func (s *Simulator) executeEMSCStartEventRIEndStationClosed(trip *models.Trip,
 }
 
 /*
-executeEMSCStartEventRIEventStation is used to reroute passengers in train (event
-station on path).
+executeEMSCStartEventRIEventStation is used to reroute passengers in train
+(event station on path).
 
 Param :
   - s *Simulator : the simulator
@@ -1983,8 +1988,8 @@ func (s *Simulator) executeEMSCStartEvent(lineEvent []*models.MetroStation,
 			s.population.SortOutside()
 
 			//reroute passengers in closed line
-			s.executeEMSCStartEventRerouteCloseMultipleStations(currentTime, stationEvent,
-				nearestStation)
+			s.executeEMSCStartEventRerouteCloseMultipleStations(currentTime,
+				stationEvent, nearestStation)
 
 			//reroute passengers in stations waiting for train
 			s.executeEMSCStartEventRerouteWaiting(stationEvent)
@@ -2032,8 +2037,9 @@ Param :
 Return :
   - []*models.EventMultipleStationsClosed : the events
 */
-func (s *Simulator) executeEMSCReroutePassenger(events []*models.EventMultipleStationsClosed,
-	oldTime, currentTime time.Time) []*models.EventMultipleStationsClosed {
+func (s *Simulator) executeEMSCReroutePassenger(events []*models.
+	EventMultipleStationsClosed, oldTime,
+	currentTime time.Time) []*models.EventMultipleStationsClosed {
 	for _, event := range events {
 		var lineEvent []*models.MetroStation
 		lineEvent = nil
@@ -2086,7 +2092,8 @@ func (s *Simulator) executeEMSCAffectES(eventStations []*models.MetroStation,
 }
 
 /*
-executeEventsMultipleStationsClosed is used to start the event "multiple stations close".
+executeEventsMultipleStationsClosed is used to start the event
+"multiple stations close".
 
 Param :
   - s *Simulator : the simulator
@@ -2097,8 +2104,9 @@ Param :
 Return :
   - []*models.EventMultipleStationsClosed : the events
 */
-func (s *Simulator) executeEventsMultipleStationsClosed(events []*models.EventMultipleStationsClosed,
-	oldTime, currentTime time.Time) []*models.EventMultipleStationsClosed {
+func (s *Simulator) executeEventsMultipleStationsClosed(events []*models.
+	EventMultipleStationsClosed, oldTime,
+	currentTime time.Time) []*models.EventMultipleStationsClosed {
 	//apply the change to the map
 	for _, event := range events {
 		var eventStations []*models.MetroStation
@@ -2315,7 +2323,8 @@ func (s *Simulator) getEventsLineDelay(start,
 }
 
 /*
-getEventsﬁultipleStationsClosed is used to get the events "multiple stations close".
+getEventsMultipleStationsClosed is used to get the events
+"multiple stations close".
 
 Param :
   - s *Simulator : the simulator
