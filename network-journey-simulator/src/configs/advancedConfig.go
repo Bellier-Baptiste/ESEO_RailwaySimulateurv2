@@ -262,8 +262,8 @@ type ConfigLineDelayEvent struct {
 }
 
 /*
-ConfigLineClosedEvent is the structure that contains the configuration of
-a line closed event.
+ConfigMultipleStationsClosedEvent is the structure that contains the
+configuration of a multiple stations closed event.
 
 Attributes :
   - XMLName xml.Name
