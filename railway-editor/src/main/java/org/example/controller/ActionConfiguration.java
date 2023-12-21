@@ -65,14 +65,14 @@ public class ActionConfiguration {
    * Path of the json file.
    */
   public static final String JSON_FILE_PATH = System.getProperty("user.dir")
-    + File.separator + "network-journey-simulator" + File.separator + "src"
-    + File.separator + "configs" + File.separator + "config.json";
+      + File.separator + "network-journey-simulator" + File.separator + "src"
+      + File.separator + "configs" + File.separator + "config.json";
 
   /**
    * Path to the archives' folder.
    */
   private static final String ARCHIVES_PATH = System.getProperty("user.dir")
-    + File.separator + "archives";
+      + File.separator + "archives";
 
   /**
    * EditConfigDialog that calls this class methods.
@@ -83,7 +83,7 @@ public class ActionConfiguration {
    * Logger, to display or save information.
    */
   private static final Logger LOGGER =
-    Logger.getLogger(ActionConfiguration.class.getName());
+      Logger.getLogger(ActionConfiguration.class.getName());
 
   /**
    * Constructor of the class.
@@ -149,7 +149,7 @@ public class ActionConfiguration {
     // and update the json map and the json file
     this.jsonMap.clear();
     for (EditConfigParamPanel editConfigParamPanel
-      : this.editConfigDialog.getEditConfigParamPanelList()) {
+        : this.editConfigDialog.getEditConfigParamPanelList()) {
       String key = editConfigParamPanel.getParamName();
       String value = editConfigParamPanel.getParamValue();
       // Check if the value is an integer, a double or a boolean and
@@ -184,10 +184,10 @@ public class ActionConfiguration {
   /**
    * Prompts the export dialog to choose the location to export the json config.
    */
-  public void showExportDialogJSON() {
+  public void showExportDialogJson() {
     JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
     FileNameExtensionFilter filter =
-      new FileNameExtensionFilter("JSON FILES", "json");
+        new FileNameExtensionFilter("JSON FILES", "json");
     fileChooser.setFileFilter(filter);
     fileChooser.setDialogTitle("Specify a file to save");
 
@@ -208,13 +208,13 @@ public class ActionConfiguration {
   /**
    * Prompts the open dialog to select which json file to import.
    */
-  public void showOpenDialogJSON() {
+  public void showOpenDialogJson() {
     JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
-      "json files", "json");
+        "json files", "json");
     fileChooser.setFileFilter(filter);
     int returnVal = fileChooser.showOpenDialog(MainWindow.getInstance()
-      .getMainPanel());
+        .getMainPanel());
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = fileChooser.getSelectedFile();
       deleteFile(JSON_FILE_PATH);
@@ -251,7 +251,7 @@ public class ActionConfiguration {
       Files.deleteIfExists(Paths.get(fileToDelete));
     } catch (IOException e) {
       LOGGER.log(Level.SEVERE, e, () -> "Impossible to delete the existing "
-        + "file: " + fileToDelete);
+          + "file: " + fileToDelete);
     }
   }
 
