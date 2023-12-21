@@ -25,6 +25,7 @@
 package org.example.controller;
 
 import javax.xml.XMLConstants;
+
 import org.example.data.Data;
 import org.example.model.Area;
 import org.example.model.Event;
@@ -136,7 +137,7 @@ public class ActionFile {
    * Path to the archives' folder.
    */
   public static final String ARCHIVES_PATH = System.getProperty("user.dir")
-    + File.separator + "archives";
+      + File.separator + "archives";
 
   /**
    * Singleton instance.
@@ -159,10 +160,10 @@ public class ActionFile {
    * Prompts the export dialog to choose the location to export the map as xml
    * file.
    */
-  public void showExportDialogXML() {
+  public void showExportDialogXml() {
     JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
     FileNameExtensionFilter filter =
-      new FileNameExtensionFilter("XML FILES", "xml");
+        new FileNameExtensionFilter("XML FILES", "xml");
     fileChooser.setFileFilter(filter);
     fileChooser.setDialogTitle("Specify a file to save");
 
@@ -184,7 +185,7 @@ public class ActionFile {
   /**
    * Prompts the open dialog to select which xml file to import.
    */
-  public void showOpenDialogXML() {
+  public void showOpenDialogXml() {
     JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
         "xml files", "xml");
@@ -867,7 +868,6 @@ public class ActionFile {
    * Format the date of the xml to be able to use it in the HMI.
    *
    * @param date the date from the xml file to format
-   *
    * @return the formatted date
    */
   private String[] formatDate(final String date) {

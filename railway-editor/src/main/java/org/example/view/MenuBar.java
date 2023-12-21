@@ -69,14 +69,14 @@ public final class MenuBar extends JMenuBar {
     JMenuItem openMap = new JMenuItem("Open");
     openMap.setName(ActionFile.IMPORT_NAME);
     openMap.addActionListener(e ->
-      ActionFile.getInstance().showOpenDialogXML());
+        ActionFile.getInstance().showOpenDialogXml());
     file.add(openMap);
     JMenuItem save = new JMenuItem("Save");
     save.setName("Save");
     file.add(save);
     JMenuItem export = new JMenuItem(EXPORT_TEXT);
     export.addActionListener(e ->
-      ActionFile.getInstance().showExportDialogXML());
+        ActionFile.getInstance().showExportDialogXml());
     export.setName(ActionFile.EXPORT_NAME);
     file.add(export);
     this.add(file);
@@ -90,12 +90,12 @@ public final class MenuBar extends JMenuBar {
     JMenuItem openConfig = new JMenuItem("Open");
     openConfig.setName("Open");
     openConfig.addActionListener(e -> new ActionConfiguration()
-        .showOpenDialogJSON());
+        .showOpenDialogJson());
     config.add(openConfig);
     JMenuItem exportConfig = new JMenuItem(EXPORT_TEXT);
     exportConfig.setName(EXPORT_TEXT);
     exportConfig.addActionListener(e ->
-      new ActionConfiguration().showExportDialogJSON());
+        new ActionConfiguration().showExportDialogJson());
     config.add(exportConfig);
 
     // Archives menu
@@ -103,12 +103,12 @@ public final class MenuBar extends JMenuBar {
     JMenuItem openArchives = new JMenuItem("Open");
     openArchives.setName("Open");
     openArchives.addActionListener(e ->
-      new ActionArchive().showOpenDialogJSONandXML());
+        new ActionArchive().showOpenDialogJsonAndXml());
     archives.add(openArchives);
     JMenuItem exportArchives = new JMenuItem(EXPORT_TEXT);
     exportArchives.setName(EXPORT_TEXT);
     exportArchives.addActionListener(e ->
-      new ActionArchive().showExportDialogJSONandXML());
+        new ActionArchive().showExportDialogJsonAndXml());
     archives.add(exportArchives);
 
     // Theme menu

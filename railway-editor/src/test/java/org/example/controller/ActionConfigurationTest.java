@@ -53,6 +53,7 @@ import java.util.Map;
  *
  * @author Aurélie Chamouleau
  * @author Baptiste BELLIER
+ * @author Benoît VAVASSEUR
  * @file ActionConfigurationTest.java
  * @date 2023-10-23
  * @since 3.0
@@ -78,7 +79,7 @@ class ActionConfigurationTest {
     // Use introspection to get the JSON_FILE_PATH field
     Field jsonFilePathField = getJsonFilePathField(actionConfiguration);
     jsonFilePathField.set(actionConfiguration, "src/test/java/org/example" +
-      "/controller/"
+        "/controller/"
         + "configTest.json");
 
     // Running tested method
@@ -300,6 +301,7 @@ class ActionConfigurationTest {
 
   /**
    * Test the copyFile method.
+   *
    * @throws IOException if the file cannot be created
    */
   @Test
@@ -327,18 +329,19 @@ class ActionConfigurationTest {
 
     // Assertions
     Assertions.assertTrue(Files.exists(target), "Target file should " +
-      "exist after copy");
+        "exist after copy");
     Assertions.assertTrue(Files.exists(source), "Source file should " +
-      "still exist after copy");
+        "still exist after copy");
 
     // Verify that copyFile was called
     Mockito.verify(actionConfiguration).copyFile(source.toString(),
-      target.toString());
+        target.toString());
     Mockito.verifyNoMoreInteractions(actionConfiguration);
   }
 
   /**
    * Test the copyFile method when the destination file already exists.
+   *
    * @throws IOException if the file cannot be created
    */
   @Test
@@ -347,7 +350,7 @@ class ActionConfigurationTest {
     // Mocking and spying instances
     EditConfigDialog editConfigDialog = Mockito.mock(EditConfigDialog.class);
     ActionConfiguration actionConfiguration =
-      Mockito.spy(new ActionConfiguration(editConfigDialog));
+        Mockito.spy(new ActionConfiguration(editConfigDialog));
 
     // Create a temporary file to copy
     Path source = null;
@@ -368,17 +371,16 @@ class ActionConfigurationTest {
 
     // Assertions
     Assertions.assertTrue(Files.exists(target), "Target file should "
-      + "still exist after copy");
+        + "still exist after copy");
     Assertions.assertTrue(Files.exists(source), "Source file should "
-      + "still exist after copy");
+        + "still exist after copy");
 
     // Verify that deleteFile and copyFile were called
     Mockito.verify(actionConfiguration).deleteFile(target.toString());
     Mockito.verify(actionConfiguration).copyFile(source.toString(),
-      target.toString());
+        target.toString());
     Mockito.verifyNoMoreInteractions(actionConfiguration);
   }
-
 
 
   /**
