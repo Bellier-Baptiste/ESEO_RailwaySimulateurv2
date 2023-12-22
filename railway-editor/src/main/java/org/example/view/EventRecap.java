@@ -274,7 +274,12 @@ public final class EventRecap extends JScrollPane {
   /**
    * create a recap for event peak.
    *
-   *
+   * @param taskpane     taskpane to add the recap to
+   * @param startDateStr event start date
+   * @param endDateStr   event end date
+   * @param peakDateStr peak time
+   * @param stationStr   station concerned
+   * @param peakStr      peak amount
    */
   public void createEventPeak(JXTaskPane taskpane,
                               String startDateStr, String endDateStr,

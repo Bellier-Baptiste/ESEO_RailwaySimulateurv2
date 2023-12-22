@@ -323,12 +323,12 @@ public class ActionMetroEvent {
   public void addGaussianPeak(final String eventString) {
     MainWindow.getInstance().toFront();
     String[] eventStringTab = eventString.split(",");
-    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-" +
-            eventStringTab[STARTING_TIME_INDEX];
-    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-" +
-            eventStringTab[ENDING_TIME_INDEX];
-    String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-" +
-            eventStringTab[PEAK_TIME_INDEX];
+    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
+            + eventStringTab[STARTING_TIME_INDEX];
+    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
+            + eventStringTab[ENDING_TIME_INDEX];
+    String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
+            + eventStringTab[PEAK_TIME_INDEX];
     String peakWidth = eventStringTab[PEAK_WIDTH_INDEX];
 
     EventGaussianPeak eventGaussianPeak = new EventGaussianPeak(
@@ -368,12 +368,12 @@ public class ActionMetroEvent {
   public void addRampPeak(final String eventString) {
     MainWindow.getInstance().toFront();
     String[] eventStringTab = eventString.split(",");
-    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-" +
-            eventStringTab[STARTING_TIME_INDEX];
-    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-" +
-            eventStringTab[ENDING_TIME_INDEX];
-    String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-" +
-            eventStringTab[PEAK_TIME_INDEX];
+    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
+            + eventStringTab[STARTING_TIME_INDEX];
+    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
+            + eventStringTab[ENDING_TIME_INDEX];
+    String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
+            + eventStringTab[PEAK_TIME_INDEX];
 
     EventRampPeak eventRampPeak = new EventRampPeak(
             this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
@@ -407,8 +407,9 @@ public class ActionMetroEvent {
    * Edit station concerned by peak event.
    *
    * @param idStation station id
+   * @return station concerned
    */
-  public Station editStationConcernedPeak(int idStation) {
+  public Station editStationConcernedPeak(final int idStation) {
     Station stationConcerned = null;
     for (LineView lineView : MainWindow.getInstance().getMainPanel()
             .getLineViews()) {
