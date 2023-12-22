@@ -1,6 +1,5 @@
 package org.example.controller;
 
-import org.example.controller.ActionMetroEvent;
 import org.example.model.*;
 import org.example.model.Event;
 import org.example.view.LineView;
