@@ -1654,7 +1654,19 @@ func (s *Simulator) checkNewStationIsFinalStation(trip *models.Trip, i string,
 	return isFinal
 }
 
-func (s *Simulator) checkNewStationIsClosedStation(
+/*
+checkNewStationIsClosedStation is used to check if the new starting station
+is closed
+
+Param :
+  - s *Simulator : the simulator
+  - nearestStation *models.MetroStation : the nearest station
+  - newStartingStation *models.MetroStation : the new starting station
+
+Return :
+  - *models.MetroStation : the new starting station
+*/
+func (s *Simulator) checkNewStartingStationIsClosedStation(
 	nearestStation, newStartingStation *models.MetroStation) *models.MetroStation {
 	if newStartingStation.StatusIsClosed() {
 		newStartingStation = nearestStation
@@ -1677,7 +1689,7 @@ func (s *Simulator) executeEMSCStartEventROSetPassengerStart(trip *models.Trip,
 		//passenger starts at a closed station
 		if len(trip.Path().Stations()) > 2 {
 			var newStartingStation = trip.Path().Stations()[1]
-			newStartingStation = s.checkNewStationIsClosedStation(
+			newStartingStation = s.checkNewStartingStationIsClosedStation(
 				nearestStation, newStartingStation)
 			var j = newStartingStation.Id()
 			var k = trip.Path().EndStation().Id()
