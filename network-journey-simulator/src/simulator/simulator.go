@@ -134,7 +134,7 @@ const (
 	strErr               = " error : "
 	strGaussianPeakParse = "EventGaussianPeak : couldn't parse date : "
 	strRampPeakParse     = "EventRampPeak : couldn't parse date : "
-	strDeletePath = " - deleted path"
+	strDeletePath        = " - deleted path"
 )
 
 /*
@@ -2374,15 +2374,15 @@ func (s *Simulator) executeEventsRampPeak(
 				totalPopulation += len(train)
 			}
 
-			departureStation := s.mapObject.FindStationById(event.GetIdStation())
+			departureStation := s.MapObject.FindStationById(event.GetIdStation())
 			// create arrival station, different from departure station
 			arrivalStation := departureStation
 			for arrivalStation == departureStation {
-				arrivalStation = s.mapObject.FindStationById(rand.Intn(
-					len(s.mapObject.Stations())))
+				arrivalStation = s.MapObject.FindStationById(rand.Intn(
+					len(s.MapObject.Stations())))
 			}
 
-			ps, _ := s.mapObject.GetPathStation(*departureStation, *arrivalStation)
+			ps, _ := s.MapObject.GetPathStation(*departureStation, *arrivalStation)
 			trip := models.NewTrip(currentTime, ps)
 
 			passenger := models.NewPassenger(strconv.Itoa(totalPopulation),
