@@ -284,14 +284,21 @@
       <stationIdStart>1</stationIdStart>
       <stationIdEnd>19</stationIdEnd>
     </lineClosed>
-    <attendancePeak>
+    <gaussianPeak>
       <start>2018-10-26T09:01:00Z</start>
       <end>2018-10-26T10:02:00Z</end>
-      <peakTime>2018-10-26T09:30:00Z</peakTime>
+      <peakTime>2018-10-26T09:31:00Z</peakTime>
       <stationId>2</stationId>
-      <peakSize>600</peakSize>
+      <peakSize>500</peakSize>
       <peakWidth>6</peakWidth>
-    </attendancePeak>
+    </gaussianPeak>
+    <rampPeak>
+      <start>2018-10-26T09:01:00Z</start>
+      <end>2018-10-26T10:02:00Z</end>
+      <peakTime>2018-10-26T09:31:00Z</peakTime>
+      <stationId>2</stationId>
+      <peakSize>500</peakSize>
+    </rampPeak>
     <lineDelay>
       <start>2018-10-12T00:19:00Z</start>
       <end>2018-10-12T00:20:00Z</end>
