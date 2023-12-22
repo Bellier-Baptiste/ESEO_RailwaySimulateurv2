@@ -518,5 +518,13 @@ public class ActionMetroEvent {
     }
     EventRecap.getInstance().eventsListRemoveBackground();
   }
+
+  /**
+   * Add a line closed event.
+   * @param eventString event string
+   */
+  public void addLineClosed(final String eventString) {
+
+  }
 }
 
