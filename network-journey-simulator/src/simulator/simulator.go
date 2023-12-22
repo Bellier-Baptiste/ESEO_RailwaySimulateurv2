@@ -1654,6 +1654,14 @@ func (s *Simulator) checkNewStationIsFinalStation(trip *models.Trip, i string,
 	return isFinal
 }
 
+func (s *Simulator) checkNewStationIsClosedStation(
+	nearestStation, newStartingStation *models.MetroStation) *models.MetroStation {
+	if newStartingStation.StatusIsClosed() {
+		newStartingStation = nearestStation
+	}
+	return newStartingStation
+}
+
 /*
 executeEMSCStartEventROSetPassengerStart is used to set the path of a passenger.
 
@@ -1669,6 +1677,8 @@ func (s *Simulator) executeEMSCStartEventROSetPassengerStart(trip *models.Trip,
 		//passenger starts at a closed station
 		if len(trip.Path().Stations()) > 2 {
 			var newStartingStation = trip.Path().Stations()[1]
+			newStartingStation = s.checkNewStationIsClosedStation(
+				nearestStation, newStartingStation)
 			var j = newStartingStation.Id()
 			var k = trip.Path().EndStation().Id()
 			if s.checkNewStationIsFinalStation(trip, i, nearestStation,
