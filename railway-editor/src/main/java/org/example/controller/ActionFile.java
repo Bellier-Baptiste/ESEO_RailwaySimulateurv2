@@ -26,7 +26,16 @@ package org.example.controller;
 
 import javax.xml.XMLConstants;
 import org.example.data.Data;
-import org.example.model.*;
+import org.example.model.Area;
+import org.example.model.Event;
+import org.example.model.EventGaussianPeak;
+import org.example.model.EventRampPeak;
+import org.example.model.EventHour;
+import org.example.model.EventLineClosed;
+import org.example.model.EventLineDelay;
+import org.example.model.EventStationClosed;
+import org.example.model.Line;
+import org.example.model.Station;
 import org.example.view.AreaView;
 import org.example.view.LineView;
 import org.example.view.MainWindow;
@@ -59,6 +68,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * A class for performing actions related to the file menu.

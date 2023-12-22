@@ -25,7 +25,17 @@
 package org.example.controller;
 
 import org.example.data.Data;
-import org.example.model.*;
+import org.example.model.Event;
+import org.example.model.EventGaussianPeak;
+import org.example.model.EventRampPeak;
+import org.example.model.EventBetween2Stations;
+import org.example.model.EventHour;
+import org.example.model.EventLineClosed;
+import org.example.model.EventLineDelay;
+import org.example.model.EventName;
+import org.example.model.EventStationClosed;
+import org.example.model.Line;
+import org.example.model.Station;
 import org.example.view.EventRecap;
 import org.example.view.EventWindow;
 import org.example.view.LineView;
@@ -35,6 +45,7 @@ import org.example.view.StationView;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.event.WindowEvent;
+
 
 /**
  * A class for creating events {@link org.example.model.Event} on the map.
