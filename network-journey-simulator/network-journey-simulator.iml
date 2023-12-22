@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
+  <component name="Go" enabled="true" />
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="8cf0c031-4ce6-4dca-b51f-adab3f2c75e0" />
   </component>
