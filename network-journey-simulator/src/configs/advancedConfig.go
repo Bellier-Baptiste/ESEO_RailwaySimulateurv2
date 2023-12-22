@@ -16,6 +16,7 @@ Author :
   - Paul TRÉMOUREUX (quality check)
   - Alexis BONAMY
   - Benoît VAVASSEUR
+  - Aurélie CHAMOULEAU
 
 License : MIT License
 

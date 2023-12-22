@@ -24,6 +24,7 @@
 
 package org.example.controller;
 
+import javax.xml.XMLConstants;
 import org.example.data.Data;
 import org.example.model.*;
 import org.example.view.AreaView;
@@ -193,6 +194,15 @@ public class ActionFile {
 
       DocumentBuilderFactory documentFactory = DocumentBuilderFactory
           .newInstance();
+      // Disable access to external entities in XML parsing.
+      documentFactory.setFeature(
+          "http://xml.org/sax/features/external-general-entities", false);
+      documentFactory.setFeature(
+          "http://xml.org/sax/features/external-parameter-entities", false);
+      documentFactory.setFeature(
+          "http://apache.org/xml/features/nonvalidating/load-external-dtd",
+          false);
+      documentFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
       DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
 
       Document document = documentBuilder.newDocument();

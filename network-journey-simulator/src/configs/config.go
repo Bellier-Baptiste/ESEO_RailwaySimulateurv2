@@ -13,6 +13,7 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX
+  - Aurélie CHAMOULEAU
 
 License : MIT License
 
