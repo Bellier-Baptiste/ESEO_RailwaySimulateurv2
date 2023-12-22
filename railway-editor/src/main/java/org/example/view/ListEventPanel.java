@@ -848,8 +848,8 @@ public final class ListEventPanel extends JPanel {
       c.gridx = 0;
       c.gridy = 8;
       c.weighty = 0.1;
-      JLabel peakNumber = new JLabel("peakNumber: ");
-      view.add(peakNumber, c);
+      JLabel peakSize = new JLabel("peak Size: ");
+      view.add(peakSize, c);
       c.gridx = 0;
       c.gridy = 9;
       c.weighty = 0.2;
@@ -991,8 +991,8 @@ public final class ListEventPanel extends JPanel {
       c.gridx = 0;
       c.gridy = 8;
       c.weighty = 0.1;
-      JLabel peakNumber = new JLabel("peakNumber: ");
-      view.add(peakNumber, c);
+      JLabel peakSize = new JLabel("peak Size: ");
+      view.add(peakSize, c);
       c.gridx = 0;
       c.gridy = 9;
       c.weighty = 0.2;
