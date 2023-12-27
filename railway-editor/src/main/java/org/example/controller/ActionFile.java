@@ -644,7 +644,8 @@ public class ActionFile {
     // Station lines line element
     for (LineView lineView2 : MainWindow.getInstance().getMainPanel()
         .getLineViews()) {
-      if (lineView2.getStationViews().contains(stationView)) {
+      if (lineView2.getLine().getStations()
+          .contains(stationView.getStation())) {
         Element line = document.createElement("line");
         Attr attrLineId = document.createAttribute("id");
         attrLineId.setValue(Integer.toString(lineView2.getLine()
