@@ -53,6 +53,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -73,7 +75,7 @@ import java.util.Properties;
  * @author Marie Bordet
  * @author Alexis BONAMY
  * @file ListEventPanel.java
- * @date N/A
+ * @date 2024-01-09
  * @since 2.0
  */
 public final class ListEventPanel extends JPanel {
@@ -1134,7 +1136,17 @@ public final class ListEventPanel extends JPanel {
     JButton currentLineButton = new JButton("Select Current line");
     currentLineButton.addActionListener(e -> editLineSelected.setText(
         Integer.toString(ActionLine.getInstance().getLineToUpdateIndex())));
-    editTypeLineClosed = new JToggleButton("Unexpected closure");
+    editTypeLineClosed = new JToggleButton("Planned line closure");
+    editTypeLineClosed.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (editTypeLineClosed.isSelected()) {
+          editTypeLineClosed.setText("Unexpected line closure");
+        } else {
+          editTypeLineClosed.setText("Planned line closure");
+        }
+      }
+    });
 
     try {
       BufferedImage btnImg = ImageIO.read(Objects.requireNonNull(getClass()
@@ -1196,28 +1208,28 @@ public final class ListEventPanel extends JPanel {
 
       c.fill = GridBagConstraints.HORIZONTAL;
       c.gridx = 0;
-      c.gridy = 6;
+      c.gridy = 4;
       c.weighty = 0.1;
       JLabel lineSelected = new JLabel("Line to edit: ");
       view.add(lineSelected, c);
       c.gridx = 0;
-      c.gridy = 7;
+      c.gridy = 5;
       c.weighty = 0.2;
       view.add(editLineSelected, c);
       c.fill = GridBagConstraints.CENTER;
       c.gridx = 1;
-      c.gridy = 7;
+      c.gridy = 5;
       c.weighty = 0.2;
       view.add(currentLineButton, c);
 
       c.fill = GridBagConstraints.HORIZONTAL;
       c.gridx = 0;
-      c.gridy = 11;
+      c.gridy = 6;
       c.weighty = 0.2;
       JLabel typeLineClosed = new JLabel("Type of closure: ");
       view.add(typeLineClosed, c);
       c.gridx = 0;
-      c.gridy = 12;
+      c.gridy = 7;
       c.weighty = 0.2;
       view.add(editTypeLineClosed, c);
 
@@ -1395,7 +1407,7 @@ public final class ListEventPanel extends JPanel {
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
     String lineSelected = editLineSelected.getText();
-    String typeLineClosed = editTypeLineClosed.isSelected() ? "Unexpected line closed" : "Planned line closed";
+    String typeLineClosed = editTypeLineClosed.isSelected() ? "Unexpected" : "Planned";
     return dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
         + lineSelected + "," + typeLineClosed;
   }

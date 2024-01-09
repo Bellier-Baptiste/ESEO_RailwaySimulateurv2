@@ -43,8 +43,9 @@ import java.awt.event.ActionEvent;
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
  * @author Alexis BONAMY
+ * @author Marie Bordet
  * @file ClockView.java
- * @date N/A
+ * @date 2024-01-09
  * @since 2.0
  */
 public final class EventRecap extends JScrollPane {
@@ -439,6 +440,56 @@ public final class EventRecap extends JScrollPane {
     taskpane.add(endTime);
     taskpane.add(line);
     taskpane.add(trainNb);
+    taskpane.add(new AbstractAction(REMOVE) {
+      /**
+       * Remove action serial version UID.
+       */
+      private static final long serialVersionUID = 1L;
+
+      public void actionPerformed(final ActionEvent e) {
+        taskPaneContainer.remove(taskpane);
+        Data.getInstance().getEventList().removeIf(event -> event.getId()
+            == id);
+        taskPaneContainer.revalidate();
+      }
+    });
+
+    // add the task pane to the taskPaneContainer
+    this.taskPaneContainer.add(taskpane);
+    this.setViewportView(taskPaneContainer);
+    taskPaneContainer.revalidate();
+  }
+
+  public void createEventLineClosed(final int id, final String startTimeStr,
+                                    final String endTimeStr, final String lineStr,
+                                    final String closureTypeStr) {
+    JXTaskPane taskpane = new JXTaskPane();
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Line Closed");
+
+    JXLabel startTime = new JXLabel();
+    startTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    startTime.setText("Start Time: " + startTimeStr);
+    startTime.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel endTime = new JXLabel();
+    endTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    endTime.setText("End Time: " + endTimeStr);
+    endTime.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel line = new JXLabel();
+    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    line.setText(LINE + lineStr);
+    line.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel closureType = new JXLabel();
+    closureType.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    closureType.setText("Closure type: " + closureTypeStr);
+    closureType.setHorizontalAlignment(SwingConstants.LEFT);
+
+    // add various actions and components to the taskpane
+    taskpane.add(startTime);
+    taskpane.add(endTime);
+    taskpane.add(line);
+    taskpane.add(closureType);
+
     taskpane.add(new AbstractAction(REMOVE) {
       /**
        * Remove action serial version UID.

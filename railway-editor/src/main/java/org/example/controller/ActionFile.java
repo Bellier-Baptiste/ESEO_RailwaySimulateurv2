@@ -30,6 +30,7 @@ import org.example.model.Area;
 import org.example.model.Event;
 import org.example.model.EventAttendancePeak;
 import org.example.model.EventHour;
+import org.example.model.EventLineClosed;
 import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
@@ -76,8 +77,9 @@ import java.util.Map;
  * @author Aurélie Chamouleau
  * @author Alexis BONAMY
  * @author Baptiste BELLIER
+ * @author Marie Bordet
  * @file ActionFile.java
- * @date 2023/09/22
+ * @date 2024/01/09
  * @see org.example.data.Data
  * @since 3.0
  */
@@ -373,6 +375,19 @@ public class ActionFile {
               eventHour.getTrainNumber())));
           eventName.appendChild(trainNumber);
           break;
+          case "lineClosed":
+            EventLineClosed eventLineClosed = (EventLineClosed) event;
+
+            Element idLineClosed = document.createElement("idLine");
+            idLineClosed.appendChild(document.createTextNode(Integer.toString(eventLineClosed
+                .getIdLine())));
+            eventName.appendChild(idLineClosed);
+
+            Element closureType = document.createElement("closureType");
+            closureType.appendChild(document.createTextNode(eventLineClosed
+                .getClosureType().getValue()));
+            eventName.appendChild(closureType);
+            break;
         default:
           break;
       }
@@ -841,6 +856,14 @@ public class ActionFile {
                 + eventElement.getElementsByTagName("trainNumber").item(0)
                 .getTextContent());
             break;
+            case "lineClosed":
+                ActionMetroEvent.getInstance().addLineClosed(startTimeSplit[0]
+                        + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
+                        + endTimeSplit[1] + "," + eventElement.getElementsByTagName(
+                        "idLine").item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName("lineClosureType").item(0)
+                        .getTextContent());
+                break;
           default:
             break;
         }
