@@ -116,8 +116,8 @@ public class ActionFile {
    * String of the peakTime tag.
    */
   public static final String PEAK_TIME = "peakTime";
-  /*
-  * String of the peakSize tag.
+  /**
+   * String of the peakSize tag.
    */
   public static final String PEAK_SIZE = "peakSize";
   /**
