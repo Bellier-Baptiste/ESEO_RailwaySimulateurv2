@@ -387,10 +387,12 @@ public class ActionMetroEvent {
 
   /**
    * Color the station views of the line.
+   *
    * @param line line concerned
    * @param eventColor color of the event
    */
-  private void colorStationViewsEntireLine(final LineView line, final Color eventColor) {
+  private void colorStationViewsEntireLine(final LineView line,
+                                           final Color eventColor) {
     for (StationView stationView : line.getStationViews()) {
       stationView.setCenterCircleColor(eventColor);
     }
@@ -542,6 +544,7 @@ public class ActionMetroEvent {
 
   /**
    * Add a line closed event.
+   *
    * @param eventString event string
    */
   public void addLineClosed(final String eventString) {
@@ -551,14 +554,15 @@ public class ActionMetroEvent {
         + eventStringTab[STARTING_TIME_INDEX];
     String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
         + eventStringTab[ENDING_TIME_INDEX];
-    EventLineClosed eventLineClosed = new EventLineClosed(this.getCurrentId(), startTime,
-        endTime, Event.EventType.LINE);
-    eventLineClosed.setIdLine(Integer.parseInt(eventStringTab[LINE_CLOSURE_LINE_INDEX]));
-    switch(eventStringTab[LINE_CLOSURE_TYPE_INDEX]) {
-      case "Unexpected":
+    EventLineClosed eventLineClosed = new EventLineClosed(this.getCurrentId(),
+        startTime, endTime, Event.EventType.LINE);
+    eventLineClosed.setIdLine(Integer.parseInt(
+        eventStringTab[LINE_CLOSURE_LINE_INDEX]));
+    switch (eventStringTab[LINE_CLOSURE_TYPE_INDEX]) {
+      case "unexpected":
         eventLineClosed.setClosureType(LineClosureType.UNEXPECTED);
         break;
-      case "Planned":
+      case "planned":
         eventLineClosed.setClosureType(LineClosureType.PLANNED);
         break;
       default:
@@ -567,13 +571,14 @@ public class ActionMetroEvent {
 
     Data.getInstance().getEventList().add(eventLineClosed);
     this.colorStationViewsEntireLine(MainWindow.getInstance().getMainPanel()
-        .getLineViews().get(Integer.parseInt(eventStringTab[LINE_CLOSURE_LINE_INDEX])),
-        Color.RED);
+        .getLineViews().get(Integer.parseInt(
+            eventStringTab[LINE_CLOSURE_LINE_INDEX])), Color.RED);
     EventWindow.getInstance().dispatchEvent(new WindowEvent(
         EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
     MainWindow.getInstance().getMainPanel().repaint();
     MainWindow.getInstance().getEventRecapPanel().createEventLineClosed(
-        this.getCurrentId(), startTime, endTime, eventStringTab[LINE_CLOSURE_LINE_INDEX],
+        this.getCurrentId(), startTime, endTime,
+        eventStringTab[LINE_CLOSURE_LINE_INDEX],
         eventStringTab[LINE_CLOSURE_TYPE_INDEX]);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();

@@ -460,8 +460,18 @@ public final class EventRecap extends JScrollPane {
     taskPaneContainer.revalidate();
   }
 
+  /**
+   * create a recap for event lineClosed.
+   *
+   * @param id              event id
+   * @param startTimeStr    event startDate
+   * @param endTimeStr      event endDate
+   * @param lineStr         line concerned
+   * @param closureTypeStr  closure type
+   */
   public void createEventLineClosed(final int id, final String startTimeStr,
-                                    final String endTimeStr, final String lineStr,
+                                    final String endTimeStr,
+                                    final String lineStr,
                                     final String closureTypeStr) {
     JXTaskPane taskpane = new JXTaskPane();
     // create a taskpane, and set it's title and icon

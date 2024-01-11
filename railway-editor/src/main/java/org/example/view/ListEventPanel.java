@@ -53,8 +53,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -1137,14 +1135,11 @@ public final class ListEventPanel extends JPanel {
     currentLineButton.addActionListener(e -> editLineSelected.setText(
         Integer.toString(ActionLine.getInstance().getLineToUpdateIndex())));
     editTypeLineClosed = new JToggleButton("Planned line closure");
-    editTypeLineClosed.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-        if (editTypeLineClosed.isSelected()) {
-          editTypeLineClosed.setText("Unexpected line closure");
-        } else {
-          editTypeLineClosed.setText("Planned line closure");
-        }
+    editTypeLineClosed.addActionListener(e -> {
+      if (editTypeLineClosed.isSelected()) {
+        editTypeLineClosed.setText("Unexpected line closure");
+      } else {
+        editTypeLineClosed.setText("Planned line closure");
       }
     });
 
@@ -1407,7 +1402,8 @@ public final class ListEventPanel extends JPanel {
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
     String lineSelected = editLineSelected.getText();
-    String typeLineClosed = editTypeLineClosed.isSelected() ? "Unexpected" : "Planned";
+    String typeLineClosed = editTypeLineClosed.isSelected() ? "unexpected"
+        : "planned";
     return dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
         + lineSelected + "," + typeLineClosed;
   }

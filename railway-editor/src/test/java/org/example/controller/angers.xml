@@ -658,5 +658,17 @@
             <peakSize>200</peakSize>
             <peakWidth>3</peakWidth>
         </attendancePeak>
+        <lineClosed>
+            <start>2023-11-01T15:37:00.000Z</start>
+            <end>2023-11-01T19:37:00.000Z</end>
+            <idLine>3</idLine>
+            <closureType>unexpected</closureType>
+        </lineClosed>
+        <lineClosed>
+            <start>2023-11-01T12:13:00.000Z</start>
+            <end>2023-11-01T12:57:00.000Z</end>
+            <idLine>1</idLine>
+            <closureType>planned</closureType>
+        </lineClosed>
     </events>
 </map>

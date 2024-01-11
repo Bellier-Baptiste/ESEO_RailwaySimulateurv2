@@ -133,6 +133,10 @@ public class ActionFile {
    */
   private static final String LATITUDE = "latitude";
   /**
+   * Line id marker.
+   */
+  private static final String LINE_ID = "idLine";
+  /**
    * Singleton instance.
    */
   private static ActionFile instance;
@@ -365,7 +369,7 @@ public class ActionFile {
         case "hour":
           EventHour eventHour = (EventHour) event;
 
-          Element idLine = document.createElement("idLine");
+          Element idLine = document.createElement(LINE_ID);
           idLine.appendChild(document.createTextNode(Integer.toString(eventHour
               .getIdLine())));
           eventName.appendChild(idLine);
@@ -375,19 +379,19 @@ public class ActionFile {
               eventHour.getTrainNumber())));
           eventName.appendChild(trainNumber);
           break;
-          case "lineClosed":
-            EventLineClosed eventLineClosed = (EventLineClosed) event;
+        case "lineClosed":
+          EventLineClosed eventLineClosed = (EventLineClosed) event;
 
-            Element idLineClosed = document.createElement("idLine");
-            idLineClosed.appendChild(document.createTextNode(Integer.toString(eventLineClosed
-                .getIdLine())));
-            eventName.appendChild(idLineClosed);
+          Element idLineClosed = document.createElement(LINE_ID);
+          idLineClosed.appendChild(document.createTextNode(
+              Integer.toString(eventLineClosed.getIdLine())));
+          eventName.appendChild(idLineClosed);
 
-            Element closureType = document.createElement("closureType");
-            closureType.appendChild(document.createTextNode(eventLineClosed
-                .getClosureType().getValue()));
-            eventName.appendChild(closureType);
-            break;
+          Element closureType = document.createElement("closureType");
+          closureType.appendChild(document.createTextNode(eventLineClosed
+              .getClosureType().getValue()));
+          eventName.appendChild(closureType);
+          break;
         default:
           break;
       }
@@ -851,19 +855,20 @@ public class ActionFile {
             String startHour = startTime.replace(END_TIME_STRING, "");
             String endHour = endTime.replace(END_TIME_STRING, "");
             ActionMetroEvent.getInstance().addTrainHour(startHour + ","
-                + endHour + "," + eventElement.getElementsByTagName("idLine")
+                + endHour + "," + eventElement.getElementsByTagName(LINE_ID)
                 .item(0).getTextContent() + ","
                 + eventElement.getElementsByTagName("trainNumber").item(0)
                 .getTextContent());
             break;
-            case "lineClosed":
-                ActionMetroEvent.getInstance().addLineClosed(startTimeSplit[0]
-                        + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
-                        + endTimeSplit[1] + "," + eventElement.getElementsByTagName(
-                        "idLine").item(0).getTextContent() + ","
-                    + eventElement.getElementsByTagName("lineClosureType").item(0)
-                        .getTextContent());
-                break;
+          case "lineClosed":
+            ActionMetroEvent.getInstance().addLineClosed(startTimeSplit[0]
+                    + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
+                    + endTimeSplit[1] + ","
+                    + eventElement.getElementsByTagName(LINE_ID)
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName("closureType")
+                    .item(0).getTextContent());
+            break;
           default:
             break;
         }
