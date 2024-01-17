@@ -40,6 +40,7 @@ import java.util.List;
  * @since 2.0
  */
 public class Line {
+  /** Line name. */
   private final String name;
   //attributes
   /** Line id. */
