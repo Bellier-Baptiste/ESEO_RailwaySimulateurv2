@@ -52,7 +52,7 @@ Input : t *testing.T
 Expected : The struct and its methods work properly
 */
 func TestEventMultipleStationsClosed(t *testing.T) {
-	println("*** EventMultipleStationsClosed_test.go ***")
+	println("*** eventMultipleStationsClosed_test.go ***")
 	start, err := time.Parse("15:04", "00:01")
 	end, err := time.Parse("15:04", "00:02")
 	if err != nil {

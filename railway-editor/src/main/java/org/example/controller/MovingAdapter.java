@@ -234,26 +234,28 @@ public class MovingAdapter extends MouseAdapter {
     }
     this.getClickedArea(e.getX(), e.getY());
     if (e.getClickCount() == 2) {
+      System.out.println("double click");
       stationZoomUpdatePos();
       StationView clickedStation = this.getClickedStation(e.getX(), e.getY());
       AreaView clickedArea = this.getClickedArea(e.getX(), e.getY());
       if (clickedStation != null) {
+        System.out.println(Data.getInstance().getSelectType());
         if (Data.getInstance().getSelectType() != null) {
           switch (Data.getInstance().getSelectType()) {
             case Data.STATION_START:
               Data.getInstance()
                   .setStationStartId(clickedStation.getStation().getId());
-              Data.getInstance().setSelectType("");
+              Data.getInstance().setSelectType(null);
               break;
             case Data.STATION_END:
               Data.getInstance()
                   .setStationEndId(clickedStation.getStation().getId());
-              Data.getInstance().setSelectType("");
+              Data.getInstance().setSelectType(null);
               break;
             case Data.STATION_CONCERNED:
               Data.getInstance()
                   .setStationConcernedId(clickedStation.getStation().getId());
-              Data.getInstance().setSelectType("");
+              Data.getInstance().setSelectType(null);
               break;
             default:
               break;
