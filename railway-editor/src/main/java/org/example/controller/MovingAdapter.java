@@ -234,12 +234,10 @@ public class MovingAdapter extends MouseAdapter {
     }
     this.getClickedArea(e.getX(), e.getY());
     if (e.getClickCount() == 2) {
-      System.out.println("double click");
       stationZoomUpdatePos();
       StationView clickedStation = this.getClickedStation(e.getX(), e.getY());
       AreaView clickedArea = this.getClickedArea(e.getX(), e.getY());
       if (clickedStation != null) {
-        System.out.println(Data.getInstance().getSelectType());
         if (Data.getInstance().getSelectType() != null) {
           switch (Data.getInstance().getSelectType()) {
             case Data.STATION_START:
