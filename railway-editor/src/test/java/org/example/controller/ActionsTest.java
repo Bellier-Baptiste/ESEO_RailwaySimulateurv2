@@ -28,6 +28,7 @@ import org.example.data.Data;
 import org.example.model.Line;
 import org.example.view.EventRecap;
 import org.example.view.MainWindow;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -129,5 +130,31 @@ class ActionsTest {
     actionLine.incrementLine();
     currentLineId = actionLine.getLineToUpdateIndex();
     assertEquals(2, currentLineId);
+  }
+
+  @Test
+  void testAddRampPeak() {
+    // Create an instance of your class
+    ActionMetroEvent actionMetroEvent = new ActionMetroEvent();
+
+    // Set up test data
+    String eventString = "2018/10/12,10:48,2018/10/12,12:48,2018/10/12,10:48,1,500";
+
+    // Perform the test
+    actionMetroEvent.addRampPeak(eventString);
+
+    // Access relevant objects to perform assertions
+    MainWindow mainWindowInstance = MainWindow.getInstance();
+    Data dataInstance = Data.getInstance();
+    EventRecap eventRecapInstance = mainWindowInstance.getEventRecapPanel();
+
+    // Assert conditions based on the outcome of the method
+    Assertions.assertNotNull(mainWindowInstance);
+    Assertions.assertNotNull(dataInstance);
+    Assertions.assertNotNull(eventRecapInstance);
+
+    // Assert specific conditions based on the behavior of the method
+    // For example, you might assert that the event list has the expected size after adding the event
+    assertEquals(1, dataInstance.getEventList().size());
   }
 }

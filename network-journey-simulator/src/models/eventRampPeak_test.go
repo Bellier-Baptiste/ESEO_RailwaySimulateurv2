@@ -36,12 +36,10 @@ package models
 import (
 	"testing"
 	"time"
-
-	"github.com/stretchr/testify/assert"
 )
 
 /*
-TestEventGaussianPeak tests the EventRampPeak struct and its methods.
+TestNewEventRampPeak tests the EventRampPeak struct and its methods.
 
 # It tests if the struct and its methods work properly
 
@@ -49,26 +47,101 @@ Input : t *testing.T
 
 Expected : The struct and its methods work properly
 */
-func TestEventRampPeakModel(t *testing.T) {
-	// create a new eventGaussianPeak arguments
+func TestNewEventRampPeak(t *testing.T) {
 	start := time.Now()
-	end := time.Now()
-	peak := time.Now()
-	idStation := 1
-	size := 10
+	end := start.Add(time.Hour)
+	peak := start.Add(time.Minute)
+	idStation := 123
+	peakSize := 42
 
-	// create a new eventRampPeak
-	eventRampPeak := NewEventRampPeak(start, end, peak,
-		idStation, size)
+	event := NewEventRampPeak(start, end, peak, idStation, peakSize)
 
-	// check if the eventRampPeak is created
-	assert.NotNil(t, eventRampPeak, "eventRampPeak should not be nil")
+	if event.start != start ||
+		event.end != end ||
+		event.peak != peak ||
+		event.idStation != idStation ||
+		event.peakSize != peakSize ||
+		event.finished != false {
+		t.Errorf("NewEventRampPeak did not initialize the struct correctly.")
+	}
+}
 
-	// check if the eventRampPeak is created with the right values
-	assert.Equal(t, start, eventRampPeak.GetStart(), "Bad Start time")
-	assert.Equal(t, end, eventRampPeak.GetEnd(), "Bad End time")
-	assert.Equal(t, peak, eventRampPeak.GetEnd(), "Bad Peak time")
-	assert.Equal(t, idStation, eventRampPeak.GetIdStation(), "Bad Start station id")
-	assert.Equal(t, size, eventRampPeak.GetPeakSize(), "Bad population size")
-	assert.False(t, eventRampPeak.IsFinished(), "Bad event status")
+/*
+TestEventRampPeakMethods tests the methods of the EventRampPeak struct.
+
+# It tests if the methods work properly
+
+Input : t *testing.T
+
+Expected : The methods work properly
+*/
+func TestEventRampPeakMethods(t *testing.T) {
+	start := time.Now()
+	end := start.Add(time.Hour)
+	peak := start.Add(time.Minute)
+	idStation := 123
+	peakSize := 42
+
+	event := NewEventRampPeak(start, end, peak, idStation, peakSize)
+
+	// Test Getters
+	if event.GetStart() != start {
+		t.Errorf("GetStart() returned incorrect value.")
+	}
+
+	if event.GetEnd() != end {
+		t.Errorf("GetEnd() returned incorrect value.")
+	}
+
+	if event.GetPeak() != peak {
+		t.Errorf("GetPeak() returned incorrect value.")
+	}
+
+	if event.GetIdStation() != idStation {
+		t.Errorf("GetIdStation() returned incorrect value.")
+	}
+
+	if event.GetPeakSize() != peakSize {
+		t.Errorf("GetPeakSize() returned incorrect value.")
+	}
+
+	if event.IsFinished() != false {
+		t.Errorf("IsFinished() returned incorrect value.")
+	}
+
+	// Test Setters
+	newStart := start.Add(2 * time.Hour)
+	event.SetStart(newStart)
+	if event.GetStart() != newStart {
+		t.Errorf("SetStart() did not set the value correctly.")
+	}
+
+	newEnd := end.Add(2 * time.Hour)
+	event.SetEnd(newEnd)
+	if event.GetEnd() != newEnd {
+		t.Errorf("SetEnd() did not set the value correctly.")
+	}
+
+	newPeak := peak.Add(2 * time.Hour)
+	event.SetPeak(newPeak)
+	if event.GetPeak() != newPeak {
+		t.Errorf("SetPeak() did not set the value correctly.")
+	}
+
+	newIdStation := 456
+	event.SetIdStation(newIdStation)
+	if event.GetIdStation() != newIdStation {
+		t.Errorf("SetIdStation() did not set the value correctly.")
+	}
+
+	newPeakSize := 84
+	event.SetPeakSize(newPeakSize)
+	if event.GetPeakSize() != newPeakSize {
+		t.Errorf("SetPeakSize() did not set the value correctly.")
+	}
+
+	event.SetFinished(true)
+	if event.IsFinished() != true {
+		t.Errorf("SetFinished() did not set the value correctly.")
+	}
 }
