@@ -1,7 +1,7 @@
 /*
-File : eventAttendancePeak_test.go
+File : eventGaussianPeak_test.go
 
-Brief : eventAttendancePeak_test.go runs tests on the eventAttendancePeak.go
+Brief : eventGaussianPeak_test.go runs tests on the eventGaussianPeak.go
 file.
 
 Date : 10/02/2020
@@ -43,7 +43,7 @@ import (
 )
 
 /*
-TestEventAttendancePeak tests the EventAttendancePeak struct and its methods.
+TestEventGaussianPeak tests the EventGaussianPeak struct and its methods.
 
 # It tests if the struct and its methods work properly
 
@@ -51,8 +51,8 @@ Input : t *testing.T
 
 Expected : The struct and its methods work properly
 */
-func TestEventAttendancePeakModel(t *testing.T) {
-	// create a new eventAttendancePeak arguments
+func TestEventGaussianPeakModel(t *testing.T) {
+	// create a new eventGaussianPeak arguments
 	start := time.Now()
 	end := time.Now()
 	peak := time.Now()
@@ -60,19 +60,19 @@ func TestEventAttendancePeakModel(t *testing.T) {
 	size := 10
 	peakWidth := 10
 
-	// create a new eventAttendancePeak
-	eventAttendancePeak := NewEventAttendancePeak(start, end, peak,
+	// create a new eventGaussianPeak
+	eventGaussianPeak := NewEventGaussianPeak(start, end, peak,
 		idStation, size, peakWidth)
 
-	// check if the eventAttendancePeak is created
-	assert.NotNil(t, eventAttendancePeak, "eventAttendancePeak should not be nil")
+	// check if the eventGaussianPeak is created
+	assert.NotNil(t, eventGaussianPeak, "eventGaussianPeak should not be nil")
 
-	// check if the eventAttendancePeak is created with the right values
-	assert.Equal(t, start, eventAttendancePeak.GetStart(), "Bad Start time")
-	assert.Equal(t, end, eventAttendancePeak.GetEnd(), "Bad End time")
-	assert.Equal(t, peak, eventAttendancePeak.GetPeak(), "Bad Peak time")
-	assert.Equal(t, idStation, eventAttendancePeak.GetIdStation(), "Bad Start station id")
-	assert.Equal(t, size, eventAttendancePeak.GetPeakSize(), "Bad population size")
-	assert.Equal(t, peakWidth, eventAttendancePeak.GetPeakWidth(), "Bad peak width")
-	assert.False(t, eventAttendancePeak.IsFinished(), "Bad event status")
+	// check if the eventGaussianPeak is created with the right values
+	assert.Equal(t, start, eventGaussianPeak.GetStart(), "Bad Start time")
+	assert.Equal(t, end, eventGaussianPeak.GetEnd(), "Bad End time")
+	assert.Equal(t, peak, eventGaussianPeak.GetEnd(), "Bad Peak time")
+	assert.Equal(t, idStation, eventGaussianPeak.GetIdStation(), "Bad Start station id")
+	assert.Equal(t, size, eventGaussianPeak.GetPeakSize(), "Bad population size")
+	assert.Equal(t, peakWidth, eventGaussianPeak.GetPeakWidth(), "Bad peak width")
+	assert.False(t, eventGaussianPeak.IsFinished(), "Bad event status")
 }

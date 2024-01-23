@@ -81,8 +81,9 @@ Attributes :
   - graph [][]*PathStation : the graph of the map
   - EventMultipleStationsClosed []*EventMultipleStationsClosed : the events
     of multiple stations closed
-  - eventsAttendancePeak []*EventAttendancePeak : the events of attendance
+  - eventsGaussianPeak []*EventGaussianPeak : the events of gaussian
     peak
+  - eventsRampPeak []*EventRampPeak : the events of ramp peak
 
 Methods :
   - Stations() []MetroStation : return the stations of the map
@@ -131,17 +132,18 @@ Methods :
     stations
 */
 type Map struct {
-	graphTimeBetweenStation     [][]int
-	graphDelay                  [][]int
-	stationsMappingCsv          tools.CsvFile
-	stationsCsv                 tools.CsvFile
-	stationsLinesCsv            tools.CsvFile
-	isConvex                    bool
-	lines                       []*MetroLine
-	stations                    []*MetroStation
-	graph                       [][]*PathStation
-	eventMultipleStationsClosed []*EventMultipleStationsClosed
-	eventsAttendancePeak        []*EventAttendancePeak
+	graphTimeBetweenStation      [][]int
+	graphDelay                   [][]int
+	stationsMappingCsv           tools.CsvFile
+	stationsCsv                  tools.CsvFile
+	stationsLinesCsv             tools.CsvFile
+	isConvex                     bool
+	lines                        []*MetroLine
+	stations                     []*MetroStation
+	graph                        [][]*PathStation
+	eventsGaussianPeak           []*EventGaussianPeak
+	eventsRampPeak               []*EventRampPeak
+	eventsMultipleStationsClosed []*EventMultipleStationsClosed
 }
 
 /*
@@ -573,7 +575,7 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 	//add events
 	var multipleStationsClosedEventsC configs.ConfigMultipleStationsClosedEvent
 	for _, eventMultipleStationsClosed := range mapPointer.
-		eventMultipleStationsClosed {
+		eventsMultipleStationsClosed {
 		multipleStationsClosedEventsC = configs.ConfigMultipleStationsClosedEvent{
 			StartString:    eventMultipleStationsClosed.start.String(),
 			EndString:      eventMultipleStationsClosed.end.String(),
@@ -584,17 +586,31 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 			multipleStationsClosedEventsC)
 	}
 
-	var attendancePeakEventsC configs.ConfigAttendancePeakEvent
-	for _, eventAttendancePeak := range mapPointer.eventsAttendancePeak {
-		attendancePeakEventsC = configs.ConfigAttendancePeakEvent{
-			StartString: eventAttendancePeak.start.String(),
-			EndString:   eventAttendancePeak.end.String(),
-			PeakString:  eventAttendancePeak.peak.String(),
-			StationId:   eventAttendancePeak.idStation,
-			PeakSize:    eventAttendancePeak.peakSize,
+	var gaussianPeakEventsC configs.ConfigGaussianPeakEvent
+	for _, eventGaussianPeak := range mapPointer.eventsGaussianPeak {
+		gaussianPeakEventsC = configs.ConfigGaussianPeakEvent{
+			StartString: eventGaussianPeak.start.String(),
+			EndString:   eventGaussianPeak.end.String(),
+			PeakString:  eventGaussianPeak.peak.String(),
+			StationId:   eventGaussianPeak.idStation,
+			PeakSize:    eventGaussianPeak.peakSize,
+			PeakWidth:   eventGaussianPeak.peakWidth,
 		}
-		mapC.EventsAttendancePeak = append(mapC.EventsAttendancePeak,
-			attendancePeakEventsC)
+		mapC.EventsGaussianPeak = append(mapC.EventsGaussianPeak,
+			gaussianPeakEventsC)
+	}
+
+	var rampPeakEventsC configs.ConfigRampPeakEvent
+	for _, eventRampPeak := range mapPointer.eventsRampPeak {
+		rampPeakEventsC = configs.ConfigRampPeakEvent{
+			StartString: eventRampPeak.start.String(),
+			EndString:   eventRampPeak.end.String(),
+			PeakString:  eventRampPeak.peak.String(),
+			StationId:   eventRampPeak.idStation,
+			PeakSize:    eventRampPeak.peakSize,
+		}
+		mapC.EventsRampPeak = append(mapC.EventsRampPeak,
+			rampPeakEventsC)
 	}
 
 	adConfig.MapC = mapC

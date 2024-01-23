@@ -29,17 +29,15 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * Model class extending {@link Event} which describes an attendance peak on a
+ * Model class extending {@link Event} which describes a ramp peak on a
  * Station.
  *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
  * @author Alexis BONAMY
- * @file EventAttendancePeak.java
- * @date N/A
- * @since 2.0
+ * @file EventPeak.java
+ * @date 08/12/2023
+ * @since 3.0
  */
-public class EventAttendancePeak extends Event {
+public class EventPeak extends Event {
   /**
    * Station id.
    */
@@ -50,8 +48,6 @@ public class EventAttendancePeak extends Event {
   private int size;
   /** Peak time. */
   private String peakTime;
-  /** Peak width. */
-  private int peakWidth;
 
   /**
    * Constructor.
@@ -60,11 +56,13 @@ public class EventAttendancePeak extends Event {
    * @param startTime event startTime
    * @param endTime   event endTime
    * @param type      eventType
+   * @param name      eventName
    */
-  public EventAttendancePeak(final int id, final String startTime,
-                             final String endTime,
-                             final EventType type) {
-    super(id, startTime, endTime, type, EventName.ATTENDANCE_PEAK);
+  public EventPeak(final int id, final String startTime,
+                       final String endTime,
+                       final EventType type,
+                       final EventName name) {
+    super(id, startTime, endTime, type, name);
   }
 
   /**
@@ -126,27 +124,6 @@ public class EventAttendancePeak extends Event {
     } else {
       throw new IllegalArgumentException("Peak time is not valid");
     }
-  }
-
-  /**
-   * get the peak width.
-   *
-   * @return int peakWidth
-   */
-  public int getPeakWidth() {
-    return peakWidth;
-  }
-
-  /**
-   * set the peak width.
-   *
-   * @param paramPeakWidth width of the peak
-   */
-  public void setPeakWidth(final int paramPeakWidth) {
-    if (paramPeakWidth < 0) {
-      throw new IllegalArgumentException("Peak width is not valid");
-    }
-    this.peakWidth = paramPeakWidth;
   }
 
   /**

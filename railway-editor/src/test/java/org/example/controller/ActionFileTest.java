@@ -28,7 +28,7 @@ import org.example.data.Data;
 import org.example.main.RailwayEditor;
 import org.example.model.Area;
 import org.example.model.Event;
-import org.example.model.EventAttendancePeak;
+import org.example.model.EventGaussianPeak;
 import org.example.model.EventHour;
 import org.example.model.EventLineClosed;
 import org.example.model.EventMultipleStationsClosed;
@@ -238,12 +238,12 @@ class ActionFileTest {
               .getTrainNumber(), "The number of trains added to this line "
               + "should be the number 13");
           break;
-        case ATTENDANCE_PEAK:
-          assertEquals(30, ((EventAttendancePeak) event)
+        case GAUSSIAN_PEAK:
+          assertEquals(30, ((EventGaussianPeak) event)
               .getIdStation(), "The station concerned by this event should"
               + " be the number 30");
-          assertEquals(200, ((EventAttendancePeak) event)
-              .getSize(), "The attendance peak in this station should be "
+          assertEquals(200, ((EventGaussianPeak) event)
+              .getSize(), "The gaussian peak in this station should be "
               + "of 200 people");
           break;
         case LINE_CLOSED:

@@ -26,7 +26,8 @@ package org.example.controller;
 
 import org.example.data.Data;
 import org.example.model.Event;
-import org.example.model.EventAttendancePeak;
+import org.example.model.EventGaussianPeak;
+import org.example.model.EventRampPeak;
 import org.example.model.EventBetween2Stations;
 import org.example.model.EventHour;
 import org.example.model.EventLineClosed;
@@ -46,6 +47,7 @@ import org.example.view.StationView;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.event.WindowEvent;
+
 
 /**
  * A class for creating events {@link org.example.model.Event} on the map.
@@ -399,53 +401,43 @@ public class ActionMetroEvent {
   }
 
   /**
-   * Add an attendance peak event.
+   * Add a gaussian peak event.
    *
    * @param eventString event string
    */
-  public void addAttendancePeak(final String eventString) {
+  public void addGaussianPeak(final String eventString) {
     MainWindow.getInstance().toFront();
     String[] eventStringTab = eventString.split(",");
-    String startTime =
-        eventStringTab[STARTING_DATE_INDEX] + "-" + eventStringTab[
-            STARTING_TIME_INDEX];
-    String endTime =
-        eventStringTab[ENDING_DATE_INDEX] + "-" + eventStringTab[
-            ENDING_TIME_INDEX];
+    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
+            + eventStringTab[STARTING_TIME_INDEX];
+    startTime = startTime.replace(":00Z", "");
+    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
+            + eventStringTab[ENDING_TIME_INDEX];
+    endTime = endTime.replace(":00Z", "");
     String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
             + eventStringTab[PEAK_TIME_INDEX];
+    peakTime = peakTime.replace(":00Z", "");
     String peakWidth = eventStringTab[PEAK_WIDTH_INDEX];
 
-    EventAttendancePeak eventAttendancePeak = new EventAttendancePeak(
+    EventGaussianPeak eventGaussianPeak = new EventGaussianPeak(
         this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
-    eventAttendancePeak.setPeakTime(peakTime);
-    eventAttendancePeak.setIdStation(Integer.parseInt(eventStringTab[
+    eventGaussianPeak.setPeakTime(peakTime);
+    eventGaussianPeak.setIdStation(Integer.parseInt(eventStringTab[
         STATION_CONCERNED_INDEX + 2]));
-    eventAttendancePeak.setSize(Integer.parseInt(eventStringTab[
+    eventGaussianPeak.setSize(Integer.parseInt(eventStringTab[
         PEAK_NUMBER_INDEX + 2]));
-    eventAttendancePeak.setPeakWidth(Integer.parseInt(peakWidth));
-    Data.getInstance().getEventList().add(eventAttendancePeak);
+    eventGaussianPeak.setPeakWidth(Integer.parseInt(peakWidth));
+    Data.getInstance().getEventList().add(eventGaussianPeak);
 
-    Station stationConcerned = null;
-    for (LineView lineView : MainWindow.getInstance().getMainPanel()
-        .getLineViews()) {
-      for (StationView stationView : lineView.getStationViews()) {
-        if (stationView.getStation().getId() == eventAttendancePeak
-            .getIdStation()) {
-          stationConcerned = stationView.getStation();
-          stationView.setCenterCircleColor(Color.YELLOW);
-        }
-      }
-    }
-    EventWindow.getInstance().dispatchEvent(new WindowEvent(
-        EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
-    MainWindow.getInstance().getMainPanel().repaint();
+    Station stationConcerned = editStationConcernedPeak(
+            eventGaussianPeak.getIdStation());
     if (stationConcerned != null) {
-      MainWindow.getInstance().getEventRecapPanel().createEventAttendancePeak(
+      MainWindow.getInstance().getEventRecapPanel().createEventGaussianPeak(
           this.getCurrentId(), startTime, endTime, peakTime,
           Integer.toString(stationConcerned.getId()),
           eventStringTab[PEAK_NUMBER_INDEX + 2], peakWidth);
     }
+
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
     try {
@@ -454,6 +446,77 @@ public class ActionMetroEvent {
       e.printStackTrace();
     }
     EventRecap.getInstance().eventsListRemoveBackground();
+  }
+
+  /**
+   * Add a ramp peak event.
+   *
+   * @param eventString event string
+   */
+  public void addRampPeak(final String eventString) {
+    MainWindow.getInstance().toFront();
+    String[] eventStringTab = eventString.split(",");
+    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
+            + eventStringTab[STARTING_TIME_INDEX];
+    startTime = startTime.replace(":00Z", "");
+    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
+            + eventStringTab[ENDING_TIME_INDEX];
+    endTime = endTime.replace(":00Z", "");
+    String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
+            + eventStringTab[PEAK_TIME_INDEX];
+    peakTime = peakTime.replace(":00Z", "");
+
+    EventRampPeak eventRampPeak = new EventRampPeak(
+            this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
+    eventRampPeak.setPeakTime(peakTime);
+    eventRampPeak.setIdStation(Integer.parseInt(eventStringTab[
+            STATION_CONCERNED_INDEX + 2]));
+    eventRampPeak.setSize(Integer.parseInt(eventStringTab[
+            PEAK_NUMBER_INDEX + 2]));
+    Data.getInstance().getEventList().add(eventRampPeak);
+
+    Station stationConcerned = editStationConcernedPeak(
+            eventRampPeak.getIdStation());
+    if (stationConcerned != null) {
+      MainWindow.getInstance().getEventRecapPanel().createEventRampPeak(
+              this.getCurrentId(), startTime, endTime, peakTime,
+              Integer.toString(stationConcerned.getId()),
+              eventStringTab[PEAK_NUMBER_INDEX + 2]);
+    }
+
+    MainWindow.getInstance().getEventRecapPanel().revalidate();
+    this.incrementCurrentId();
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    EventRecap.getInstance().eventsListRemoveBackground();
+  }
+
+  /**
+   * Edit station concerned by peak event.
+   *
+   * @param idStation station id
+   * @return station concerned
+   */
+  public Station editStationConcernedPeak(final int idStation) {
+    Station stationConcerned = null;
+    for (LineView lineView : MainWindow.getInstance().getMainPanel()
+            .getLineViews()) {
+      for (StationView stationView : lineView.getStationViews()) {
+        if (stationView.getStation().getId() == idStation) {
+          stationConcerned = stationView.getStation();
+          stationView.setCenterCircleColor(Color.YELLOW);
+        }
+      }
+    }
+
+    EventWindow.getInstance().dispatchEvent(new WindowEvent(
+            EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
+    MainWindow.getInstance().getMainPanel().repaint();
+
+    return stationConcerned;
   }
 
   /**

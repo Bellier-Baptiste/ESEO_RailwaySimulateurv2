@@ -274,27 +274,19 @@ public final class EventRecap extends JScrollPane {
   }
 
   /**
-   * create a recap for event attendancePeak.
+   * create a recap for event peak.
    *
-   * @param id           event id
+   * @param taskpane     taskpane to add the recap to
    * @param startDateStr event start date
    * @param endDateStr   event end date
    * @param peakDateStr peak time
    * @param stationStr   station concerned
    * @param peakStr      peak amount
-   * @param peakWidthStr peak width
    */
-  public void createEventAttendancePeak(final int id, final String startDateStr,
-                                        final String endDateStr,
-                                        final String peakDateStr,
-                                        final String stationStr,
-                                        final String peakStr,
-                                        final String peakWidthStr) {
-    JXTaskPane taskpane = new JXTaskPane();
-
-    // create a taskpane, and set it's title and icon
-    taskpane.setTitle("Attendance Peak");
-
+  public void createEventPeak(JXTaskPane taskpane,
+                              String startDateStr, String endDateStr,
+                              String peakDateStr, String stationStr,
+                              String peakStr) {
     JXLabel startDate = new JXLabel();
     startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     startDate.setText(START_DATE + startDateStr);
@@ -315,10 +307,6 @@ public final class EventRecap extends JScrollPane {
     peak.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     peak.setText("Peak amount: " + peakStr);
     peak.setHorizontalAlignment(SwingConstants.LEFT);
-    JXLabel peakWidth = new JXLabel();
-    peakWidth.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
-    peakWidth.setText("Peak width: " + peakWidthStr);
-    peakWidth.setHorizontalAlignment(SwingConstants.LEFT);
 
     // add various actions and components to the taskpane
     taskpane.add(startDate);
@@ -326,9 +314,40 @@ public final class EventRecap extends JScrollPane {
     taskpane.add(peakTime);
     taskpane.add(station);
     taskpane.add(peak);
+  }
+
+  /**
+   * create a recap for event gaussianPeak.
+   *
+   * @param id           event id
+   * @param startDateStr event start date
+   * @param endDateStr   event end date
+   * @param peakDateStr peak time
+   * @param stationStr   station concerned
+   * @param peakStr      peak amount
+   * @param peakWidthStr peak width
+   */
+  public void createEventGaussianPeak(final int id, final String startDateStr,
+                                        final String endDateStr,
+                                        final String peakDateStr,
+                                        final String stationStr,
+                                        final String peakStr,
+                                        final String peakWidthStr) {
+    JXTaskPane taskpane = new JXTaskPane();
+
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Gaussian Peak");
+
+    createEventPeak(taskpane, startDateStr, endDateStr, peakDateStr,
+            stationStr, peakStr);
+    JXLabel peakWidth = new JXLabel();
+    peakWidth.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    peakWidth.setText("Peak width: " + peakWidthStr);
+    peakWidth.setHorizontalAlignment(SwingConstants.LEFT);
+
+    // add various actions and components to the taskpane
     taskpane.add(peakWidth);
-    taskpane.add(new AbstractAction(REMOVE
-    ) {
+    taskpane.add(new AbstractAction(REMOVE) {
       /**
        * Remove action serial version UID.
        */
@@ -346,7 +365,49 @@ public final class EventRecap extends JScrollPane {
     this.taskPaneContainer.add(taskpane);
     this.setViewportView(taskPaneContainer);
     taskPaneContainer.revalidate();
+  }
 
+  /**
+   * create a recap for event rampPeak.
+   *
+   * @param id           event id
+   * @param startDateStr event start date
+   * @param endDateStr   event end date
+   * @param peakDateStr peak time
+   * @param stationStr   station concerned
+   * @param peakStr      peak amount
+   */
+  public void createEventRampPeak(final int id, final String startDateStr,
+                                      final String endDateStr,
+                                      final String peakDateStr,
+                                      final String stationStr,
+                                      final String peakStr) {
+    JXTaskPane taskpane = new JXTaskPane();
+
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Ramp Peak");
+
+    createEventPeak(taskpane, startDateStr, endDateStr, peakDateStr,
+            stationStr, peakStr);
+
+    taskpane.add(new AbstractAction(REMOVE) {
+      /**
+       * Remove action serial version UID.
+       */
+      private static final long serialVersionUID = 1L;
+
+      public void actionPerformed(final ActionEvent e) {
+        taskPaneContainer.remove(taskpane);
+        Data.getInstance().getEventList().removeIf(event -> event.getId()
+                == id);
+        taskPaneContainer.revalidate();
+      }
+    });
+
+    // add the task pane to the taskPaneContainer
+    this.taskPaneContainer.add(taskpane);
+    this.setViewportView(taskPaneContainer);
+    taskPaneContainer.revalidate();
   }
 
   /**

@@ -69,8 +69,9 @@ Attributes :
   - eventsLineDelay []models.EventLineDelay : the events of the simulator
   - eventMultipleStationsClosed []models.EventMultipleStationsClosed :
     the events of the simulator
-  - eventsAttendancePeak []models.EventAttendancePeak : the events of the
+  - eventsGaussianPeak []models.EventGaussianPeak : the events of the
     simulator
+  - eventsRampPeak []models.EventRampPeak : the events of the simulator
   - areasDistribution []models.PopulationDistribution : the population
     distribution of an area
   - tripNumberCounter int : the trip number counter of the simulator
@@ -83,14 +84,18 @@ Methods :
   - GetAllEventsMultipleStationsClosed() []models.EventMultipleStationsClosed :
     get the multiple stations closed
     events of the simulator
-  - GetAllEventsAttendancePeak() []models.EventAttendancePeak : get the
-    attendance peak events of the simulator
+  - GetAllEventsGaussianPeak() []models.EventGaussianPeak : get the
+    gaussian peak events of the simulator
+  - GetAllEventsRampPeak() []models.EventRampPeak : get the
+    ramp peak events of the simulator
   - CreateEventsStationClose() : create "station close" event of the
     simulator
   - CreateEventsLineDelay() : create "line delay" event of the simulator
   - CreateEventsMultipleStationsClose() : create "multiple stations close"
     event of the simulator
-  - CreateEventsAttendancePeak() : create "attendance peak" event of the
+  - CreateEventsGaussianPeak() : create "gaussian peak" event of the
+    simulator
+  - CreateEventsRampPeak() : create "ramp peak" event of the
     simulator
   - AddTrainLinePeer(line *models.MetroLine, shift, count, aux1, aux2 int)
     (*models.MetroLine, int, int, int, int) : add train to line (peer train
@@ -119,9 +124,10 @@ type Simulator struct {
 	timetable                    models.Timetable
 	timetableReal                models.TimetableReal
 	eventsStationClosed          []models.EventStationClosed
-	eventsLineDelay              []models.EventLineDelay
 	eventsMultipleStationsClosed []models.EventMultipleStationsClosed
-	eventsAttendancePeak         []models.EventAttendancePeak
+	eventsLineDelay              []models.EventLineDelay
+	eventsGaussianPeak           []models.EventGaussianPeak
+	eventsRampPeak               []models.EventRampPeak
 	tripNumberCounter            int
 	populationsDistributions     []models.PopulationDistribution
 	destinationDistributions     []models.DestinationDistribution
@@ -129,9 +135,10 @@ type Simulator struct {
 }
 
 const (
-	strErr        = " error : "
-	strEacParse   = "EventAttendancePeak : couldn't parse date : "
-	strDeletePath = " - deleted path"
+	strErr               = " error : "
+	strGaussianPeakParse = "EventGaussianPeak : couldn't parse date : "
+	strRampPeakParse     = "EventRampPeak : couldn't parse date : "
+	strDeletePath        = " - deleted path"
 )
 
 /*
@@ -168,22 +175,22 @@ Return :
 */
 func NewSimulator() *Simulator {
 	simulator := &Simulator{
-		config:                       configs.GetInstance(),
-		adConfig:                     nil,
-		MapObject:                    models.Map{},
-		population:                   nil,
-		trains:                       make([]*models.MetroTrain, 0),
-		currentTime:                  time.Now(),
-		timetable:                    models.Timetable{},
-		timetableReal:                models.TimetableReal{},
-		eventsStationClosed:          make([]models.EventStationClosed, 0),
-		eventsLineDelay:              make([]models.EventLineDelay, 0),
-		eventsMultipleStationsClosed: make([]models.EventMultipleStationsClosed, 0),
-		eventsAttendancePeak:         make([]models.EventAttendancePeak, 0),
-		populationsDistributions:     make([]models.PopulationDistribution, 0),
-		destinationDistributions:     make([]models.DestinationDistribution, 0),
-		areas:                        make([]models.Area, 0),
-		tripNumberCounter:            0,
+		config:                   configs.GetInstance(),
+		adConfig:                 nil,
+		MapObject:                models.Map{},
+		population:               nil,
+		trains:                   make([]*models.MetroTrain, 0),
+		currentTime:              time.Now(),
+		timetable:                models.Timetable{},
+		timetableReal:            models.TimetableReal{},
+		eventsStationClosed:      make([]models.EventStationClosed, 0),
+		eventsLineDelay:          make([]models.EventLineDelay, 0),
+		eventsGaussianPeak:       make([]models.EventGaussianPeak, 0),
+		eventsRampPeak:           make([]models.EventRampPeak, 0),
+		populationsDistributions: make([]models.PopulationDistribution, 0),
+		destinationDistributions: make([]models.DestinationDistribution, 0),
+		areas:                    make([]models.Area, 0),
+		tripNumberCounter:        0,
 	}
 	return simulator
 }
@@ -231,17 +238,31 @@ func (s *Simulator) GetAllEventsStationClosed() []models.EventStationClosed {
 }
 
 /*
-GetAllEventsAttendancePeak is used to get the attendance peak events of the
+GetAllEventsGaussianPeak is used to get the gaussian peak events of the
 simulator.
 
 Param :
   - s *Simulator : the simulator
 
 Return :
-  - []models.EventAttendancePeak : the events of the simulator
+  - []models.EventGaussianPeak : the events of the simulator
 */
-func (s *Simulator) GetAllEventsAttendancePeak() []models.EventAttendancePeak {
-	return s.eventsAttendancePeak
+func (s *Simulator) GetAllEventsGaussianPeak() []models.EventGaussianPeak {
+	return s.eventsGaussianPeak
+}
+
+/*
+GetAllEventsRampPeak is used to get the ramp peak events of the
+simulator.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []models.EventRampPeak : the events of the simulator
+*/
+func (s *Simulator) GetAllEventsRampPeak() []models.EventRampPeak {
+	return s.eventsRampPeak
 }
 
 /*
@@ -486,36 +507,70 @@ func (s *Simulator) CreateEventsMultipleStationsClose() {
 }
 
 /*
-CreateEventsAttendancePeak is used to create "attendance peak" event of the
+CreateEventsGaussianPeak is used to create "gaussian peak" event of the
 simulator.
 
 Param :
   - s *Simulator : the simulator
 */
-func (s *Simulator) CreateEventsAttendancePeak() {
-	s.eventsAttendancePeak = make([]models.EventAttendancePeak,
-		len(s.adConfig.MapC.EventsAttendancePeak))
-	for i, ev := range s.adConfig.MapC.EventsAttendancePeak {
+func (s *Simulator) CreateEventsGaussianPeak() {
+	s.eventsGaussianPeak = make([]models.EventGaussianPeak,
+		len(s.adConfig.MapC.EventsGaussianPeak))
+	for i, ev := range s.adConfig.MapC.EventsGaussianPeak {
 		startEv, err := time.Parse(time.RFC3339, ev.StartString)
 		if err != nil {
-			fmt.Print(strEacParse,
+			fmt.Print(strGaussianPeakParse,
 				ev.StartString, strErr, err)
 			continue
 		}
 		endEv, err := time.Parse(time.RFC3339, ev.EndString)
 		if err != nil {
-			fmt.Print(strEacParse,
+			fmt.Print(strGaussianPeakParse,
 				ev.EndString, strErr, err)
 			continue
 		}
 		peakEv, err := time.Parse(time.RFC3339, ev.PeakString)
 		if err != nil {
-			fmt.Print(strEacParse,
+			fmt.Print(strGaussianPeakParse,
 				ev.PeakString, strErr, err)
 			continue
 		}
-		s.eventsAttendancePeak[i] = models.NewEventAttendancePeak(startEv,
+		s.eventsGaussianPeak[i] = models.NewEventGaussianPeak(startEv,
 			endEv, peakEv, ev.StationId, ev.PeakSize, ev.PeakWidth)
+	}
+}
+
+/*
+CreateEventsRampPeak is used to create "ramp peak" event of the
+simulator.
+
+Param :
+  - s *Simulator : the simulator
+*/
+func (s *Simulator) CreateEventsRampPeak() {
+	s.eventsRampPeak = make([]models.EventRampPeak,
+		len(s.adConfig.MapC.EventsRampPeak))
+	for i, ev := range s.adConfig.MapC.EventsRampPeak {
+		startEv, err := time.Parse(time.RFC3339, ev.StartString)
+		if err != nil {
+			fmt.Print(strRampPeakParse,
+				ev.StartString, strErr, err)
+			continue
+		}
+		endEv, err := time.Parse(time.RFC3339, ev.EndString)
+		if err != nil {
+			fmt.Print(strRampPeakParse,
+				ev.EndString, strErr, err)
+			continue
+		}
+		peakEv, err := time.Parse(time.RFC3339, ev.PeakString)
+		if err != nil {
+			fmt.Print(strRampPeakParse,
+				ev.PeakString, strErr, err)
+			continue
+		}
+		s.eventsRampPeak[i] = models.NewEventRampPeak(startEv,
+			endEv, peakEv, ev.StationId, ev.PeakSize)
 	}
 }
 
@@ -728,7 +783,9 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 
 	s.CreateEventsMultipleStationsClose()
 
-	s.CreateEventsAttendancePeak()
+	s.CreateEventsGaussianPeak()
+
+	s.CreateEventsRampPeak()
 
 	//generate populations distribution
 	s.CreatePopulationsDistribution()
@@ -865,8 +922,11 @@ func (s *Simulator) RunOnce() {
 	eventMultipleStationsClosed = s.executeEventsMultipleStationsClosed(
 		eventMultipleStationsClosed, oldTime, newCurrentTime)
 
-	var eventsAttendancePeak = s.getEventsAttendancePeak(oldTime, newCurrentTime)
-	s.executeEventsAttendancePeak(eventsAttendancePeak, oldTime, newCurrentTime)
+	var eventsGaussianPeak = s.getEventsGaussianPeak(oldTime, newCurrentTime)
+	s.executeEventsGaussianPeak(eventsGaussianPeak, oldTime, newCurrentTime)
+
+	var eventsRampPeak = s.getEventsRampPeak(oldTime, newCurrentTime)
+	s.executeEventsRampPeak(eventsRampPeak, oldTime, newCurrentTime)
 
 	//var lastTime = s.currentTime
 	s.currentTime = newCurrentTime
@@ -2173,32 +2233,29 @@ func (s *Simulator) executeEventsMultipleStationsClosed(events []*models.
 }
 
 /*
-executeEventsAttendancePeak is used to start the event "attendance peak".
+executeEventsGaussianPeak is used to start the event "gaussian peak".
 
 Param :
   - s *Simulator : the simulator
-  - events []*models.EventAttendancePeak : the events
+  - events []*models.EventGaussianPeak : the events
   - oldTime time.Time : the old time
   - currentTime time.Time : the current time
 */
-func (s *Simulator) executeEventsAttendancePeak(
-	events []*models.EventAttendancePeak, oldTime time.Time,
+func (s *Simulator) executeEventsGaussianPeak(
+	events []*models.EventGaussianPeak, oldTime time.Time,
 	currentTime time.Time) {
 	for _, event := range events {
 		// get minutes
 		startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
-		endMinutes := event.GetEnd().Hour()*60 + event.GetEnd().Minute()
-		peakMinutes := event.GetPeak().Hour()*60 + event.GetPeak().Minute()
 		oldMinutes := oldTime.Hour()*60 + oldTime.Minute()
 		currentMinutes := currentTime.Hour()*60 + currentTime.Minute()
 
 		// get passenger distribution
-		passengerDistribution := s.makeEventAttendancePeakDistribution(startMinutes,
-			endMinutes, peakMinutes, event)
+		passengerDistribution := s.makeEventGaussianPeakDistribution(event)
 
 		// determine the number of passengers for the current minute by taking the
 		// difference between the current time and the old time
-		currentPassengers := s.pickEventAttendancePeakCurrentPassengers(
+		currentPassengers := s.pickEventPeakCurrentPassengers(
 			passengerDistribution, oldMinutes, currentMinutes, startMinutes)
 
 		// execute the event
@@ -2239,25 +2296,26 @@ func (s *Simulator) executeEventsAttendancePeak(
 }
 
 /*
-makeEventAttendancePeakDistribution is used to create a distribution of
-passengers for an event "attendance peak".
+makeEventGaussianPeakDistribution is used to create a distribution of
+passengers for an event "gaussian peak".
 
 Param :
   - s *Simulator : the simulator
-  - startMinutes int : the start minutes
-  - endMinutes int : the end minutes
-  - peakMinutes int : the peak minutes
-  - event *models.EventAttendancePeak : the event
+  - event *models.EventGaussianPeak : the event
 
 Return :
   - []int : the distribution
 */
-func (s *Simulator) makeEventAttendancePeakDistribution(startMinutes,
-	endMinutes, peakMinutes int, event *models.EventAttendancePeak) []int {
+func (s *Simulator) makeEventGaussianPeakDistribution(
+	event *models.EventGaussianPeak) []int {
+	startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+	endMinutes := event.GetEnd().Hour()*60 + event.GetEnd().Minute()
+	peakMinutes := event.GetPeak().Hour()*60 + event.GetPeak().Minute()
+
 	// create a table to store the number of passengers for each minute
 	passengerDistribution := make([]int, endMinutes-startMinutes)
 
-	// calcultate asymetrical gaussian distribution
+	// calculate asymetrical gaussian distribution
 	peakArea := float64(event.GetPeakSize())
 	peakHeight := peakArea / (float64(event.GetPeakWidth()) * math.Sqrt(2*math.Pi))
 	for minute := startMinutes; minute < endMinutes; minute++ {
@@ -2297,7 +2355,7 @@ func (s *Simulator) makeEventAttendancePeakDistribution(startMinutes,
 	return passengerDistribution
 }
 
-func (s *Simulator) pickEventAttendancePeakCurrentPassengers(
+func (s *Simulator) pickEventPeakCurrentPassengers(
 	passengerDistribution []int, oldMinutes, currentMinutes,
 	startMinutes int) int {
 
@@ -2309,6 +2367,135 @@ func (s *Simulator) pickEventAttendancePeakCurrentPassengers(
 		currentPassengers += passengerDistribution[minute-startMinutes]
 	}
 	return currentPassengers
+}
+
+/*
+executeEventsRampPeak is used to start the event "ramp peak".
+
+Param :
+  - s *Simulator : the simulator
+  - events []*models.EventRampPeak : the events
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
+*/
+func (s *Simulator) executeEventsRampPeak(
+	events []*models.EventRampPeak, oldTime time.Time,
+	currentTime time.Time) {
+	for _, event := range events {
+		// get minutes
+		startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+		oldMinutes := oldTime.Hour()*60 + oldTime.Minute()
+		currentMinutes := currentTime.Hour()*60 + currentTime.Minute()
+
+		// get passenger distribution
+		passengerDistribution := s.makeEventRampPeakDistribution(event)
+
+		// determine the number of passengers for the current minute by taking the
+		// difference between the current time and the old time
+		currentPassengers := s.pickEventPeakCurrentPassengers(
+			passengerDistribution, oldMinutes, currentMinutes, startMinutes)
+
+		// execute the event
+		for i := 0; i < currentPassengers; i++ {
+			// get total population
+			var totalPopulation int
+			totalPopulation += len(s.population.Outside())
+			for _, station := range s.population.InStation() {
+				totalPopulation += len(station)
+			}
+			for _, train := range s.population.InTrains() {
+				totalPopulation += len(train)
+			}
+
+			departureStation := s.MapObject.FindStationById(event.GetIdStation())
+			// create arrival station, different from departure station
+			arrivalStation := departureStation
+			for arrivalStation == departureStation {
+				arrivalStation = s.MapObject.FindStationById(rand.Intn(
+					len(s.MapObject.Stations())))
+			}
+
+			ps, _ := s.MapObject.GetPathStation(*departureStation, *arrivalStation)
+			trip := models.NewTrip(currentTime, ps)
+
+			passenger := models.NewPassenger(strconv.Itoa(totalPopulation),
+				models.PickAKind())
+			passenger.SetTrips([]*models.Trip{&trip})
+			passenger.SetCurrentTrip(&trip)
+
+			s.population.Outside()[passenger.Id()] = &passenger
+			s.population.TransferFromPopulationToStation(&passenger, departureStation,
+				currentTime)
+			s.population.InStation()[event.GetIdStation()][passenger.Id()] =
+				&passenger
+		}
+	}
+}
+
+/*
+makeEventGaussianPeakDistribution is used to create a distribution of
+passengers for an event "gaussian peak".
+
+Param :
+  - s *Simulator : the simulator
+  - event *models.EventRampPeak : the event
+
+Return :
+  - []int : the distribution
+*/
+func (s *Simulator) makeEventRampPeakDistribution(
+	event *models.EventRampPeak) []int {
+	startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+	endMinutes := event.GetEnd().Hour()*60 + event.GetEnd().Minute()
+	peakMinutes := event.GetPeak().Hour()*60 + event.GetPeak().Minute()
+
+	// create a table to store the number of passengers for each minute
+	passengerDistribution := make([]int, endMinutes-startMinutes)
+
+	// calculate the ramp peak distribution
+	peakArea := float64(event.GetPeakSize())
+	divider := float64((peakMinutes-startMinutes)/2 + (endMinutes-peakMinutes)/2)
+	peakMaxHeight := peakArea / divider
+	for minute := startMinutes; minute < endMinutes; minute++ {
+		if minute < peakMinutes {
+			passengerDistribution[minute-startMinutes] =
+				int(peakMaxHeight / float64(peakMinutes-startMinutes) *
+					float64(minute-startMinutes))
+		}
+		if minute >= peakMinutes {
+			passengerDistribution[minute-startMinutes] =
+				int(peakMaxHeight / (float64(peakMinutes - endMinutes)) *
+					(float64(minute - endMinutes)))
+		}
+	}
+
+	totalPassengers := 0
+	for _, passengers := range passengerDistribution {
+		totalPassengers += passengers
+	}
+
+	// add missing passengers to the distribution or remove passengers if
+	// there are too many
+	value := event.GetPeakSize() > totalPassengers
+	print(value)
+	if event.GetPeakSize() > totalPassengers {
+		missingPassengers := event.GetPeakSize() - totalPassengers
+		// add missing passengers
+		for missingPassengers > 0 {
+			passengerDistribution[rand.Intn(len(passengerDistribution))]++
+			missingPassengers--
+		}
+	}
+	if event.GetPeakSize() < totalPassengers {
+		missingPassengers := totalPassengers - event.GetPeakSize()
+		// remove passengers
+		for missingPassengers > 0 {
+			passengerDistribution[rand.Intn(len(passengerDistribution))]--
+			missingPassengers--
+		}
+	}
+
+	return passengerDistribution
 }
 
 /*
@@ -2393,7 +2580,7 @@ func (s *Simulator) getEventsMultipleStationsClosed(start,
 }
 
 /*
-getEventsAttendancePeak is used to get the events "attendance peak".
+getEventsGaussianPeak is used to get the events "gaussian peak".
 
 Param :
   - s *Simulator : the simulator
@@ -2401,16 +2588,40 @@ Param :
   - end time.Time : the end time
 
 Return :
-  - []*models.EventAttendancePeak : the events
+  - []*models.EventGaussianPeak : the events
 */
-func (s *Simulator) getEventsAttendancePeak(start,
-	end time.Time) []*models.EventAttendancePeak {
-	var output []*models.EventAttendancePeak
+func (s *Simulator) getEventsGaussianPeak(start,
+	end time.Time) []*models.EventGaussianPeak {
+	var output []*models.EventGaussianPeak
 
-	for i := range s.eventsAttendancePeak {
-		if s.eventsAttendancePeak[i].GetStart().Before(end) &&
-			s.eventsAttendancePeak[i].GetEnd().After(start) {
-			output = append(output, &s.eventsAttendancePeak[i])
+	for i := range s.eventsGaussianPeak {
+		if s.eventsGaussianPeak[i].GetStart().Before(end) &&
+			s.eventsGaussianPeak[i].GetEnd().After(start) {
+			output = append(output, &s.eventsGaussianPeak[i])
+		}
+	}
+	return output
+}
+
+/*
+getEventsRampPeak is used to get the events "ramp peak".
+
+Param :
+  - s *Simulator : the simulator
+  - start time.Time : the start time
+  - end time.Time : the end time
+
+Return :
+  - []*models.EventRampPeak : the events
+*/
+func (s *Simulator) getEventsRampPeak(start,
+	end time.Time) []*models.EventRampPeak {
+	var output []*models.EventRampPeak
+
+	for i := range s.eventsRampPeak {
+		if s.eventsRampPeak[i].GetStart().Before(end) &&
+			s.eventsRampPeak[i].GetEnd().After(start) {
+			output = append(output, &s.eventsRampPeak[i])
 		}
 	}
 	return output
