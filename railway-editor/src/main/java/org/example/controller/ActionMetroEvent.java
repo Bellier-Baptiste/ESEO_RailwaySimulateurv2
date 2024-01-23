@@ -410,10 +410,13 @@ public class ActionMetroEvent {
     String[] eventStringTab = eventString.split(",");
     String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
             + eventStringTab[STARTING_TIME_INDEX];
+    startTime = startTime.replace(":00Z", "");
     String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
             + eventStringTab[ENDING_TIME_INDEX];
+    endTime = endTime.replace(":00Z", "");
     String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
             + eventStringTab[PEAK_TIME_INDEX];
+    peakTime = peakTime.replace(":00Z", "");
     String peakWidth = eventStringTab[PEAK_WIDTH_INDEX];
 
     EventGaussianPeak eventGaussianPeak = new EventGaussianPeak(
@@ -455,10 +458,13 @@ public class ActionMetroEvent {
     String[] eventStringTab = eventString.split(",");
     String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
             + eventStringTab[STARTING_TIME_INDEX];
+    startTime = startTime.replace(":00Z", "");
     String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
             + eventStringTab[ENDING_TIME_INDEX];
+    endTime = endTime.replace(":00Z", "");
     String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
             + eventStringTab[PEAK_TIME_INDEX];
+    peakTime = peakTime.replace(":00Z", "");
 
     EventRampPeak eventRampPeak = new EventRampPeak(
             this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
