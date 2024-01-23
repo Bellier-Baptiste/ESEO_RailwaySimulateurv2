@@ -31,7 +31,7 @@ package org.example.model;
  * @author Aurélie Chamouleau
  * @author Marie Bordet
  * @file EventName.java
- * @date 2024-01-09
+ * @date 2023-10-02
  * @since 3.0
  */
 public enum EventName {
