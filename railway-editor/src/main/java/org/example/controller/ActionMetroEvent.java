@@ -55,7 +55,7 @@ import java.awt.event.WindowEvent;
  * @author Alexis BONAMY
  * @author Marie Bordet
  * @file ActionMetroEvent.java
- * @date 2024-01-09
+ * @date 2023-10-02
  * @see org.example.view.EventWindow
  * @see org.example.view.EventRecap
  * @see org.example.view.ListEventPanel
