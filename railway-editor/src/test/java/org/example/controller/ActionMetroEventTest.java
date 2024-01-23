@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import org.example.data.Data;
 import org.example.model.*;
 import org.example.model.Event;
 import org.example.view.LineView;
@@ -15,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Test-cases of creating events.
  *
@@ -306,6 +308,119 @@ class ActionMetroEventTest {
     Assertions.assertEquals(station2.getId(), returnFunction[0].getId());
     Assertions.assertEquals(station1.getId(), returnFunction[1].getId());
   }
+
+  /**
+   * Test the ColorStationViewsEntireLine method.
+   */
+  @Test
+  void testColorStationViewsEntireLine() {
+    Station station1 = new Station(0, 1, 1, "0");
+    Station station2 = new Station(1, 2, 2, "1");
+    List<Station> stationList = new ArrayList<>();
+    stationList.add(station1);
+    stationList.add(station2);
+    List<StationView> stationViewList = new ArrayList<>();
+    stationViewList.add(new StationView(station1));
+    stationViewList.add(new StationView(station2));
+    LineView lineView = new LineView(new Line(0, stationList), stationViewList);
+    Method method = null;
+    try {
+      method = ActionMetroEvent.class.getDeclaredMethod(
+          "colorStationViewsEntireLine", LineView.class, Color.class);
+    } catch (NoSuchMethodException e) {
+      e.printStackTrace();
+    }
+    method.setAccessible(true);
+    try {
+      method.invoke(ActionMetroEvent.getInstance(), lineView, Color.RED);
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InvocationTargetException e) {
+      e.printStackTrace();
+    }
+    Assertions.assertEquals(Color.RED, lineView.getStationViews().get(0).getCenterCircleColor());
+    Assertions.assertEquals(Color.RED, lineView.getStationViews().get(1).getCenterCircleColor());
+  }
+
+  /**
+   * Test the AddLineClosed method when it is a planned line closed.
+   */
+  @Test
+  void testAddLineClosedPlanned() {
+    String string = "2024/01/18,11:42,2024/01/25,11:42,0,planned";
+    ActionMetroEvent actionMetroEvent = ActionMetroEvent.getInstance();
+    Data data = Data.getInstance();
+    data.setEventList(new ArrayList<>());
+    Station station1 = new Station(0, 1, 1, "0");
+    Station station2 = new Station(1, 2, 2, "1");
+    List<Station> stationList = new ArrayList<>();
+    stationList.add(station1);
+    stationList.add(station2);
+    List<StationView> stationViewList = new ArrayList<>();
+    stationViewList.add(new StationView(station1));
+    stationViewList.add(new StationView(station2));
+    LineView lineView = new LineView(new Line(0, stationList), stationViewList);
+    List<LineView> lineViewList = new ArrayList<>();
+    lineViewList.add(lineView);
+    MainPanel mainPanel = MainWindow.getInstance().getMainPanel();
+    mainPanel.setLineViews(lineViewList);
+    actionMetroEvent.addLineClosed(string);
+
+    Assertions.assertEquals(1, data.getEventList().size());
+    Assertions.assertEquals("2024/01/18-11:42", data.getEventList().get(0).getStartTime());
+  }
+
+  /**
+   * Test the AddLineClosed method when it is a unexpected line closed.
+   */
+  @Test
+  void testAddLineClosedUnexpected() {
+    String string = "2024/01/18,11:42,2024/01/25,11:42,0,unexpected";
+    ActionMetroEvent actionMetroEvent = ActionMetroEvent.getInstance();
+    Data data = Data.getInstance();
+    data.setEventList(new ArrayList<>());
+    Station station1 = new Station(0, 1, 1, "0");
+    Station station2 = new Station(1, 2, 2, "1");
+    List<Station> stationList = new ArrayList<>();
+    stationList.add(station1);
+    stationList.add(station2);
+    List<StationView> stationViewList = new ArrayList<>();
+    stationViewList.add(new StationView(station1));
+    stationViewList.add(new StationView(station2));
+    LineView lineView = new LineView(new Line(0, stationList), stationViewList);
+    List<LineView> lineViewList = new ArrayList<>();
+    lineViewList.add(lineView);
+    MainPanel mainPanel = MainWindow.getInstance().getMainPanel();
+    mainPanel.setLineViews(lineViewList);
+    actionMetroEvent.addLineClosed(string);
+    Assertions.assertEquals(1, data.getEventList().size());
+    Assertions.assertEquals("2024/01/18-11:42", data.getEventList().get(0).getStartTime());
+  }
+
+  /**
+   * Test the AddLineClosed method when the line closure type is invalid.
+   */
+  @Test
+  void testAddLineClosedException() {
+    String string = "2024/01/18,11:42,2024/01/25,11:42,0,test";
+    ActionMetroEvent actionMetroEvent = ActionMetroEvent.getInstance();
+    Station station1 = new Station(0, 1, 1, "0");
+    Station station2 = new Station(1, 2, 2, "1");
+    List<Station> stationList = new ArrayList<>();
+    stationList.add(station1);
+    stationList.add(station2);
+    List<StationView> stationViewList = new ArrayList<>();
+    stationViewList.add(new StationView(station1));
+    stationViewList.add(new StationView(station2));
+    LineView lineView = new LineView(new Line(0, stationList), stationViewList);
+    List<LineView> lineViewList = new ArrayList<>();
+    lineViewList.add(lineView);
+    MainPanel mainPanel = MainWindow.getInstance().getMainPanel();
+    mainPanel.setLineViews(lineViewList);
+    Assertions.assertThrows(IllegalArgumentException.class, () -> actionMetroEvent.addLineClosed(string));
+  }
+
+
 
 
 }

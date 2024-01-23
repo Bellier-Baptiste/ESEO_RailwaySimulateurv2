@@ -54,7 +54,11 @@ public enum EventName {
   /**
    * Station closed event name.
    */
-  STATION_CLOSED("stationClosed");
+  STATION_CLOSED("stationClosed"),
+  /**
+   * Line closed event name.
+   */
+  LINE_CLOSED("lineClosed");
 
   /**
    * String value of the event name.

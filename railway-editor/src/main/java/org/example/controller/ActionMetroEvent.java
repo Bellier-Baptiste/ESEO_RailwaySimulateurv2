@@ -29,11 +29,13 @@ import org.example.model.Event;
 import org.example.model.EventAttendancePeak;
 import org.example.model.EventBetween2Stations;
 import org.example.model.EventHour;
+import org.example.model.EventLineClosed;
 import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventName;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
+import org.example.model.LineClosureType;
 import org.example.model.Station;
 import org.example.view.EventRecap;
 import org.example.view.EventWindow;
@@ -100,6 +102,14 @@ public class ActionMetroEvent {
    * Ending time index.
    */
   private static final int ENDING_TIME_INDEX = 3;
+  /**
+   * Line closure line index.
+   */
+  private static final int LINE_CLOSURE_LINE_INDEX = 4;
+  /**
+   * Line closure type index.
+   */
+  private static final int LINE_CLOSURE_TYPE_INDEX = 5;
   /** Peak date index. */
   private static final int PEAK_DATE_INDEX = 4;
   /** Peak time index. */
@@ -376,6 +386,19 @@ public class ActionMetroEvent {
   }
 
   /**
+   * Color the station views of the line.
+   *
+   * @param line line concerned
+   * @param eventColor color of the event
+   */
+  private void colorStationViewsEntireLine(final LineView line,
+                                           final Color eventColor) {
+    for (StationView stationView : line.getStationViews()) {
+      stationView.setCenterCircleColor(eventColor);
+    }
+  }
+
+  /**
    * Add an attendance peak event.
    *
    * @param eventString event string
@@ -509,6 +532,54 @@ public class ActionMetroEvent {
           this.getCurrentId(), startTime, endTime,
           Integer.toString(stationConcerned.getId()));
     }
+    MainWindow.getInstance().getEventRecapPanel().revalidate();
+    this.incrementCurrentId();
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    EventRecap.getInstance().eventsListRemoveBackground();
+  }
+
+  /**
+   * Add a line closed event.
+   *
+   * @param eventString event string
+   */
+  public void addLineClosed(final String eventString) {
+    MainWindow.getInstance().toFront();
+    String[] eventStringTab = eventString.split(",");
+    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
+        + eventStringTab[STARTING_TIME_INDEX];
+    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
+        + eventStringTab[ENDING_TIME_INDEX];
+    EventLineClosed eventLineClosed = new EventLineClosed(this.getCurrentId(),
+        startTime, endTime, Event.EventType.LINE);
+    eventLineClosed.setIdLine(Integer.parseInt(
+        eventStringTab[LINE_CLOSURE_LINE_INDEX]));
+    switch (eventStringTab[LINE_CLOSURE_TYPE_INDEX]) {
+      case "unexpected":
+        eventLineClosed.setClosureType(LineClosureType.UNEXPECTED);
+        break;
+      case "planned":
+        eventLineClosed.setClosureType(LineClosureType.PLANNED);
+        break;
+      default:
+        throw new IllegalArgumentException("Invalid line closure type.");
+    }
+
+    Data.getInstance().getEventList().add(eventLineClosed);
+    this.colorStationViewsEntireLine(MainWindow.getInstance().getMainPanel()
+        .getLineViews().get(Integer.parseInt(
+            eventStringTab[LINE_CLOSURE_LINE_INDEX])), Color.RED);
+    EventWindow.getInstance().dispatchEvent(new WindowEvent(
+        EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
+    MainWindow.getInstance().getMainPanel().repaint();
+    MainWindow.getInstance().getEventRecapPanel().createEventLineClosed(
+        this.getCurrentId(), startTime, endTime,
+        eventStringTab[LINE_CLOSURE_LINE_INDEX],
+        eventStringTab[LINE_CLOSURE_TYPE_INDEX]);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
     try {

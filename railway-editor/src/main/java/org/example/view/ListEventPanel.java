@@ -42,6 +42,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.BorderLayout;
@@ -193,7 +194,8 @@ public final class ListEventPanel extends JPanel {
   private static final Object[][] TABLE_DATA = {
       {"LineDelayed", "Line", "configure a delay between 2 stations of a line"},
       {"StationClosed", "Station", "close a station"},
-      {"MultipleStationsClosed", "Line", "close an entire line of the map"},
+      {"MultipleStationsClosed", "Line", "close multiple stations of the map"},
+      {"LineClosed", "Line", "close an entire line of the map"},
       {"AttendancePeak", "Station", "configure a big raise of population on a"
           + " defined station"},
       {"TrainHour", "Line", "configure a new train flow on a line"}};
@@ -278,6 +280,11 @@ public final class ListEventPanel extends JPanel {
   //eventTrainHour
   private JTextField editTrainNumber;
 
+  /**
+   * edit type line closed field.
+   */
+  private JToggleButton editTypeLineClosed;
+
 
   /**
    * ListEventPanel constructor.
@@ -304,6 +311,7 @@ public final class ListEventPanel extends JPanel {
     editStationStart = new JTextField();
     editTrainNumber = new JTextField();
     editStationClosedConcerned = new JTextField();
+    editTypeLineClosed = new JToggleButton();
 
   }
 
@@ -406,6 +414,18 @@ public final class ListEventPanel extends JPanel {
               confirmEventBtn.addActionListener(e ->
                   ActionMetroEvent.getInstance().addStationClosed(ListEventPanel
                       .getInstance().eventStationClosedToString()));
+              view.add(confirmEventBtn, c);
+              break;
+            case "LineClosed":
+              initLineClosed(c);
+              c.fill = GridBagConstraints.HORIZONTAL;
+              c.gridwidth = GRID_WIDTH;
+              c.gridx = GRID_X_POSITION;
+              c.gridy = GRID_Y_POSITION;
+              c.weighty = GRID_WEIGHT;
+              confirmEventBtn.addActionListener(e ->
+                  ActionMetroEvent.getInstance().addLineClosed(ListEventPanel
+                      .getInstance().eventLineClosedToString()));
               view.add(confirmEventBtn, c);
               break;
             default:
@@ -1080,6 +1100,143 @@ public final class ListEventPanel extends JPanel {
   }
 
   /**
+   * Edition fields for event line closed.
+   *
+   * @param c grid bag constraints
+   */
+  private void initLineClosed(final GridBagConstraints c) {
+    JLabel timeStart = new JLabel(START_TIME);
+    JLabel timeEnd = new JLabel(END_TIME);
+
+    Properties p = new Properties();
+    p.put(PROPERTIES_TEXT_TODAY, PROPERTIES_TEXT_TODAY_VALUE);
+    p.put(PROPERTIES_TEXT_MONTH, PROPERTIES_TEXT_MONTH_VALUE);
+    p.put(PROPERTIES_TEXT_YEAR, PROPERTIES_TEXT_YEAR_VALUE);
+
+    JPanel viewDateStart = new JPanel();
+    JPanel viewDateEnd = new JPanel();
+    viewDateStart.setBorder(new BevelBorder(BevelBorder.RAISED));
+    viewDateEnd.setBorder(new BevelBorder(BevelBorder.RAISED));
+
+    UtilDateModel model = new UtilDateModel();
+    UtilDateModel model2 = new UtilDateModel();
+    JDatePanelImpl datePanelStart = new JDatePanelImpl(model, p);
+    Properties p2 = new Properties();
+    JDatePanelImpl datePanelEnd = new JDatePanelImpl(model2, p2);
+    datePickerStart = new JDatePickerImpl(datePanelStart,
+        new DateLabelFormatter());
+    datePickerEnd = new JDatePickerImpl(datePanelEnd, new DateLabelFormatter());
+    viewDateStart.add(datePickerStart, BorderLayout.CENTER);
+    viewDateEnd.add(datePickerEnd, BorderLayout.CENTER);
+    clockPanelStart = new ClockPanel();
+    clockPanelEnd = new ClockPanel();
+    editLineSelected = new JTextField();
+    JButton currentLineButton = new JButton("Select Current line");
+    currentLineButton.addActionListener(e -> editLineSelected.setText(
+        Integer.toString(ActionLine.getInstance().getLineToUpdateIndex())));
+    editTypeLineClosed = new JToggleButton("Planned line closure");
+    editTypeLineClosed.addActionListener(e -> {
+      if (editTypeLineClosed.isSelected()) {
+        editTypeLineClosed.setText("Unexpected line closure");
+      } else {
+        editTypeLineClosed.setText("Planned line closure");
+      }
+    });
+
+    try {
+      BufferedImage btnImg = ImageIO.read(Objects.requireNonNull(getClass()
+          .getResource(SELECTION_PNG_PATH)));
+      Image scaled = btnImg.getScaledInstance(SELECT_STATION_ICON_BTN_WIDTH,
+          SELECT_STATION_ICON_BTN_HEIGHT, java.awt.Image.SCALE_SMOOTH);
+      ImageIcon icon = new ImageIcon(scaled);
+      JButton stationConcernedPicker = new JButton(icon);
+      stationConcernedPicker.addActionListener(arg0 -> {
+        EventWindow.getInstance().dispose();
+        Data.getInstance().setSelectType(Data.STATION_CONCERNED);
+      });
+      stationConcernedPicker.setPreferredSize(new Dimension(
+          SELECT_STATION_BTN_WIDTH, SELECT_STATION_BTN_HEIGHT));
+      c.anchor = GridBagConstraints.NORTHWEST;
+      c.fill = GridBagConstraints.VERTICAL;
+      c.gridwidth = 3;
+      c.gridx = 0;
+      c.gridy = 0;
+      c.gridheight = 1;
+      c.weightx = 3;
+      c.weighty = 0.1;
+      view.add(timeStart, c);
+
+      c.fill = GridBagConstraints.BOTH;
+      c.gridwidth = 1;
+      c.gridx = 0;
+      c.gridy = 1;
+      c.gridheight = 1;
+      c.weightx = 3;
+      c.weighty = 0.1;
+      view.add(viewDateStart, c);
+      c.gridx = 1;
+      c.gridy = 1;
+      c.weighty = 0.1;
+      view.add(clockPanelStart, c);
+
+      c.fill = GridBagConstraints.VERTICAL;
+      c.gridwidth = 3;
+      c.gridx = 0;
+      c.gridy = 2;
+      c.gridheight = 1;
+      c.weightx = 3;
+      c.weighty = 0.1;
+      view.add(timeEnd, c);
+
+      c.fill = GridBagConstraints.BOTH;
+      c.gridwidth = 1;
+      c.gridx = 0;
+      c.gridy = 3;
+      c.gridheight = 1;
+      c.weightx = 3;
+      c.weighty = 0.4;
+      view.add(viewDateEnd, c);
+      c.gridx = 1;
+      c.gridy = 3;
+      c.weighty = 0.4;
+      view.add(clockPanelEnd, c);
+
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.gridx = 0;
+      c.gridy = 4;
+      c.weighty = 0.1;
+      JLabel lineSelected = new JLabel("Line to edit: ");
+      view.add(lineSelected, c);
+      c.gridx = 0;
+      c.gridy = 5;
+      c.weighty = 0.2;
+      view.add(editLineSelected, c);
+      c.fill = GridBagConstraints.CENTER;
+      c.gridx = 1;
+      c.gridy = 5;
+      c.weighty = 0.2;
+      view.add(currentLineButton, c);
+
+      c.fill = GridBagConstraints.HORIZONTAL;
+      c.gridx = 0;
+      c.gridy = 6;
+      c.weighty = 0.2;
+      JLabel typeLineClosed = new JLabel("Type of closure: ");
+      view.add(typeLineClosed, c);
+      c.gridx = 0;
+      c.gridy = 7;
+      c.weighty = 0.2;
+      view.add(editTypeLineClosed, c);
+
+      eventConfig.revalidate();
+      eventConfig.setVisible(true);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+
+  }
+
+  /**
    * format the date of the JDatePicker.
    *
    * @author arthu
@@ -1227,6 +1384,28 @@ public final class ListEventPanel extends JPanel {
 
     return timeStart + "," + timeEnd + "," + lineSelected + ","
         + trainNumer;
+  }
+
+  /**
+   * get the info of the edition fields recap as a String
+   * for eventLineClosed.
+   *
+   * @return String
+   */
+  public String eventLineClosedToString() {
+    DateFormat df = new SimpleDateFormat(FORMAT_DATE);
+    DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
+
+    String dateStart = df.format((Date) datePickerStart.getModel().getValue());
+    String dateEnd = df.format((Date) datePickerEnd.getModel().getValue());
+    String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
+        .getValue());
+    String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
+    String lineSelected = editLineSelected.getText();
+    String typeLineClosed = editTypeLineClosed.isSelected() ? "unexpected"
+        : "planned";
+    return dateStart + "," + timeStart + "," + dateEnd + "," + timeEnd + ","
+        + lineSelected + "," + typeLineClosed;
   }
 
   /**
