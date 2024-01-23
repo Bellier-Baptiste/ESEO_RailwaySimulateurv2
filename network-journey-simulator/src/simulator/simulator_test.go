@@ -11,6 +11,7 @@ Author :
   - Benoît VAVASSEUR
   - Paul TRÉMOUREUX
   - Aurélie CHAMOULEAU
+  - Marie BORDET
   - Alexis BONAMY
 
 License : MIT License
@@ -260,30 +261,30 @@ func TestSimulator_TripNumber(t *testing.T) {
 }
 
 /*
-TestSimulator_EventLineClosed() tests the GetAllEventsLineClosed() method of the Simulator struct.
+TestSimulator_EventMultipleStationsClosed() tests the GetAllEventsMultipleStationsClosed() method of the Simulator struct.
 
-# It tests if the GetAllEventsLineClosed() method works properly
+# It tests if the GetAllEventsMultipleStationsClosed() method works properly
 
 Input : t *testing.T
 
-Expected : The GetAllEventsLineClosed() method works properly
+Expected : The GetAllEventsMultipleStationsClosed() method works properly
 */
-func TestSimulator_EventLineClosed(t *testing.T) {
-	println("TestSimulator_EventLineClosed")
+func TestSimulator_EventMultipleStationsClosed(t *testing.T) {
+	println("TestSimulator_EventMultipleStationsClosed")
 	sim := NewSimulator()
 	output, err := sim.Init("working day")
 	assert.Nil(t, err)
 	assert.True(t, output)
-	eventsLineClosed := sim.GetAllEventsLineClosed()
+	eventsMultipleStationsClosed := sim.GetAllEventsMultipleStationsClosed()
 
-	//	println("len : ", len(eventsLineClosed))
+	//	println("len : ", len(eventsMultipleStationsClosed))
 
-	assert.True(t, (len(eventsLineClosed) != 0), "Array of events (line closed) not initialized")
+	assert.True(t, (len(eventsMultipleStationsClosed) != 0), "Array of events (multiple stations closed) not initialized")
 
-	assert.Equal(t, timeStart, eventsLineClosed[0].Start().Format(time.RFC3339), "Bad Start time")
-	assert.Equal(t, timeEnd, eventsLineClosed[0].End().Format(time.RFC3339), "Bad End time")
-	assert.Equal(t, elcStationstart, eventsLineClosed[0].IdStationStart(), "Bad Start station id")
-	assert.Equal(t, elcStationend, eventsLineClosed[0].IdStationEnd(), "Bad End station id")
+	assert.Equal(t, timeStart, eventsMultipleStationsClosed[0].Start().Format(time.RFC3339), "Bad Start time")
+	assert.Equal(t, timeEnd, eventsMultipleStationsClosed[0].End().Format(time.RFC3339), "Bad End time")
+	assert.Equal(t, elcStationstart, eventsMultipleStationsClosed[0].IdStationStart(), "Bad Start station id")
+	assert.Equal(t, elcStationend, eventsMultipleStationsClosed[0].IdStationEnd(), "Bad End station id")
 }
 
 /*

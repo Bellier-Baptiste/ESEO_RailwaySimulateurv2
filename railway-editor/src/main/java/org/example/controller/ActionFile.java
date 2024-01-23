@@ -32,6 +32,7 @@ import org.example.model.EventGaussianPeak;
 import org.example.model.EventRampPeak;
 import org.example.model.EventHour;
 import org.example.model.EventLineClosed;
+import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
@@ -78,6 +79,8 @@ import java.util.Map;
  * @author Aurélie Chamouleau
  * @author Alexis BONAMY
  * @author Baptiste BELLIER
+ * @author Benoît VAVASSEUR
+ * @author Marie Bordet
  * @file ActionFile.java
  * @date 2023/09/22
  * @see org.example.data.Data
@@ -144,6 +147,17 @@ public class ActionFile {
    * Latitude marker.
    */
   private static final String LATITUDE = "latitude";
+
+  /**
+   * Path to the archives' folder.
+   */
+  public static final String ARCHIVES_PATH = System.getProperty("user.dir")
+      + File.separator + "archives";
+
+  /**
+   * Line id marker.
+   */
+  private static final String LINE_ID = "idLine";
   /**
    * Singleton instance.
    */
@@ -170,10 +184,16 @@ public class ActionFile {
 
     fileChooser.setDialogTitle("Specify a file to save");
 
+    File defaultFile = new File("example.xml");
+    fileChooser.setSelectedFile(defaultFile);
+
     int userSelection = fileChooser.showSaveDialog(MainWindow.getInstance());
 
     if (userSelection == JFileChooser.APPROVE_OPTION) {
       File fileToSave = fileChooser.getSelectedFile();
+      if (!fileToSave.getAbsolutePath().endsWith(".xml")) {
+        fileToSave = new File(fileToSave + ".xml");
+      }
       this.export(fileToSave);
     }
   }
@@ -181,8 +201,8 @@ public class ActionFile {
   /**
    * Prompts the open dialog to select which xml file to import.
    */
-  public void showOpenDialog() {
-    JFileChooser fileChooser = new JFileChooser();
+  public void showOpenDialogXml() {
+    JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
     FileNameExtensionFilter filter = new FileNameExtensionFilter(
         "xml files", "xml");
     fileChooser.setFileFilter(filter);
@@ -321,19 +341,20 @@ public class ActionFile {
           eventName.appendChild(delay);
           break;
 
-        case "lineClosed":
-          EventLineClosed eventLineClosed = (EventLineClosed) event;
+        case "multipleStationsClosed":
+          EventMultipleStationsClosed eventMultipleStationsClosed =
+              (EventMultipleStationsClosed) event;
 
           Element stationStartClosed = document.createElement(STATION_ID_START);
           stationStartClosed.appendChild(
-              document.createTextNode(Integer.toString(eventLineClosed
-                  .getIdStationStart())));
+                  document.createTextNode(Integer.toString(
+                      eventMultipleStationsClosed.getIdStationStart())));
           eventName.appendChild(stationStartClosed);
 
           Element stationEndClosed = document.createElement(STATION_ID_END);
           stationEndClosed
-              .appendChild(document.createTextNode(Integer.toString(
-                  eventLineClosed.getIdStationEnd())));
+                  .appendChild(document.createTextNode(Integer.toString(
+                          eventMultipleStationsClosed.getIdStationEnd())));
           eventName.appendChild(stationEndClosed);
           break;
 
@@ -406,7 +427,7 @@ public class ActionFile {
         case "hour":
           EventHour eventHour = (EventHour) event;
 
-          Element idLine = document.createElement("idLine");
+          Element idLine = document.createElement(LINE_ID);
           idLine.appendChild(document.createTextNode(Integer.toString(eventHour
               .getIdLine())));
           eventName.appendChild(idLine);
@@ -415,6 +436,19 @@ public class ActionFile {
           trainNumber.appendChild(document.createTextNode(Integer.toString(
               eventHour.getTrainNumber())));
           eventName.appendChild(trainNumber);
+          break;
+        case "lineClosed":
+          EventLineClosed eventLineClosed = (EventLineClosed) event;
+
+          Element idLineClosed = document.createElement(LINE_ID);
+          idLineClosed.appendChild(document.createTextNode(
+              Integer.toString(eventLineClosed.getIdLine())));
+          eventName.appendChild(idLineClosed);
+
+          Element closureType = document.createElement("closureType");
+          closureType.appendChild(document.createTextNode(eventLineClosed
+              .getClosureType().getValue()));
+          eventName.appendChild(closureType);
           break;
 
         default:
@@ -844,14 +878,14 @@ public class ActionFile {
                     .item(0).getTextContent()
             );
             break;
-
-          case "lineClosed":
-            ActionMetroEvent.getInstance().addLineClosed(startTimeSplit[0]
+          case "multipleStationsClosed":
+            ActionMetroEvent.getInstance().addMultipleStationsClosed(
+                startTimeSplit[0]
                 + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
                 + endTimeSplit[1] + "," + eventElement.getElementsByTagName(
-                STATION_ID_START).item(0).getTextContent() + ","
+                    STATION_ID_START).item(0).getTextContent() + ","
                 + eventElement.getElementsByTagName(STATION_ID_END).item(0)
-                .getTextContent());
+                    .getTextContent());
             break;
 
           case "gaussianPeak":
@@ -898,10 +932,19 @@ public class ActionFile {
             String startHour = startTime.replace(END_TIME_STRING, "");
             String endHour = endTime.replace(END_TIME_STRING, "");
             ActionMetroEvent.getInstance().addTrainHour(startHour + ","
-                + endHour + "," + eventElement.getElementsByTagName("idLine")
+                + endHour + "," + eventElement.getElementsByTagName(LINE_ID)
                 .item(0).getTextContent() + ","
                 + eventElement.getElementsByTagName("trainNumber").item(0)
                 .getTextContent());
+            break;
+          case "lineClosed":
+            ActionMetroEvent.getInstance().addLineClosed(startTimeSplit[0]
+                    + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
+                    + endTimeSplit[1] + ","
+                    + eventElement.getElementsByTagName(LINE_ID)
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName("closureType")
+                    .item(0).getTextContent());
             break;
 
           default:

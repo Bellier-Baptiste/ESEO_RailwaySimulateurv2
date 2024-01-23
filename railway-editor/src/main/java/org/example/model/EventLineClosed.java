@@ -1,51 +1,74 @@
-/*
- * License : MIT License
- *
- * Copyright (c) 2023 Team PFE_2023_16
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 package org.example.model;
 
 /**
- * Model class extends {@link org.example.model.EventBetween2Stations} which
- * describes the closing between two stations {@link org.example.model.Station}.
+ * Model class extending {@link Event} which
+ * describes a closure of a line {@link org.example.model.Line}.
  *
- * @author Arthur Lagarce
- * @author Aurélie Chamouleau
+ * @author Marie Bordet
  * @file EventLineClosed.java
- * @date N/A
- * @since 2.0
+ * @date 2024-01-09
+ * @since 3.0
  */
-public class EventLineClosed extends EventBetween2Stations {
+
+public class EventLineClosed extends Event {
+  /**
+   * Line id.
+   */
+  private int idLine;
+  /**
+   * Type of the line closure.
+   */
+  private LineClosureType closureType;
 
   /**
    * Constructor.
    *
-   * @param id        event id
+   * @param id event id
    * @param startTime event startTime
-   * @param endTime   event endTime
-   * @param type      event eventType
+   * @param endTime event endTime
+   * @param type event eventType
    */
   public EventLineClosed(final int id, final String startTime,
-                         final String endTime, final EventType type) {
+                         final String endTime,
+                         final EventType type) {
     super(id, startTime, endTime, type, EventName.LINE_CLOSED);
   }
+
+  /**
+   * get the id of the line concerned.
+   *
+   * @return int idLine
+   */
+  public int getIdLine() {
+    return idLine;
+  }
+
+  /**
+   * set the id of the line concerned.
+   *
+   * @param eventIdLine id of the line concerned
+   */
+
+  public void setIdLine(final int eventIdLine) {
+    this.idLine = eventIdLine;
+  }
+
+  /**
+   * get the type of the line closure.
+   *
+   * @return LineClosureType type of the line closure
+   */
+  public LineClosureType getClosureType() {
+    return closureType;
+  }
+
+  /**
+   * set the type of the line closure.
+   *
+   * @param eventClosureType type of the line closure
+   */
+  public void setClosureType(final LineClosureType eventClosureType) {
+    this.closureType = eventClosureType;
+  }
+
 }

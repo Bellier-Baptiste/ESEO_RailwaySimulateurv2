@@ -31,7 +31,7 @@ package org.example.model;
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
  * @file EventBetween2Stations.java
- * @date N/A
+ * @date 2023_12_20
  * @since 2.0
  */
 public abstract class EventBetween2Stations extends Event {

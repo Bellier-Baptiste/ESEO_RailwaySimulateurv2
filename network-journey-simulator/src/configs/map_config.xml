@@ -278,12 +278,12 @@
     </line>
   </lines>
   <events>
-    <lineClosed>
+    <multipleStationsClosed>
       <start>2018-10-26T09:01:00Z</start>
       <end>2018-10-26T10:02:00Z</end>
       <stationIdStart>1</stationIdStart>
       <stationIdEnd>19</stationIdEnd>
-    </lineClosed>
+    </multipleStationsClosed>
     <gaussianPeak>
       <start>2018-10-26T09:01:00Z</start>
       <end>2018-10-26T10:02:00Z</end>

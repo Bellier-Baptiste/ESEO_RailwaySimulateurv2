@@ -17,6 +17,7 @@ Author :
   - Alexis BONAMY
   - Benoît VAVASSEUR
   - Aurélie CHAMOULEAU
+  - Marie BORDET
 
 License : MIT License
 
@@ -62,7 +63,8 @@ Attributes :
   - EventsStationClosed []ConfigStationClosedEvent : the events of station
     closed
   - EventsLineDelay []ConfigLineDelayEvent : the events of line delay
-  - EventsLineClosed []ConfigLineClosedEvent : the events of line closed
+  - EventsMultipleStationsClosed []ConfigMultipleStationsClosedEvent :
+    the events of multiple stations closed
   - EventsGaussianPeak []ConfigGaussianPeakEvent : the events of gaussian
     peak
   - EventsRampPeak []ConfigRampPeakEvent : the events of ramp peak
@@ -72,16 +74,16 @@ Attributes :
 */
 type ConfigMap struct {
 	XMLName                 xml.Name                        `xml:"map"`
-	Stations                []ConfigStation                 `xml:"stations>station"`
-	Lines                   []ConfigLine                    `xml:"lines>line"`
-	EventsStationClosed     []ConfigStationClosedEvent      `xml:"events>stationClosed"`
-	EventsLineDelay         []ConfigLineDelayEvent          `xml:"events>lineDelay"`
-	EventsLineClosed        []ConfigLineClosedEvent         `xml:"events>lineClosed"`
-	EventsGaussianPeak      []ConfigGaussianPeakEvent       `xml:"events>gaussianPeak"`
-	EventsRampPeak          []ConfigRampPeakEvent           `xml:"events>rampPeak"`
-	Areas                   []ConfigArea                    `xml:"areas>area"`
-	PopulationDistribution  []ConfigPopulationDistribution  `xml:"area>populationDistribution"`
-	DestinationDistribution []ConfigDestinationDistribution `xml:"area>destinationDistribution"`
+	Stations                     []ConfigStation                 `xml:"stations>station"`
+	Lines                        []ConfigLine                    `xml:"lines>line"`
+	EventsStationClosed          []ConfigStationClosedEvent      `xml:"events>stationClosed"`
+	EventsLineDelay              []ConfigLineDelayEvent          `xml:"events>lineDelay"`
+	EventsMultipleStationsClosed []ConfigMultipleStationsClosedEvent `xml:"events>multipleStationsClosed"`
+	EventsGaussianPeak           []ConfigGaussianPeakEvent       `xml:"events>gaussianPeak"`
+	EventsRampPeak               []ConfigRampPeakEvent           `xml:"events>rampPeak"`
+	Areas                        []ConfigArea                    `xml:"areas>area"`
+	PopulationDistribution       []ConfigPopulationDistribution  `xml:"area>populationDistribution"`
+	DestinationDistribution      []ConfigDestinationDistribution `xml:"area>destinationDistribution"`
 }
 
 /*
@@ -262,8 +264,8 @@ type ConfigLineDelayEvent struct {
 }
 
 /*
-ConfigLineClosedEvent is the structure that contains the configuration of
-a line closed event.
+ConfigMultipleStationsClosedEvent is the structure that contains the
+configuration of a multiple stations closed event.
 
 Attributes :
   - XMLName xml.Name
@@ -272,8 +274,8 @@ Attributes :
   - StationIdStart int
   - StationIdEnd int
 */
-type ConfigLineClosedEvent struct {
-	XMLName        xml.Name `xml:"lineClosed"`
+type ConfigMultipleStationsClosedEvent struct {
+	XMLName        xml.Name `xml:"multipleStationsClosed"`
 	StartString    string   `xml:"start"`
 	EndString      string   `xml:"end"`
 	StationIdStart int      `xml:"stationIdStart"`
