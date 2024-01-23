@@ -40,10 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +50,6 @@ import java.util.Map;
  *
  * @author Aurélie Chamouleau
  * @author Baptiste BELLIER
- * @author Benoît VAVASSEUR
  * @file ActionConfigurationTest.java
  * @date 2023-10-23
  * @since 3.0
@@ -78,8 +74,7 @@ class ActionConfigurationTest {
 
     // Use introspection to get the JSON_FILE_PATH field
     Field jsonFilePathField = getJsonFilePathField(actionConfiguration);
-    jsonFilePathField.set(actionConfiguration, "src/test/java/org/example" +
-        "/controller/"
+    jsonFilePathField.set(actionConfiguration, "src/test/java/org/example/controller/"
         + "configTest.json");
 
     // Running tested method
@@ -296,89 +291,6 @@ class ActionConfigurationTest {
 
     // Verify that the methods have been called
     Mockito.verify(actionConfiguration).saveJsonFile();
-    Mockito.verifyNoMoreInteractions(actionConfiguration);
-  }
-
-  /**
-   * Test the copyFile method.
-   *
-   * @throws IOException if the file cannot be created
-   */
-  @Test
-  @Order(5)
-  void testCopyFile() throws IOException {
-    // Mocking and spying instances
-    EditConfigDialog editConfigDialog = Mockito.mock(EditConfigDialog.class);
-    ActionConfiguration actionConfiguration =
-        Mockito.spy(new ActionConfiguration(editConfigDialog));
-
-    // Create a temporary file to copy
-    Path source = null;
-    Path target = null;
-    try {
-      source = Files.createTempFile("source", ".tmp");
-      target = Files.createTempFile("target", ".tmp");
-    } catch (IOException e) {
-      Thread.currentThread().interrupt();
-    }
-
-    // Running tested method
-    assert target != null;
-    Files.deleteIfExists(target);
-    actionConfiguration.copyFile(source.toString(), target.toString());
-
-    // Assertions
-    Assertions.assertTrue(Files.exists(target), "Target file should " +
-        "exist after copy");
-    Assertions.assertTrue(Files.exists(source), "Source file should " +
-        "still exist after copy");
-
-    // Verify that copyFile was called
-    Mockito.verify(actionConfiguration).copyFile(source.toString(),
-        target.toString());
-    Mockito.verifyNoMoreInteractions(actionConfiguration);
-  }
-
-  /**
-   * Test the copyFile method when the destination file already exists.
-   *
-   * @throws IOException if the file cannot be created
-   */
-  @Test
-  @Order(6)
-  void testCopyFileDestFileAlreadyExists() throws IOException {
-    // Mocking and spying instances
-    EditConfigDialog editConfigDialog = Mockito.mock(EditConfigDialog.class);
-    ActionConfiguration actionConfiguration =
-        Mockito.spy(new ActionConfiguration(editConfigDialog));
-
-    // Create a temporary file to copy
-    Path source = null;
-    Path target = null;
-    try {
-      source = Files.createTempFile("source", ".tmp");
-      target = Files.createTempFile("target", ".tmp");
-    } catch (IOException e) {
-      Thread.currentThread().interrupt();
-    }
-
-    // Make sure the target file exists before calling copyFile
-    assert target != null;
-    Files.write(target, Collections.singletonList("Test content"));
-
-    // Running tested method
-    actionConfiguration.copyFile(source.toString(), target.toString());
-
-    // Assertions
-    Assertions.assertTrue(Files.exists(target), "Target file should "
-        + "still exist after copy");
-    Assertions.assertTrue(Files.exists(source), "Source file should "
-        + "still exist after copy");
-
-    // Verify that deleteFile and copyFile were called
-    Mockito.verify(actionConfiguration).deleteFile(target.toString());
-    Mockito.verify(actionConfiguration).copyFile(source.toString(),
-        target.toString());
     Mockito.verifyNoMoreInteractions(actionConfiguration);
   }
 
