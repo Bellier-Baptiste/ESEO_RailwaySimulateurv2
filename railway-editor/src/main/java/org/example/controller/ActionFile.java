@@ -214,6 +214,31 @@ public class ActionFile {
   }
 
   /**
+   * Prompts the export dialog to choose the location to export the map as xml
+   * file.
+   */
+  public void showExportDialogXml() {
+    JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
+    FileNameExtensionFilter filter =
+        new FileNameExtensionFilter("XML FILES", "xml");
+    fileChooser.setFileFilter(filter);
+    fileChooser.setDialogTitle("Specify a file to save");
+
+    File defaultFile = new File("example.xml");
+    fileChooser.setSelectedFile(defaultFile);
+
+    int userSelection = fileChooser.showSaveDialog(MainWindow.getInstance());
+
+    if (userSelection == JFileChooser.APPROVE_OPTION) {
+      File fileToSave = fileChooser.getSelectedFile();
+      if (!fileToSave.getAbsolutePath().endsWith(".xml")) {
+        fileToSave = new File(fileToSave + ".xml");
+      }
+      this.export(fileToSave);
+    }
+  }
+
+  /**
    * Export the current map as xml file.
    *
    * @param fileToSave the xml file to save
