@@ -243,17 +243,17 @@ public class MovingAdapter extends MouseAdapter {
             case Data.STATION_START:
               Data.getInstance()
                   .setStationStartId(clickedStation.getStation().getId());
-              Data.getInstance().setSelectType("");
+              Data.getInstance().setSelectType(null);
               break;
             case Data.STATION_END:
               Data.getInstance()
                   .setStationEndId(clickedStation.getStation().getId());
-              Data.getInstance().setSelectType("");
+              Data.getInstance().setSelectType(null);
               break;
             case Data.STATION_CONCERNED:
               Data.getInstance()
                   .setStationConcernedId(clickedStation.getStation().getId());
-              Data.getInstance().setSelectType("");
+              Data.getInstance().setSelectType(null);
               break;
             default:
               break;

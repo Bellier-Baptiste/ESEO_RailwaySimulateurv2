@@ -28,9 +28,10 @@ import org.example.data.Data;
 import org.example.main.RailwayEditor;
 import org.example.model.Area;
 import org.example.model.Event;
-import org.example.model.EventAttendancePeak;
+import org.example.model.EventGaussianPeak;
 import org.example.model.EventHour;
 import org.example.model.EventLineClosed;
+import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.view.AreaView;
@@ -158,8 +159,8 @@ class ActionFileTest {
         .getLineViews().size(), "There should be 4 lineViews");
     assertEquals(3, MainWindow.getInstance().getMainPanel()
         .getAreaViews().size(), "There should be 3 areaViews");
-    assertEquals(5, Data.getInstance().getEventList().size(),
-        "There should be 5 events");
+    assertEquals(7, Data.getInstance().getEventList().size(),
+        "There should be 7 events");
     int numberOfStations = MainWindow.getInstance().getMainPanel()
         .getLineViews().stream().mapToInt(lineView -> lineView.getStationViews()
             .size()).sum();
@@ -191,6 +192,10 @@ class ActionFileTest {
     expectedArguments.add(Arrays.asList("19:46", "22:46"));
     expectedArguments.add(Arrays.asList("2023/11/01-18:51",
         "2023/11/01-22:51"));
+    expectedArguments.add(Arrays.asList("2023/11/01-15:37",
+        "2023/11/01-19:37"));
+    expectedArguments.add(Arrays.asList("2023/11/01-12:13",
+        "2023/11/01-12:57"));
 
     // Check events imported
     for (int i = 0; i < Data.getInstance().getEventList().size(); i++) {
@@ -207,11 +212,11 @@ class ActionFileTest {
               .getIdStation(), "The station concerned by this event should"
               + " be the number 12");
           break;
-        case LINE_CLOSED:
-          assertEquals(39, ((EventLineClosed) event)
+        case MULTIPLE_STATIONS_CLOSED:
+          assertEquals(39, ((EventMultipleStationsClosed) event)
               .getIdStationStart(), "The starting station concerned by "
               + "this event should be the number 39");
-          assertEquals(41, ((EventLineClosed) event)
+          assertEquals(41, ((EventMultipleStationsClosed) event)
               .getIdStationEnd(), "The ending station concerned by this "
               + "event should be the number 41");
           break;
@@ -233,13 +238,29 @@ class ActionFileTest {
               .getTrainNumber(), "The number of trains added to this line "
               + "should be the number 13");
           break;
-        case ATTENDANCE_PEAK:
-          assertEquals(30, ((EventAttendancePeak) event)
+        case GAUSSIAN_PEAK:
+          assertEquals(30, ((EventGaussianPeak) event)
               .getIdStation(), "The station concerned by this event should"
               + " be the number 30");
-          assertEquals(200, ((EventAttendancePeak) event)
-              .getSize(), "The attendance peak in this station should be "
+          assertEquals(200, ((EventGaussianPeak) event)
+              .getSize(), "The gaussian peak in this station should be "
               + "of 200 people");
+          break;
+        case LINE_CLOSED:
+          if(((EventLineClosed) event).getClosureType().equals("unexpected")) {
+            assertEquals(3, ((EventLineClosed) event)
+                .getIdLine(), "The line concerned by this event should"
+                + " be the number 3");
+            assertEquals("Unexpected", ((EventLineClosed) event)
+                .getClosureType().getValue(), "The closure type of this event should be"
+                + " unexpected");
+          } else if(((EventLineClosed) event).getClosureType().equals("planned")) {
+            assertEquals(1, ((EventLineClosed) event)
+                .getIdLine(), "The line concerned by this event should"
+                + " be the number 2");
+            assertEquals("Planned", ((EventLineClosed) event).getClosureType().getValue(),
+                "The closure type of this event should be planned");
+          }
           break;
         default:
           break;

@@ -60,13 +60,6 @@ public class ActionArchive {
       new ActionConfiguration();
 
   /**
-   * Path to the XML file.
-   */
-  public static final String XML_FILE_PATH = System.getProperty("user.dir")
-      + File.separator + "network-journey-simulator" + File.separator + "src"
-      + File.separator + "configs" + File.separator + "runThisSimulation.xml";
-
-  /**
    * Logger, to display or save information.
    */
   private final Logger logger =
@@ -78,12 +71,12 @@ public class ActionArchive {
   public void showExportDialogJsonAndXml() {
     try {
       LocalDateTime now = LocalDateTime.now();
-      DateTimeFormatter formatter =
-          DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm");
+      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM"
+          + "-dd_HH-mm");
       String baseFolderName = now.format(formatter);
       String folderName = baseFolderName;
-      File exportFolder = new File(ARCHIVES_PATH
-          + File.separator + folderName);
+      File exportFolder =
+          new File(ARCHIVES_PATH + File.separator + folderName);
       int increment = 1;
 
       while (exportFolder.exists()) {
@@ -92,20 +85,20 @@ public class ActionArchive {
             + folderName);
         increment++;
       }
-
       exportFolder.mkdirs();
 
       Files.copy(Paths.get(JSON_FILE_PATH),
           Paths.get(exportFolder.getAbsolutePath() + File.separator
               + "config.json"),
           StandardCopyOption.REPLACE_EXISTING);
-      Files.copy(Paths.get(XML_FILE_PATH),
-          Paths.get(exportFolder.getAbsolutePath() + File.separator
-              + "RunThisSimulation.xml"),
-          StandardCopyOption.REPLACE_EXISTING);
+
+      File xmlFileToSave = new File(exportFolder.getAbsolutePath()
+          + File.separator + "runThisSimulation.xml");
+
+      ActionFile.getInstance().export(xmlFileToSave);
+
     } catch (Exception e) {
-      logger.log(Level.SEVERE,
-          "Error exporting files", e);
+      logger.log(Level.SEVERE, "Error exporting files", e);
     }
   }
 

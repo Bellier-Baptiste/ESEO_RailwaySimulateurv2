@@ -198,7 +198,7 @@ public class MainPanelHud {
     g2D.drawString(STATION_DELAYED_STRING, posX + STATION_DELAYED_X_STRING,
         posY + STATION_DELAYED_Y_STRING);
 
-    // Station AttendancePeak description
+    // Station GaussianPeak description
 
     g2D.setColor(Color.YELLOW);
     g2D.fillOval(posX + STATION_PEAK_X, posY + STATION_PEAK_Y, CIRCLE_SIZE,
