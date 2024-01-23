@@ -29,6 +29,7 @@ package org.example.model;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Marie Bordet
  * @file EventName.java
  * @date 2023-10-02
  * @since 3.0
@@ -39,13 +40,17 @@ public enum EventName {
    */
   LINE_DELAYED("lineDelay"),
   /**
-   * Line closed event name.
+   * Multiple stations closed event name.
    */
-  LINE_CLOSED("lineClosed"),
+  MULTIPLE_STATIONS_CLOSED("multipleStationsClosed"),
   /**
-   * Attendance peak event name.
+   * Gaussian peak event name.
    */
-  ATTENDANCE_PEAK("attendancePeak"),
+  GAUSSIAN_PEAK("gaussianPeak"),
+  /**
+   * Ramp peak event name.
+   */
+  RAMP_PEAK("rampPeak"),
   /**
    * Train hour event name.
    */
@@ -53,7 +58,11 @@ public enum EventName {
   /**
    * Station closed event name.
    */
-  STATION_CLOSED("stationClosed");
+  STATION_CLOSED("stationClosed"),
+  /**
+   * Line closed event name.
+   */
+  LINE_CLOSED("lineClosed");
 
   /**
    * String value of the event name.

@@ -278,17 +278,27 @@
     </line>
   </lines>
   <events>
-    <lineClosed>
-      <start>2018-10-26T10:01:00Z</start>
+    <multipleStationsClosed>
+      <start>2018-10-26T09:01:00Z</start>
       <end>2018-10-26T10:02:00Z</end>
       <stationIdStart>1</stationIdStart>
       <stationIdEnd>19</stationIdEnd>
-    </lineClosed>
-    <attendancePeak>
-      <time>2018-10-26T10:01:00Z</time>
+    </multipleStationsClosed>
+    <gaussianPeak>
+      <start>2018-10-26T09:01:00Z</start>
+      <end>2018-10-26T10:02:00Z</end>
+      <peakTime>2018-10-26T09:31:00Z</peakTime>
       <stationId>2</stationId>
-      <size>10</size>
-    </attendancePeak>
+      <peakSize>500</peakSize>
+      <peakWidth>6</peakWidth>
+    </gaussianPeak>
+    <rampPeak>
+      <start>2018-10-26T09:01:00Z</start>
+      <end>2018-10-26T10:02:00Z</end>
+      <peakTime>2018-10-26T09:31:00Z</peakTime>
+      <stationId>2</stationId>
+      <peakSize>500</peakSize>
+    </rampPeak>
     <lineDelay>
       <start>2018-10-12T00:19:00Z</start>
       <end>2018-10-12T00:20:00Z</end>
@@ -298,7 +308,7 @@
     </lineDelay>
     <stationClosed>
       <idStation>2</idStation>
-      <start>2018-10-26T10:01:00Z</start>
+      <start>2018-10-26T09:01:00Z</start>
       <end>2018-10-26T10:02:00Z</end>
     </stationClosed>
   </events>

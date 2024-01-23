@@ -26,19 +26,21 @@ package org.example.controller;
 
 import org.example.data.Data;
 import org.example.model.Event;
-import org.example.model.EventAttendancePeak;
+import org.example.model.EventGaussianPeak;
+import org.example.model.EventRampPeak;
 import org.example.model.EventBetween2Stations;
 import org.example.model.EventHour;
 import org.example.model.EventLineClosed;
+import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
+import org.example.model.EventName;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
+import org.example.model.LineClosureType;
 import org.example.model.Station;
-import org.example.model.EventName;
 import org.example.view.EventRecap;
 import org.example.view.EventWindow;
 import org.example.view.LineView;
-import org.example.view.ListEventPanel;
 import org.example.view.MainWindow;
 import org.example.view.StationView;
 
@@ -46,17 +48,19 @@ import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.awt.event.WindowEvent;
 
+
 /**
  * A class for creating events {@link org.example.model.Event} on the map.
  *
- * @see org.example.view.EventWindow
- * @see org.example.view.EventRecap
- * @see ListEventPanel
- *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
+ * @author Marie Bordet
  * @file ActionMetroEvent.java
  * @date 2023-10-02
+ * @see org.example.view.EventWindow
+ * @see org.example.view.EventRecap
+ * @see org.example.view.ListEventPanel
  * @since 3.0
  */
 public class ActionMetroEvent {
@@ -64,37 +68,81 @@ public class ActionMetroEvent {
    * Add event action name.
    */
   public static final String ADD_EVENT = "ADD_EVENT";
-  /** Event window x offset. */
+  /**
+   * Event window x offset.
+   */
   private static final int EVENT_WINDOW_X_OFFSET = 200;
-  /** Event window y offset. */
+  /**
+   * Event window y offset.
+   */
   private static final int EVENT_WINDOW_Y_OFFSET = 20;
-  /** Starting date index. */
+  /**
+   * Starting date index.
+   */
   private static final int STARTING_DATE_INDEX = 0;
-  /** Starting time index for train hour. */
+  /**
+   * Starting time index for train hour.
+   */
   private static final int STARTING_TIME_INDEX_TRAIN_HOUR = 0;
-  /** Ending time index for train hour. */
+  /**
+   * Ending time index for train hour.
+   */
   private static final int ENDING_TIME_INDEX_TRAIN_HOUR = 1;
-  /** Starting time index. */
+  /**
+   * Starting time index.
+   */
   private static final int STARTING_TIME_INDEX = 1;
-  /** Ending date index. */
+  /**
+   * Ending date index.
+   */
   private static final int ENDING_DATE_INDEX = 2;
-  /** Train hour line index. */
+  /**
+   * Train hour line index.
+   */
   private static final int TRAIN_HOUR_LINE_INDEX = 2;
-  /** Ending time index. */
+  /**
+   * Ending time index.
+   */
   private static final int ENDING_TIME_INDEX = 3;
+  /**
+   * Line closure line index.
+   */
+  private static final int LINE_CLOSURE_LINE_INDEX = 4;
+  /**
+   * Line closure type index.
+   */
+  private static final int LINE_CLOSURE_TYPE_INDEX = 5;
+  /** Peak date index. */
+  private static final int PEAK_DATE_INDEX = 4;
+  /** Peak time index. */
+  private static final int PEAK_TIME_INDEX = 5;
+  /** Peak width index. */
+  private static final int PEAK_WIDTH_INDEX = 8;
   /** Train hour train number index. */
   private static final int TRAIN_HOUR_TRAIN_NUMBER_INDEX = 3;
-  /** Starting station index. */
+  /**
+   * Starting station index.
+   */
   private static final int STARTING_STATION_INDEX = 4;
-  /** Station concerned index. */
+  /**
+   * Station concerned index.
+   */
   private static final int STATION_CONCERNED_INDEX = 4;
-  /** Ending station index. */
+  /**
+   * Ending station index.
+   */
   private static final int ENDING_STATION_INDEX = 5;
-  /** Size index. */
+  /**
+   * Size index.
+   */
   private static final int PEAK_NUMBER_INDEX = 5;
-  /** Delay index. */
+  /**
+   * Delay index.
+   */
   private static final int DELAY_INDEX = 6;
-  /** Number of minutes in an hour. */
+  /**
+   * Number of minutes in an hour.
+   */
   private static final int MINUTES_IN_HOUR = 60;
   /**
    * Singleton instance.
@@ -120,11 +168,10 @@ public class ActionMetroEvent {
   /**
    * check if a station id between the starting and ending station.
    *
-   * @param station     station to check
+   * @param station      station to check
    * @param stationStart starting station
-   * @param stationEnd  ending station
-   * @param line       line concerned
-   *
+   * @param stationEnd   ending station
+   * @param line         line concerned
    * @return true if the station is between the starting and ending station
    */
 
@@ -158,39 +205,54 @@ public class ActionMetroEvent {
     EventWindow.getInstance().setVisible(true);
   }
 
-  /** Add a line delay event. */
-  public void addLineDelay() {
+  /**
+   * Add a line delay event.
+   *
+   * @param eventString event string
+   */
+  public void addLineDelay(final String eventString) {
     MainWindow.getInstance().toFront();
-    String eventString = ListEventPanel.getInstance().eventLineDelayToString();
     String[] eventStringTab = eventString.split(",");
     String startTime =
         eventStringTab[STARTING_DATE_INDEX] + "-"
             + eventStringTab[STARTING_TIME_INDEX];
     String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
-            + eventStringTab[ENDING_TIME_INDEX];
-    int delay = Integer.parseInt(eventStringTab[DELAY_INDEX].split(":")[0])
-        * MINUTES_IN_HOUR + Integer.parseInt(eventStringTab[DELAY_INDEX]
-        .split(":")[1]);
+        + eventStringTab[ENDING_TIME_INDEX];
     EventLineDelay eventLineDelay = new EventLineDelay(this.getCurrentId(),
         startTime, endTime, Event.EventType.LINE);
+    int delay;
+    if (eventStringTab[DELAY_INDEX].contains(":")) {
+      delay = Integer.parseInt(eventStringTab[DELAY_INDEX].split(":")[0])
+          * MINUTES_IN_HOUR + Integer.parseInt(eventStringTab[DELAY_INDEX]
+          .split(":")[1]);
+    } else {
+      delay = Integer.parseInt(eventStringTab[DELAY_INDEX]);
+    }
+    eventLineDelay.setDelay(delay);
     eventLineDelay.setIdStationStart(Integer.parseInt(eventStringTab[
         STARTING_STATION_INDEX]));
     eventLineDelay.setIdStationEnd(Integer.parseInt(eventStringTab[
         ENDING_STATION_INDEX]));
-    eventLineDelay.setDelay(delay);
     eventLineDelay.setEventName(EventName.LINE_DELAYED);
     Color eventColor = Color.ORANGE;
     this.addEventBetween2Stations(eventLineDelay, eventColor, eventStringTab);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
-  /** Add a line closed event. */
-  public void addLineClosed() {
+  /**
+   * Add a multiple stations closed event.
+   *
+   * @param eventString event string
+   */
+  public void addMultipleStationsClosed(final String eventString) {
     MainWindow.getInstance().toFront();
-    String eventString = ListEventPanel.getInstance().eventLineClosedToString();
     String[] eventStringTab = eventString.split(",");
     String startTime =
         eventStringTab[STARTING_DATE_INDEX] + "-" + eventStringTab[
@@ -198,20 +260,33 @@ public class ActionMetroEvent {
     String endTime =
         eventStringTab[ENDING_DATE_INDEX] + "-" + eventStringTab[
             ENDING_TIME_INDEX];
-    EventLineClosed eventLineClosed = new EventLineClosed(this.getCurrentId(),
-        startTime, endTime, Event.EventType.LINE);
-    eventLineClosed.setIdStationStart(Integer.parseInt(eventStringTab[
-        STARTING_STATION_INDEX]));
-    eventLineClosed.setIdStationEnd(Integer.parseInt(eventStringTab[
+    EventMultipleStationsClosed eventMultipleStationsClosed = new
+        EventMultipleStationsClosed(
+            this.getCurrentId(), startTime, endTime, Event.EventType.LINE);
+    eventMultipleStationsClosed.setIdStationStart(Integer.parseInt(
+        eventStringTab[STARTING_STATION_INDEX]));
+    eventMultipleStationsClosed.setIdStationEnd(Integer.parseInt(eventStringTab[
         ENDING_STATION_INDEX]));
     Color eventColor = Color.RED;
-    this.addEventBetween2Stations(eventLineClosed, eventColor, eventStringTab);
+    this.addEventBetween2Stations(eventMultipleStationsClosed,
+        eventColor, eventStringTab);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
+  /**
+   * Add an event between 2 stations.
+   *
+   * @param event          event to add
+   * @param eventColor     event color
+   * @param eventStringTab event string tab
+   */
   private void addEventBetween2Stations(final EventBetween2Stations event,
                                         final Color eventColor,
                                         final String[] eventStringTab) {
@@ -219,46 +294,87 @@ public class ActionMetroEvent {
     Data.getInstance().getEventList().add(event);
     Station stationStart = null;
     Station stationEnd = null;
-    LineView line = null;
+    LineView lineStart = null;
+    LineView lineEnd = null;
     for (LineView lineView : MainWindow.getInstance().getMainPanel()
         .getLineViews()) {
       for (StationView stationView : lineView.getStationViews()) {
         if (stationView.getStation().getId() == event
             .getIdStationStart()) {
-          line = lineView;
+          lineStart = lineView;
           stationStart = stationView.getStation();
         } else if (stationView.getStation().getId() == event
             .getIdStationEnd()) {
+          lineEnd = lineView;
           stationEnd = stationView.getStation();
         }
       }
     }
-    if (line != null && stationStart != null && stationEnd != null) {
-      if (stationEnd.getId() < stationStart.getId()) {
-        Station aux = stationEnd;
-        stationEnd = stationStart;
-        stationStart = aux;
-      }
-      this.colorStationViews(line, stationStart, stationEnd,
-          eventColor);
-      EventWindow.getInstance().dispatchEvent(new WindowEvent(
-          EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
-      MainWindow.getInstance().getMainPanel().repaint();
-      String locationsStr = "from " + stationStart.getName() + " to "
-          + stationEnd.getName();
-      if (event.getEventName() == EventName.LINE_DELAYED) {
-        EventRecap.getInstance().createEventLineDelayed(this.getCurrentId(),
-            event.getStartTime(), event.getEndTime(), locationsStr,
-            eventStringTab[eventStringTab.length - 1],
-            Integer.toString(line.getLine().getId()));
-      } else if (event.getEventName() == EventName.LINE_CLOSED) {
-        EventRecap.getInstance().createEventLineClosed(this.getCurrentId(),
-            event.getStartTime(), event.getEndTime(), locationsStr,
-            Integer.toString(line.getLine().getId()));
-      }
+    Station[] stations = checkLinesAndStations(lineStart, lineEnd,
+        stationStart, stationEnd);
+    stationStart = stations[0];
+    stationEnd = stations[1];
+    this.colorStationViews(lineStart, stationStart, stationEnd,
+        eventColor);
+    EventWindow.getInstance().dispatchEvent(new WindowEvent(
+        EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
+    MainWindow.getInstance().getMainPanel().repaint();
+    String locationsStr = "from " + stationStart.getName() + " to "
+        + stationEnd.getName();
+    if (event.getEventName() == EventName.LINE_DELAYED) {
+      EventRecap.getInstance().createEventLineDelayed(this.getCurrentId(),
+          event.getStartTime(), event.getEndTime(), locationsStr,
+          eventStringTab[eventStringTab.length - 1],
+          Integer.toString(lineStart.getLine().getId()));
+    } else if (event.getEventName() == EventName.MULTIPLE_STATIONS_CLOSED) {
+      EventRecap.getInstance().createEventMultipleStationsClosed(
+          this.getCurrentId(), event.getStartTime(),
+          event.getEndTime(), locationsStr,
+          Integer.toString(lineStart.getLine().getId()));
     }
   }
 
+  /**
+   * Check if the lines and stations are not null, if the stations are on
+   * the same line and inversed the station start and the station end
+   * if necessary.
+   *
+   * @param lineStart the line of the start station
+   * @param lineEnd the line of the end station
+   * @param stationStart the start station
+   * @param stationEnd the end station
+   * @return stationStart, stationEnd
+   */
+  private Station[] checkLinesAndStations(final LineView lineStart,
+                                     final LineView lineEnd,
+                                     final Station stationStart,
+                                     final Station stationEnd) {
+    if (lineStart != null && lineEnd != null
+        && stationStart != null && stationEnd != null) {
+      if (lineStart.getLine().getId() != lineEnd.getLine().getId()) {
+        throw new IllegalArgumentException("The stations "
+            + "must be on the same line");
+      }
+      Station newStationStart = stationStart;
+      Station newStationEnd = stationEnd;
+      if (stationEnd.getId() < stationStart.getId()) {
+        newStationEnd = stationStart;
+        newStationStart = stationEnd;
+      }
+      return new Station[]{newStationStart, newStationEnd};
+    } else {
+      throw new IllegalArgumentException("The stations or the line are empty");
+    }
+  }
+
+  /**
+   * Color the station views between the starting and ending station.
+   *
+   * @param line line concerned
+   * @param stationStart starting station
+   * @param stationEnd ending station
+   * @param eventColor color of the event
+   */
   private void colorStationViews(final LineView line,
                                  final Station stationStart,
                                  final Station stationEnd,
@@ -271,56 +387,145 @@ public class ActionMetroEvent {
     }
   }
 
-  /** Add an attendance peak event. */
-  public void addAttendancePeak() {
-    MainWindow.getInstance().toFront();
-    String eventString = ListEventPanel.getInstance()
-        .eventAttendancePeakToString();
-    String[] eventStringTab = eventString.split(",");
-    String startTime =
-        eventStringTab[STARTING_DATE_INDEX] + "-" + eventStringTab[
-            STARTING_TIME_INDEX];
-    String endTime =
-        eventStringTab[ENDING_DATE_INDEX] + "-" + eventStringTab[
-            ENDING_TIME_INDEX];
-    EventAttendancePeak eventAttendancePeak = new EventAttendancePeak(
-        this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
-    eventAttendancePeak.setIdStation(Integer.parseInt(eventStringTab[
-        STATION_CONCERNED_INDEX]));
-    eventAttendancePeak.setSize(Integer.parseInt(eventStringTab[
-        PEAK_NUMBER_INDEX]));
-    Data.getInstance().getEventList().add(eventAttendancePeak);
+  /**
+   * Color the station views of the line.
+   *
+   * @param line line concerned
+   * @param eventColor color of the event
+   */
+  private void colorStationViewsEntireLine(final LineView line,
+                                           final Color eventColor) {
+    for (StationView stationView : line.getStationViews()) {
+      stationView.setCenterCircleColor(eventColor);
+    }
+  }
 
+  /**
+   * Add a gaussian peak event.
+   *
+   * @param eventString event string
+   */
+  public void addGaussianPeak(final String eventString) {
+    MainWindow.getInstance().toFront();
+    String[] eventStringTab = eventString.split(",");
+    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
+            + eventStringTab[STARTING_TIME_INDEX];
+    startTime = startTime.replace(":00Z", "");
+    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
+            + eventStringTab[ENDING_TIME_INDEX];
+    endTime = endTime.replace(":00Z", "");
+    String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
+            + eventStringTab[PEAK_TIME_INDEX];
+    peakTime = peakTime.replace(":00Z", "");
+    String peakWidth = eventStringTab[PEAK_WIDTH_INDEX];
+
+    EventGaussianPeak eventGaussianPeak = new EventGaussianPeak(
+        this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
+    eventGaussianPeak.setPeakTime(peakTime);
+    eventGaussianPeak.setIdStation(Integer.parseInt(eventStringTab[
+        STATION_CONCERNED_INDEX + 2]));
+    eventGaussianPeak.setSize(Integer.parseInt(eventStringTab[
+        PEAK_NUMBER_INDEX + 2]));
+    eventGaussianPeak.setPeakWidth(Integer.parseInt(peakWidth));
+    Data.getInstance().getEventList().add(eventGaussianPeak);
+
+    Station stationConcerned = editStationConcernedPeak(
+            eventGaussianPeak.getIdStation());
+    if (stationConcerned != null) {
+      MainWindow.getInstance().getEventRecapPanel().createEventGaussianPeak(
+          this.getCurrentId(), startTime, endTime, peakTime,
+          Integer.toString(stationConcerned.getId()),
+          eventStringTab[PEAK_NUMBER_INDEX + 2], peakWidth);
+    }
+
+    MainWindow.getInstance().getEventRecapPanel().revalidate();
+    this.incrementCurrentId();
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    EventRecap.getInstance().eventsListRemoveBackground();
+  }
+
+  /**
+   * Add a ramp peak event.
+   *
+   * @param eventString event string
+   */
+  public void addRampPeak(final String eventString) {
+    MainWindow.getInstance().toFront();
+    String[] eventStringTab = eventString.split(",");
+    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
+            + eventStringTab[STARTING_TIME_INDEX];
+    startTime = startTime.replace(":00Z", "");
+    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
+            + eventStringTab[ENDING_TIME_INDEX];
+    endTime = endTime.replace(":00Z", "");
+    String peakTime = eventStringTab[PEAK_DATE_INDEX] + "-"
+            + eventStringTab[PEAK_TIME_INDEX];
+    peakTime = peakTime.replace(":00Z", "");
+
+    EventRampPeak eventRampPeak = new EventRampPeak(
+            this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
+    eventRampPeak.setPeakTime(peakTime);
+    eventRampPeak.setIdStation(Integer.parseInt(eventStringTab[
+            STATION_CONCERNED_INDEX + 2]));
+    eventRampPeak.setSize(Integer.parseInt(eventStringTab[
+            PEAK_NUMBER_INDEX + 2]));
+    Data.getInstance().getEventList().add(eventRampPeak);
+
+    Station stationConcerned = editStationConcernedPeak(
+            eventRampPeak.getIdStation());
+    if (stationConcerned != null) {
+      MainWindow.getInstance().getEventRecapPanel().createEventRampPeak(
+              this.getCurrentId(), startTime, endTime, peakTime,
+              Integer.toString(stationConcerned.getId()),
+              eventStringTab[PEAK_NUMBER_INDEX + 2]);
+    }
+
+    MainWindow.getInstance().getEventRecapPanel().revalidate();
+    this.incrementCurrentId();
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    EventRecap.getInstance().eventsListRemoveBackground();
+  }
+
+  /**
+   * Edit station concerned by peak event.
+   *
+   * @param idStation station id
+   * @return station concerned
+   */
+  public Station editStationConcernedPeak(final int idStation) {
     Station stationConcerned = null;
     for (LineView lineView : MainWindow.getInstance().getMainPanel()
-        .getLineViews()) {
+            .getLineViews()) {
       for (StationView stationView : lineView.getStationViews()) {
-        if (stationView.getStation().getId() == eventAttendancePeak
-            .getIdStation()) {
+        if (stationView.getStation().getId() == idStation) {
           stationConcerned = stationView.getStation();
           stationView.setCenterCircleColor(Color.YELLOW);
         }
       }
     }
+
     EventWindow.getInstance().dispatchEvent(new WindowEvent(
-        EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
+            EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
     MainWindow.getInstance().getMainPanel().repaint();
-    if (stationConcerned != null) {
-      MainWindow.getInstance().getEventRecapPanel().createEventAttendancePeak(
-          this.getCurrentId(), startTime, endTime,
-          Integer.toString(stationConcerned.getId()),
-          eventStringTab[PEAK_NUMBER_INDEX]);
-    }
-    MainWindow.getInstance().getEventRecapPanel().revalidate();
-    this.incrementCurrentId();
-    SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
-    EventRecap.getInstance().eventsListRemoveBackground();
+
+    return stationConcerned;
   }
 
-  /** Add a train hour event. */
-  public void addTrainHour() {
+  /**
+   * Add a train hour event.
+   *
+   * @param eventString event string
+   */
+  public void addTrainHour(final String eventString) {
     MainWindow.getInstance().toFront();
-    String eventString = ListEventPanel.getInstance().eventTrainHourToString();
     String[] eventStringTab = eventString.split(",");
     String startTime = eventStringTab[STARTING_TIME_INDEX_TRAIN_HOUR];
     String endTime = eventStringTab[ENDING_TIME_INDEX_TRAIN_HOUR];
@@ -339,27 +544,36 @@ public class ActionMetroEvent {
         eventStringTab[TRAIN_HOUR_TRAIN_NUMBER_INDEX]);
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 
-  /** Add a station closed event. */
-  public void addStationClosed() {
+  /**
+   * Add a station closed event.
+   *
+   * @param eventString event string
+   */
+  public void addStationClosed(final String eventString) {
+    // Get the event string from the event window
     MainWindow.getInstance().toFront();
-    String eventString = ListEventPanel.getInstance()
-        .eventStationClosedToString();
     String[] eventStringTab = eventString.split(",");
-    String startTime =
-        eventStringTab[STARTING_DATE_INDEX] + "-"
-            + eventStringTab[STARTING_TIME_INDEX];
-    String endTime =
-        eventStringTab[ENDING_DATE_INDEX] + "-"
-            + eventStringTab[ENDING_TIME_INDEX];
+    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
+        + eventStringTab[STARTING_TIME_INDEX];
+    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
+        + eventStringTab[ENDING_TIME_INDEX];
+
+    // Create the event and add it to the list of events in Data
     EventStationClosed eventStationClosed = new EventStationClosed(
         this.getCurrentId(), startTime, endTime, Event.EventType.STATION);
     eventStationClosed.setIdStation(Integer.parseInt(eventStringTab[
         STATION_CONCERNED_INDEX]));
     Data.getInstance().getEventList().add(eventStationClosed);
+
+    // Search for the station view concerned by the event and color it in red
     Station stationConcerned = null;
     for (LineView lineView : MainWindow.getInstance().getMainPanel()
         .getLineViews()) {
@@ -372,6 +586,7 @@ public class ActionMetroEvent {
       }
     }
 
+    // Add the event to the event recap panel (left panel with all the events)
     EventWindow.getInstance().dispatchEvent(new WindowEvent(
         EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
     MainWindow.getInstance().getMainPanel().repaint();
@@ -382,7 +597,59 @@ public class ActionMetroEvent {
     }
     MainWindow.getInstance().getEventRecapPanel().revalidate();
     this.incrementCurrentId();
-    SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    EventRecap.getInstance().eventsListRemoveBackground();
+  }
+
+  /**
+   * Add a line closed event.
+   *
+   * @param eventString event string
+   */
+  public void addLineClosed(final String eventString) {
+    MainWindow.getInstance().toFront();
+    String[] eventStringTab = eventString.split(",");
+    String startTime = eventStringTab[STARTING_DATE_INDEX] + "-"
+        + eventStringTab[STARTING_TIME_INDEX];
+    String endTime = eventStringTab[ENDING_DATE_INDEX] + "-"
+        + eventStringTab[ENDING_TIME_INDEX];
+    EventLineClosed eventLineClosed = new EventLineClosed(this.getCurrentId(),
+        startTime, endTime, Event.EventType.LINE);
+    eventLineClosed.setIdLine(Integer.parseInt(
+        eventStringTab[LINE_CLOSURE_LINE_INDEX]));
+    switch (eventStringTab[LINE_CLOSURE_TYPE_INDEX]) {
+      case "unexpected":
+        eventLineClosed.setClosureType(LineClosureType.UNEXPECTED);
+        break;
+      case "planned":
+        eventLineClosed.setClosureType(LineClosureType.PLANNED);
+        break;
+      default:
+        throw new IllegalArgumentException("Invalid line closure type.");
+    }
+
+    Data.getInstance().getEventList().add(eventLineClosed);
+    this.colorStationViewsEntireLine(MainWindow.getInstance().getMainPanel()
+        .getLineViews().get(Integer.parseInt(
+            eventStringTab[LINE_CLOSURE_LINE_INDEX])), Color.RED);
+    EventWindow.getInstance().dispatchEvent(new WindowEvent(
+        EventWindow.getInstance(), WindowEvent.WINDOW_CLOSING));
+    MainWindow.getInstance().getMainPanel().repaint();
+    MainWindow.getInstance().getEventRecapPanel().createEventLineClosed(
+        this.getCurrentId(), startTime, endTime,
+        eventStringTab[LINE_CLOSURE_LINE_INDEX],
+        eventStringTab[LINE_CLOSURE_TYPE_INDEX]);
+    MainWindow.getInstance().getEventRecapPanel().revalidate();
+    this.incrementCurrentId();
+    try {
+      SwingUtilities.updateComponentTreeUI(MainWindow.getInstance());
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     EventRecap.getInstance().eventsListRemoveBackground();
   }
 }

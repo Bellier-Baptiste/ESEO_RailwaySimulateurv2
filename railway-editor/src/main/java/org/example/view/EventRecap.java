@@ -42,6 +42,8 @@ import java.awt.event.ActionEvent;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Alexis BONAMY
+ * @author Marie Bordet
  * @file ClockView.java
  * @date N/A
  * @since 2.0
@@ -53,9 +55,9 @@ public final class EventRecap extends JScrollPane {
   private static final long serialVersionUID = 1L;
   // constants
   /** default width of the panel. */
-  public static final int LARGEUR_PAR_DEFAUT = 220;
+  public static final int DEFAULT_WIDTH = 220;
   /** default height of the panel. */
-  public static final int HAUTEUR_PAR_DEFAUT = 600;
+  public static final int DEFAULT_HEIGHT = 600;
   /** default font of the panel. */
   private static final String SEGEOE_UI = "Segoe UI";
   /** string of the for the starting date. */
@@ -70,6 +72,10 @@ public final class EventRecap extends JScrollPane {
   private static final int MAIN_FONT_SIZE = 12;
   /** Details font size. */
   private static final int DETAILS_FONT_SIZE = 11;
+  /**
+   * Number of minutes in an hour.
+   */
+  private static final int MINUTES_IN_HOUR = 60;
   /** Singleton instance of the class. */
   private static EventRecap instance;
   /** task pane container. */
@@ -80,8 +86,8 @@ public final class EventRecap extends JScrollPane {
    * Constructor of the class.
    */
   private EventRecap() {
-    this.setPreferredSize(new Dimension(LARGEUR_PAR_DEFAUT,
-        HAUTEUR_PAR_DEFAUT));
+    this.setPreferredSize(new Dimension(DEFAULT_WIDTH,
+        DEFAULT_HEIGHT));
     TitledBorder eventRecapBorder = new TitledBorder("Events List");
     this.setBorder(eventRecapBorder);
     this.taskPaneContainer = new JXTaskPaneContainer();
@@ -127,7 +133,7 @@ public final class EventRecap extends JScrollPane {
     JXTaskPane taskpane = new JXTaskPane();
     // create a taskpane, and set it's title and icon
     taskpane.setTitle("Line Delayed");
-
+    String newDelayStr = delayStr;
     JXLabel startDate = new JXLabel();
     startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     startDate.setText(START_DATE + startDateStr);
@@ -146,7 +152,15 @@ public final class EventRecap extends JScrollPane {
     line.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel delay = new JXLabel();
     delay.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
-    delay.setText("Delay: " + delayStr);
+    if (!delayStr.contains(":")) {
+      // if for example delay = 186, then delay should be 3:06
+      int delayInt = Integer.parseInt(delayStr);
+      int delayHours = delayInt / MINUTES_IN_HOUR;
+      int delayMinutes = delayInt % MINUTES_IN_HOUR;
+      newDelayStr = delayHours + ":" + delayMinutes;
+      newDelayStr = formatTime(newDelayStr);
+    }
+    delay.setText("Delay: " + newDelayStr);
     delay.setHorizontalAlignment(SwingConstants.LEFT);
 
     // add various actions and components to the taskpane
@@ -177,6 +191,27 @@ public final class EventRecap extends JScrollPane {
   }
 
   /**
+   * Format a time string to have two digits for hours and minutes.
+   *
+   * @param input time string to format
+   *
+   * @return formatted time string
+   */
+  private static String formatTime(final String input) {
+    String[] parts = input.split(":");
+
+    // Get the parts before and after the ":" (or "0" if they don't exist)
+    String hours = (parts.length > 0) ? parts[0] : "0";
+    String minutes = (parts.length > 1) ? parts[1] : "0";
+
+    // Format the parts with two digits
+    hours = String.format("%02d", Integer.parseInt(hours));
+    minutes = String.format("%02d", Integer.parseInt(minutes));
+
+    return hours + ":" + minutes;
+  }
+
+  /**
    * create a recap for event line closed.
    *
    * @param id           event id
@@ -185,13 +220,14 @@ public final class EventRecap extends JScrollPane {
    * @param locationsStr stations concerned
    * @param lineStr      line concerned
    */
-  public void createEventLineClosed(final int id, final String startDateStr,
-                                    final String endDateStr,
-                                    final String locationsStr,
-                                    final String lineStr) {
+  public void createEventMultipleStationsClosed(final int id,
+                                                final String startDateStr,
+                                                final String endDateStr,
+                                                final String locationsStr,
+                                                final String lineStr) {
     JXTaskPane taskpane = new JXTaskPane();
     // create a taskpane, and set it's title and icon
-    taskpane.setTitle("Line Closed");
+    taskpane.setTitle("Multiple Stations Closed");
 
     JXLabel startDate = new JXLabel();
     startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
@@ -238,23 +274,19 @@ public final class EventRecap extends JScrollPane {
   }
 
   /**
-   * create a recap for event attendancePeak.
+   * create a recap for event peak.
    *
-   * @param id           event id
+   * @param taskpane     taskpane to add the recap to
    * @param startDateStr event start date
    * @param endDateStr   event end date
+   * @param peakDateStr peak time
    * @param stationStr   station concerned
    * @param peakStr      peak amount
    */
-  public void createEventAttendancePeak(final int id, final String startDateStr,
-                                        final String endDateStr,
-                                        final String stationStr,
-                                        final String peakStr) {
-    JXTaskPane taskpane = new JXTaskPane();
-
-    // create a taskpane, and set it's title and icon
-    taskpane.setTitle("Attendance Peak");
-
+  public void createEventPeak(JXTaskPane taskpane,
+                              String startDateStr, String endDateStr,
+                              String peakDateStr, String stationStr,
+                              String peakStr) {
     JXLabel startDate = new JXLabel();
     startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     startDate.setText(START_DATE + startDateStr);
@@ -263,6 +295,10 @@ public final class EventRecap extends JScrollPane {
     endDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     endDate.setText(END_DATE + endDateStr);
     endDate.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel peakTime = new JXLabel();
+    peakTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    peakTime.setText("Peak time: " + peakDateStr);
+    peakTime.setHorizontalAlignment(SwingConstants.LEFT);
     JXLabel station = new JXLabel();
     station.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
     station.setText("Station: " + stationStr);
@@ -273,13 +309,45 @@ public final class EventRecap extends JScrollPane {
     peak.setHorizontalAlignment(SwingConstants.LEFT);
 
     // add various actions and components to the taskpane
-
     taskpane.add(startDate);
     taskpane.add(endDate);
+    taskpane.add(peakTime);
     taskpane.add(station);
     taskpane.add(peak);
-    taskpane.add(new AbstractAction(REMOVE
-    ) {
+  }
+
+  /**
+   * create a recap for event gaussianPeak.
+   *
+   * @param id           event id
+   * @param startDateStr event start date
+   * @param endDateStr   event end date
+   * @param peakDateStr peak time
+   * @param stationStr   station concerned
+   * @param peakStr      peak amount
+   * @param peakWidthStr peak width
+   */
+  public void createEventGaussianPeak(final int id, final String startDateStr,
+                                        final String endDateStr,
+                                        final String peakDateStr,
+                                        final String stationStr,
+                                        final String peakStr,
+                                        final String peakWidthStr) {
+    JXTaskPane taskpane = new JXTaskPane();
+
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Gaussian Peak");
+
+    createEventPeak(taskpane, startDateStr, endDateStr, peakDateStr,
+            stationStr, peakStr);
+    JXLabel peakWidth = new JXLabel();
+    peakWidth.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    peakWidth.setText("Peak width: " + peakWidthStr);
+    peakWidth.setHorizontalAlignment(SwingConstants.LEFT);
+
+    // add various actions and components to the taskpane
+    taskpane.add(peakWidth);
+    taskpane.add(new AbstractAction(REMOVE) {
       /**
        * Remove action serial version UID.
        */
@@ -297,7 +365,49 @@ public final class EventRecap extends JScrollPane {
     this.taskPaneContainer.add(taskpane);
     this.setViewportView(taskPaneContainer);
     taskPaneContainer.revalidate();
+  }
 
+  /**
+   * create a recap for event rampPeak.
+   *
+   * @param id           event id
+   * @param startDateStr event start date
+   * @param endDateStr   event end date
+   * @param peakDateStr peak time
+   * @param stationStr   station concerned
+   * @param peakStr      peak amount
+   */
+  public void createEventRampPeak(final int id, final String startDateStr,
+                                      final String endDateStr,
+                                      final String peakDateStr,
+                                      final String stationStr,
+                                      final String peakStr) {
+    JXTaskPane taskpane = new JXTaskPane();
+
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Ramp Peak");
+
+    createEventPeak(taskpane, startDateStr, endDateStr, peakDateStr,
+            stationStr, peakStr);
+
+    taskpane.add(new AbstractAction(REMOVE) {
+      /**
+       * Remove action serial version UID.
+       */
+      private static final long serialVersionUID = 1L;
+
+      public void actionPerformed(final ActionEvent e) {
+        taskPaneContainer.remove(taskpane);
+        Data.getInstance().getEventList().removeIf(event -> event.getId()
+                == id);
+        taskPaneContainer.revalidate();
+      }
+    });
+
+    // add the task pane to the taskPaneContainer
+    this.taskPaneContainer.add(taskpane);
+    this.setViewportView(taskPaneContainer);
+    taskPaneContainer.revalidate();
   }
 
   /**
@@ -411,4 +521,73 @@ public final class EventRecap extends JScrollPane {
     taskPaneContainer.revalidate();
   }
 
+  /**
+   * create a recap for event lineClosed.
+   *
+   * @param id              event id
+   * @param startTimeStr    event startDate
+   * @param endTimeStr      event endDate
+   * @param lineStr         line concerned
+   * @param closureTypeStr  closure type
+   */
+  public void createEventLineClosed(final int id, final String startTimeStr,
+                                    final String endTimeStr,
+                                    final String lineStr,
+                                    final String closureTypeStr) {
+    JXTaskPane taskpane = new JXTaskPane();
+    // create a taskpane, and set it's title and icon
+    taskpane.setTitle("Line Closed");
+
+    JXLabel startTime = new JXLabel();
+    startTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    startTime.setText("Start Time: " + startTimeStr);
+    startTime.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel endTime = new JXLabel();
+    endTime.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
+    endTime.setText("End Time: " + endTimeStr);
+    endTime.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel line = new JXLabel();
+    line.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    line.setText(LINE + lineStr);
+    line.setHorizontalAlignment(SwingConstants.LEFT);
+    JXLabel closureType = new JXLabel();
+    closureType.setFont(new Font(SEGEOE_UI, Font.ITALIC, DETAILS_FONT_SIZE));
+    closureType.setText("Closure type: " + closureTypeStr);
+    closureType.setHorizontalAlignment(SwingConstants.LEFT);
+
+    // add various actions and components to the taskpane
+    taskpane.add(startTime);
+    taskpane.add(endTime);
+    taskpane.add(line);
+    taskpane.add(closureType);
+
+    taskpane.add(new AbstractAction(REMOVE) {
+      /**
+       * Remove action serial version UID.
+       */
+      private static final long serialVersionUID = 1L;
+
+      public void actionPerformed(final ActionEvent e) {
+        taskPaneContainer.remove(taskpane);
+        Data.getInstance().getEventList().removeIf(event -> event.getId()
+            == id);
+        taskPaneContainer.revalidate();
+      }
+    });
+
+    // add the task pane to the taskPaneContainer
+    this.taskPaneContainer.add(taskpane);
+    this.setViewportView(taskPaneContainer);
+    taskPaneContainer.revalidate();
+  }
+
+  /**
+   * Remove all events from the list.
+   * Used when loading a new file.
+   */
+  public void cleanEvents() {
+    this.taskPaneContainer.removeAll();
+    this.taskPaneContainer.revalidate();
+    Data.getInstance().getEventList().clear();
+  }
 }

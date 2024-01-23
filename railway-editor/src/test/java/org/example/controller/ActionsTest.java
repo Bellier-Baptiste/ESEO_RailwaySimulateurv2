@@ -24,12 +24,14 @@
 
 package org.example.controller;
 
-import org.example.controller.ActionArea;
-import org.example.controller.ActionLine;
-import org.example.controller.ActionStation;
+import org.example.data.Data;
 import org.example.model.Line;
+import org.example.view.EventRecap;
 import org.example.view.MainWindow;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -38,15 +40,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Baptiste BELLIER
  * @file ActionsTest.java
  * @date N/A
  * @since 2.0
  */
-public class ActionsTest {
+class ActionsTest {
+
+  @BeforeEach
+  void setUp() {
+    MainWindow.getInstance().getMainPanel().getLineViews().clear();
+    MainWindow.getInstance().getMainPanel().getAreaViews().clear();
+    EventRecap.getInstance().cleanEvents();
+    Data.getInstance().getEventList().clear();
+  }
 
 
   @Test
-  public void testAddLine() {
+  void testAddLine() {
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
     int nbLineView = MainWindow.getInstance().getMainPanel().getLineViews()
@@ -65,7 +76,7 @@ public class ActionsTest {
   }
 
   @Test
-  public void testAddStation() {
+  void testAddStation() {
     MainWindow.getInstance().getMainPanel().getLineViews().clear();
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
@@ -86,7 +97,7 @@ public class ActionsTest {
   }
 
   @Test
-  public void testAddArea() {
+  void testAddArea() {
     ActionArea actionArea = new ActionArea();
     int nbAreaView = MainWindow.getInstance().getMainPanel().getAreaViews()
         .size();
@@ -99,7 +110,7 @@ public class ActionsTest {
   }
 
   @Test
-  public void testLineSwitch() {
+  void testLineSwitch() {
     ActionLine actionLine = ActionLine.getInstance();
     actionLine.addLine();
     actionLine.addLine();
@@ -119,5 +130,31 @@ public class ActionsTest {
     actionLine.incrementLine();
     currentLineId = actionLine.getLineToUpdateIndex();
     assertEquals(2, currentLineId);
+  }
+
+  @Test
+  void testAddRampPeak() {
+    // Create an instance of your class
+    ActionMetroEvent actionMetroEvent = new ActionMetroEvent();
+
+    // Set up test data
+    String eventString = "2018/10/12,10:48,2018/10/12,12:48,2018/10/12,10:48,1,500";
+
+    // Perform the test
+    actionMetroEvent.addRampPeak(eventString);
+
+    // Access relevant objects to perform assertions
+    MainWindow mainWindowInstance = MainWindow.getInstance();
+    Data dataInstance = Data.getInstance();
+    EventRecap eventRecapInstance = mainWindowInstance.getEventRecapPanel();
+
+    // Assert conditions based on the outcome of the method
+    Assertions.assertNotNull(mainWindowInstance);
+    Assertions.assertNotNull(dataInstance);
+    Assertions.assertNotNull(eventRecapInstance);
+
+    // Assert specific conditions based on the behavior of the method
+    // For example, you might assert that the event list has the expected size after adding the event
+    assertEquals(1, dataInstance.getEventList().size());
   }
 }

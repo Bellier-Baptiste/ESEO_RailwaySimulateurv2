@@ -50,6 +50,7 @@ public final class ActionLine {
   public static final String INCREMENT_LINE = "INCREMENT_LINE";
   /** String of the decrement action name. */
   public static final String DECREMENT_LINE = "DECREMENT_LINE";
+  /** String of the delete action name. */
   public static final String DELETE_LINE = "DELETE_LINE";
   /** Singleton instance of the class. */
   private static ActionLine instance;
@@ -90,14 +91,14 @@ public final class ActionLine {
    *
    * @param lineToUpdateIndexToSet line to update index
    */
-  private void setLineToUpdateIndex(final int lineToUpdateIndexToSet) {
+  void setLineToUpdateIndex(final int lineToUpdateIndexToSet) {
     this.lineToUpdateIndex = lineToUpdateIndexToSet;
   }
 
   /**
    * Creates a {@link Line} with its linked {@link LineView} created and
-   * add this {@link LineView} to the {@link org.example.view.MainPanel} thanks to
-   * {@link LineController}.
+   * add this {@link LineView} to the {@link org.example.view.MainPanel} thanks
+   * to {@link LineController}.
    */
   public void addLine() {
     int lineIndex = MainWindow.getInstance().getMainPanel().getLineViews()
@@ -111,8 +112,7 @@ public final class ActionLine {
     @SuppressWarnings("unused")
     LineController lineController = new LineController(lineview);
     MainWindow.getInstance().getToolBarPanel().getLineId().setText(
-        Integer.toString(lineIndex)); // change line id
-    // displayed in the
+        Integer.toString(lineIndex)); // change line id displayed in the
     // toolBar Panel
     MainWindow.getInstance().getMainPanel().repaint();
   }
@@ -122,7 +122,6 @@ public final class ActionLine {
    */
   public void incrementLine() {
     JLabel lineId = MainWindow.getInstance().getToolBarPanel().getLineId();
-
     if (!lineId.getText().equals("none")) { // if a line exists
       int currentLineId = Integer.parseInt(lineId.getText());
       if (currentLineId < MainWindow.getInstance().getMainPanel().getLineViews()

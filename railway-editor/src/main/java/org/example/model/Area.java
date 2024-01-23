@@ -124,6 +124,7 @@ public class Area {
    */
   public Area(final int areaPosX, final int areaPosY,
               final int areaWidth, final int areaHeight) {
+    this.id = Data.getInstance().getNewAreaId();
     this.posX = areaPosX;
     this.posY = areaPosY;
     this.width = areaWidth;
@@ -150,6 +151,7 @@ public class Area {
    */
   public Area(final double latitudeTopToSet, final double longitudeTopToSet,
               final double latitudeBotToSet, final double longitudeBotToSet) {
+    this.id = Data.getInstance().getNewAreaId();
     this.initDistributions();
     this.initColor();
     this.latitudeBot = latitudeBotToSet;

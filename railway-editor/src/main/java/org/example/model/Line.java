@@ -24,6 +24,7 @@
 
 package org.example.model;
 
+import org.example.controller.ActionFile;
 import org.example.data.Data;
 
 import java.awt.Color;
@@ -39,7 +40,8 @@ import java.util.List;
  * @since 2.0
  */
 public class Line {
-
+  /** Line name. */
+  private final String name;
   //attributes
   /** Line id. */
   private int id;
@@ -59,6 +61,7 @@ public class Line {
     this.id = lineId;
     this.color = Data.getInstance().getLinesColors()[id];
     this.stations = lineStations;
+    this.name = ActionFile.toAlphabetic(this.id);
   }
 
   //accessors
@@ -100,6 +103,15 @@ public class Line {
   }
 
   /**
+   * get the name of the line.
+   *
+   * @return name of the line
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
    * get the stations of the line.
    *
    * @return list of the stations
@@ -128,5 +140,5 @@ public class Line {
     this.stations.add(station);
   }
 
-
 }
+

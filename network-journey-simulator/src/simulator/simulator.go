@@ -11,8 +11,10 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX
+  - Alexis BONAMY
   - Benoît VAVASSEUR
   - Aurélie CHAMOULEAU
+  - Marie BORDET
 
 License : MIT License
 
@@ -40,6 +42,7 @@ package simulator
 
 import (
 	"fmt"
+	"math"
 	"math/rand"
 	"network-journey-simulator/src/configs"
 	"network-journey-simulator/src/models"
@@ -64,9 +67,11 @@ Attributes :
   - eventsStationClosed []models.EventStationClosed : the events of the
     simulator
   - eventsLineDelay []models.EventLineDelay : the events of the simulator
-  - eventsLineClosed []models.EventLineClosed : the events of the simulator
-  - eventsAttendancePeak []models.EventAttendancePeak : the events of the
+  - eventMultipleStationsClosed []models.EventMultipleStationsClosed :
+    the events of the simulator
+  - eventsGaussianPeak []models.EventGaussianPeak : the events of the
     simulator
+  - eventsRampPeak []models.EventRampPeak : the events of the simulator
   - areasDistribution []models.PopulationDistribution : the population
     distribution of an area
   - tripNumberCounter int : the trip number counter of the simulator
@@ -76,15 +81,21 @@ Methods :
     simulator
   - GetTrains() []*models.MetroTrain : get the trains of the simulator
   - Population() *models.Population : get the population of the simulator
-  - GetAllEventsLineClosed() []models.EventLineClosed : get the line closed
+  - GetAllEventsMultipleStationsClosed() []models.EventMultipleStationsClosed :
+    get the multiple stations closed
     events of the simulator
-  - GetAllEventsAttendancePeak() []models.EventAttendancePeak : get the
-    attendance peak events of the simulator
+  - GetAllEventsGaussianPeak() []models.EventGaussianPeak : get the
+    gaussian peak events of the simulator
+  - GetAllEventsRampPeak() []models.EventRampPeak : get the
+    ramp peak events of the simulator
   - CreateEventsStationClose() : create "station close" event of the
     simulator
   - CreateEventsLineDelay() : create "line delay" event of the simulator
-  - CreateEventsLineClose() : create "line close" event of the simulator
-  - CreateEventsAttendancePeak() : create "attendance peak" event of the
+  - CreateEventsMultipleStationsClose() : create "multiple stations close"
+    event of the simulator
+  - CreateEventsGaussianPeak() : create "gaussian peak" event of the
+    simulator
+  - CreateEventsRampPeak() : create "ramp peak" event of the
     simulator
   - AddTrainLinePeer(line *models.MetroLine, shift, count, aux1, aux2 int)
     (*models.MetroLine, int, int, int, int) : add train to line (peer train
@@ -104,26 +115,30 @@ Methods :
   - ToCSV() : save the timetable and timetableReal as CSV
 */
 type Simulator struct {
-	config                   configs.ConfigurationType
-	adConfig                 *configs.AdvancedConfig
-	mapObject                models.Map
-	population               *models.Population
-	trains                   []*models.MetroTrain
-	currentTime              time.Time
-	timetable                models.Timetable
-	timetableReal            models.TimetableReal
-	eventsStationClosed      []models.EventStationClosed
-	eventsLineDelay          []models.EventLineDelay
-	eventsLineClosed         []models.EventLineClosed
-	eventsAttendancePeak     []models.EventAttendancePeak
-	tripNumberCounter        int
-	populationsDistributions []models.PopulationDistribution
-	destinationDistributions []models.DestinationDistribution
-	areas                    []models.Area
+	config                       configs.ConfigurationType
+	adConfig                     *configs.AdvancedConfig
+	MapObject                    models.Map
+	population                   *models.Population
+	trains                       []*models.MetroTrain
+	currentTime                  time.Time
+	timetable                    models.Timetable
+	timetableReal                models.TimetableReal
+	eventsStationClosed          []models.EventStationClosed
+	eventsMultipleStationsClosed []models.EventMultipleStationsClosed
+	eventsLineDelay              []models.EventLineDelay
+	eventsGaussianPeak           []models.EventGaussianPeak
+	eventsRampPeak               []models.EventRampPeak
+	tripNumberCounter            int
+	populationsDistributions     []models.PopulationDistribution
+	destinationDistributions     []models.DestinationDistribution
+	areas                        []models.Area
 }
 
 const (
-	strErr = " error : "
+	strErr               = " error : "
+	strGaussianPeakParse = "EventGaussianPeak : couldn't parse date : "
+	strRampPeakParse     = "EventRampPeak : couldn't parse date : "
+	strDeletePath        = " - deleted path"
 )
 
 /*
@@ -162,7 +177,7 @@ func NewSimulator() *Simulator {
 	simulator := &Simulator{
 		config:                   configs.GetInstance(),
 		adConfig:                 nil,
-		mapObject:                models.Map{},
+		MapObject:                models.Map{},
 		population:               nil,
 		trains:                   make([]*models.MetroTrain, 0),
 		currentTime:              time.Now(),
@@ -170,8 +185,8 @@ func NewSimulator() *Simulator {
 		timetableReal:            models.TimetableReal{},
 		eventsStationClosed:      make([]models.EventStationClosed, 0),
 		eventsLineDelay:          make([]models.EventLineDelay, 0),
-		eventsLineClosed:         make([]models.EventLineClosed, 0),
-		eventsAttendancePeak:     make([]models.EventAttendancePeak, 0),
+		eventsGaussianPeak:       make([]models.EventGaussianPeak, 0),
+		eventsRampPeak:           make([]models.EventRampPeak, 0),
 		populationsDistributions: make([]models.PopulationDistribution, 0),
 		destinationDistributions: make([]models.DestinationDistribution, 0),
 		areas:                    make([]models.Area, 0),
@@ -194,16 +209,18 @@ func (s *Simulator) Population() *models.Population {
 }
 
 /*
-GetAllEventsLineClosed is used to get the line closed events of the simulator.
+GetAllEventsMultipleStationsClosed is used to get the multiple
+stations closed events of the simulator.
 
 Param :
   - s *Simulator : the simulator
 
 Return :
-  - []models.EventLineClosed : the events of the simulator
+  - []models.EventMultipleStationsClosed : the events of the simulator
 */
-func (s *Simulator) GetAllEventsLineClosed() []models.EventLineClosed {
-	return s.eventsLineClosed
+func (s *Simulator) GetAllEventsMultipleStationsClosed() []models.
+	EventMultipleStationsClosed {
+	return s.eventsMultipleStationsClosed
 }
 
 /*
@@ -221,17 +238,31 @@ func (s *Simulator) GetAllEventsStationClosed() []models.EventStationClosed {
 }
 
 /*
-GetAllEventsAttendancePeak is used to get the attendance peak events of the
+GetAllEventsGaussianPeak is used to get the gaussian peak events of the
 simulator.
 
 Param :
   - s *Simulator : the simulator
 
 Return :
-  - []models.EventAttendancePeak : the events of the simulator
+  - []models.EventGaussianPeak : the events of the simulator
 */
-func (s *Simulator) GetAllEventsAttendancePeak() []models.EventAttendancePeak {
-	return s.eventsAttendancePeak
+func (s *Simulator) GetAllEventsGaussianPeak() []models.EventGaussianPeak {
+	return s.eventsGaussianPeak
+}
+
+/*
+GetAllEventsRampPeak is used to get the ramp peak events of the
+simulator.
+
+Param :
+  - s *Simulator : the simulator
+
+Return :
+  - []models.EventRampPeak : the events of the simulator
+*/
+func (s *Simulator) GetAllEventsRampPeak() []models.EventRampPeak {
+	return s.eventsRampPeak
 }
 
 /*
@@ -245,7 +276,8 @@ Return :
   - []models.PopulationDistribution : the population distribution of all the
     areas
 */
-func (s *Simulator) GetAllPopDistribution() []models.PopulationDistribution {
+func (s *Simulator) GetAllPopDistribution() []models.
+	PopulationDistribution {
 	return s.populationsDistributions
 }
 
@@ -260,7 +292,8 @@ Return :
   - []models.DestinationDistribution : the destination distribution of all the
     areas
 */
-func (s *Simulator) GetAllDestDistribution() []models.DestinationDistribution {
+func (s *Simulator) GetAllDestDistribution() []models.
+	DestinationDistribution {
 	return s.destinationDistributions
 }
 
@@ -276,8 +309,8 @@ Return :
   - models.PopulationDistribution : the population distribution of the
     area
 */
-func (s *Simulator) GetPopulationDistributionArea(
-	id int) models.PopulationDistribution {
+func (s *Simulator) GetPopulationDistributionArea(id int) models.
+	PopulationDistribution {
 	return s.populationsDistributions[id]
 }
 
@@ -292,8 +325,8 @@ Return :
   - []models.DestinationDistribution : the destination distribution of the
     areas
 */
-func (s *Simulator) GetDestinationDistributionArea(
-	id int) models.DestinationDistribution {
+func (s *Simulator) GetDestinationDistributionArea(id int) models.
+	DestinationDistribution {
 	return s.destinationDistributions[id]
 }
 
@@ -311,11 +344,12 @@ Return :
   - models.PopulationDistribution : the population distribution of the
     station
 */
-func (s *Simulator) GetPopulationDistributionStation(
-	id int) models.PopulationDistribution {
+func (s *Simulator) GetPopulationDistributionStation(id int) models.
+	PopulationDistribution {
 	ms := s.adConfig.MapC.Stations[id]
 	if ms.IdArea == nil {
-		return models.NewPopulationDistribution(14, 14, 14, 15, 14, 14, 15)
+		return models.NewPopulationDistribution(14, 14,
+			14, 15, 14, 14, 15)
 	}
 	idArea := *ms.IdArea
 	return s.populationsDistributions[idArea]
@@ -335,11 +369,12 @@ Return :
   - models.DestinationDistribution : the destination distribution of the
     station
 */
-func (s *Simulator) GetDestinationDistributionStation(
-	id int) models.DestinationDistribution {
+func (s *Simulator) GetDestinationDistributionStation(id int) models.
+	DestinationDistribution {
 	ms := s.adConfig.MapC.Stations[id]
 	if ms.IdArea == nil {
-		return models.NewDestinationDistribution(15, 14, 14, 14, 15, 14, 14)
+		return models.NewDestinationDistribution(15, 14,
+			14, 14, 15, 14, 14)
 	}
 	idArea := *ms.IdArea
 	return s.destinationDistributions[idArea]
@@ -443,79 +478,143 @@ func (s *Simulator) CreateEventsLineDelay() {
 }
 
 /*
-CreateEventsLineClose is used to create "line close" event of the simulator.
+CreateEventsMultipleStationsClose is used to create "multiple stations close"
+event of the simulator.
 
 Param :
   - s *Simulator : the simulator
 */
-func (s *Simulator) CreateEventsLineClose() {
-	s.eventsLineClosed = make([]models.EventLineClosed,
-		len(s.adConfig.MapC.EventsLineClosed))
-	for i, ev := range s.adConfig.MapC.EventsLineClosed {
+func (s *Simulator) CreateEventsMultipleStationsClose() {
+	s.eventsMultipleStationsClosed = make([]models.EventMultipleStationsClosed,
+		len(s.adConfig.MapC.EventsMultipleStationsClosed))
+	for i, ev := range s.adConfig.MapC.EventsMultipleStationsClosed {
 		start, err := time.Parse(time.RFC3339, ev.StartString)
 		if err != nil {
-			fmt.Print("EventLineClosed : couldn't parse date : ",
+			fmt.Print("EventMultipleStationsClosed : couldn't parse date : ",
 				ev.StartString, strErr, err)
 			continue
 		}
 		end, err := time.Parse(time.RFC3339, ev.EndString)
 		if err != nil {
-			fmt.Print("EventLineClosed : couldn't parse date : ",
+			fmt.Print("EventMultipleStationsClosed : couldn't parse date : ",
 				ev.EndString, strErr, err)
 			continue
 		}
 
-		s.eventsLineClosed[i] = models.NewEventLineClosed(ev.StationIdStart,
-			ev.StationIdEnd, start, end)
+		s.eventsMultipleStationsClosed[i] = models.NewEventMultipleStationsClosed(
+			ev.StationIdStart, ev.StationIdEnd, start, end)
 	}
 }
 
 /*
-CreateEventsAttendancePeak is used to create "attendance peak" event of the
+CreateEventsGaussianPeak is used to create "gaussian peak" event of the
 simulator.
 
 Param :
   - s *Simulator : the simulator
 */
-func (s *Simulator) CreateEventsAttendancePeak() {
-	s.eventsAttendancePeak = make([]models.EventAttendancePeak,
-		len(s.adConfig.MapC.EventsAttendancePeak))
-	for i, ev := range s.adConfig.MapC.EventsAttendancePeak {
-		timeEv, err := time.Parse(time.RFC3339, ev.TimeString)
+func (s *Simulator) CreateEventsGaussianPeak() {
+	s.eventsGaussianPeak = make([]models.EventGaussianPeak,
+		len(s.adConfig.MapC.EventsGaussianPeak))
+	for i, ev := range s.adConfig.MapC.EventsGaussianPeak {
+		startEv, err := time.Parse(time.RFC3339, ev.StartString)
 		if err != nil {
-			fmt.Print("EventAttendancePeak : couldn't parse date : ",
-				ev.TimeString, strErr, err)
+			fmt.Print(strGaussianPeakParse,
+				ev.StartString, strErr, err)
 			continue
 		}
-		s.eventsAttendancePeak[i] = models.NewEventAttendancePeak(ev.StationId,
-			ev.Size, timeEv)
+		endEv, err := time.Parse(time.RFC3339, ev.EndString)
+		if err != nil {
+			fmt.Print(strGaussianPeakParse,
+				ev.EndString, strErr, err)
+			continue
+		}
+		peakEv, err := time.Parse(time.RFC3339, ev.PeakString)
+		if err != nil {
+			fmt.Print(strGaussianPeakParse,
+				ev.PeakString, strErr, err)
+			continue
+		}
+		s.eventsGaussianPeak[i] = models.NewEventGaussianPeak(startEv,
+			endEv, peakEv, ev.StationId, ev.PeakSize, ev.PeakWidth)
 	}
 }
 
 /*
-CreateAreasDistribution is used to create "area distribution"
+CreateEventsRampPeak is used to create "ramp peak" event of the
+simulator.
+
+Param :
+  - s *Simulator : the simulator
+*/
+func (s *Simulator) CreateEventsRampPeak() {
+	s.eventsRampPeak = make([]models.EventRampPeak,
+		len(s.adConfig.MapC.EventsRampPeak))
+	for i, ev := range s.adConfig.MapC.EventsRampPeak {
+		startEv, err := time.Parse(time.RFC3339, ev.StartString)
+		if err != nil {
+			fmt.Print(strRampPeakParse,
+				ev.StartString, strErr, err)
+			continue
+		}
+		endEv, err := time.Parse(time.RFC3339, ev.EndString)
+		if err != nil {
+			fmt.Print(strRampPeakParse,
+				ev.EndString, strErr, err)
+			continue
+		}
+		peakEv, err := time.Parse(time.RFC3339, ev.PeakString)
+		if err != nil {
+			fmt.Print(strRampPeakParse,
+				ev.PeakString, strErr, err)
+			continue
+		}
+		s.eventsRampPeak[i] = models.NewEventRampPeak(startEv,
+			endEv, peakEv, ev.StationId, ev.PeakSize)
+	}
+}
+
+/*
+CreatePopulationsDistribution is used to create the population distribution of
+the areas.
+
+Param :
+  - s *Simulator : the simulator
 */
 func (s *Simulator) CreatePopulationsDistribution() {
 	s.populationsDistributions = make([]models.PopulationDistribution,
 		len(s.adConfig.MapC.Areas))
 	for i, pd := range s.adConfig.MapC.Areas {
 		s.populationsDistributions[i] =
-			models.NewPopulationDistribution(pd.PopulationDistribution.Businessman,
-				pd.PopulationDistribution.Child, pd.PopulationDistribution.Retired,
-				pd.PopulationDistribution.Student, pd.PopulationDistribution.Tourist,
-				pd.PopulationDistribution.Unemployed, pd.PopulationDistribution.Worker)
+			models.NewPopulationDistribution(
+				pd.PopulationDistribution.Businessman,
+				pd.PopulationDistribution.Child,
+				pd.PopulationDistribution.Retired,
+				pd.PopulationDistribution.Student,
+				pd.PopulationDistribution.Tourist,
+				pd.PopulationDistribution.Unemployed,
+				pd.PopulationDistribution.Worker)
 	}
 }
 
+/*
+CreateDestinationDistribution is used to create the destination distribution of
+the areas.
+
+Param :
+  - s *Simulator : the simulator
+*/
 func (s *Simulator) CreateDestinationDistribution() {
 	s.destinationDistributions = make([]models.DestinationDistribution,
 		len(s.adConfig.MapC.Areas))
 	for i, dd := range s.adConfig.MapC.Areas {
 		s.destinationDistributions[i] =
-			models.NewDestinationDistribution(dd.DestinationDistribution.Commercial,
+			models.NewDestinationDistribution(
+				dd.DestinationDistribution.Commercial,
 				dd.DestinationDistribution.Educational,
 				dd.DestinationDistribution.Industrial,
-				dd.DestinationDistribution.Leisure, dd.DestinationDistribution.Office,
+				dd.DestinationDistribution.Leisure,
+				dd.DestinationDistribution.Office,
 				dd.DestinationDistribution.Residential,
 				dd.DestinationDistribution.Touristic)
 	}
@@ -543,8 +642,8 @@ func (s *Simulator) AddTrainLinePeer(line *models.MetroLine,
 	shift, count, aux1, aux2 int) (*models.MetroLine, int, int, int, int) {
 	for k := 0; k < line.TrainNumber()/2; k++ {
 		shift = k * (models.LineTimeLength(line,
-			s.mapObject.GraphTimeBetweenStation(),
-			s.mapObject.GraphDelay(),
+			s.MapObject.GraphTimeBetweenStation(),
+			s.MapObject.GraphDelay(),
 			len(line.Stations()),
 			s.config.TimeInStation()) / len(s.trains))
 		//count in base N
@@ -559,8 +658,8 @@ func (s *Simulator) AddTrainLinePeer(line *models.MetroLine,
 		s.trains[count].SetTimeArrivalNextStation(
 			s.trains[count].TimeArrivalCurrentStation().Add(
 				time.Duration(
-					s.mapObject.GraphTimeBetweenStation()[aux1][aux2]+
-						s.mapObject.GraphDelay()[aux1][aux2]) * time.Second))
+					s.MapObject.GraphTimeBetweenStation()[aux1][aux2]+
+						s.MapObject.GraphDelay()[aux1][aux2]) * time.Second))
 		s.trains[count].SetId(count)
 		count++
 		s.trains[count] = models.NewMetroTrain(line, "down")
@@ -574,8 +673,8 @@ func (s *Simulator) AddTrainLinePeer(line *models.MetroLine,
 		s.trains[count].SetTimeArrivalNextStation(
 			s.trains[count].TimeArrivalCurrentStation().Add(
 				time.Duration(
-					s.mapObject.GraphTimeBetweenStation()[aux1][aux2]+
-						s.mapObject.GraphDelay()[aux1][aux2]) * time.Second))
+					s.MapObject.GraphTimeBetweenStation()[aux1][aux2]+
+						s.MapObject.GraphDelay()[aux1][aux2]) * time.Second))
 		s.trains[count].SetId(count)
 		count++
 
@@ -605,10 +704,10 @@ Return :
 func (s *Simulator) AddTrainLineOdd(line *models.MetroLine,
 	shift, count, aux1, aux2, j int) (*models.MetroLine, int, int, int, int) {
 	for l := 0; l < line.TrainNumber(); l++ {
-		shift = l * (models.LineTimeLength(s.mapObject.Lines()[j],
-			s.mapObject.GraphTimeBetweenStation(),
-			s.mapObject.GraphDelay(),
-			len(s.mapObject.Lines()[j].Stations()),
+		shift = l * (models.LineTimeLength(s.MapObject.Lines()[j],
+			s.MapObject.GraphTimeBetweenStation(),
+			s.MapObject.GraphDelay(),
+			len(s.MapObject.Lines()[j].Stations()),
 			s.config.TimeInStation()) / (2 * len(s.trains)))
 		if l%2 == 0 {
 			s.trains[count] = models.NewMetroTrain(line, "up")
@@ -622,8 +721,8 @@ func (s *Simulator) AddTrainLineOdd(line *models.MetroLine,
 			s.trains[count].SetTimeArrivalNextStation(
 				s.trains[count].TimeArrivalCurrentStation().Add(
 					time.Duration(
-						s.mapObject.GraphTimeBetweenStation()[aux1][aux2]+
-							s.mapObject.GraphDelay()[aux1][aux2]) * time.Second))
+						s.MapObject.GraphTimeBetweenStation()[aux1][aux2]+
+							s.MapObject.GraphDelay()[aux1][aux2]) * time.Second))
 			s.trains[count].SetId(count)
 		} else {
 			s.trains[count] = models.NewMetroTrain(line, "down")
@@ -637,8 +736,8 @@ func (s *Simulator) AddTrainLineOdd(line *models.MetroLine,
 			s.trains[count].SetTimeArrivalNextStation(
 				s.trains[count].TimeArrivalCurrentStation().Add(
 					time.Duration(
-						s.mapObject.GraphTimeBetweenStation()[aux1][aux2]+
-							s.mapObject.GraphDelay()[aux1][aux2]) * time.Second))
+						s.MapObject.GraphTimeBetweenStation()[aux1][aux2]+
+							s.MapObject.GraphDelay()[aux1][aux2]) * time.Second))
 			s.trains[count].SetId(count)
 		}
 		s.trains[count].SetTimeArrivalCurrentStation(
@@ -647,7 +746,7 @@ func (s *Simulator) AddTrainLineOdd(line *models.MetroLine,
 		s.trains[count].SetTimeArrivalNextStation(
 			s.trains[count].TimeArrivalCurrentStation().Add(
 				time.Duration(
-					s.mapObject.GraphTimeBetweenStation()[aux1][aux2]) * time.Second))
+					s.MapObject.GraphTimeBetweenStation()[aux1][aux2]) * time.Second))
 		s.trains[count].SetId(count)
 
 		count++
@@ -682,9 +781,11 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 
 	s.CreateEventsLineDelay()
 
-	s.CreateEventsLineClose()
+	s.CreateEventsMultipleStationsClose()
 
-	s.CreateEventsAttendancePeak()
+	s.CreateEventsGaussianPeak()
+
+	s.CreateEventsRampPeak()
 
 	//generate populations distribution
 	s.CreatePopulationsDistribution()
@@ -692,18 +793,18 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	s.CreateDestinationDistribution()
 
 	// create map
-	s.mapObject = models.CreateMapAdvanced(*s.adConfig)
+	s.MapObject = models.CreateMapAdvanced(*s.adConfig)
 
 	// create passengers
 	s.population = models.NewPopulation(s.config.Population(),
 		s.config.PopulationCommutersProportion(),
-		s.config.PopulationRandomProportion(), s.mapObject)
+		s.config.PopulationRandomProportion(), s.MapObject)
 
 	// create trains
 	var totalNumberOfTrains = 0
 	for i := 0; i < len(s.adConfig.MapC.Lines); i++ {
 		totalNumberOfTrains = totalNumberOfTrains +
-			s.mapObject.Lines()[i].TrainNumber()
+			s.MapObject.Lines()[i].TrainNumber()
 	}
 	s.trains = make([]*models.MetroTrain, totalNumberOfTrains)
 
@@ -714,8 +815,8 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 	var count = 0
 	var aux1 = 0
 	var aux2 = 0
-	for j := 0; j < len(s.mapObject.Lines()); j++ {
-		var line = s.mapObject.Lines()[j]
+	for j := 0; j < len(s.MapObject.Lines()); j++ {
+		var line = s.MapObject.Lines()[j]
 		if line.TrainNumber()%2 == 0 {
 			//peer
 			line, shift, count, aux1, aux2 = s.AddTrainLinePeer(line,
@@ -732,7 +833,7 @@ func (s *Simulator) Init(dayType string) (bool, error) {
 
 	if s.config.PreTimetable() {
 		// create timetables
-		s.timetable = models.NewTimetable(&s.mapObject, s.GetTrains())
+		s.timetable = models.NewTimetable(&s.MapObject, s.GetTrains())
 		// save timetable and timetableStations as CSV
 		s.timetable.ToCSV()
 	}
@@ -779,6 +880,7 @@ func (s *Simulator) Run(n int) {
 		}
 	}
 
+	s.population.AllStationsExitPop(s.currentTime, &s.MapObject)
 	s.ToCSV()
 }
 
@@ -815,18 +917,22 @@ func (s *Simulator) RunOnce() {
 	eventsLineDelay = s.executeEventsLineDelay(eventsLineDelay,
 		oldTime, newCurrentTime)
 
-	var eventsLineClosed = s.getEventsLineClosed(oldTime, newCurrentTime)
-	eventsLineClosed = s.executeEventsLineClosed(eventsLineClosed,
-		oldTime, newCurrentTime)
+	var eventMultipleStationsClosed = s.getEventsMultipleStationsClosed(oldTime,
+		newCurrentTime)
+	eventMultipleStationsClosed = s.executeEventsMultipleStationsClosed(
+		eventMultipleStationsClosed, oldTime, newCurrentTime)
 
-	var eventsAttendancePeak = s.getEventsAttendancePeak(oldTime, newCurrentTime)
-	s.executeEventsAttendancePeak(eventsAttendancePeak, oldTime, newCurrentTime)
+	var eventsGaussianPeak = s.getEventsGaussianPeak(oldTime, newCurrentTime)
+	s.executeEventsGaussianPeak(eventsGaussianPeak, oldTime, newCurrentTime)
+
+	var eventsRampPeak = s.getEventsRampPeak(oldTime, newCurrentTime)
+	s.executeEventsRampPeak(eventsRampPeak, oldTime, newCurrentTime)
 
 	//var lastTime = s.currentTime
 	s.currentTime = newCurrentTime
 
 	// Check if passengers arrived / got out of a station.
-	s.population.UpdateAll(s.currentTime, &s.mapObject)
+	s.population.UpdateAll(s.currentTime, &s.MapObject)
 
 	if s.config.PrintDebug() {
 		println("\n\n", s.currentTime.String(), ": ", len(trainEvents), " events")
@@ -873,8 +979,8 @@ func (s *Simulator) RunOnce() {
 			var j = trainEvents[i].GetCurrentStation().Id()
 			var k = trainEvents[i].GetNextStation().Id()
 			trainEvents[i].SetTimeArrivalNextStation(aTime.Add(time.Duration(
-				s.mapObject.GraphTimeBetweenStation()[j][k]+
-					s.mapObject.GraphDelay()[j][k]) * time.Second))
+				s.MapObject.GraphTimeBetweenStation()[j][k]+
+					s.MapObject.GraphDelay()[j][k]) * time.Second))
 			continue
 		} else {
 			threadWaitGroup.Add(1)
@@ -890,8 +996,8 @@ func (s *Simulator) RunOnce() {
 				var k = trainEvents[i].GetNextStation().Id()
 				trainEvents[i].SetTimeArrivalNextStation(aTime.Add(
 					time.Duration(s.config.TimeInStation()+
-						s.mapObject.GraphTimeBetweenStation()[j][k]+
-						s.mapObject.GraphDelay()[j][k]) * time.Second))
+						s.MapObject.GraphTimeBetweenStation()[j][k]+
+						s.MapObject.GraphDelay()[j][k]) * time.Second))
 
 				writeInTimetableMutex.Lock()
 				s.WriteInTimetableReal(trainEvents[i], aTime)
@@ -935,7 +1041,7 @@ func (s *Simulator) executeESCStartEventROSetPassengerStart(trip *models.Trip,
 			var j = newStartingStation.Id()
 			var k = trip.Path().EndStation().Id()
 			s.population.Outside()[i].NextTrip().SetPath(
-				*s.mapObject.Graph()[j][k])
+				*s.MapObject.Graph()[j][k])
 			if s.config.PrintDebug() {
 				fmt.Println(" - new start : ", newStartingStation.Name())
 			}
@@ -943,7 +1049,7 @@ func (s *Simulator) executeESCStartEventROSetPassengerStart(trip *models.Trip,
 			//remove the trip totally
 			s.population.Outside()[i].RemoveTrip(trip)
 			if s.config.PrintDebug() {
-				fmt.Println(" - deleted path")
+				fmt.Println(strDeletePath)
 			}
 			return
 		}
@@ -972,11 +1078,11 @@ func (s *Simulator) executeESCStartEventROSetPath(trip *models.Trip,
 	}
 	var j = trip.Path().StartStation().Id()
 	var k = trip.Path().EndStation().Id()
-	path := s.mapObject.Graph()[j][k]
+	path := s.MapObject.Graph()[j][k]
 	if path == nil {
 		//means there is no possible pathways between the start and the end.
 		//try to find an opened station close to the start & end
-		path2 := s.mapObject.GetNewPathStationMiddleClose(
+		path2 := s.MapObject.GetNewPathStationMiddleClose(
 			trip.Path().StartStation(),
 			trip.Path().EndStation())
 		if path2 == nil {
@@ -1073,7 +1179,7 @@ func (s *Simulator) executeESCStartEventRerouteCloseStation(
 
 				var newTrip = models.NewTrip(currentTime.Add(
 					time.Duration(walkingTime)*time.Second),
-					*s.mapObject.Graph()[nextStation.Id()][curTrip.Path().EndStation().Id()])
+					*s.MapObject.Graph()[nextStation.Id()][curTrip.Path().EndStation().Id()])
 				s.population.InStation()[event.IdStation()][i].AddTrip(&newTrip)
 
 				if s.config.PrintDebug() {
@@ -1106,12 +1212,12 @@ func (s *Simulator) executeESCStartEventRerouteWaitingLoop(stationId int,
 	for passengerId := range station {
 		trip := s.population.InStation()[stationId][passengerId].CurrentTrip()
 		if trip.Path().HasStation(&stationEvent) {
-			path := s.mapObject.Graph()[stationId][trip.Path().EndStation().Id()]
+			path := s.MapObject.Graph()[stationId][trip.Path().EndStation().Id()]
 			if path == nil {
 				//means there is no possible pathways between the start and the end.
 				//try to find an opened station close to the start & end
-				path2 := s.mapObject.GetNewPathStationMiddleClose(
-					&s.mapObject.Stations()[stationId],
+				path2 := s.MapObject.GetNewPathStationMiddleClose(
+					&s.MapObject.Stations()[stationId],
 					trip.Path().EndStation())
 				if path2 == nil {
 					//the trip is a fail, the passenger will not take it.
@@ -1172,7 +1278,7 @@ func (s *Simulator) executeESCStartEventRIEndStationClosed(trip *models.Trip,
 		if !trip.Path().Stations()[l].StatusIsClosed() {
 			var j = nextStationTrain.Id()
 			var k = trip.Path().Stations()[l].Id()
-			newPath := s.mapObject.Graph()[j][k]
+			newPath := s.MapObject.Graph()[j][k]
 			if newPath == nil {
 				//put the user out
 				trip.SetPath(*trip.Path().GetSegment(
@@ -1184,7 +1290,7 @@ func (s *Simulator) executeESCStartEventRIEndStationClosed(trip *models.Trip,
 		} else {
 			var j = nextStationTrain.Id()
 			var k = nearestStation.Id()
-			newPath := s.mapObject.Graph()[j][k]
+			newPath := s.MapObject.Graph()[j][k]
 			if newPath == nil {
 				//put the user out
 				trip.SetPath(*trip.Path().GetSegment(
@@ -1218,9 +1324,9 @@ func (s *Simulator) executeESCStartEventRIEventStation(trip *models.Trip,
 	if trip.Path().HasStation(&stationEvent) {
 		var j = nextStationTrain.Id()
 		var k = trip.Path().EndStation().Id()
-		newPath := s.mapObject.Graph()[j][k]
+		newPath := s.MapObject.Graph()[j][k]
 		if newPath == nil {
-			newPath = s.mapObject.GetNewPathStationMiddleClose(
+			newPath = s.MapObject.GetNewPathStationMiddleClose(
 				nextStationTrain, trip.Path().EndStation())
 			if newPath == nil {
 				trip.SetPath(*trip.Path().GetSegment(
@@ -1270,7 +1376,7 @@ func (s *Simulator) executeESCStartEventRerouteInside(
 }
 
 /*
-executeESCStartEvent is used to start the event "line close".
+executeESCStartEvent is used to start the event "multiple stations close".
 
 Param :
   - s *Simulator : the simulator
@@ -1290,7 +1396,7 @@ func (s *Simulator) executeESCStartEvent(stationEvent models.MetroStation,
 		}
 
 		//get the nearest opened station in order to reroute efficiently passengers
-		var nearestStation = s.mapObject.GetNearestStationOpened(
+		var nearestStation = s.MapObject.GetNearestStationOpened(
 			stationEvent.Position())
 		//divert all passengers to the closest non-closed station
 
@@ -1314,7 +1420,7 @@ func (s *Simulator) executeESCStartEvent(stationEvent models.MetroStation,
 }
 
 /*
-executeESCEndEvent is used to start the event "line close".
+executeESCEndEvent is used to start the event "multiple stations close".
 
 Param :
   - s *Simulator : the simulator
@@ -1327,10 +1433,10 @@ func (s *Simulator) executeESCEndEvent(event *models.EventStationClosed,
 	if event.End().After(oldTime) && event.End().Before(currentTime) {
 		if s.config.PrintDebug() {
 			println("event activated : reopened station ",
-				s.mapObject.Stations()[event.IdStation()].Name(), " at ",
+				s.MapObject.Stations()[event.IdStation()].Name(), " at ",
 				event.End().String())
 		}
-		s.mapObject.Stations2()[event.IdStation()].SetStatus("open")
+		s.MapObject.Stations2()[event.IdStation()].SetStatus("open")
 	}
 }
 
@@ -1347,7 +1453,7 @@ func (s *Simulator) executeESCReroutePassenger(
 	events []*models.EventStationClosed,
 	oldTime, currentTime time.Time) []*models.EventStationClosed {
 	for _, event := range events {
-		var stationEvent = s.mapObject.Stations()[event.IdStation()]
+		var stationEvent = s.MapObject.Stations()[event.IdStation()]
 
 		//start the event
 		s.executeESCStartEvent(stationEvent, event, oldTime, currentTime)
@@ -1360,7 +1466,7 @@ func (s *Simulator) executeESCReroutePassenger(
 }
 
 /*
-executeEventsStationClosed is used to start the event "line close".
+executeEventsStationClosed is used to start the event "multiple stations close".
 
 Param :
   - s *Simulator : the simulator
@@ -1375,19 +1481,19 @@ func (s *Simulator) executeEventsStationClosed(
 	for _, event := range events {
 		if event.Start().After(oldTime) && event.Start().Before(currentTime) {
 			//activate the event
-			s.mapObject.Stations2()[event.IdStation()].SetStatus("closed")
+			s.MapObject.Stations2()[event.IdStation()].SetStatus("closed")
 		}
 		//don't use if/else as it would risk to not reopen the station.
 		if event.End().After(oldTime) && event.End().Before(currentTime) &&
 			!event.Finished() {
 			//deactivate the event
 			event.SetFinished(true)
-			s.mapObject.Stations2()[event.IdStation()].SetStatus("open")
+			s.MapObject.Stations2()[event.IdStation()].SetStatus("open")
 		}
 	}
 
 	//remake the graph
-	s.mapObject.GenerateGraph()
+	s.MapObject.GenerateGraph()
 
 	//reroute passengers
 	events = s.executeESCReroutePassenger(events, oldTime, currentTime)
@@ -1408,12 +1514,12 @@ Return :
 func (s *Simulator) timeArrivalUpdate(event *models.EventLineDelay,
 	lineDelay *models.MetroLine) *models.MetroLine {
 	for i := 0; i < len(
-		s.mapObject.Stations()[event.IdStationStart()].Lines()); i++ {
+		s.MapObject.Stations()[event.IdStationStart()].Lines()); i++ {
 		for j := 0; j < len(
-			s.mapObject.Stations()[event.IdStationEnd()].Lines()); j++ {
-			if s.mapObject.Stations()[event.IdStationStart()].Lines()[i].Id() ==
-				s.mapObject.Stations()[event.IdStationEnd()].Lines()[j].Id() {
-				lineDelay = s.mapObject.Stations()[event.IdStationStart()].Lines()[i]
+			s.MapObject.Stations()[event.IdStationEnd()].Lines()); j++ {
+			if s.MapObject.Stations()[event.IdStationStart()].Lines()[i].Id() ==
+				s.MapObject.Stations()[event.IdStationEnd()].Lines()[j].Id() {
+				lineDelay = s.MapObject.Stations()[event.IdStationStart()].Lines()[i]
 			}
 		}
 	}
@@ -1445,7 +1551,7 @@ func (s *Simulator) eventsLineDelayUpdateBeforeStation(
 				var m = event.IdStationEnd()
 				models.UpdateBeforeTimeArrivalNextStation(s.GetTrains()[k],
 					currentTime, event.Delay(),
-					s.mapObject.GraphTimeBetweenStation()[l][m])
+					s.MapObject.GraphTimeBetweenStation()[l][m])
 			} else if direction == "down" &&
 				s.GetTrains()[k].CurrentStation().Id() == event.IdStationEnd() {
 				fmt.Println("exe eventsLineDelay  : update elsif")
@@ -1453,7 +1559,7 @@ func (s *Simulator) eventsLineDelayUpdateBeforeStation(
 				var m = event.IdStationEnd()
 				models.UpdateBeforeTimeArrivalNextStation(s.GetTrains()[k],
 					currentTime, event.Delay(),
-					s.mapObject.GraphTimeBetweenStation()[l][m])
+					s.MapObject.GraphTimeBetweenStation()[l][m])
 			}
 		}
 	}
@@ -1485,7 +1591,7 @@ func (s *Simulator) eventsLineDelayUpdateAfterStation(
 				var m = event.IdStationEnd()
 				models.UpdateAfterTimeArrivalNextStation(s.GetTrains()[k],
 					currentTime, event.Delay(),
-					s.mapObject.GraphTimeBetweenStation()[l][m])
+					s.MapObject.GraphTimeBetweenStation()[l][m])
 			} else if direction == "down" &&
 				s.GetTrains()[k].CurrentStation().Id() == event.IdStationEnd() {
 				fmt.Println("exe eventsLineDelay  : update elsif")
@@ -1493,7 +1599,7 @@ func (s *Simulator) eventsLineDelayUpdateAfterStation(
 				var m = event.IdStationEnd()
 				models.UpdateAfterTimeArrivalNextStation(s.GetTrains()[k],
 					currentTime, event.Delay(),
-					s.mapObject.GraphTimeBetweenStation()[l][m])
+					s.MapObject.GraphTimeBetweenStation()[l][m])
 			}
 		}
 	}
@@ -1542,7 +1648,7 @@ func (s *Simulator) executeEventsLineDelay(events []*models.EventLineDelay,
 			//execute start of event
 			var lineDelay *models.MetroLine
 			var direction string
-			s.mapObject.AddDelay(event.IdStationStart(), event.IdStationEnd(),
+			s.MapObject.AddDelay(event.IdStationStart(), event.IdStationEnd(),
 				event.Delay())
 			//must be changed later to accept a list of delays
 			//update time arrival next station for trains on this part of line
@@ -1560,7 +1666,7 @@ func (s *Simulator) executeEventsLineDelay(events []*models.EventLineDelay,
 			//execute end of event
 			var lineDelay *models.MetroLine
 			var direction string
-			s.mapObject.AddDelay(event.IdStationStart(), event.IdStationEnd(), 0)
+			s.MapObject.AddDelay(event.IdStationStart(), event.IdStationEnd(), 0)
 			//not working yet with a list of delays
 			//update time arrival next station for trains on this part of line
 			lineDelay = s.timeArrivalUpdate(event, lineDelay)
@@ -1577,7 +1683,59 @@ func (s *Simulator) executeEventsLineDelay(events []*models.EventLineDelay,
 }
 
 /*
-executeELCStartEventROSetPassengerStart is used to set the path of a passenger.
+checkNewStationIsFinalStation is used to check if the new station is the final
+station.
+
+Param :
+  - s *Simulator : the simulator
+  - trip *models.Trip : the trip
+  - i string : the id of the passenger
+  - nearestStation *models.MetroStation : the nearest station
+  - newStartingStation *models.MetroStation : the new starting station
+  - j int : the id of the new starting station
+  - k int : the id of the final station
+
+Return :
+  - bool : true if the new station is the final station
+*/
+func (s *Simulator) checkNewStationIsFinalStation(trip *models.Trip, i string,
+	nearestStation, newStartingStation *models.MetroStation, j, k int) bool {
+	var isFinal = false
+	if newStartingStation.StatusIsClosed() {
+		newStartingStation = nearestStation
+	}
+	if j == k {
+		isFinal = true
+		s.population.Outside()[i].RemoveTrip(trip)
+		if s.config.PrintDebug() {
+			fmt.Println(strDeletePath)
+		}
+	}
+	return isFinal
+}
+
+/*
+checkNewStationIsClosedStation is used to check if the new starting station
+is closed
+
+Param :
+  - s *Simulator : the simulator
+  - nearestStation *models.MetroStation : the nearest station
+  - newStartingStation *models.MetroStation : the new starting station
+
+Return :
+  - *models.MetroStation : the new starting station
+*/
+func (s *Simulator) checkNewStartingStationIsClosedStation(
+	nearestStation, newStartingStation *models.MetroStation) *models.MetroStation {
+	if newStartingStation.StatusIsClosed() {
+		newStartingStation = nearestStation
+	}
+	return newStartingStation
+}
+
+/*
+executeEMSCStartEventROSetPassengerStart is used to set the path of a passenger.
 
 Param :
   - s *Simulator : the simulator
@@ -1585,19 +1743,22 @@ Param :
   - nearestStation *models.MetroStation : the nearest station
   - i string : the id of the passenger
 */
-func (s *Simulator) executeELCStartEventROSetPassengerStart(trip *models.Trip,
+func (s *Simulator) executeEMSCStartEventROSetPassengerStart(trip *models.Trip,
 	nearestStation *models.MetroStation, i string) {
 	if trip.Path().StartStation().StatusIsClosed() {
 		//passenger starts at a closed station
 		if len(trip.Path().Stations()) > 2 {
 			var newStartingStation = trip.Path().Stations()[1]
-			if newStartingStation.StatusIsClosed() {
-				newStartingStation = nearestStation
-			}
+			newStartingStation = s.checkNewStartingStationIsClosedStation(
+				nearestStation, newStartingStation)
 			var j = newStartingStation.Id()
 			var k = trip.Path().EndStation().Id()
+			if s.checkNewStationIsFinalStation(trip, i, nearestStation,
+				newStartingStation, j, k) {
+				return
+			}
 			s.population.Outside()[i].NextTrip().SetPath(
-				*s.mapObject.Graph()[j][k])
+				*s.MapObject.Graph()[j][k])
 			if s.config.PrintDebug() {
 				fmt.Println(" - new start : ", newStartingStation.Name())
 			}
@@ -1605,7 +1766,7 @@ func (s *Simulator) executeELCStartEventROSetPassengerStart(trip *models.Trip,
 			//delete the trip
 			s.population.Outside()[i].RemoveTrip(trip)
 			if s.config.PrintDebug() {
-				fmt.Println(" - deleted path")
+				fmt.Println(strDeletePath)
 			}
 			return
 		}
@@ -1613,7 +1774,7 @@ func (s *Simulator) executeELCStartEventROSetPassengerStart(trip *models.Trip,
 }
 
 /*
-executeELCStartEventROSetPath is used to set the path of a passenger.
+executeEMSCStartEventROSetPath is used to set the path of a passenger.
 
 Param :
   - s *Simulator : the simulator
@@ -1624,14 +1785,13 @@ Param :
 Return :
   - *models.Trip : the trip
 */
-func (s *Simulator) executeELCStartEventROSetPath(trip *models.Trip,
-	pass *models.Passenger, i string) *models.Trip {
-	trip = pass.NextTrip()
+func (s *Simulator) executeEMSCStartEventROSetPath(trip *models.Trip,
+	i string) *models.Trip {
 	var j = trip.Path().StartStation().Id()
 	var k = trip.Path().EndStation().Id()
-	path := s.mapObject.Graph()[j][k]
+	path := s.MapObject.Graph()[j][k]
 	if path == nil {
-		newPath := s.mapObject.GetNewPathStationMiddleClose(
+		newPath := s.MapObject.GetNewPathStationMiddleClose(
 			trip.Path().StartStation(), trip.Path().EndStation())
 		if newPath == nil {
 			s.population.Outside()[i].RemoveTrip(trip)
@@ -1654,17 +1814,17 @@ func (s *Simulator) executeELCStartEventROSetPath(trip *models.Trip,
 }
 
 /*
-executeELCStartEventRerouteOutside is used to reroute passengers in population
+executeEMSCStartEventRerouteOutside is used to reroute passengers in population
 outside.
 
 Param :
   - s *Simulator : the simulator
-  - event *models.EventLineClosed : the event
+  - event *models.EventMultipleStationsClosed : the event
   - stationEvent *models.MetroStation : the station
   - nearestStation *models.MetroStation : the nearest station
 */
-func (s *Simulator) executeELCStartEventRerouteOutside(
-	event *models.EventLineClosed,
+func (s *Simulator) executeEMSCStartEventRerouteOutside(
+	event *models.EventMultipleStationsClosed,
 	stationEvent, nearestStation *models.MetroStation) {
 	for i, pass := range s.population.Outside() {
 		trip := pass.NextTrip()
@@ -1679,16 +1839,18 @@ func (s *Simulator) executeELCStartEventRerouteOutside(
 				fmt.Print("rerouting passenger from outside : "+
 					"old path:", trip.Path().String())
 			}
-			s.executeELCStartEventROSetPassengerStart(trip, nearestStation, i)
+			s.executeEMSCStartEventROSetPassengerStart(trip, nearestStation, i)
 
-			trip = s.executeELCStartEventROSetPath(trip, pass, i)
+			if trip != nil {
+				trip = s.executeEMSCStartEventROSetPath(trip, i)
+			}
 		}
 	}
 }
 
 /*
-executeELCStartEventRerouteCloseLine is used to reroute passengers in closed
-line.
+executeEMSCStartEventRerouteCloseMultipleStations is used to reroute passengers
+in closed multiple stations.
 
 Param :
   - s *Simulator : the simulator
@@ -1696,8 +1858,9 @@ Param :
   - stationEvent *models.MetroStation : the station
   - nearestStation *models.MetroStation : the nearest station
 */
-func (s *Simulator) executeELCStartEventRerouteCloseLine(currentTime time.Time,
-	stationEvent, nearestStation *models.MetroStation) {
+func (s *Simulator) executeEMSCStartEventRerouteCloseMultipleStations(
+	currentTime time.Time, stationEvent,
+	nearestStation *models.MetroStation) {
 	for i := range s.population.InStation()[stationEvent.Id()] {
 		pass := s.population.InStation()[stationEvent.Id()][i]
 		currentPath := pass.CurrentTrip().Path()
@@ -1713,7 +1876,7 @@ func (s *Simulator) executeELCStartEventRerouteCloseLine(currentTime time.Time,
 					stationEvent.Position()) / (6 / 3.6)
 				newTrip := models.NewTrip(currentTime.Add(
 					time.Duration(deltaTime)*time.Second),
-					*s.mapObject.Graph()[nextStation.Id()][currentPath.EndStation().Id()])
+					*s.MapObject.Graph()[nextStation.Id()][currentPath.EndStation().Id()])
 				s.population.InStation()[stationEvent.Id()][i].AddTrip(&newTrip)
 				if s.config.PrintDebug() {
 					println("rerouted passenger", pass.Id(),
@@ -1729,8 +1892,8 @@ func (s *Simulator) executeELCStartEventRerouteCloseLine(currentTime time.Time,
 }
 
 /*
-executeELCStartEventRerouteWaitingLoop is used to reroute passengers in stations
-waiting for train (loop).
+executeEMSCStartEventRerouteWaitingLoop is used to reroute passengers in
+stations waiting for train (loop).
 
 Param :
   - s *Simulator : the simulator
@@ -1738,15 +1901,15 @@ Param :
   - stationEvent *models.MetroStation : the station
   - station map[string]*models.Passenger : the station
 */
-func (s *Simulator) executeELCStartEventRerouteWaitingLoop(id int,
+func (s *Simulator) executeEMSCStartEventRerouteWaitingLoop(id int,
 	stationEvent *models.MetroStation, station map[string]*models.Passenger) {
 	for passId := range station {
 		trip := s.population.InStation()[id][passId].CurrentTrip()
 		if trip.Path().HasStation(stationEvent) {
-			path := s.mapObject.Graph()[id][trip.Path().EndStation().Id()]
+			path := s.MapObject.Graph()[id][trip.Path().EndStation().Id()]
 			if path == nil {
-				newPath := s.mapObject.GetNewPathStationMiddleClose(
-					&s.mapObject.Stations()[id], trip.Path().EndStation())
+				newPath := s.MapObject.GetNewPathStationMiddleClose(
+					&s.MapObject.Stations()[id], trip.Path().EndStation())
 				if newPath == nil {
 					newPath = trip.Path().GetSegment(
 						trip.Path().StartStation(), stationEvent)
@@ -1761,25 +1924,25 @@ func (s *Simulator) executeELCStartEventRerouteWaitingLoop(id int,
 }
 
 /*
-executeELCStartEventRerouteWaiting is used to reroute passengers in stations
+executeEMSCStartEventRerouteWaiting is used to reroute passengers in stations
 waiting for train.
 
 Param :
   - s *Simulator : the simulator
   - stationEvent *models.MetroStation : the station
 */
-func (s *Simulator) executeELCStartEventRerouteWaiting(
+func (s *Simulator) executeEMSCStartEventRerouteWaiting(
 	stationEvent *models.MetroStation) {
 	for id, station := range s.population.InStation() {
 		if id == stationEvent.Id() {
 			continue
 		}
-		s.executeELCStartEventRerouteWaitingLoop(id, stationEvent, station)
+		s.executeEMSCStartEventRerouteWaitingLoop(id, stationEvent, station)
 	}
 }
 
 /*
-executeELCStartEventRIEndStationClosed is used to reroute passengers in train
+executeEMSCStartEventRIEndStationClosed is used to reroute passengers in train
 (end station closed).
 
 Param :
@@ -1792,7 +1955,7 @@ Param :
 Return :
   - *models.Trip : trip
 */
-func (s *Simulator) executeELCStartEventRIEndStationClosed(trip *models.Trip,
+func (s *Simulator) executeEMSCStartEventRIEndStationClosed(trip *models.Trip,
 	nearestStation, nextStationTrain,
 	nextStationOpenedTrain *models.MetroStation) *models.Trip {
 	if trip.Path().EndStation().StatusIsClosed() {
@@ -1800,7 +1963,7 @@ func (s *Simulator) executeELCStartEventRIEndStationClosed(trip *models.Trip,
 		var k = trip.Path().Stations()[len(trip.Path().Stations())-2].Id()
 		if !trip.Path().Stations()[len(
 			trip.Path().Stations())-2].StatusIsClosed() {
-			newPath := s.mapObject.Graph()[j][k]
+			newPath := s.MapObject.Graph()[j][k]
 			if newPath == nil {
 				trip.SetPath(*trip.Path().GetSegment(
 					trip.Path().StartStation(), nextStationOpenedTrain))
@@ -1810,7 +1973,7 @@ func (s *Simulator) executeELCStartEventRIEndStationClosed(trip *models.Trip,
 		} else {
 			var l = nextStationTrain.Id()
 			var m = nearestStation.Id()
-			newPath := s.mapObject.Graph()[l][m]
+			newPath := s.MapObject.Graph()[l][m]
 			if newPath == nil {
 				trip.SetPath(*trip.Path().GetSegment(
 					trip.Path().StartStation(), nextStationOpenedTrain))
@@ -1823,8 +1986,8 @@ func (s *Simulator) executeELCStartEventRIEndStationClosed(trip *models.Trip,
 }
 
 /*
-executeELCStartEventRIEventStation is used to reroute passengers in train (event
-station on path).
+executeEMSCStartEventRIEventStation is used to reroute passengers in train
+(event station on path).
 
 Param :
   - s *Simulator : the simulator
@@ -1836,15 +1999,15 @@ Param :
 Return :
   - *models.Trip : trip
 */
-func (s *Simulator) executeELCStartEventRIEventStation(trip *models.Trip,
+func (s *Simulator) executeEMSCStartEventRIEventStation(trip *models.Trip,
 	stationEvent, nextStationTrain,
 	nextStationOpenedTrain *models.MetroStation) *models.Trip {
 	if trip.Path().HasStation(stationEvent) {
 		var j = nextStationTrain.Id()
 		var k = trip.Path().EndStation().Id()
-		newPath := s.mapObject.Graph()[j][k]
+		newPath := s.MapObject.Graph()[j][k]
 		if newPath == nil {
-			newPath = s.mapObject.GetNewPathStationMiddleClose(
+			newPath = s.MapObject.GetNewPathStationMiddleClose(
 				nextStationTrain, trip.Path().EndStation())
 			if newPath == nil {
 				trip.SetPath(*trip.Path().GetSegment(
@@ -1860,14 +2023,14 @@ func (s *Simulator) executeELCStartEventRIEventStation(trip *models.Trip,
 }
 
 /*
-executeELCStartEventRerouteInside is used to reroute passengers in train.
+executeEMSCStartEventRerouteInside is used to reroute passengers in train.
 
 Param :
   - s *Simulator : the simulator
   - stationEvent *models.MetroStation : the station
   - nearestStation *models.MetroStation : the nearest station
 */
-func (s *Simulator) executeELCStartEventRerouteInside(
+func (s *Simulator) executeEMSCStartEventRerouteInside(
 	stationEvent, nearestStation *models.MetroStation) {
 	for id, train := range s.population.InTrains() {
 		nextStationTrain := s.trains[id].GetNextStation()
@@ -1879,35 +2042,35 @@ func (s *Simulator) executeELCStartEventRerouteInside(
 			pass := s.population.InTrains()[id][passId]
 			trip := pass.CurrentTrip()
 
-			trip = s.executeELCStartEventRIEndStationClosed(trip,
+			trip = s.executeEMSCStartEventRIEndStationClosed(trip,
 				nearestStation, nextStationTrain, nextStationOpenedTrain)
 
-			trip = s.executeELCStartEventRIEventStation(trip,
+			trip = s.executeEMSCStartEventRIEventStation(trip,
 				stationEvent, nextStationTrain, nextStationOpenedTrain)
 		}
 	}
 }
 
 /*
-executeELCStartEvent is used to start the event "line close".
+executeEMSCStartEvent is used to start the event "multiple stations close".
 
 Param :
   - s *Simulator : the simulator
   - lineEvent []*models.MetroStation : the line
-  - event *models.EventLineClosed : the event
+  - event *models.EventMultipleStationsClosed : the event
   - oldTime time.Time : the old time
   - currentTime time.Time : the current time
 
 Return :
   - []*models.MetroStation : the line
 */
-func (s *Simulator) executeELCStartEvent(lineEvent []*models.MetroStation,
-	event *models.EventLineClosed,
+func (s *Simulator) executeEMSCStartEvent(lineEvent []*models.MetroStation,
+	event *models.EventMultipleStationsClosed,
 	oldTime, currentTime time.Time) []*models.MetroStation {
 	if (lineEvent != nil) &&
 		event.Start().After(oldTime) &&
 		event.Start().Before(currentTime) {
-		//event : line closed
+		//event : multiple stations closed
 		if s.config.PrintDebug() {
 			for _, stationEvent := range lineEvent {
 				println("event activated : closed station ",
@@ -1917,100 +2080,101 @@ func (s *Simulator) executeELCStartEvent(lineEvent []*models.MetroStation,
 		}
 		// get the nearest opened station to reroute passengers
 		for _, stationEvent := range lineEvent {
-			var nearestStation = s.mapObject.GetNearestStationOpened(
+			var nearestStation = s.MapObject.GetNearestStationOpened(
 				stationEvent.Position())
 
 			//reroute passengers in population outside
-			s.executeELCStartEventRerouteOutside(event, stationEvent,
+			s.executeEMSCStartEventRerouteOutside(event, stationEvent,
 				nearestStation)
 
 			//sort trips of outsiders
 			s.population.SortOutside()
 
 			//reroute passengers in closed line
-			s.executeELCStartEventRerouteCloseLine(currentTime, stationEvent,
-				nearestStation)
+			s.executeEMSCStartEventRerouteCloseMultipleStations(currentTime,
+				stationEvent, nearestStation)
 
 			//reroute passengers in stations waiting for train
-			s.executeELCStartEventRerouteWaiting(stationEvent)
+			s.executeEMSCStartEventRerouteWaiting(stationEvent)
 
 			//reroute passengers in train
-			s.executeELCStartEventRerouteInside(stationEvent, nearestStation)
+			s.executeEMSCStartEventRerouteInside(stationEvent, nearestStation)
 		}
 	}
 	return lineEvent
 }
 
 /*
-executeELCEndEvent is used to start the event "line close".
+executeEMSCEndEvent is used to start the event "multiple stations close".
 
 Param :
   - s *Simulator : the simulator
   - lineEvent []*models.MetroStation : the line
-  - event *models.EventLineClosed : the event
+  - event *models.EventMultipleStationsClosed : the event
   - oldTime time.Time : the old time
   - currentTime time.Time : the current time
 */
-func (s *Simulator) executeELCEndEvent(lineEvent []*models.MetroStation,
-	event *models.EventLineClosed, oldTime, currentTime time.Time) {
+func (s *Simulator) executeEMSCEndEvent(lineEvent []*models.MetroStation,
+	event *models.EventMultipleStationsClosed, oldTime, currentTime time.Time) {
 	if event.End().After(oldTime) && event.End().Before(currentTime) {
 		for _, stationEvent := range lineEvent {
 			if s.config.PrintDebug() {
 				println("event activated : reopened station ",
-					s.mapObject.Stations()[stationEvent.Id()].Name(),
+					s.MapObject.Stations()[stationEvent.Id()].Name(),
 					" at ", event.End().String())
 			}
-			s.mapObject.Stations2()[stationEvent.Id()].SetStatus("open")
+			s.MapObject.Stations2()[stationEvent.Id()].SetStatus("open")
 		}
 	}
 }
 
 /*
-executeELCReroutePassenger is used to reroute passenger.
+executeEMSCReroutePassenger is used to reroute passenger.
 
 Param :
   - s *Simulator : the simulator
-  - events []*models.EventLineClosed : the events
+  - events []*models.EventMultipleStationsClosed : the events
   - oldTime time.Time : the old time
   - currentTime time.Time : the current time
 
 Return :
-  - []*models.EventLineClosed : the events
+  - []*models.EventMultipleStationsClosed : the events
 */
-func (s *Simulator) executeELCReroutePassenger(events []*models.EventLineClosed,
-	oldTime, currentTime time.Time) []*models.EventLineClosed {
+func (s *Simulator) executeEMSCReroutePassenger(events []*models.
+	EventMultipleStationsClosed, oldTime,
+	currentTime time.Time) []*models.EventMultipleStationsClosed {
 	for _, event := range events {
 		var lineEvent []*models.MetroStation
 		lineEvent = nil
-		for _, line := range s.mapObject.Lines() {
-			if line.GetPath(s.mapObject.FindStationById(event.IdStationStart()),
-				s.mapObject.FindStationById(event.IdStationEnd())) != nil {
-				lineEvent = line.GetPath(s.mapObject.FindStationById(
-					event.IdStationStart()), s.mapObject.FindStationById(event.IdStationEnd()))
+		for _, line := range s.MapObject.Lines() {
+			if line.GetPath(s.MapObject.FindStationById(event.IdStationStart()),
+				s.MapObject.FindStationById(event.IdStationEnd())) != nil {
+				lineEvent = line.GetPath(s.MapObject.FindStationById(
+					event.IdStationStart()), s.MapObject.FindStationById(event.IdStationEnd()))
 			}
 		}
 
 		//start the event
-		lineEvent = s.executeELCStartEvent(lineEvent, event, oldTime, currentTime)
+		lineEvent = s.executeEMSCStartEvent(lineEvent, event, oldTime, currentTime)
 
 		//finish the event
-		s.executeELCEndEvent(lineEvent, event, oldTime, currentTime)
+		s.executeEMSCEndEvent(lineEvent, event, oldTime, currentTime)
 	}
 	return events
 }
 
 /*
-executeELCAffectES is used to affect "close" or "open" to station status.
+executeEMSCAffectES is used to affect "close" or "open" to station status.
 
 Param :
   - s *Simulator : the simulator
   - eventStations []*models.MetroStation : the stations
-  - event *models.EventLineClosed : the event
+  - event *models.EventMultipleStationsClosed : the event
   - oldTime time.Time : the old time
   - currentTime time.Time : the current time
 */
-func (s *Simulator) executeELCAffectES(eventStations []*models.MetroStation,
-	event *models.EventLineClosed, oldTime, currentTime time.Time) {
+func (s *Simulator) executeEMSCAffectES(eventStations []*models.MetroStation,
+	event *models.EventMultipleStationsClosed, oldTime, currentTime time.Time) {
 	if (eventStations != nil) &&
 		event.Start().After(oldTime) &&
 		event.Start().Before(currentTime) {
@@ -2031,72 +2195,307 @@ func (s *Simulator) executeELCAffectES(eventStations []*models.MetroStation,
 }
 
 /*
-executeEventsLineClosed is used to start the event "line close".
+executeEventsMultipleStationsClosed is used to start the event
+"multiple stations close".
 
 Param :
   - s *Simulator : the simulator
-  - events []*models.EventLineClosed : the events
+  - events []*models.EventMultipleStationsClosed : the events
   - oldTime time.Time : the old time
   - currentTime time.Time : the current time
 
 Return :
-  - []*models.EventLineClosed : the events
+  - []*models.EventMultipleStationsClosed : the events
 */
-func (s *Simulator) executeEventsLineClosed(events []*models.EventLineClosed,
-	oldTime, currentTime time.Time) []*models.EventLineClosed {
+func (s *Simulator) executeEventsMultipleStationsClosed(events []*models.
+	EventMultipleStationsClosed, oldTime,
+	currentTime time.Time) []*models.EventMultipleStationsClosed {
 	//apply the change to the map
 	for _, event := range events {
 		var eventStations []*models.MetroStation
 		eventStations = nil
-		for _, line := range s.mapObject.Lines() {
-			if line.GetPath(s.mapObject.FindStationById(event.IdStationStart()),
-				s.mapObject.FindStationById(event.IdStationEnd())) != nil {
-				eventStations = line.GetPath(s.mapObject.FindStationById(
-					event.IdStationStart()), s.mapObject.FindStationById(event.IdStationEnd()))
+		for _, line := range s.MapObject.Lines() {
+			if line.GetPath(s.MapObject.FindStationById(event.IdStationStart()),
+				s.MapObject.FindStationById(event.IdStationEnd())) != nil {
+				eventStations = line.GetPath(s.MapObject.FindStationById(
+					event.IdStationStart()), s.MapObject.FindStationById(event.IdStationEnd()))
 			}
 		}
-		s.executeELCAffectES(eventStations, event, oldTime, currentTime)
+		s.executeEMSCAffectES(eventStations, event, oldTime, currentTime)
 	}
 	//remake the graph
-	s.mapObject.GenerateGraph()
+	s.MapObject.GenerateGraph()
 
 	//reroute passengers
-	events = s.executeELCReroutePassenger(events, oldTime, currentTime)
+	events = s.executeEMSCReroutePassenger(events, oldTime, currentTime)
 
 	return events
 }
 
 /*
-executeEventsAttendancePeak is used to start the event "attendance peak".
+executeEventsGaussianPeak is used to start the event "gaussian peak".
 
 Param :
   - s *Simulator : the simulator
-  - events []*models.EventAttendancePeak : the events
+  - events []*models.EventGaussianPeak : the events
   - oldTime time.Time : the old time
   - currentTime time.Time : the current time
 */
-func (s *Simulator) executeEventsAttendancePeak(
-	events []*models.EventAttendancePeak, oldTime, currentTime time.Time) {
-	var totalPopulation = len(s.Population().Outside()) +
-		len(s.Population().InStation()) + len(s.Population().InTrains())
+func (s *Simulator) executeEventsGaussianPeak(
+	events []*models.EventGaussianPeak, oldTime time.Time,
+	currentTime time.Time) {
 	for _, event := range events {
-		if event.Time().After(oldTime) && (event.Time().Before(currentTime) ||
-			event.Time().Equal(currentTime)) && !event.Finished() {
-			//execute the event
-			for i := 0; i < event.Size(); i++ {
-				departureStation := s.mapObject.FindStationById(event.IdStation())
-				arrivalStation := s.mapObject.FindStationById(rand.Intn(
-					len(s.mapObject.Stations())))
-				ps, _ := s.mapObject.GetPathStation(*departureStation, *arrivalStation)
-				trip := models.NewTrip(event.Time(), ps)
+		// get minutes
+		startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+		oldMinutes := oldTime.Hour()*60 + oldTime.Minute()
+		currentMinutes := currentTime.Hour()*60 + currentTime.Minute()
 
-				passenger := models.NewPassenger(strconv.Itoa(totalPopulation+i), 0)
-				passenger.SetCurrentTrip(&trip)
+		// get passenger distribution
+		passengerDistribution := s.makeEventGaussianPeakDistribution(event)
 
-				s.Population().InStation()[event.IdStation()][passenger.Id()] = &passenger
+		// determine the number of passengers for the current minute by taking the
+		// difference between the current time and the old time
+		currentPassengers := s.pickEventPeakCurrentPassengers(
+			passengerDistribution, oldMinutes, currentMinutes, startMinutes)
+
+		// execute the event
+		for i := 0; i < currentPassengers; i++ {
+			// get total population
+			var totalPopulation int
+			totalPopulation += len(s.population.Outside())
+			for _, station := range s.population.InStation() {
+				totalPopulation += len(station)
 			}
+			for _, train := range s.population.InTrains() {
+				totalPopulation += len(train)
+			}
+
+			departureStation := s.MapObject.FindStationById(event.GetIdStation())
+			// create arrival station, different from departure station
+			arrivalStation := departureStation
+			for arrivalStation == departureStation {
+				arrivalStation = s.MapObject.FindStationById(rand.Intn(
+					len(s.MapObject.Stations())))
+			}
+
+			ps, _ := s.MapObject.GetPathStation(*departureStation, *arrivalStation)
+			trip := models.NewTrip(currentTime, ps)
+
+			passenger := models.NewPassenger(strconv.Itoa(totalPopulation),
+				models.PickAKind())
+			passenger.SetTrips([]*models.Trip{&trip})
+			passenger.SetCurrentTrip(&trip)
+
+			s.population.Outside()[passenger.Id()] = &passenger
+			s.population.TransferFromPopulationToStation(&passenger, departureStation,
+				currentTime)
+			s.population.InStation()[event.GetIdStation()][passenger.Id()] =
+				&passenger
 		}
 	}
+}
+
+/*
+makeEventGaussianPeakDistribution is used to create a distribution of
+passengers for an event "gaussian peak".
+
+Param :
+  - s *Simulator : the simulator
+  - event *models.EventGaussianPeak : the event
+
+Return :
+  - []int : the distribution
+*/
+func (s *Simulator) makeEventGaussianPeakDistribution(
+	event *models.EventGaussianPeak) []int {
+	startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+	endMinutes := event.GetEnd().Hour()*60 + event.GetEnd().Minute()
+	peakMinutes := event.GetPeak().Hour()*60 + event.GetPeak().Minute()
+
+	// create a table to store the number of passengers for each minute
+	passengerDistribution := make([]int, endMinutes-startMinutes)
+
+	// calculate asymetrical gaussian distribution
+	peakArea := float64(event.GetPeakSize())
+	peakHeight := peakArea / (float64(event.GetPeakWidth()) * math.Sqrt(2*math.Pi))
+	for minute := startMinutes; minute < endMinutes; minute++ {
+		exponent := -math.Pow(float64(minute-peakMinutes), 2) /
+			(2 * math.Pow(float64(event.GetPeakWidth()), 2))
+		passengerDistribution[minute-startMinutes] = int(peakHeight *
+			math.Exp(exponent))
+	}
+
+	// get total number of passengers from passengerDistribution
+	totalPassengers := 0
+	for _, passengers := range passengerDistribution {
+		totalPassengers += passengers
+	}
+
+	// add missing passengers to the distribution or remove passengers if
+	// there are too many
+	value := event.GetPeakSize() > totalPassengers
+	print(value)
+	if event.GetPeakSize() > totalPassengers {
+		missingPassengers := event.GetPeakSize() - totalPassengers
+		// add missing passengers
+		for missingPassengers > 0 {
+			passengerDistribution[rand.Intn(len(passengerDistribution))]++
+			missingPassengers--
+		}
+	}
+	if event.GetPeakSize() < totalPassengers {
+		missingPassengers := totalPassengers - event.GetPeakSize()
+		// remove passengers
+		for missingPassengers > 0 {
+			passengerDistribution[rand.Intn(len(passengerDistribution))]--
+			missingPassengers--
+		}
+	}
+
+	return passengerDistribution
+}
+
+func (s *Simulator) pickEventPeakCurrentPassengers(
+	passengerDistribution []int, oldMinutes, currentMinutes,
+	startMinutes int) int {
+
+	currentPassengers := 0
+	for minute := oldMinutes; minute < currentMinutes; minute++ {
+		if minute < startMinutes {
+			continue
+		}
+		currentPassengers += passengerDistribution[minute-startMinutes]
+	}
+	return currentPassengers
+}
+
+/*
+executeEventsRampPeak is used to start the event "ramp peak".
+
+Param :
+  - s *Simulator : the simulator
+  - events []*models.EventRampPeak : the events
+  - oldTime time.Time : the old time
+  - currentTime time.Time : the current time
+*/
+func (s *Simulator) executeEventsRampPeak(
+	events []*models.EventRampPeak, oldTime time.Time,
+	currentTime time.Time) {
+	for _, event := range events {
+		// get minutes
+		startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+		oldMinutes := oldTime.Hour()*60 + oldTime.Minute()
+		currentMinutes := currentTime.Hour()*60 + currentTime.Minute()
+
+		// get passenger distribution
+		passengerDistribution := s.makeEventRampPeakDistribution(event)
+
+		// determine the number of passengers for the current minute by taking the
+		// difference between the current time and the old time
+		currentPassengers := s.pickEventPeakCurrentPassengers(
+			passengerDistribution, oldMinutes, currentMinutes, startMinutes)
+
+		// execute the event
+		for i := 0; i < currentPassengers; i++ {
+			// get total population
+			var totalPopulation int
+			totalPopulation += len(s.population.Outside())
+			for _, station := range s.population.InStation() {
+				totalPopulation += len(station)
+			}
+			for _, train := range s.population.InTrains() {
+				totalPopulation += len(train)
+			}
+
+			departureStation := s.MapObject.FindStationById(event.GetIdStation())
+			// create arrival station, different from departure station
+			arrivalStation := departureStation
+			for arrivalStation == departureStation {
+				arrivalStation = s.MapObject.FindStationById(rand.Intn(
+					len(s.MapObject.Stations())))
+			}
+
+			ps, _ := s.MapObject.GetPathStation(*departureStation, *arrivalStation)
+			trip := models.NewTrip(currentTime, ps)
+
+			passenger := models.NewPassenger(strconv.Itoa(totalPopulation),
+				models.PickAKind())
+			passenger.SetTrips([]*models.Trip{&trip})
+			passenger.SetCurrentTrip(&trip)
+
+			s.population.Outside()[passenger.Id()] = &passenger
+			s.population.TransferFromPopulationToStation(&passenger, departureStation,
+				currentTime)
+			s.population.InStation()[event.GetIdStation()][passenger.Id()] =
+				&passenger
+		}
+	}
+}
+
+/*
+makeEventGaussianPeakDistribution is used to create a distribution of
+passengers for an event "gaussian peak".
+
+Param :
+  - s *Simulator : the simulator
+  - event *models.EventRampPeak : the event
+
+Return :
+  - []int : the distribution
+*/
+func (s *Simulator) makeEventRampPeakDistribution(
+	event *models.EventRampPeak) []int {
+	startMinutes := event.GetStart().Hour()*60 + event.GetStart().Minute()
+	endMinutes := event.GetEnd().Hour()*60 + event.GetEnd().Minute()
+	peakMinutes := event.GetPeak().Hour()*60 + event.GetPeak().Minute()
+
+	// create a table to store the number of passengers for each minute
+	passengerDistribution := make([]int, endMinutes-startMinutes)
+
+	// calculate the ramp peak distribution
+	peakArea := float64(event.GetPeakSize())
+	divider := float64((peakMinutes-startMinutes)/2 + (endMinutes-peakMinutes)/2)
+	peakMaxHeight := peakArea / divider
+	for minute := startMinutes; minute < endMinutes; minute++ {
+		if minute < peakMinutes {
+			passengerDistribution[minute-startMinutes] =
+				int(peakMaxHeight / float64(peakMinutes-startMinutes) *
+					float64(minute-startMinutes))
+		}
+		if minute >= peakMinutes {
+			passengerDistribution[minute-startMinutes] =
+				int(peakMaxHeight / (float64(peakMinutes - endMinutes)) *
+					(float64(minute - endMinutes)))
+		}
+	}
+
+	totalPassengers := 0
+	for _, passengers := range passengerDistribution {
+		totalPassengers += passengers
+	}
+
+	// add missing passengers to the distribution or remove passengers if
+	// there are too many
+	value := event.GetPeakSize() > totalPassengers
+	print(value)
+	if event.GetPeakSize() > totalPassengers {
+		missingPassengers := event.GetPeakSize() - totalPassengers
+		// add missing passengers
+		for missingPassengers > 0 {
+			passengerDistribution[rand.Intn(len(passengerDistribution))]++
+			missingPassengers--
+		}
+	}
+	if event.GetPeakSize() < totalPassengers {
+		missingPassengers := totalPassengers - event.GetPeakSize()
+		// remove passengers
+		for missingPassengers > 0 {
+			passengerDistribution[rand.Intn(len(passengerDistribution))]--
+			missingPassengers--
+		}
+	}
+
+	return passengerDistribution
 }
 
 /*
@@ -2154,7 +2553,8 @@ func (s *Simulator) getEventsLineDelay(start,
 }
 
 /*
-getEventsLineClosed is used to get the events "line close".
+getEventsMultipleStationsClosed is used to get the events
+"multiple stations close".
 
 Param :
   - s *Simulator : the simulator
@@ -2162,26 +2562,25 @@ Param :
   - end time.Time : the end time
 
 Return :
-  - []*models.EventLineClosed : the events
+  - []*models.EventsMultipleStationsClosed : the events
 */
-func (s *Simulator) getEventsLineClosed(start,
-	end time.Time) []*models.EventLineClosed {
-	var output []*models.EventLineClosed
+func (s *Simulator) getEventsMultipleStationsClosed(start,
+	end time.Time) []*models.EventMultipleStationsClosed {
+	var output []*models.EventMultipleStationsClosed
 
-	for i := range s.eventsLineClosed {
-		if (s.eventsLineClosed[i].Start().Before(end) &&
-			s.eventsStationClosed[i].Start().After(start)) ||
-			(s.eventsLineClosed[i].End().Before(end) &&
-				s.eventsStationClosed[i].End().After(start)) {
-			output = append(output, &s.eventsLineClosed[i])
+	for i := range s.eventsMultipleStationsClosed {
+		if (s.eventsMultipleStationsClosed[i].Start().Before(end) &&
+			s.eventsMultipleStationsClosed[i].Start().After(start)) ||
+			(s.eventsMultipleStationsClosed[i].End().Before(end) &&
+				s.eventsMultipleStationsClosed[i].End().After(start)) {
+			output = append(output, &s.eventsMultipleStationsClosed[i])
 		}
 	}
-
 	return output
 }
 
 /*
-getEventsAttendancePeak is used to get the events "attendance peak".
+getEventsGaussianPeak is used to get the events "gaussian peak".
 
 Param :
   - s *Simulator : the simulator
@@ -2189,16 +2588,40 @@ Param :
   - end time.Time : the end time
 
 Return :
-  - []*models.EventAttendancePeak : the events
+  - []*models.EventGaussianPeak : the events
 */
-func (s *Simulator) getEventsAttendancePeak(start,
-	end time.Time) []*models.EventAttendancePeak {
-	var output []*models.EventAttendancePeak
+func (s *Simulator) getEventsGaussianPeak(start,
+	end time.Time) []*models.EventGaussianPeak {
+	var output []*models.EventGaussianPeak
 
-	for i := range s.eventsAttendancePeak {
-		if s.eventsAttendancePeak[i].Time().Before(end) &&
-			s.eventsAttendancePeak[i].Time().After(start) {
-			output = append(output, &s.eventsAttendancePeak[i])
+	for i := range s.eventsGaussianPeak {
+		if s.eventsGaussianPeak[i].GetStart().Before(end) &&
+			s.eventsGaussianPeak[i].GetEnd().After(start) {
+			output = append(output, &s.eventsGaussianPeak[i])
+		}
+	}
+	return output
+}
+
+/*
+getEventsRampPeak is used to get the events "ramp peak".
+
+Param :
+  - s *Simulator : the simulator
+  - start time.Time : the start time
+  - end time.Time : the end time
+
+Return :
+  - []*models.EventRampPeak : the events
+*/
+func (s *Simulator) getEventsRampPeak(start,
+	end time.Time) []*models.EventRampPeak {
+	var output []*models.EventRampPeak
+
+	for i := range s.eventsRampPeak {
+		if s.eventsRampPeak[i].GetStart().Before(end) &&
+			s.eventsRampPeak[i].GetEnd().After(start) {
+			output = append(output, &s.eventsRampPeak[i])
 		}
 	}
 	return output
@@ -2260,8 +2683,8 @@ func (s *Simulator) WriteInTimetableReal(train *models.MetroTrain,
 	direction := train.GetDirection()
 	var i = station.Id()
 	var j = nextStation.Id()
-	timeBetweenStation := s.mapObject.GraphTimeBetweenStation()[i][j]
-	delay := s.mapObject.GraphDelay()[station.Id()][nextStation.Id()]
+	timeBetweenStation := s.MapObject.GraphTimeBetweenStation()[i][j]
+	delay := s.MapObject.GraphDelay()[station.Id()][nextStation.Id()]
 	timeInStation := s.config.TimeInStation()
 	departure := timeArrival.Add(time.Duration(timeInStation) * time.Second)
 	nextArrival := departure.Add(time.Duration(timeBetweenStation+delay) *

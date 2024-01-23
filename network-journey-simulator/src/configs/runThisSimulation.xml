@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <map>
+    <location>
+        <latitude>47.040182144806664</latitude>
+        <longitude>0.0</longitude>
+        <zoom>2</zoom>
+    </location>
     <stations/>
     <lines/>
-    <areas/>
     <events/>
 </map>

@@ -14,7 +14,10 @@ Author :
   - Team v1
   - Team v2
   - Paul TRÉMOUREUX (quality check)
+  - Alexis BONAMY
   - Benoît VAVASSEUR
+  - Aurélie CHAMOULEAU
+  - Marie BORDET
 
 License : MIT License
 
@@ -60,24 +63,27 @@ Attributes :
   - EventsStationClosed []ConfigStationClosedEvent : the events of station
     closed
   - EventsLineDelay []ConfigLineDelayEvent : the events of line delay
-  - EventsLineClosed []ConfigLineClosedEvent : the events of line closed
-  - EventsAttendancePeak []ConfigAttendancePeakEvent : the events of attendance
+  - EventsMultipleStationsClosed []ConfigMultipleStationsClosedEvent :
+    the events of multiple stations closed
+  - EventsGaussianPeak []ConfigGaussianPeakEvent : the events of gaussian
     peak
+  - EventsRampPeak []ConfigRampPeakEvent : the events of ramp peak
   - Areas []ConfigArea : the areas linking stations
   - PopulationDistribution []ConfigPopulationDistribution : the population
     distribution of an area
 */
 type ConfigMap struct {
 	XMLName                 xml.Name                        `xml:"map"`
-	Stations                []ConfigStation                 `xml:"stations>station"`
-	Lines                   []ConfigLine                    `xml:"lines>line"`
-	EventsStationClosed     []ConfigStationClosedEvent      `xml:"events>stationClosed"`
-	EventsLineDelay         []ConfigLineDelayEvent          `xml:"events>lineDelay"`
-	EventsLineClosed        []ConfigLineClosedEvent         `xml:"events>lineClosed"`
-	EventsAttendancePeak    []ConfigAttendancePeakEvent     `xml:"events>attendancePeak"`
-	Areas                   []ConfigArea                    `xml:"areas>area"`
-	PopulationDistribution  []ConfigPopulationDistribution  `xml:"area>populationDistribution"`
-	DestinationDistribution []ConfigDestinationDistribution `xml:"area>destinationDistribution"`
+	Stations                     []ConfigStation                 `xml:"stations>station"`
+	Lines                        []ConfigLine                    `xml:"lines>line"`
+	EventsStationClosed          []ConfigStationClosedEvent      `xml:"events>stationClosed"`
+	EventsLineDelay              []ConfigLineDelayEvent          `xml:"events>lineDelay"`
+	EventsMultipleStationsClosed []ConfigMultipleStationsClosedEvent `xml:"events>multipleStationsClosed"`
+	EventsGaussianPeak           []ConfigGaussianPeakEvent       `xml:"events>gaussianPeak"`
+	EventsRampPeak               []ConfigRampPeakEvent           `xml:"events>rampPeak"`
+	Areas                        []ConfigArea                    `xml:"areas>area"`
+	PopulationDistribution       []ConfigPopulationDistribution  `xml:"area>populationDistribution"`
+	DestinationDistribution      []ConfigDestinationDistribution `xml:"area>destinationDistribution"`
 }
 
 /*
@@ -258,8 +264,8 @@ type ConfigLineDelayEvent struct {
 }
 
 /*
-ConfigLineClosedEvent is the structure that contains the configuration of
-a line closed event.
+ConfigMultipleStationsClosedEvent is the structure that contains the
+configuration of a multiple stations closed event.
 
 Attributes :
   - XMLName xml.Name
@@ -268,8 +274,8 @@ Attributes :
   - StationIdStart int
   - StationIdEnd int
 */
-type ConfigLineClosedEvent struct {
-	XMLName        xml.Name `xml:"lineClosed"`
+type ConfigMultipleStationsClosedEvent struct {
+	XMLName        xml.Name `xml:"multipleStationsClosed"`
 	StartString    string   `xml:"start"`
 	EndString      string   `xml:"end"`
 	StationIdStart int      `xml:"stationIdStart"`
@@ -277,23 +283,53 @@ type ConfigLineClosedEvent struct {
 }
 
 /*
-ConfigAttendancePeakEvent is the structure that contains the configuration of
-an attendance peak event.
+ConfigGaussianPeakEvent is the structure that contains the configuration of
+an gaussian peak event.
 
 Attributes :
   - XMLName xml.Name
-  - TimeString string
+  - StartString string
+  - EndString string
+  - PeakString string
   - StationId int
-  - Size int
+  - PeakSize int
+  - PeakWidth int
 
 Methods :
   - None
 */
-type ConfigAttendancePeakEvent struct {
-	XMLName    xml.Name `xml:"attendancePeak"`
-	TimeString string   `xml:"time"`
-	StationId  int      `xml:"stationId"`
-	Size       int      `xml:"size"`
+type ConfigGaussianPeakEvent struct {
+	XMLName     xml.Name `xml:"gaussianPeak"`
+	StartString string   `xml:"start"`
+	EndString   string   `xml:"end"`
+	PeakString  string   `xml:"peakTime"`
+	StationId   int      `xml:"stationId"`
+	PeakSize    int      `xml:"peakSize"`
+	PeakWidth   int      `xml:"peakWidth"`
+}
+
+/*
+ConfigRampPeakEvent is the structure that contains the configuration of
+an ramp peak event.
+
+Attributes :
+  - XMLName xml.Name
+  - StartString string
+  - EndString string
+  - PeakString string
+  - StationId int
+  - PeakSize int
+
+Methods :
+  - None
+*/
+type ConfigRampPeakEvent struct {
+	XMLName     xml.Name `xml:"rampPeak"`
+	StartString string   `xml:"start"`
+	EndString   string   `xml:"end"`
+	PeakString  string   `xml:"peakTime"`
+	StationId   int      `xml:"stationId"`
+	PeakSize    int      `xml:"peakSize"`
 }
 
 /*

@@ -10,7 +10,10 @@ Date : 24/01/2019
 Author :
   - Team v1
   - Team v2
+  - Paul TRÉMOUREUX (quality check)
+  - Alexis BONAMY
   - Paul TRÉMOUREUX
+  - Marie BORDET
 
 License : MIT License
 
@@ -76,9 +79,11 @@ Attributes :
   - lines []*MetroLine : the lines of the map
   - stations []*MetroStation : the stations of the map
   - graph [][]*PathStation : the graph of the map
-  - eventsLineClosed []*EventLineClosed : the events of line closed
-  - eventsAttendancePeak []*EventAttendancePeak : the events of attendance
+  - EventMultipleStationsClosed []*EventMultipleStationsClosed : the events
+    of multiple stations closed
+  - eventsGaussianPeak []*EventGaussianPeak : the events of gaussian
     peak
+  - eventsRampPeak []*EventRampPeak : the events of ramp peak
 
 Methods :
   - Stations() []MetroStation : return the stations of the map
@@ -127,17 +132,18 @@ Methods :
     stations
 */
 type Map struct {
-	graphTimeBetweenStation [][]int
-	graphDelay              [][]int
-	stationsMappingCsv      tools.CsvFile
-	stationsCsv             tools.CsvFile
-	stationsLinesCsv        tools.CsvFile
-	isConvex                bool
-	lines                   []*MetroLine
-	stations                []*MetroStation
-	graph                   [][]*PathStation
-	eventsLineClosed        []*EventLineClosed
-	eventsAttendancePeak    []*EventAttendancePeak
+	graphTimeBetweenStation      [][]int
+	graphDelay                   [][]int
+	stationsMappingCsv           tools.CsvFile
+	stationsCsv                  tools.CsvFile
+	stationsLinesCsv             tools.CsvFile
+	isConvex                     bool
+	lines                        []*MetroLine
+	stations                     []*MetroStation
+	graph                        [][]*PathStation
+	eventsGaussianPeak           []*EventGaussianPeak
+	eventsRampPeak               []*EventRampPeak
+	eventsMultipleStationsClosed []*EventMultipleStationsClosed
 }
 
 /*
@@ -246,7 +252,8 @@ Return :
   - [][]*PathStation : the graph of the map
 */
 func (mapPointer *Map) Graph() [][]*PathStation {
-
+	println("is mapPointer.graph nil ? " + strconv.FormatBool(
+		mapPointer.graph == nil))
 	clone := make([][]*PathStation, len(mapPointer.graph))
 
 	for i := range mapPointer.graph {
@@ -566,26 +573,44 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 	}
 
 	//add events
-	var lineClosedEventsC configs.ConfigLineClosedEvent
-	for _, eventLineClosed := range mapPointer.eventsLineClosed {
-		lineClosedEventsC = configs.ConfigLineClosedEvent{
-			StartString:    eventLineClosed.start.String(),
-			EndString:      eventLineClosed.end.String(),
-			StationIdStart: eventLineClosed.idStationStart,
-			StationIdEnd:   eventLineClosed.idStationEnd,
+	var multipleStationsClosedEventsC configs.ConfigMultipleStationsClosedEvent
+	for _, eventMultipleStationsClosed := range mapPointer.
+		eventsMultipleStationsClosed {
+		multipleStationsClosedEventsC = configs.ConfigMultipleStationsClosedEvent{
+			StartString:    eventMultipleStationsClosed.start.String(),
+			EndString:      eventMultipleStationsClosed.end.String(),
+			StationIdStart: eventMultipleStationsClosed.idStationStart,
+			StationIdEnd:   eventMultipleStationsClosed.idStationEnd,
 		}
-		mapC.EventsLineClosed = append(mapC.EventsLineClosed, lineClosedEventsC)
+		mapC.EventsMultipleStationsClosed = append(mapC.EventsMultipleStationsClosed,
+			multipleStationsClosedEventsC)
 	}
 
-	var attendancePeakEventsC configs.ConfigAttendancePeakEvent
-	for _, eventAttendancePeak := range mapPointer.eventsAttendancePeak {
-		attendancePeakEventsC = configs.ConfigAttendancePeakEvent{
-			TimeString: eventAttendancePeak.time.String(),
-			StationId:  eventAttendancePeak.idStation,
-			Size:       eventAttendancePeak.size,
+	var gaussianPeakEventsC configs.ConfigGaussianPeakEvent
+	for _, eventGaussianPeak := range mapPointer.eventsGaussianPeak {
+		gaussianPeakEventsC = configs.ConfigGaussianPeakEvent{
+			StartString: eventGaussianPeak.start.String(),
+			EndString:   eventGaussianPeak.end.String(),
+			PeakString:  eventGaussianPeak.peak.String(),
+			StationId:   eventGaussianPeak.idStation,
+			PeakSize:    eventGaussianPeak.peakSize,
+			PeakWidth:   eventGaussianPeak.peakWidth,
 		}
-		mapC.EventsAttendancePeak = append(mapC.EventsAttendancePeak,
-			attendancePeakEventsC)
+		mapC.EventsGaussianPeak = append(mapC.EventsGaussianPeak,
+			gaussianPeakEventsC)
+	}
+
+	var rampPeakEventsC configs.ConfigRampPeakEvent
+	for _, eventRampPeak := range mapPointer.eventsRampPeak {
+		rampPeakEventsC = configs.ConfigRampPeakEvent{
+			StartString: eventRampPeak.start.String(),
+			EndString:   eventRampPeak.end.String(),
+			PeakString:  eventRampPeak.peak.String(),
+			StationId:   eventRampPeak.idStation,
+			PeakSize:    eventRampPeak.peakSize,
+		}
+		mapC.EventsRampPeak = append(mapC.EventsRampPeak,
+			rampPeakEventsC)
 	}
 
 	adConfig.MapC = mapC
