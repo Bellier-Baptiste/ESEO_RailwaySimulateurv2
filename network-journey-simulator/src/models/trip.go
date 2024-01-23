@@ -216,7 +216,7 @@ func randomPath(aMap Map) PathStation {
 	arrivalStation := stations[rand.Intn(len(stations))]
 	path, err := aMap.GetPathStation(departureStation, arrivalStation)
 	if err != nil {
-		log.Fatal(err, "couldn't get path")
+		log.Fatal(err, " couldn't get path")
 	}
 	return path
 }
