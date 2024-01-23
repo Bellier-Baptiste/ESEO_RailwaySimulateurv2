@@ -14,6 +14,7 @@ HMI.
     - [Generate the executable](#generate-the-executable)
   - [HMI](#hmi)
     - [Launch the HMI](#launch-the-hmi)
+    - [Dark mode / Light mode](#dark-mode--light-mode)
     - [Destinations](#destinations)
     - [Lines](#lines)
       - [Add lines](#add-lines)
@@ -34,6 +35,8 @@ HMI.
     - [Run a simulation](#run-a-simulation)
     - [Import/Export system](#importexport-system)
     - [Archiving system](#archiving-system)
+    - [Stop the HMI](#stop-the-hmi)
+  - [Power BI dashboard](#power-bi-dashboard)
   
 
 ## MNJS simulator
@@ -58,6 +61,8 @@ go build .\src\main\metro_simulator.go
 To launch the HMI, you need to run the RailwayEditor.main() method from the
 [RailwayEditor.java](..%2F..%2F..%2F..%2Frailway-editor%2Fsrc%2Fmain%2Fjava%2Forg%2Fexample%2Fmain%2FRailwayEditor.java)  
 file.
+
+### Dark mode / Light mode
 
 ### Destinations
 
@@ -92,6 +97,9 @@ file.
 
 ### Archiving system
 
+### Stop the HMI
+
+## Power BI dashboard
 
 
 
