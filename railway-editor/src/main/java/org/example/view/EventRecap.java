@@ -127,12 +127,12 @@ public final class EventRecap extends JScrollPane {
   public void createEventLineDelayed(final int id, final String startDateStr,
                                      final String endDateStr,
                                      final String locationsStr,
-                                     String delayStr,
+                                     final String delayStr,
                                      final String lineStr) {
     JXTaskPane taskpane = new JXTaskPane();
     // create a taskpane, and set it's title and icon
     taskpane.setTitle("Line Delayed");
-
+    String newDelayStr = delayStr;
     JXLabel startDate = new JXLabel();
     startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));
     startDate.setText(START_DATE + startDateStr);
@@ -156,10 +156,10 @@ public final class EventRecap extends JScrollPane {
       int delayInt = Integer.parseInt(delayStr);
       int delayHours = delayInt / MINUTES_IN_HOUR;
       int delayMinutes = delayInt % MINUTES_IN_HOUR;
-      delayStr = delayHours + ":" + delayMinutes;
-      delayStr = formatTime(delayStr);
+      newDelayStr = delayHours + ":" + delayMinutes;
+      newDelayStr = formatTime(newDelayStr);
     }
-    delay.setText("Delay: " + delayStr);
+    delay.setText("Delay: " + newDelayStr);
     delay.setHorizontalAlignment(SwingConstants.LEFT);
 
     // add various actions and components to the taskpane
@@ -219,13 +219,14 @@ public final class EventRecap extends JScrollPane {
    * @param locationsStr stations concerned
    * @param lineStr      line concerned
    */
-  public void createEventLineClosed(final int id, final String startDateStr,
-                                    final String endDateStr,
-                                    final String locationsStr,
-                                    final String lineStr) {
+  public void createEventMultipleStationsClosed(final int id,
+                                                final String startDateStr,
+                                                final String endDateStr,
+                                                final String locationsStr,
+                                                final String lineStr) {
     JXTaskPane taskpane = new JXTaskPane();
     // create a taskpane, and set it's title and icon
-    taskpane.setTitle("Line Closed");
+    taskpane.setTitle("Multiple Stations Closed");
 
     JXLabel startDate = new JXLabel();
     startDate.setFont(new Font(SEGEOE_UI, Font.ITALIC, MAIN_FONT_SIZE));

@@ -47,6 +47,7 @@ import java.util.Random;
 public final class ActionStation {
   /** Action name of the add button. */
   public static final String ACTION_NAME = "ADD_STATION";
+  /** Action name of the delete button. */
   public static final String DELETE_STATION = "DELETE_STATION";
   /** Low bound for the random position of the station. */
   private static final int LOW_BOUND = 10;

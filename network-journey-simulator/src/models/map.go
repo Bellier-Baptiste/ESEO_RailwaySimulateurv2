@@ -13,6 +13,7 @@ Author :
   - Paul TRÉMOUREUX (quality check)
   - Alexis BONAMY
   - Paul TRÉMOUREUX
+  - Marie BORDET
 
 License : MIT License
 
@@ -78,7 +79,8 @@ Attributes :
   - lines []*MetroLine : the lines of the map
   - stations []*MetroStation : the stations of the map
   - graph [][]*PathStation : the graph of the map
-  - eventsLineClosed []*EventLineClosed : the events of line closed
+  - EventMultipleStationsClosed []*EventMultipleStationsClosed : the events
+    of multiple stations closed
   - eventsAttendancePeak []*EventAttendancePeak : the events of attendance
     peak
 
@@ -129,17 +131,17 @@ Methods :
     stations
 */
 type Map struct {
-	graphTimeBetweenStation [][]int
-	graphDelay              [][]int
-	stationsMappingCsv      tools.CsvFile
-	stationsCsv             tools.CsvFile
-	stationsLinesCsv        tools.CsvFile
-	isConvex                bool
-	lines                   []*MetroLine
-	stations                []*MetroStation
-	graph                   [][]*PathStation
-	eventsLineClosed        []*EventLineClosed
-	eventsAttendancePeak    []*EventAttendancePeak
+	graphTimeBetweenStation     [][]int
+	graphDelay                  [][]int
+	stationsMappingCsv          tools.CsvFile
+	stationsCsv                 tools.CsvFile
+	stationsLinesCsv            tools.CsvFile
+	isConvex                    bool
+	lines                       []*MetroLine
+	stations                    []*MetroStation
+	graph                       [][]*PathStation
+	eventMultipleStationsClosed []*EventMultipleStationsClosed
+	eventsAttendancePeak        []*EventAttendancePeak
 }
 
 /*
@@ -569,15 +571,17 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 	}
 
 	//add events
-	var lineClosedEventsC configs.ConfigLineClosedEvent
-	for _, eventLineClosed := range mapPointer.eventsLineClosed {
-		lineClosedEventsC = configs.ConfigLineClosedEvent{
-			StartString:    eventLineClosed.start.String(),
-			EndString:      eventLineClosed.end.String(),
-			StationIdStart: eventLineClosed.idStationStart,
-			StationIdEnd:   eventLineClosed.idStationEnd,
+	var multipleStationsClosedEventsC configs.ConfigMultipleStationsClosedEvent
+	for _, eventMultipleStationsClosed := range mapPointer.
+		eventMultipleStationsClosed {
+		multipleStationsClosedEventsC = configs.ConfigMultipleStationsClosedEvent{
+			StartString:    eventMultipleStationsClosed.start.String(),
+			EndString:      eventMultipleStationsClosed.end.String(),
+			StationIdStart: eventMultipleStationsClosed.idStationStart,
+			StationIdEnd:   eventMultipleStationsClosed.idStationEnd,
 		}
-		mapC.EventsLineClosed = append(mapC.EventsLineClosed, lineClosedEventsC)
+		mapC.EventsMultipleStationsClosed = append(mapC.EventsMultipleStationsClosed,
+			multipleStationsClosedEventsC)
 	}
 
 	var attendancePeakEventsC configs.ConfigAttendancePeakEvent

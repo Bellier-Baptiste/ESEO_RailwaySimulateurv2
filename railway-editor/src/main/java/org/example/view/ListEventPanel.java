@@ -69,6 +69,7 @@ import java.util.Properties;
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
+ * @author Marie Bordet
  * @author Alexis BONAMY
  * @file ListEventPanel.java
  * @date N/A
@@ -192,7 +193,7 @@ public final class ListEventPanel extends JPanel {
   private static final Object[][] TABLE_DATA = {
       {"LineDelayed", "Line", "configure a delay between 2 stations of a line"},
       {"StationClosed", "Station", "close a station"},
-      {"LineClosed", "Line", "close an entire line of the map"},
+      {"MultipleStationsClosed", "Line", "close an entire line of the map"},
       {"AttendancePeak", "Station", "configure a big raise of population on a"
           + " defined station"},
       {"TrainHour", "Line", "configure a new train flow on a line"}};
@@ -357,16 +358,17 @@ public final class ListEventPanel extends JPanel {
                       .getInstance().eventLineDelayToString()));
               view.add(confirmEventBtn, c);
               break;
-            case "LineClosed":
-              initLineClosed(c);
+            case "MultipleStationsClosed":
+              initMultipleStationsClosed(c);
               c.fill = GridBagConstraints.HORIZONTAL;
               c.gridwidth = GRID_WIDTH;
               c.gridx = GRID_X_POSITION;
               c.gridy = GRID_Y_POSITION;
               c.weighty = GRID_WEIGHT;
               confirmEventBtn.addActionListener(e ->
-                  ActionMetroEvent.getInstance().addLineClosed(ListEventPanel
-                      .getInstance().eventLineClosedToString()));
+                  ActionMetroEvent.getInstance().addMultipleStationsClosed(
+                      ListEventPanel.getInstance()
+                              .eventMultipleStationsClosedToString()));
               view.add(confirmEventBtn, c);
               break;
             case "AttendancePeak":
@@ -571,13 +573,14 @@ public final class ListEventPanel extends JPanel {
   }
 
   /**
-   * Edition fields for event line Closed.
+   * Edition fields for event multiple stations closed.
    *
    * @param c grid bag constraints
    */
-  private void initLineClosed(final GridBagConstraints c) {
+  private void initMultipleStationsClosed(final GridBagConstraints c) {
     JLabel timeStart = new JLabel(START_TIME);
     JLabel timeEnd = new JLabel(END_TIME);
+
 
 
     Properties p = new Properties();
@@ -894,6 +897,7 @@ public final class ListEventPanel extends JPanel {
     JLabel timeEnd = new JLabel(END_TIME);
 
 
+
     Properties p = new Properties();
     p.put(PROPERTIES_TEXT_TODAY, PROPERTIES_TEXT_TODAY_VALUE);
     p.put(PROPERTIES_TEXT_MONTH, PROPERTIES_TEXT_MONTH_VALUE);
@@ -1129,7 +1133,7 @@ public final class ListEventPanel extends JPanel {
     DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
 
     String dateStart = df.format((Date) datePickerStart.getModel().getValue());
-    String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String dateEnd = df.format((Date) datePickerEnd.getModel().getValue());
     String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
@@ -1142,16 +1146,17 @@ public final class ListEventPanel extends JPanel {
   }
 
   /**
-   * get the info of the edition fields recap as a String for eventLineClosed.
+   * get the info of the edition fields recap as a
+   * String for eventMultipleStationsClosed.
    *
    * @return String
    */
-  public String eventLineClosedToString() {
+  public String eventMultipleStationsClosedToString() {
     DateFormat df = new SimpleDateFormat(FORMAT_DATE);
     DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
 
     String dateStart = df.format((Date) datePickerStart.getModel().getValue());
-    String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String dateEnd = df.format((Date) datePickerEnd.getModel().getValue());
     String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());
@@ -1172,7 +1177,7 @@ public final class ListEventPanel extends JPanel {
     DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
 
     String dateStart = df.format((Date) datePickerStart.getModel().getValue());
-    String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String dateEnd = df.format((Date) datePickerEnd.getModel().getValue());
     String datePeak = df.format((Date) datePickerPeak.getModel().getValue());
     String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
         .getValue());
@@ -1197,7 +1202,7 @@ public final class ListEventPanel extends JPanel {
     DateFormat df = new SimpleDateFormat(FORMAT_DATE);
     DateFormat dfTime = new SimpleDateFormat(FORMAT_TIME);
     String dateStart = df.format((Date) datePickerStart.getModel().getValue());
-    String dateEnd = df.format((Date) datePickerStart.getModel().getValue());
+    String dateEnd = df.format((Date) datePickerEnd.getModel().getValue());
     String timeStart = dfTime.format(clockPanelStart.getTimeSpinner()
         .getValue());
     String timeEnd = dfTime.format(clockPanelEnd.getTimeSpinner().getValue());

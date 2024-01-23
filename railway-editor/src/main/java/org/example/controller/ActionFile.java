@@ -31,7 +31,7 @@ import org.example.model.Area;
 import org.example.model.Event;
 import org.example.model.EventAttendancePeak;
 import org.example.model.EventHour;
-import org.example.model.EventLineClosed;
+import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
@@ -325,19 +325,20 @@ public class ActionFile {
           eventName.appendChild(delay);
           break;
 
-        case "lineClosed":
-          EventLineClosed eventLineClosed = (EventLineClosed) event;
+        case "multipleStationsClosed":
+          EventMultipleStationsClosed eventMultipleStationsClosed =
+              (EventMultipleStationsClosed) event;
 
           Element stationStartClosed = document.createElement(STATION_ID_START);
           stationStartClosed.appendChild(
-              document.createTextNode(Integer.toString(eventLineClosed
-                  .getIdStationStart())));
+                  document.createTextNode(Integer.toString(
+                      eventMultipleStationsClosed.getIdStationStart())));
           eventName.appendChild(stationStartClosed);
 
           Element stationEndClosed = document.createElement(STATION_ID_END);
           stationEndClosed
-              .appendChild(document.createTextNode(Integer.toString(
-                  eventLineClosed.getIdStationEnd())));
+                  .appendChild(document.createTextNode(Integer.toString(
+                          eventMultipleStationsClosed.getIdStationEnd())));
           eventName.appendChild(stationEndClosed);
           break;
         case "attendancePeak":
@@ -817,13 +818,14 @@ public class ActionFile {
                     .item(0).getTextContent()
             );
             break;
-          case "lineClosed":
-            ActionMetroEvent.getInstance().addLineClosed(startTimeSplit[0]
+          case "multipleStationsClosed":
+            ActionMetroEvent.getInstance().addMultipleStationsClosed(
+                startTimeSplit[0]
                 + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
                 + endTimeSplit[1] + "," + eventElement.getElementsByTagName(
-                STATION_ID_START).item(0).getTextContent() + ","
+                    STATION_ID_START).item(0).getTextContent() + ","
                 + eventElement.getElementsByTagName(STATION_ID_END).item(0)
-                .getTextContent());
+                    .getTextContent());
             break;
           case "attendancePeak":
             String peakTime = eventElement.getElementsByTagName("peakTime")
