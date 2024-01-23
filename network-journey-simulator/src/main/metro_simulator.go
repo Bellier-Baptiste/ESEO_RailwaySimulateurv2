@@ -270,7 +270,7 @@ func main() {
 	basePath = strings.Replace(basePath, "\\models", "", -1)
 	basePath = strings.Replace(basePath, "\\simulator", "", -1)
 	basePath = strings.Replace(basePath, "\\tools", "", -1)
-	advancedConfigPath := filepath.Join(basePath, "src/configs", *configName)
+	advancedConfigPath := filepath.Join(basePath, "src\\configs\\", *configName)
 
 	printHeader("Verifying Config")
 	if *regenerateConfig {
