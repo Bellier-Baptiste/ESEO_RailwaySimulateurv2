@@ -132,17 +132,18 @@ Methods :
     stations
 */
 type Map struct {
-	graphTimeBetweenStation     [][]int
-	graphDelay                  [][]int
-	stationsMappingCsv          tools.CsvFile
-	stationsCsv                 tools.CsvFile
-	stationsLinesCsv            tools.CsvFile
-	isConvex                    bool
-	lines                       []*MetroLine
-	stations                    []*MetroStation
-	graph                       [][]*PathStation
-	eventsGaussianPeak          []*EventGaussianPeak
-	eventsRampPeak              []*EventRampPeak
+	graphTimeBetweenStation      [][]int
+	graphDelay                   [][]int
+	stationsMappingCsv           tools.CsvFile
+	stationsCsv                  tools.CsvFile
+	stationsLinesCsv             tools.CsvFile
+	isConvex                     bool
+	lines                        []*MetroLine
+	stations                     []*MetroStation
+	graph                        [][]*PathStation
+	eventsGaussianPeak           []*EventGaussianPeak
+	eventsRampPeak               []*EventRampPeak
+	eventsMultipleStationsClosed []*EventMultipleStationsClosed
 }
 
 /*
@@ -574,7 +575,7 @@ func (mapPointer *Map) ExportMapToAdConfig() configs.AdvancedConfig {
 	//add events
 	var multipleStationsClosedEventsC configs.ConfigMultipleStationsClosedEvent
 	for _, eventMultipleStationsClosed := range mapPointer.
-		eventMultipleStationsClosed {
+		eventsMultipleStationsClosed {
 		multipleStationsClosedEventsC = configs.ConfigMultipleStationsClosedEvent{
 			StartString:    eventMultipleStationsClosed.start.String(),
 			EndString:      eventMultipleStationsClosed.end.String(),

@@ -124,6 +124,7 @@ type Simulator struct {
 	timetable                    models.Timetable
 	timetableReal                models.TimetableReal
 	eventsStationClosed          []models.EventStationClosed
+	eventsMultipleStationsClosed []models.EventMultipleStationsClosed
 	eventsLineDelay              []models.EventLineDelay
 	eventsGaussianPeak           []models.EventGaussianPeak
 	eventsRampPeak               []models.EventRampPeak
@@ -174,22 +175,22 @@ Return :
 */
 func NewSimulator() *Simulator {
 	simulator := &Simulator{
-		config:                       configs.GetInstance(),
-		adConfig:                     nil,
-		MapObject:                    models.Map{},
-		population:                   nil,
-		trains:                       make([]*models.MetroTrain, 0),
-		currentTime:                  time.Now(),
-		timetable:                    models.Timetable{},
-		timetableReal:                models.TimetableReal{},
-		eventsStationClosed:          make([]models.EventStationClosed, 0),
-		eventsLineDelay:              make([]models.EventLineDelay, 0),
+		config:                   configs.GetInstance(),
+		adConfig:                 nil,
+		MapObject:                models.Map{},
+		population:               nil,
+		trains:                   make([]*models.MetroTrain, 0),
+		currentTime:              time.Now(),
+		timetable:                models.Timetable{},
+		timetableReal:            models.TimetableReal{},
+		eventsStationClosed:      make([]models.EventStationClosed, 0),
+		eventsLineDelay:          make([]models.EventLineDelay, 0),
 		eventsGaussianPeak:       make([]models.EventGaussianPeak, 0),
 		eventsRampPeak:           make([]models.EventRampPeak, 0),
-		populationsDistributions:     make([]models.PopulationDistribution, 0),
-		destinationDistributions:     make([]models.DestinationDistribution, 0),
-		areas:                        make([]models.Area, 0),
-		tripNumberCounter:            0,
+		populationsDistributions: make([]models.PopulationDistribution, 0),
+		destinationDistributions: make([]models.DestinationDistribution, 0),
+		areas:                    make([]models.Area, 0),
+		tripNumberCounter:        0,
 	}
 	return simulator
 }

@@ -65,7 +65,7 @@ public final class MenuBar extends JMenuBar {
     JMenu file = new JMenu("File");
     JMenuItem open = new JMenuItem("Open");
     open.setName(ActionFile.IMPORT_NAME);
-    open.addActionListener(e -> ActionFile.getInstance().showOpenDialog());
+    open.addActionListener(e -> ActionFile.getInstance().showOpenDialogXml());
     file.add(open);
     JMenuItem save = new JMenuItem("Save");
     save.setName("Save");
