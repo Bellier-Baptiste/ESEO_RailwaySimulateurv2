@@ -490,15 +490,10 @@ public class ActionFile {
    */
   private void exportAreas(final Document document, final Element root) {
     // Areas of the Map
+    Element areas = document.createElement("areas");
+    root.appendChild(areas);
     for (AreaView areaView : MainWindow.getInstance().getMainPanel()
         .getAreaViews()) {
-
-      // if the current area is the first of the list
-      Element areas = null;
-      if (areaView.getArea().getId() == 0) {
-        areas = document.createElement("areas");
-        root.appendChild(areas);
-      }
 
       // one area of the map
       Element area = document.createElement("area");

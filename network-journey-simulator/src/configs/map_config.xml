@@ -287,7 +287,7 @@
     <gaussianPeak>
       <start>2018-10-26T09:01:00Z</start>
       <end>2018-10-26T10:02:00Z</end>
-      <peak>2018-10-12T15:09:00.000Z</peak>
+      <peakTime>2018-10-26T09:31:00Z</peakTime>
       <stationId>2</stationId>
       <peakSize>500</peakSize>
       <peakWidth>6</peakWidth>
