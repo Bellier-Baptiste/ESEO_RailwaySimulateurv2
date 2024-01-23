@@ -30,16 +30,25 @@ import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.view.EditConfigDialog;
 import org.example.view.EditConfigParamPanel;
+import org.example.view.MainWindow;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controller to read and save the json configuration parameters.
  *
- * @author Aurélie Chamouleau
+ * @author Aurélie CHAMOULEAU
+ * @author Benoît VAVASSEUR
  * @file ActionConfiguration.java
  * @date 2023-10-20
  * @see EditConfigParamPanel
@@ -51,16 +60,30 @@ public class ActionConfiguration {
    * LinkedHashMap with the parameters of the configuration.
    */
   private LinkedHashMap<String, Object> jsonMap;
+
   /**
    * Path of the json file.
    */
-  private static final String JSON_FILE_PATH = System.getProperty("user.dir")
-      + "\\network-journey-simulator\\src\\configs\\config.json";
+  public static final String JSON_FILE_PATH = System.getProperty("user.dir")
+      + File.separator + "network-journey-simulator" + File.separator + "src"
+      + File.separator + "configs" + File.separator + "config.json";
+
+  /**
+   * Path to the archives' folder.
+   */
+  private static final String ARCHIVES_PATH = System.getProperty("user.dir")
+      + File.separator + "archives";
 
   /**
    * EditConfigDialog that calls this class methods.
    */
   private final EditConfigDialog editConfigDialog;
+
+  /**
+   * Logger, to display or save information.
+   */
+  private static final Logger LOGGER =
+      Logger.getLogger(ActionConfiguration.class.getName());
 
   /**
    * Constructor of the class.
@@ -70,6 +93,13 @@ public class ActionConfiguration {
    */
   public ActionConfiguration(final EditConfigDialog editConfigDialogToSet) {
     this.editConfigDialog = editConfigDialogToSet;
+  }
+
+  /**
+   * Constructor of the class.
+   */
+  public ActionConfiguration() {
+    this.editConfigDialog = null;
   }
 
   /**
@@ -150,4 +180,79 @@ public class ActionConfiguration {
       Thread.currentThread().interrupt();
     }
   }
+
+  /**
+   * Prompts the export dialog to choose the location to export the json config.
+   */
+  public void showExportDialogJson() {
+    JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
+    FileNameExtensionFilter filter =
+        new FileNameExtensionFilter("JSON FILES", "json");
+    fileChooser.setFileFilter(filter);
+    fileChooser.setDialogTitle("Specify a file to save");
+
+    File defaultFile = new File("example.json");
+    fileChooser.setSelectedFile(defaultFile);
+
+    int userSelection = fileChooser.showSaveDialog(MainWindow.getInstance());
+
+    if (userSelection == JFileChooser.APPROVE_OPTION) {
+      File fileToSave = fileChooser.getSelectedFile();
+      if (!fileToSave.getAbsolutePath().endsWith(".json")) {
+        fileToSave = new File(fileToSave + ".json");
+      }
+      this.copyFile(JSON_FILE_PATH, fileToSave.getAbsolutePath());
+    }
+  }
+
+  /**
+   * Prompts the open dialog to select which json file to import.
+   */
+  public void showOpenDialogJson() {
+    JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "json files", "json");
+    fileChooser.setFileFilter(filter);
+    int returnVal = fileChooser.showOpenDialog(MainWindow.getInstance()
+        .getMainPanel());
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+      File file = fileChooser.getSelectedFile();
+      deleteFile(JSON_FILE_PATH);
+      this.copyFile(file.getAbsolutePath(), JSON_FILE_PATH);
+    }
+  }
+
+  /**
+   * Copy a file to the selected location.
+   *
+   * @param sourcePath the path of the file to copy
+   * @param destPath   the path of the destination file
+   */
+  public void copyFile(final String sourcePath, final String destPath) {
+    Path destination = Paths.get(destPath);
+    try {
+      if (Files.exists(destination)) {
+        deleteFile(destPath);
+      }
+      Files.copy(Paths.get(sourcePath), destination);
+    } catch (IOException e) {
+      LOGGER.log(Level.SEVERE, "Error copying file", e);
+      Thread.currentThread().interrupt();
+    }
+  }
+
+  /**
+   * Delete a file.
+   *
+   * @param fileToDelete the path of the file to delete
+   */
+  public void deleteFile(final String fileToDelete) {
+    try {
+      Files.deleteIfExists(Paths.get(fileToDelete));
+    } catch (IOException e) {
+      LOGGER.log(Level.SEVERE, e, () -> "Impossible to delete the existing "
+          + "file: " + fileToDelete);
+    }
+  }
+
 }
