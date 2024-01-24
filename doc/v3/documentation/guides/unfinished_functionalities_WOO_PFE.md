@@ -243,6 +243,123 @@ simulator.go. But this solution is the best one that we have found for the
 moment. But even with a new functioning, few adaptation of this solution
 will be needed.
 
+### 2. ClosedLine events
+
+#### 2.1. Introduction
+This part of the document describes the progress status of the implementation of the ClosedLine events.
+This features has been divided into 3 parts :
+- The creation of a line closed event on the HMI;
+- The implementation of an unexpected line closed event in the simulator;
+- The implementation of a planned line closed event in the simulator.
+
+The first part has been successfully implemented, and tested, but it is not functional yet on the dev branch.
+However, we will explain how to fix it in this part.
+
+The second and third parts are not implemented yet, but we will explain what we thought of for it.
+
+#### 2.2. Work
+
+##### 2.2.1. Creation of a line closed event on the HMI
+
+###### 2.2.1.1 How to make it functional
+
+The first part of the work was to be able to create a line closed event (planned or unexpected) on the HMI.
+This part has been successfully implemented and tested, but it is not functional yet on the dev branch.
+However, to fix it, in the file ListEventPanel.java, we need to add an element in the TABLE_DATA array (lines 202 to 211), which will be the line closed event.
+
+Currently, it looks like this :
+```java
+private static final Object[][] TABLE_DATA = {
+      {"LineDelayed", EVENT_TYPE_LINE,
+              "configure a delay between 2 stations of a line"},
+      {"StationClosed", EVENT_TYPE_STATION, "close a station"},
+      {"MultipleStationsClosed", EVENT_TYPE_LINE, "close multiple stations of the map"},
+      {"GaussianPeak", EVENT_TYPE_STATION,
+              "configure an attendance peak with a gaussian distribution"},
+      {"RampPeak", EVENT_TYPE_STATION,
+              "configure an attendance peak with a ramp distribution"},
+      {"TrainHour", EVENT_TYPE_LINE, "configure a new train flow on a line"}};
+```
+We need to add this in the array :
+```java
+{"LineClosed", EVENT_TYPE_LINE, "close an entire line of the map"}
+```
+It would look like this :
+```java
+private static final Object[][] TABLE_DATA = {
+      {"LineDelayed", EVENT_TYPE_LINE,
+              "configure a delay between 2 stations of a line"},
+      {"StationClosed", EVENT_TYPE_STATION, "close a station"},
+      {"MultipleStationsClosed", EVENT_TYPE_LINE, "close multiple stations of the map"},
+      {"LineClosed", EVENT_TYPE_LINE, "close an entire line of the map"}
+      {"GaussianPeak", EVENT_TYPE_STATION,
+              "configure an attendance peak with a gaussian distribution"},
+      {"RampPeak", EVENT_TYPE_STATION,
+              "configure an attendance peak with a ramp distribution"},
+      {"TrainHour", EVENT_TYPE_LINE, "configure a new train flow on a line"}};
+```
+###### 2.2.1.2 How it works
+
+Once it works, we will be able to create a line closed event on the HMI.
+In the Event-editor, we can choose the type "Line Closed", then we have to choose the start end date, the line concerned and the type of closure (planned or unexpected).
+
+When we export the XML file, the line closed event is added in the "events" element of the XML file.
+
+For a planned line closed event the element looks like this :
+```xml
+<lineClosed>
+    <start>2024-01-17T23:32:00.000Z</start>
+    <end>2024-01-24T23:32:00.000Z</end>
+    <idLine>0</idLine>
+    <closureType>planned</closureType>
+</lineClosed>
+```
+And for an unexpected line closed event the element looks like this :
+```xml
+<lineClosed>
+    <start>2024-01-17T23:32:00.000Z</start>
+    <end>2024-01-25T23:32:00.000Z</end>
+    <idLine>1</idLine>
+    <closureType>unexpected</closureType>
+</lineClosed>
+```
+##### 2.2.2. Implementation of a line closed event in the simulator
+
+We have defined two types of line closed events :
+- Planned line closed : this event correspond to a line closure that would be planned in advance so the trains would stop at the terminus.
+- Unexpected line closed : this event correspond to a line closure that that would occur unexpectedly, in the case of a breakdown for example. In this case, the trains would stop at the nearest station or even between stations.
+
+For now, the line closed event is not handled by the simulator, but we thought about how to implement it.
+
+First, we need to create one or several classes to handle the line closed event. Here are two possibilities :
+- Create an abstract class LineClosedEvent that would be the parent class of two classes PlannedLineClosedEvent and UnexpectedLineClosedEvent.
+- Create one class LineClosedEvent with an attribute "type" that would be "planned" or "unexpected".
+
+Then, we need to add a case when the simulator is analysing the xml file to create the line closed event in the simulator.
+
+To implement the line closed our idea is to handle the event directly when the simulator calculate the schedule of the trains in the call Timetable.
+Depending on the type of event we would have different behavior.
+
+###### 2.2.2.1 Planned line closed event
+As the name suggests, this event would be planned in advance, so the trains would stop at the terminus and the passengers would go out the trains, at they usually do at a terminus.
+When the simulator will calculate the schedule of the trains, if there is a line closed event,
+the simulator will check if the train has the time to arrive at the end of a line before the closure of the line. If it is not the case, the train will stay at the terminus.
+
+###### 2.2.2.2. Unexpected line closed event
+On the contrary, this event would be unexpected, it would correspond to a short-term closure of a line so the trains would have several possible behaviors :
+- If the train is already at a station, it would stay at this station;
+- If the train is between two stations and the next station is empty, it would go and stop to this next station;
+- If the train is between two stations and the next station is not empty, it would stop between the two stations.
+
+In all cases, the passengers would not be able to go out the train, so they would stay in the train until the end of the event.
+
+#### 2.3. Conclusion
+
+The first part of the work has been successfully implemented and tested, but it is not functional yet on the dev branch.
+However, it can be fixed by adding an element in the TABLE_DATA array in the file ListEventPanel.java.
+
+The second and third parts are not implemented yet, but we thought about how to implement it. 
+
 ### 6. Licences
 
 #### 6.1. Introduction
