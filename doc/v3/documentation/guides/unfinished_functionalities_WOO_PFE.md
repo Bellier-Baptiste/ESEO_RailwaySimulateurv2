@@ -5,15 +5,26 @@
 This document describes the unfinished functionalities of the project.
 There are 4 unfinished functionalities:
 
-- [Trains management](#1-progress-status-of-the-train-management)
+- Trains management
 - ClosedLine events
 - Population realism
-- [Multiple days enhancement](#4-multiple-days-enhancement)
+- Multiple days enhancement
 
 Then, 2 more elements will need some work to resolve the issues raised by them:
 
 - Concurrency use
-- [Licences](#6-licences)
+- Licences
+
+## List of branches to keep
+
+The following branches should be kept because they have some work that is not
+finished (work described in this document) so are not merged into the dev
+branch. Also, these branches have not been actualized with the master branch
+since they have been created. Therefore, do not forget to actualize them with
+the master branch before merging them into the dev branch.
+
+Here is the list of the branches to keep:
+- sim_11_ptre (US #11: "end of the simulation enhancement")
 
 ### 1. Progress status of the train management
 
@@ -272,8 +283,84 @@ day of the simulation in the HMI.
 Scenario nominal:
 
 - The user launch the HMI.
-- The user click on the "Edit" button.
-- 
+- The user click on the **Edit** button.
+- The user click on the **Parameters** button.
+- The user choose the **start** and **end time** of the simulation.
+- The user click on the **OK** button.
+- The user click on the **Edit** button.
+- The user click on the **Days type** button.
+- The user can choose the **type of day** for each day of the simulation.
+- The user click on the **OK** button.
+- The user can see the changes in the **config.json**.
+
+##### 4.2.2. Run the simulation over multiple days and apply the changes of the type of day in the simulation
+
+The second part of the work was to be able to run the simulation over multiple
+days and to apply the changes of the type of day in the simulation. This part is
+still in progress.
+
+You can already run the simulation over multiple days. But at end of a day and
+at begin of a new day, the simulation doesn't reset his state. Indeed, stations
+and lines are not reset. So, the objective is to run a simulation for each day
+of the simulation.
+
+The following work has to be done:
+
+- You have to edit function main in **metro_simulator.go** to replace the actual
+definition of day type in the simulator by the on in the config.json file.
+- A function was begun to be created and the objective is to return a list
+of business days of all days between the start and end date of the simulation. This function is in the file
+**metro_simulator.go**. It is called generateDateRange. It is not finished yet.
+- After you get the list of business days, you have to run the simulation for
+each day of the list. You have to edit function main in **metro_simulator.go**
+to do that (maybe a loop of the function Init and the function Run of the
+simulator.go file).
+
+#### 4.3. Conclusion
+
+All the work to be done is essentially in the simulator. **WARNING**, the
+save of the statitics with CSV functions have to be adapted to save all results
+of simulators in the same file.
+
+### 5. Concurrency use
+
+#### 5.1. Introduction
+
+This part of the document describes the concurrency use in the project.
+
+Currently, the concurrency is not used in the project. But, the concurrency
+could be used in the project to improve the performance of the simulation.
+
+#### 5.2. Concurrency use
+
+The concurrency could be used in the project to improve the performance of the
+simulation. In fact, the simulation is a succession of events. Each event is
+executed one after the other. But, some events could be executed at the same
+time. Therefore, the concurrency could be used to execute these events at the
+same time.
+
+GO is a language that is well adapted to the concurrency. Therefore, this
+language have been chosen for this project. However, the first version of the
+simulation has been done without it.
+
+The part that need to be adapted to use the concurrency is the management of the
+train events.
+
+For example, during tests, two simulation were launched with the same amount of
+passengers. The only thing that differ between the two simulations was the
+number of lines. The simulations were parameterized to have 4 trains per line.
+In the first simulation (with 2 line, so 8 trains), it took around 1 minute. In
+the second simulation (with 50 lines, so 200 trains), it took around 30 minutes.
+
+#### 5.3. Conclusion
+
+Currently, the concurrency is not used in the project. But, the concurrency
+could and should be used in the project to improve the performance of the
+simulation.
+
+This part might be the most difficult one to do. But, it is also the one that
+will have the most impact on the performance of the simulation. Therefore, it is
+recommended to do it as soon as possible.
 
 ### 6. Licences
 
