@@ -243,6 +243,46 @@ simulator.go. But this solution is the best one that we have found for the
 moment. But even with a new functioning, few adaptation of this solution
 will be needed.
 
+### 5. Concurrency use
+
+#### 5.1. Introduction
+
+This part of the document describes the concurrency use in the project.
+
+Currently, the concurrency is not used in the project. But, the concurrency
+could be used in the project to improve the performance of the simulation.
+
+#### 5.2. Concurrency use
+
+The concurrency could be used in the project to improve the performance of the
+simulation. In fact, the simulation is a succession of events. Each event is
+executed one after the other. But, some events could be executed at the same
+time. Therefore, the concurrency could be used to execute these events at the
+same time.
+
+GO is a language that is well adapted to the concurrency. Therefore, this
+language have been chosen for this project. However, the first version of the
+simulation has been done without it.
+
+The part that need to be adapted to use the concurrency is the management of the
+train events.
+
+For example, during tests, two simulation were launched with the same amount of
+passengers. The only thing that differ between the two simulations was the
+number of lines. The simulations were parameterized to have 4 trains per line.
+In the first simulation (with 2 line, so 8 trains), it took around 1 minute. In
+the second simulation (with 50 lines, so 200 trains), it took around 30 minutes.
+
+#### 5.3. Conclusion
+
+Currently, the concurrency is not used in the project. But, the concurrency
+could and should be used in the project to improve the performance of the
+simulation.
+
+This part might be the most difficult one to do. But, it is also the one that
+will have the most impact on the performance of the simulation. Therefore, it is
+recommended to do it as soon as possible.
+
 ### 6. Licences
 
 #### 6.1. Introduction
