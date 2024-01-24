@@ -451,7 +451,7 @@ simulator.go file).
 
 All the work to be done is essentially in the simulator. **WARNING**, the
 save of the statitics with CSV functions have to be adapted to save all results
-of simulators in the same file.
+of simulators in the same file. 
 
 ### 5. Concurrency use
 
