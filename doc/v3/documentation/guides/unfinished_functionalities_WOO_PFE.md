@@ -385,6 +385,177 @@ However, it can be fixed by adding an element in the TABLE_DATA array in the fil
 
 The second and third parts are not implemented yet, but we thought about how to implement it. 
 
+### 3. Progress status of the population realism
+
+#### 3.1. Introduction
+
+The main problem with the simulator is the random nature of the population's
+movements, more specifically that the routes generated are random.
+For example, the probability of a person travelling to a lightly used station
+is the same as the probability of a person travelling to a station in the city
+centre. the same as the probability of a person travelling to a station in the
+city centre, for example.
+A system has been put in place in previous teams to have 'commute hours' to
+simulate work-related rush hours.
+The aim of this US is therefore to remodel the current system to generate
+more consistent journeys for any type of day and any type of traveller.
+
+#### 3.2. Elements in place
+
+To do this, on the GUI side, we can modify the distribution of stations in an area.
+
+Version v2 introduces areas that can group together several stations, and gives
+each station in the area destinations distribution:
+- Residential
+- Commercial
+- Office
+- Industrial
+- Touristic
+- Leisure
+- Educational
+
+Another population distribution has been introduced in v3:
+- Student
+- BusinessMan
+- Worker
+- Child
+- Retired
+- Unemployed
+- Tourist
+
+  If the station is not in an area, then we take default values
+  (100 / number of fields and some rounded to keep them whole numbers).
+
+#### 3.3 Work
+
+##### 3.3.1 Probabilities of having some trips for each type of person depending on the type of day
+
+To generate routes for passengers, a
+[csv spreadsheet](../../../../network-journey-simulator/src/configs/orientation_coefficients_csv.csv)
+was created. This spreadsheet contains the probabilities of having some trips
+for each type of person depending on the type of day.
+
+Here's an example:
+For a student on a working day, there is a 30% chance that he will have a
+trip to go to a commercial area, a 5% chance that he will have a trip to go
+to an industrial area, a 25% chance that he will have a trip to go to a
+leisure area, a 2% chance that he will go to a tourist area, and an 80%
+chance that he will go to an education area.
+
+These percentages were imagined, there is no source from which the
+probabilities come. Research has been done, but it's quite difficult to
+determine, bearing in mind also that these probabilities can change from one
+culture to another, from one country to another. This file is in the configs
+folder with the other existing configuration files and the customer can modify
+the values to match their desired model.
+
+<div style="text-align: center;">
+    <figure>
+      <img src="../resources/orientation_coefficients_csv.png"alt="CSV" width="500"/>
+    </figure>
+  <figurecaption>CSV file with orientation coefficients</figurecaption>
+</div>
+
+##### 3.3.2. New function for generating the passengers trips in populationManager.go
+
+The basic NewPopulation function generates a proportion of the population as
+passengers who will have random trips and another proportion who will
+participate in the morning and evening peak times. These proportions can be
+found in the [config.json](../../../../network-journey-simulator/src/configs/config.json)
+file:
+```json
+"population commuters proportion": 0.7,
+"population randoms proportion": 0.3,
+```
+
+In the [populationManager.go](../../../../network-journey-simulator/src/models/populationManager.go)
+file of the branch sim_9_acha, a new function called NewPopulation2 has been
+created and should eventually replace the NewPopulation function.
+
+In this function, some calculations are made:
+- The sum of all the percentages of each population type
+- The sum of all the percentages of each destination type
+- The total percentage of the model (equivalent of the 100% for us)
+- The proportion of each population type
+- The proportion of each destination type
+- Probability for each station that a person lives there depending on their type
+- Probability for each station that a person goes there depending on their type
+
+##### 3.3.3. Modification of the tourism attribute, residence problem
+However, a problem has been detected:
+
+Tourists spend their nights in commercial areas, not residential areas, but
+they do play a part in the calculations and therefore distort them slightly.
+Several solutions have been devised to exclude them from the calculations, but
+the simplest solution is to remove them from the population distribution in
+the GUI and add a parameter to the
+[config.json](../../../../network-journey-simulator/src/configs/config.json)
+to determine the overall number of tourists. This part has been  done on the
+HMI side and still needs to be implemented on the simulator side (in terms of
+json decoding, since the tourist attribute no longer exists, and the default
+values have changed, see the
+[Area.java](../../../../railway-editor/src/main/java/org/example/model/Area.java)
+file for these values).
+
+
+
+The probability for each station that a person lives there depending on
+their type is also wrong because it's not pondered by the residential
+percentages in the stations.
+
+
+##### 3.3.4. Bugs fixed
+
+In this branch, several bugs have been fixed on the GUI side. Several of these
+dated back to v2, and others appeared with our new implementation in v3.
+Not all of them have been noted in the bug tracker, but here is a list of the
+ones that have been noted:
+- Right click can move elements
+- When moving quickly the map or doing big zooming/dezooming, the elements
+  move a lot
+- The zoom bar is linked only to the map and not to the elements
+- Areas don't export as expected : once export a network with 3 areas but
+  only one was in the xml **(this one has been better fixed in the dev branch for
+  the final master release)**
+
+#### 3.4. What remains to be done
+
+We need to redo the go code for the NewPopulation2 function to remove the
+tourist field from the distribution population and recalculate the number of
+people for each population type.
+
+Then, the probability for each resort that the person lives there has not been
+calculated according to the residential percentage of each resort.
+We therefore need to :
+- Calculate the number of inhabitants per station using the residential
+  percentages and the total of the residential percentages.
+- Recalculate the proportion of each type of person in the population,
+  weighted by the station's residential percentage. For example, if there are
+  40% students in a station with only 10% residential, this doesn't necessarily
+  represent more students than 20% students in a station with 40% residential.
+- Recalculate the probability of residence in a station depending on the
+  population type
+- Use this to calculate the number of people per population type.
+- Create the required number of passengers for each type.
+- For each passenger, assign a residence based on the recalculated probability.
+  Browse the csv line corresponding to the passenger type and the day type,
+  and for each destination, if the random number generated is valid, generate
+  a trip. Select a destination station using the map with the probability for
+  each station that a person goes there depending on their type.
+
+#### 3.5. Conclusion
+
+The implementation has started and several phases of exploration have been
+carried out for the different phases. During these exploration phases,
+problems and potential solutions were determined and remain to be implemented.
+
+I strongly advise you to take a paper or go to the whiteboard to simulate a
+metro network of one line and 3/4 stations, write the values for the
+distributions of each station and test the calculations to be implemented in
+the code. This has already been done, but unfortunately I do not have photos
+of the whiteboard when the explorations were made.
+
+
 ### 4. Multiple days enhancement
 
 #### 4.1. Introduction
