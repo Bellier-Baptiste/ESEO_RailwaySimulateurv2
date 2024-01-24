@@ -25,65 +25,52 @@
 package org.example.model;
 
 /**
- * Enum of the {@link org.example.model.Event} names.
+ * Model class extending {@link Event} which describes a gaussian peak on a
+ * Station.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau
- * @author Marie Bordet
- * @file EventName.java
- * @date 2023-10-02
- * @since 3.0
+ * @author Alexis BONAMY
+ * @file EventGaussianPeak.java
+ * @date N/A
+ * @since 2.0
  */
-public enum EventName {
-  /**
-   * Line delayed event name.
-   */
-  LINE_DELAYED("lineDelay"),
-  /**
-   * Multiple stations closed event name.
-   */
-  MULTIPLE_STATIONS_CLOSED("multipleStationsClosed"),
-  /**
-   * Gaussian peak event name.
-   */
-  GAUSSIAN_PEAK("gaussianPeak"),
-  /**
-   * Ramp peak event name.
-   */
-  RAMP_PEAK("rampPeak"),
-  /**
-   * Train hour event name.
-   */
-  TRAIN_HOUR("hour"),
-  /**
-   * Station closed event name.
-   */
-  STATION_CLOSED("stationClosed"),
-  /**
-   * Line closed event name.
-   */
-  LINE_CLOSED("lineClosed");
+public class EventGaussianPeak extends EventPeak {
+  /** Peak width. */
+  private int peakWidth;
 
   /**
-   * String value of the event name.
-   */
-  private final String value;
-
-  /**
-   * Constructor of the enum.
+   * Constructor.
    *
-   * @param valueToSet String value to set
+   * @param id        event id
+   * @param startTime event startTime
+   * @param endTime   event endTime
+   * @param type      eventType
    */
-  EventName(final String valueToSet) {
-    this.value = valueToSet;
+  public EventGaussianPeak(final int id, final String startTime,
+                             final String endTime,
+                             final EventType type) {
+    super(id, startTime, endTime, type, EventName.GAUSSIAN_PEAK);
   }
 
   /**
-   * Get the string value of the event name.
+   * get the peak width.
    *
-   * @return String value
+   * @return int peakWidth
    */
-  public String getString() {
-    return value;
+  public int getPeakWidth() {
+    return peakWidth;
+  }
+
+  /**
+   * set the peak width.
+   *
+   * @param paramPeakWidth width of the peak
+   */
+  public void setPeakWidth(final int paramPeakWidth) {
+    if (paramPeakWidth < 0) {
+      throw new IllegalArgumentException("Peak width is not valid");
+    }
+    this.peakWidth = paramPeakWidth;
   }
 }

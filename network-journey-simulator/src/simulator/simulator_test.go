@@ -11,6 +11,8 @@ Author :
   - Benoît VAVASSEUR
   - Paul TRÉMOUREUX
   - Aurélie CHAMOULEAU
+  - Marie BORDET
+  - Alexis BONAMY
 
 License : MIT License
 
@@ -50,11 +52,12 @@ import (
 const (
 	timeStart        = "2018-10-26T09:01:00Z"
 	timeEnd          = "2018-10-26T10:02:00Z"
-	elc_stationStart = 1
-	elc_stationEnd   = 19
-	eap_stationStart = 2
-	eap_size         = 600
-	eap_width        = 6
+	timePeak         = "2018-10-26T09:31:00Z"
+	elcStationstart  = 1
+	elcStationend    = 19
+	peakStationstart = 2
+	peakSize         = 500
+	peakWidth        = 6
 )
 
 /*
@@ -258,30 +261,30 @@ func TestSimulator_TripNumber(t *testing.T) {
 }
 
 /*
-TestSimulator_EventLineClosed() tests the GetAllEventsLineClosed() method of the Simulator struct.
+TestSimulator_EventMultipleStationsClosed() tests the GetAllEventsMultipleStationsClosed() method of the Simulator struct.
 
-# It tests if the GetAllEventsLineClosed() method works properly
+# It tests if the GetAllEventsMultipleStationsClosed() method works properly
 
 Input : t *testing.T
 
-Expected : The GetAllEventsLineClosed() method works properly
+Expected : The GetAllEventsMultipleStationsClosed() method works properly
 */
-func TestSimulator_EventLineClosed(t *testing.T) {
-	println("TestSimulator_EventLineClosed")
+func TestSimulator_EventMultipleStationsClosed(t *testing.T) {
+	println("TestSimulator_EventMultipleStationsClosed")
 	sim := NewSimulator()
 	output, err := sim.Init("working day")
 	assert.Nil(t, err)
 	assert.True(t, output)
-	eventsLineClosed := sim.GetAllEventsLineClosed()
+	eventsMultipleStationsClosed := sim.GetAllEventsMultipleStationsClosed()
 
-	//	println("len : ", len(eventsLineClosed))
+	//	println("len : ", len(eventsMultipleStationsClosed))
 
-	assert.True(t, (len(eventsLineClosed) != 0), "Array of events (line closed) not initialized")
+	assert.True(t, (len(eventsMultipleStationsClosed) != 0), "Array of events (multiple stations closed) not initialized")
 
-	assert.Equal(t, timeStart, eventsLineClosed[0].Start().Format(time.RFC3339), "Bad Start time")
-	assert.Equal(t, timeEnd, eventsLineClosed[0].End().Format(time.RFC3339), "Bad End time")
-	assert.Equal(t, elc_stationStart, eventsLineClosed[0].IdStationStart(), "Bad Start station id")
-	assert.Equal(t, elc_stationEnd, eventsLineClosed[0].IdStationEnd(), "Bad End station id")
+	assert.Equal(t, timeStart, eventsMultipleStationsClosed[0].Start().Format(time.RFC3339), "Bad Start time")
+	assert.Equal(t, timeEnd, eventsMultipleStationsClosed[0].End().Format(time.RFC3339), "Bad End time")
+	assert.Equal(t, elcStationstart, eventsMultipleStationsClosed[0].IdStationStart(), "Bad Start station id")
+	assert.Equal(t, elcStationend, eventsMultipleStationsClosed[0].IdStationEnd(), "Bad End station id")
 }
 
 /*
@@ -309,35 +312,73 @@ func TestSimulator_EventStationClosed(t *testing.T) {
 }
 
 /*
-TestSimulator_EventAttendancePeak() tests the GetAllEventsAttendancePeak() method of the Simulator struct.
+TestSimulator_EventGaussianPeak() tests the GetAllEventsGaussianPeak() method of the Simulator struct.
 
-# It tests if the GetAllEventsAttendancePeak() method works properly
+# It tests if the GetAllEventsGaussianPeak() method works properly
 
 Input : t *testing.T
 
-Expected : The GetAllEventsAttendancePeak() method works properly
+Expected : The GetAllEventsGaussianPeak() method works properly
 */
-func TestSimulator_EventAttendancePeak(t *testing.T) {
-	println("TestSimulator_EventAttendancePeak")
+func TestSimulator_EventGaussianPeak(t *testing.T) {
+	println("TestSimulator_EventGaussianPeak")
 	sim := NewSimulator()
 	output, err := sim.Init("working day")
 	assert.Nil(t, err)
 	assert.True(t, output)
 
-	eventsAttendancePeak := sim.GetAllEventsAttendancePeak()
+	eventsGaussianPeak := sim.GetAllEventsGaussianPeak()
 
-	println("len : ", len(eventsAttendancePeak))
+	println("len : ", len(eventsGaussianPeak))
 
-	assert.True(t, len(eventsAttendancePeak) != 0, "Array of events (attendance peak) not initialized")
+	assert.True(t, len(eventsGaussianPeak) != 0, "Array of events (gaussian peak) not initialized")
 
-	assert.Equal(t, timeStart, eventsAttendancePeak[0].GetStart().Format(time.
+	assert.Equal(t, timeStart, eventsGaussianPeak[0].GetStart().Format(time.
 		RFC3339), "Bad Time attribute")
-	assert.Equal(t, eap_stationStart, eventsAttendancePeak[0].GetIdStation(),
+	assert.Equal(t, timeEnd, eventsGaussianPeak[0].GetEnd().Format(time.
+		RFC3339), "Bad Time attribute")
+	assert.Equal(t, timePeak, eventsGaussianPeak[0].GetPeak().Format(time.
+		RFC3339), "Bad Time attribute")
+	assert.Equal(t, peakStationstart, eventsGaussianPeak[0].GetIdStation(),
 		"Bad station id attribute")
-	assert.Equal(t, eap_size, eventsAttendancePeak[0].GetPeakSize(),
+	assert.Equal(t, peakSize, eventsGaussianPeak[0].GetPeakSize(),
 		"Bad size attribute")
-	assert.Equal(t, eap_width, eventsAttendancePeak[0].GetPeakWidth(),
+	assert.Equal(t, peakWidth, eventsGaussianPeak[0].GetPeakWidth(),
 		"Bad width attribute")
+}
+
+/*
+TestSimulator_EventRampPeak() tests the GetAllEventsRampPeak() method of the Simulator struct.
+
+# It tests if the GetAllEventsRampPeak() method works properly
+
+Input : t *testing.T
+
+Expected : The GetAllEventsRampPeak() method works properly
+*/
+func TestSimulator_EventRampPeak(t *testing.T) {
+	println("TestSimulator_EventRampPeak")
+	sim := NewSimulator()
+	output, err := sim.Init("working day")
+	assert.Nil(t, err)
+	assert.True(t, output)
+
+	eventsRampPeak := sim.GetAllEventsRampPeak()
+
+	println("len : ", len(eventsRampPeak))
+
+	assert.True(t, len(eventsRampPeak) != 0, "Array of events (ramp peak) not initialized")
+
+	assert.Equal(t, timeStart, eventsRampPeak[0].GetStart().Format(time.
+		RFC3339), "Bad Time attribute")
+	assert.Equal(t, timeEnd, eventsRampPeak[0].GetEnd().Format(time.
+		RFC3339), "Bad Time attribute")
+	assert.Equal(t, timePeak, eventsRampPeak[0].GetPeak().Format(time.
+		RFC3339), "Bad Time attribute")
+	assert.Equal(t, peakStationstart, eventsRampPeak[0].GetIdStation(),
+		"Bad station id attribute")
+	assert.Equal(t, peakSize, eventsRampPeak[0].GetPeakSize(),
+		"Bad size attribute")
 }
 
 /*

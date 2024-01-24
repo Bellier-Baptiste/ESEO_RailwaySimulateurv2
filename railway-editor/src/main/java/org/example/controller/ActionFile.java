@@ -25,13 +25,14 @@
 package org.example.controller;
 
 import javax.xml.XMLConstants;
-
 import org.example.data.Data;
 import org.example.model.Area;
 import org.example.model.Event;
-import org.example.model.EventAttendancePeak;
+import org.example.model.EventGaussianPeak;
+import org.example.model.EventRampPeak;
 import org.example.model.EventHour;
 import org.example.model.EventLineClosed;
+import org.example.model.EventMultipleStationsClosed;
 import org.example.model.EventLineDelay;
 import org.example.model.EventStationClosed;
 import org.example.model.Line;
@@ -69,15 +70,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * A class for performing actions related to the file menu.
  * Linked to menu items in {@link org.example.view.MenuBar}.
  *
- * @author Arthur LAGARCE
+ * @author Arthur Lagarce
  * @author Aurélie Chamouleau
  * @author Alexis BONAMY
  * @author Baptiste BELLIER
  * @author Benoît VAVASSEUR
+ * @author Marie Bordet
  * @file ActionFile.java
  * @date 2023/09/22
  * @see org.example.data.Data
@@ -108,6 +111,18 @@ public class ActionFile {
    * String of the station tag.
    */
   public static final String STATION = "station";
+  /**
+   * String of the station id tag.
+   */
+  public static final String STATION_ID = "stationId";
+  /**
+   * String of the peakTime tag.
+   */
+  public static final String PEAK_TIME = "peakTime";
+  /**
+   * String of the peakSize tag.
+   */
+  public static final String PEAK_SIZE = "peakSize";
   /**
    * Number of letters in alphabet.
    */
@@ -140,6 +155,10 @@ public class ActionFile {
       + File.separator + "archives";
 
   /**
+   * Line id marker.
+   */
+  private static final String LINE_ID = "idLine";
+  /**
    * Singleton instance.
    */
   private static ActionFile instance;
@@ -154,6 +173,44 @@ public class ActionFile {
       instance = new ActionFile();
     }
     return instance;
+  }
+
+  /**
+   * Prompts the export dialog to choose the location to export the map as xml
+   * file.
+   */
+  public void showExportDialog() {
+    JFileChooser fileChooser = new JFileChooser();
+
+    fileChooser.setDialogTitle("Specify a file to save");
+
+    File defaultFile = new File("example.xml");
+    fileChooser.setSelectedFile(defaultFile);
+
+    int userSelection = fileChooser.showSaveDialog(MainWindow.getInstance());
+
+    if (userSelection == JFileChooser.APPROVE_OPTION) {
+      File fileToSave = fileChooser.getSelectedFile();
+      if (!fileToSave.getAbsolutePath().endsWith(".xml")) {
+        fileToSave = new File(fileToSave + ".xml");
+      }
+      this.export(fileToSave);
+    }
+  }
+
+  /**
+   * Prompts the open dialog to select which xml file to import.
+   */
+  public void showOpenDialogXml() {
+    JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
+    FileNameExtensionFilter filter = new FileNameExtensionFilter(
+        "xml files", "xml");
+    fileChooser.setFileFilter(filter);
+    int returnVal = fileChooser.showOpenDialog(MainWindow.getInstance()
+        .getMainPanel());
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+      this.importMap(fileChooser.getSelectedFile());
+    }
   }
 
   /**
@@ -178,22 +235,6 @@ public class ActionFile {
         fileToSave = new File(fileToSave + ".xml");
       }
       this.export(fileToSave);
-    }
-  }
-
-
-  /**
-   * Prompts the open dialog to select which xml file to import.
-   */
-  public void showOpenDialogXml() {
-    JFileChooser fileChooser = new JFileChooser(ARCHIVES_PATH);
-    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-        "xml files", "xml");
-    fileChooser.setFileFilter(filter);
-    int returnVal = fileChooser.showOpenDialog(MainWindow.getInstance()
-        .getMainPanel());
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-      this.importMap(fileChooser.getSelectedFile());
     }
   }
 
@@ -325,49 +366,79 @@ public class ActionFile {
           eventName.appendChild(delay);
           break;
 
-        case "lineClosed":
-          EventLineClosed eventLineClosed = (EventLineClosed) event;
+        case "multipleStationsClosed":
+          EventMultipleStationsClosed eventMultipleStationsClosed =
+              (EventMultipleStationsClosed) event;
 
           Element stationStartClosed = document.createElement(STATION_ID_START);
           stationStartClosed.appendChild(
-              document.createTextNode(Integer.toString(eventLineClosed
-                  .getIdStationStart())));
+                  document.createTextNode(Integer.toString(
+                      eventMultipleStationsClosed.getIdStationStart())));
           eventName.appendChild(stationStartClosed);
 
           Element stationEndClosed = document.createElement(STATION_ID_END);
           stationEndClosed
-              .appendChild(document.createTextNode(Integer.toString(
-                  eventLineClosed.getIdStationEnd())));
+                  .appendChild(document.createTextNode(Integer.toString(
+                          eventMultipleStationsClosed.getIdStationEnd())));
           eventName.appendChild(stationEndClosed);
           break;
-        case "attendancePeak":
-          EventAttendancePeak eventAttendancePeak = (EventAttendancePeak) event;
 
-          String peakTime = eventAttendancePeak.getPeakTime();
-          peakTime = peakTime.replace("-", "T");
-          peakTime = peakTime.replace("/", "-");
-          peakTime = peakTime + END_TIME_STRING;
+        case "gaussianPeak":
+          EventGaussianPeak eventGaussianPeak = (EventGaussianPeak) event;
 
-          Element peakTimeElement = document.createElement("peakTime");
-          peakTimeElement.appendChild(document.createTextNode(peakTime));
-          eventName.appendChild(peakTimeElement);
+          String gaussianPeakTime = eventGaussianPeak.getPeakTime();
+          gaussianPeakTime = gaussianPeakTime.replace("-", "T");
+          gaussianPeakTime = gaussianPeakTime.replace("/", "-");
+          gaussianPeakTime = gaussianPeakTime + END_TIME_STRING;
 
-          Element stationId = document.createElement("stationId");
-          stationId
+          Element gaussianPeakTimeElement = document.createElement(PEAK_TIME);
+          gaussianPeakTimeElement.appendChild(
+                  document.createTextNode(gaussianPeakTime));
+          eventName.appendChild(gaussianPeakTimeElement);
+
+          Element stationIdGaussian = document.createElement(STATION_ID);
+          stationIdGaussian
               .appendChild(document.createTextNode(Integer.toString(
-                  eventAttendancePeak.getIdStation())));
-          eventName.appendChild(stationId);
+                  eventGaussianPeak.getIdStation())));
+          eventName.appendChild(stationIdGaussian);
 
-          Element sizePeak = document.createElement("peakSize");
-          sizePeak.appendChild(document.createTextNode(Integer.toString(
-              eventAttendancePeak.getSize())));
-          eventName.appendChild(sizePeak);
+          Element sizeGaussianPeak = document.createElement(PEAK_SIZE);
+          sizeGaussianPeak.appendChild(document.createTextNode(Integer.toString(
+              eventGaussianPeak.getSize())));
+          eventName.appendChild(sizeGaussianPeak);
 
-          Element peakWidth = document.createElement("peakWidth");
-          peakWidth.appendChild(document.createTextNode(Integer.toString(
-              eventAttendancePeak.getPeakWidth())));
-          eventName.appendChild(peakWidth);
+          Element gaussianPeakWidth = document.createElement("peakWidth");
+          gaussianPeakWidth
+                  .appendChild(document.createTextNode(Integer.toString(
+                          eventGaussianPeak.getPeakWidth())));
+          eventName.appendChild(gaussianPeakWidth);
           break;
+
+        case "rampPeak":
+          EventRampPeak eventRampPeak = (EventRampPeak) event;
+
+          String rampPeakTime = eventRampPeak.getPeakTime();
+          rampPeakTime = rampPeakTime.replace("-", "T");
+          rampPeakTime = rampPeakTime.replace("/", "-");
+          rampPeakTime = rampPeakTime + END_TIME_STRING;
+
+          Element rampPeakTimeElement = document.createElement(PEAK_TIME);
+          rampPeakTimeElement.appendChild(
+                  document.createTextNode(rampPeakTime));
+          eventName.appendChild(rampPeakTimeElement);
+
+          Element stationIdRamp = document.createElement(STATION_ID);
+          stationIdRamp
+              .appendChild(document.createTextNode(Integer.toString(
+                  eventRampPeak.getIdStation())));
+          eventName.appendChild(stationIdRamp);
+
+          Element sizeRampPeak = document.createElement(PEAK_SIZE);
+          sizeRampPeak.appendChild(document.createTextNode(Integer.toString(
+              eventRampPeak.getSize())));
+          eventName.appendChild(sizeRampPeak);
+          break;
+
         case "stationClosed":
           EventStationClosed eventStationClosed = (EventStationClosed) event;
 
@@ -377,10 +448,11 @@ public class ActionFile {
               eventStationClosed.getIdStation())));
           eventName.appendChild(stationClosedId);
           break;
+
         case "hour":
           EventHour eventHour = (EventHour) event;
 
-          Element idLine = document.createElement("idLine");
+          Element idLine = document.createElement(LINE_ID);
           idLine.appendChild(document.createTextNode(Integer.toString(eventHour
               .getIdLine())));
           eventName.appendChild(idLine);
@@ -390,6 +462,20 @@ public class ActionFile {
               eventHour.getTrainNumber())));
           eventName.appendChild(trainNumber);
           break;
+        case "lineClosed":
+          EventLineClosed eventLineClosed = (EventLineClosed) event;
+
+          Element idLineClosed = document.createElement(LINE_ID);
+          idLineClosed.appendChild(document.createTextNode(
+              Integer.toString(eventLineClosed.getIdLine())));
+          eventName.appendChild(idLineClosed);
+
+          Element closureType = document.createElement("closureType");
+          closureType.appendChild(document.createTextNode(eventLineClosed
+              .getClosureType().getValue()));
+          eventName.appendChild(closureType);
+          break;
+
         default:
           break;
       }
@@ -404,15 +490,10 @@ public class ActionFile {
    */
   private void exportAreas(final Document document, final Element root) {
     // Areas of the Map
+    Element areas = document.createElement("areas");
+    root.appendChild(areas);
     for (AreaView areaView : MainWindow.getInstance().getMainPanel()
         .getAreaViews()) {
-
-      // if the current area is the first of the list
-      Element areas = null;
-      if (areaView.getArea().getId() == 0) {
-        areas = document.createElement("areas");
-        root.appendChild(areas);
-      }
 
       // one area of the map
       Element area = document.createElement("area");
@@ -662,7 +743,8 @@ public class ActionFile {
     // Station lines line element
     for (LineView lineView2 : MainWindow.getInstance().getMainPanel()
         .getLineViews()) {
-      if (lineView2.getStationViews().contains(stationView)) {
+      if (lineView2.getLine().getStations()
+          .contains(stationView.getStation())) {
         Element line = document.createElement("line");
         Attr attrLineId = document.createAttribute("id");
         attrLineId.setValue(Integer.toString(lineView2.getLine()
@@ -817,30 +899,48 @@ public class ActionFile {
                     .item(0).getTextContent()
             );
             break;
-          case "lineClosed":
-            ActionMetroEvent.getInstance().addLineClosed(startTimeSplit[0]
+          case "multipleStationsClosed":
+            ActionMetroEvent.getInstance().addMultipleStationsClosed(
+                startTimeSplit[0]
                 + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
                 + endTimeSplit[1] + "," + eventElement.getElementsByTagName(
-                STATION_ID_START).item(0).getTextContent() + ","
+                    STATION_ID_START).item(0).getTextContent() + ","
                 + eventElement.getElementsByTagName(STATION_ID_END).item(0)
-                .getTextContent());
+                    .getTextContent());
             break;
-          case "attendancePeak":
-            String peakTime = eventElement.getElementsByTagName("peakTime")
-                .item(0).getTextContent();
-            String[] peakTimeSplit = this.formatDate(peakTime);
-            ActionMetroEvent.getInstance().addAttendancePeak(
+
+          case "gaussianPeak":
+            String gaussianPeakTime = eventElement.getElementsByTagName(
+                    PEAK_TIME).item(0).getTextContent();
+            String[] gaussianPeakTimeSplit = this.formatDate(gaussianPeakTime);
+            ActionMetroEvent.getInstance().addGaussianPeak(
                 startTimeSplit[0] + "," + startTimeSplit[1] + ","
                     + endTimeSplit[0] + "," + endTimeSplit[1] + ","
-                    + peakTimeSplit[0] + "," + peakTimeSplit[1] + ","
-                    + eventElement.getElementsByTagName("stationId")
+                    + gaussianPeakTimeSplit[0] + "," + gaussianPeakTimeSplit[1]
+                    + "," + eventElement.getElementsByTagName(STATION_ID)
                     .item(0).getTextContent() + ","
-                    + eventElement.getElementsByTagName("peakSize")
+                    + eventElement.getElementsByTagName(PEAK_SIZE)
                     .item(0).getTextContent() + ","
                     + eventElement.getElementsByTagName("peakWidth")
                     .item(0).getTextContent()
             );
             break;
+
+          case "rampPeak":
+            String rampPeakTime = eventElement.getElementsByTagName(PEAK_TIME)
+                .item(0).getTextContent();
+            String[] rampPeakTimeSplit = this.formatDate(rampPeakTime);
+            ActionMetroEvent.getInstance().addRampPeak(
+                startTimeSplit[0] + "," + startTimeSplit[1] + ","
+                    + endTimeSplit[0] + "," + endTimeSplit[1] + ","
+                    + rampPeakTimeSplit[0] + "," + rampPeakTimeSplit[1] + ","
+                    + eventElement.getElementsByTagName(STATION_ID)
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName(PEAK_SIZE)
+                    .item(0).getTextContent()
+            );
+            break;
+
           case "stationClosed":
             ActionMetroEvent.getInstance().addStationClosed(startTimeSplit[0]
                 + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
@@ -848,15 +948,26 @@ public class ActionFile {
                 "idStation").item(0).getTextContent()
             );
             break;
+
           case "hour":
             String startHour = startTime.replace(END_TIME_STRING, "");
             String endHour = endTime.replace(END_TIME_STRING, "");
             ActionMetroEvent.getInstance().addTrainHour(startHour + ","
-                + endHour + "," + eventElement.getElementsByTagName("idLine")
+                + endHour + "," + eventElement.getElementsByTagName(LINE_ID)
                 .item(0).getTextContent() + ","
                 + eventElement.getElementsByTagName("trainNumber").item(0)
                 .getTextContent());
             break;
+          case "lineClosed":
+            ActionMetroEvent.getInstance().addLineClosed(startTimeSplit[0]
+                    + "," + startTimeSplit[1] + "," + endTimeSplit[0] + ","
+                    + endTimeSplit[1] + ","
+                    + eventElement.getElementsByTagName(LINE_ID)
+                    .item(0).getTextContent() + ","
+                    + eventElement.getElementsByTagName("closureType")
+                    .item(0).getTextContent());
+            break;
+
           default:
             break;
         }
@@ -868,6 +979,7 @@ public class ActionFile {
    * Format the date of the xml to be able to use it in the HMI.
    *
    * @param date the date from the xml file to format
+   *
    * @return the formatted date
    */
   private String[] formatDate(final String date) {

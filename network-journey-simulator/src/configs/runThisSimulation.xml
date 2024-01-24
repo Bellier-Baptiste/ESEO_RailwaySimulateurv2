@@ -1,68 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <map>
     <location>
-        <latitude>22.302755575548254</latitude>
-        <longitude>114.17713165283203</longitude>
-        <zoom>13</zoom>
+        <latitude>47.040182144806664</latitude>
+        <longitude>0.0</longitude>
+        <zoom>2</zoom>
     </location>
-    <stations>
-        <station>
-            <id>0</id>
-            <name>Bridger</name>
-            <position>
-                <latitude>22.300690904952706</latitude>
-                <longitude>114.14949417114258</longitude>
-            </position>
-            <lines>
-                <line id="0" platform=""/>
-            </lines>
-            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
-            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
-        </station>
-        <station>
-            <id>1</id>
-            <name>Gliasisapphe</name>
-            <position>
-                <latitude>22.296720298809937</latitude>
-                <longitude>114.1537857055664</longitude>
-            </position>
-            <lines>
-                <line id="0" platform=""/>
-            </lines>
-            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
-            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
-        </station>
-        <station>
-            <id>2</id>
-            <name>Mewick</name>
-            <position>
-                <latitude>22.292749579829565</latitude>
-                <longitude>114.15807723999023</longitude>
-            </position>
-            <lines>
-                <line id="0" platform=""/>
-            </lines>
-            <populationDistribution businessman="14" child="14" retired="14" student="15" tourist="14" unemployed="14" worker="15"/>
-            <destinationDistribution commercial="15" educational="14" industrial="14" leisure="14" office="15" residential="14" touristic="14"/>
-        </station>
-    </stations>
-    <lines>
-        <line>
-            <id>0</id>
-            <name>A</name>
-            <numberOfTrain>30</numberOfTrain>
-            <stations>
-                <station id="0" order="0"/>
-                <station id="1" order="1"/>
-                <station id="2" order="2"/>
-            </stations>
-        </line>
-    </lines>
-    <events>
-        <stationClosed>
-            <start>2018-10-12T14:00:00.000Z</start>
-            <end>2018-10-12T18:00:00.000Z</end>
-            <idStation>1</idStation>
-        </stationClosed>
-    </events>
+    <stations/>
+    <lines/>
+    <events/>
 </map>

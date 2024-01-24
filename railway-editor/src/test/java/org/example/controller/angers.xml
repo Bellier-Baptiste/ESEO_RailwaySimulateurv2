@@ -631,12 +631,12 @@
             <end>2023-11-01T19:37:00.000Z</end>
             <idStation>12</idStation>
         </stationClosed>
-        <lineClosed>
+        <multipleStationsClosed>
             <start>2023-11-01T21:56:00.000Z</start>
             <end>2023-11-01T21:56:00.000Z</end>
             <stationIdStart>39</stationIdStart>
             <stationIdEnd>41</stationIdEnd>
-        </lineClosed>
+        </multipleStationsClosed>
         <lineDelay>
             <start>2023-11-01T20:00:00.000Z</start>
             <end>2023-11-01T23:00:00.000Z</end>
@@ -650,13 +650,25 @@
             <idLine>0</idLine>
             <trainNumber>13</trainNumber>
         </hour>
-        <attendancePeak>
+        <gaussianPeak>
             <start>2023-11-01T18:51:00.000Z</start>
             <end>2023-11-01T22:51:00.000Z</end>
             <peakTime>2023-11-01T20:51:00.000Z</peakTime>
             <stationId>30</stationId>
             <peakSize>200</peakSize>
             <peakWidth>3</peakWidth>
-        </attendancePeak>
+        </gaussianPeak>
+        <lineClosed>
+            <start>2023-11-01T15:37:00.000Z</start>
+            <end>2023-11-01T19:37:00.000Z</end>
+            <idLine>3</idLine>
+            <closureType>unexpected</closureType>
+        </lineClosed>
+        <lineClosed>
+            <start>2023-11-01T12:13:00.000Z</start>
+            <end>2023-11-01T12:57:00.000Z</end>
+            <idLine>1</idLine>
+            <closureType>planned</closureType>
+        </lineClosed>
     </events>
 </map>
