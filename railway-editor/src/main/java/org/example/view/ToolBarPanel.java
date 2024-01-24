@@ -343,7 +343,8 @@ public class ToolBarPanel extends JToolBar {
    *
    * @return JPanel stationPanel
    */
-  private JPanel initStationPanel(NoneSelectedButtonGroup actionButtonGroup) {
+  private JPanel initStationPanel(final NoneSelectedButtonGroup
+                                      actionButtonGroup) {
     // Station panel init
     JPanel stationPanel = new JPanel();
     stationPanel.setAlignmentY(Component.TOP_ALIGNMENT);

@@ -33,7 +33,8 @@ import java.awt.GridLayout;
 import java.util.function.Consumer;
 
 /**
- * Popup to inform an imminent merge between two {@link org.example.model.Station}.
+ * Popup to inform an imminent merge between two
+ * {@link org.example.model.Station}.
  *
  * @author Arthur Lagarce
  * @author Aurélie Chamouleau

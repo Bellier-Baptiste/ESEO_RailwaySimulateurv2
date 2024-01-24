@@ -36,7 +36,7 @@ package org.example.model;
  */
 public class EventLineDelay extends EventBetween2Stations {
   /**
-   * Delay in minutes for attendance peak events.
+   * Delay in minutes for gaussian peak events.
    */
   private int delay;
 
