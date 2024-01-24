@@ -1,8 +1,26 @@
-## Progress status of the branch sim_11_ptre
+## Unfinished functionalities
 
-### 1. Introduction
+## Introduction
 
-This document describes the progress status of the branch sim_11_ptre.
+This document describes the unfinished functionalities of the project.
+There are 4 unfinished functionalities:
+
+- Trains management
+- ClosedLine events
+- Population realism
+- Multiple days enhancement
+
+Then, 2 more elements will need some work to resolve the issues raised by them:
+
+- Concurrency use
+- Licences
+
+### 1. Progress status of the train management
+
+#### 1.1. Introduction
+
+This part of the document describes the progress status of the branch
+sim_11_ptre.
 The branch sim_11_ptre was created to work on the US #11: "end of the simulation
 enhancement".
 The work done on this branch was divided into 2 parts:
@@ -26,9 +44,9 @@ work that still needs to be done.
 The objective is to have a clear view of the work that still needs to be done
 in order to allow the following developers to continue the work on this branch.
 
-### 2. Work
+#### 1.2. Work
 
-#### 2.1. Passenger exiting the stations
+##### 1.2.1. Passenger exiting the stations
 
 The first part of the work was to be sure that all the passengers have exited
 the stations at the end of the simulation.
@@ -59,7 +77,7 @@ To verify the integrated tests, the following work has been done:
   checkPassengersInNetwork() are called.
 - Then the results are displayed.
 
-#### 2.2. Passenger exiting the trains
+##### 1.2.2. Passenger exiting the trains
 
 The second part of the work was to be sure that all the passengers have exited
 the trains at the end of the simulation.
@@ -94,7 +112,7 @@ Then, the following work has been done:
 - At the end of the function Run() in simulator.go, the function
   AllTrainsExitPop() is called.
 
-##### 2.2.1. First version & the major issue
+###### 1.2.2.1. First version & the major issue
 
 Also, a modification has been done to the function RunOnce() in simulator.go:
 
@@ -125,7 +143,7 @@ In fact, this version worked. The integrated tests were successful. But this
 version is not really satisfying because the trains do not have a realistic
 comportment.
 
-##### 2.2.2. US #26: Adjust the number of trains and their spacing in the line
+###### 1.2.2.2. US #26: Adjust the number of trains and their spacing in the line
 
 The US #26 has not been implemented for the moment. But the exploration of this
 US has been started. The goal is to be able to adjust the number of trains and
@@ -145,7 +163,7 @@ station and end when they leave the station. This event is generated just before
 train finish the previous one, so just before the train leave the precedent
 station.
 
-##### 2.2.3. Solution began
+###### 1.2.2.3. Solution began
 
 So, the major issue is the structure of the line and the trains. The trains
 should be able to stop at the terminus. This is not the case for the moment.
@@ -203,7 +221,7 @@ simulator.go, here is how the solution should be implemented:
   populationManager.go will be called in order to be sure that no passenger is
   still in the train when it is stocked in the terminus.
 
-### 3. Conclusion
+#### 1.3. Conclusion
 
 The first part of the work has been successfully implemented and tested. It has
 been merged into the dev branch.
@@ -224,3 +242,34 @@ simulation is not satisfying with the current NextEventTrain() function in
 simulator.go. But this solution is the best one that we have found for the
 moment. But even with a new functioning, few adaptation of this solution
 will be needed.
+
+### 6. Licences
+
+#### 6.1. Introduction
+
+This part of the document describes the licences used in the project.
+
+Currently, there are 3 different licences used in the project:
+
+- MIT for the MNJS;
+- GPL for the module JMapViewer;
+- ODBL for the library OpenStreetMap.
+
+#### 6.2. ODBL
+
+The library OpenStreetMap is under the ODBL licence. This licence do not cause
+any problem for the moment. Therefore, no work is needed on this part.
+
+#### 6.3. MIT & GPL
+
+The MNJS is under the MIT licence and the module JMapViewer is under the GPL
+licence. These licences are not really compatible. Therefore, a modification
+should be done.
+
+Three solutions are possible. The two first are more easy technically but less
+satisfying. The third one is more difficult technically but more satisfying.
+
+##### 6.3.1. First solution
+
+The first solution is to change the licence of the MNJS. This solution is not
+satisfying because this licence is the one wanted by Thales.
