@@ -64,8 +64,18 @@ file.
 
 ### Dark mode / Light mode
 
+The HMI has a dark mode and a light mode. To change the mode, you need to click
+on the "Dark mode" or "Light mode" button at the top left of the HMI.
+![Dark mode](..%2Fresources%2Fdark_mode.png)
+
+![Light mode](..%2Fresources%2Flight_mode.png)
+
 ### Destinations
 
+You can 'teleport' to a destination by selecting it in the top right-hand 
+corner. You can enter the destination to find it in the drop-down list.
+
+![Destination drop down list](..%2Fresources%2Fdestination_drop_down_list.png)
 ### Lines
 
 #### Add lines
