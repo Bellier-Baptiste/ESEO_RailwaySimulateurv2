@@ -266,10 +266,41 @@ The MNJS is under the MIT licence and the module JMapViewer is under the GPL
 licence. These licences are not really compatible. Therefore, a modification
 should be done.
 
-Three solutions are possible. The two first are more easy technically but less
+Three solutions are possible. The two first are easier technically but less
 satisfying. The third one is more difficult technically but more satisfying.
 
 ##### 6.3.1. First solution
 
 The first solution is to change the licence of the MNJS. This solution is not
-satisfying because this licence is the one wanted by Thales.
+satisfying because this licence is the one wanted by Thales. But, if this
+solution is chosen, the MNJS will be under the GPL licence. If this solution is
+chosen, the header of all the files of the MNJS will need to be modified.
+
+##### 6.3.2. Second solution
+
+The second solution is to stop using the module JMapViewer and to use another
+map module. This solution is complicated because the module JMapViewer is
+integrated in the MNJS. Therefore, a lot of work will be needed to replace this
+module.
+
+##### 6.3.3. Third solution
+
+In fact the two licence can be compatible. The GPL licence is a copyleft
+licence. This licence impose that the software that use the module JMapViewer
+must be under the GPL licence. But the MIT licence is a permissive licence. This
+licence impose that the software that use the MNJS can be under any licence.
+
+Therefore, the two can work together if the communication between the two is
+done in a specific way. But, to do this, an expertise is needed. Student working
+on this project do not have the expertise to do this. Therefore, a work with
+Thales will be needed to do this.
+
+### 6.4. Conclusion
+
+Currently, the MNJS is under the MIT licence and the module JMapViewer is under
+the GPL licence. These licences are not really compatible. Therefore, a
+modification should be done.
+
+Three solutions are possible. The last one look to be the one to be chosen. But
+an expertise is needed to do this. Therefore, a discussion with Thales will be
+needed to do this.
