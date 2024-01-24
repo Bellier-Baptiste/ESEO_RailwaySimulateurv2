@@ -104,6 +104,31 @@ the **/network-journey-simulator** folder:
    go mod init
    ```
 
+When you have the go.mod file, you need to run the following command from
+the **/network-journey-simulator** folder:
+
+   ```bash
+   go mod tidy
+   ```
+
+For the go.mod file to be taken into account and not the GOPATH, you must go to
+File > Settings > Languages & Frameworks > Go > Go Modules and then check
+***"Enable go modules integration"***
+
+<div style="text-align: center;">
+    <figure>
+      <img src="../resources/gomodule_integration_setting.png"alt="Go 
+modules integration setting"width="500"/>
+    </figure>
+  <figurecaption>Go modules integration setting</figurecaption>
+</div>
+
+Also make sure that your GOROOT is specified in the following place:
+File > Settings > Languages & Frameworks > Go > Go Modules
+
+Finally, install the extension to support the Go language in the IDE:
+Go by JetBrains.
+
 ### **Initialisation of the HMI**
 
 To initialize the HMI, you need to run the following command from
@@ -133,3 +158,11 @@ If you want to use Checkstyle plugin, look at the [Checkstyle guide](checkstyle_
 ### SonarQube
 
 If you want to use SonarQube integration, look at the [SonarQube guide](sonarqube_guide_QLT_PFE.md).
+
+### Useful parameter:
+
+When you do CTRL + ALT + O to optimize imports, it will sometimes give you 
+'*' to import the entire package. For quality, we didn't want imports like 
+this so to make it faster you can do the following:
+- Go to Editor > Code Style > Java > Imports tab
+- Remove packages in "Packages to Use Import with '*'
