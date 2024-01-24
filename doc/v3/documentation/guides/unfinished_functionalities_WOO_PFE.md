@@ -5,15 +5,15 @@
 This document describes the unfinished functionalities of the project.
 There are 4 unfinished functionalities:
 
-- Trains management
+- [Trains management](#1-progress-status-of-the-train-management)
 - ClosedLine events
 - Population realism
-- Multiple days enhancement
+- [Multiple days enhancement](#4-multiple-days-enhancement)
 
 Then, 2 more elements will need some work to resolve the issues raised by them:
 
 - Concurrency use
-- Licences
+- [Licences](#6-licences)
 
 ### 1. Progress status of the train management
 
@@ -242,6 +242,38 @@ simulation is not satisfying with the current NextEventTrain() function in
 simulator.go. But this solution is the best one that we have found for the
 moment. But even with a new functioning, few adaptation of this solution
 will be needed.
+
+### 4. Multiple days enhancement
+
+#### 4.1. Introduction
+
+This part of the document describes the progress status of the branch
+sim_red_15_39_bbel. The branch sim_red_15_39_bbel was created to work on the
+US#15: "Simulation over multiple days" and the US#39: "Change the type of day
+for each day of the simulation in the HMI". The work done on this branch was
+divided into 2 parts:
+
+- being able to change the type of day for each day of the simulation in the
+  HMI.
+- being able to run the simulation over multiple days and to apply the changes
+    of the type of day in the simulation.
+
+The first part has been successfully developed.
+
+The second part is still in progress.
+
+#### 4.2. Work
+
+##### 4.2.1. Change the type of day for each day of the simulation in the HMI
+
+The first part of the work was to be able to change the type of day for each
+day of the simulation in the HMI.
+
+Scenario nominal:
+
+- The user launch the HMI.
+- The user click on the "Edit" button.
+- 
 
 ### 6. Licences
 

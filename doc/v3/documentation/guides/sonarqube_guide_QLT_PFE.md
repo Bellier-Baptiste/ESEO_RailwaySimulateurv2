@@ -36,6 +36,6 @@ set SONAR_TOKEN=<your_token>
 ```
 
 ```bash
-mvn verify sonar:sonar -Dsonar.projectKey=<name_of_your_sonar_project> -Dsonar.host.url="<url_of_your_sonarqube_instance>/sonar" -Dsonar.login=%SONAR_TOKEN% -Dsonar.exclusions=**/JMapViewer-master/**,**/*_test.go
+mvn verify sonar:sonar -Dsonar.projectKey=<name_of_your_sonar_project> -Dsonar.host.url="<url_of_your_sonarqube_instance>/sonar" -Dsonar.login=%SONAR_TOKEN% -Dsonar.exclusions=**/JMapViewer-master/**,**/*_test.go,**/view/**
 ```
 
