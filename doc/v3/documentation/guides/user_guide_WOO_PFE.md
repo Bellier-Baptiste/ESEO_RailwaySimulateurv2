@@ -31,12 +31,13 @@ HMI.
     - [Events](#events)
       - [Add events](#add-events)
       - [Delete events](#delete-events)
-    - [Edit a configuration](#edit-a-configuration)
+    - [Edit the configuration](#edit-the-configuration)
     - [Run a simulation](#run-a-simulation)
     - [Import/Export system](#importexport-system)
     - [Archiving system](#archiving-system)
     - [Stop the HMI](#stop-the-hmi)
   - [Power BI dashboard](#power-bi-dashboard)
+    - [Change the path to the tickets table](#change-the-path-to-the-tickets-table)
   
 
 ## MNJS simulator
@@ -70,10 +71,12 @@ The HMI has a dark mode and a light mode.
 To change modes, you need to click on the "Dark Mode" or "Light Mode" button at
 the top left of the HMI.
 
-Dark mode:
+**Dark mode:**
+
 ![Dark mode](..%2Fresources%2Fdark_mode.png)
 
-Light mode:
+**Light mode:**
+
 ![Light mode](..%2Fresources%2Flight_mode.png)
 
 ### Destinations
@@ -86,7 +89,8 @@ You can enter the destination to find it in the drop-down list.
 Focusing on a destination is essential if we want to have coherent distance 
 scales for a metro network.
 
-Destination drop down list:
+**Destination drop down list:**
+
 ![Destination drop down list](..%2Fresources%2Fdestination_drop_down_list.png)
 
 ### Lines
@@ -114,10 +118,12 @@ In order to change lines, you need to create at least two lines.
 To change lines, you need to click on the down arrow to decrease the line 
 number and the up arrow to increase it.
 
-Increment line number:
+**Increment line number:**
+
 ![Increment line number](..%2Fresources%2Fincrement_line.png)
 
-Decrement line number:
+**Decrement line number:**
+
 ![Decrement line number](..%2Fresources%2Fdecrement_line.png)
 
 
@@ -182,10 +188,12 @@ Then, a dialog box will allow you to modify the distribution of the area.
 In order to save the changes, the percentage of the distribution must be equal
 to 100%. Otherwise, you cannot click on the "Save" button.
 
-Distribution of 100%:
+**Distribution of 100%:**
+
 ![Edit distribution](..%2Fresources%2Fedit_distribution.png) 
 
-Distribution not equal to 100%:
+**Distribution not equal to 100%:**
+
 ![Edit distribution](..%2Fresources%2Fedit_distribution_wrong.png) 
 
 ### Events
@@ -215,16 +223,20 @@ Click on the "Done" button.
 
 The concerned station(s), the colour of the circle should change.
 
-ADD button:
+**ADD button:**
+
 ![Add event](..%2Fresources%2Fadd_event.png)
 
-Dialog box:
+**Dialog box:**
+
 ![Event editor](..%2Fresources%2Fevent_editor.png) 
 
-Event selected:
+**Event selected:**
+
 ![Event editor event selected](..%2Fresources%2Fevent_editor_event_selected.png)
 
-Event created:
+**Event created:**
+
 ![Event created](..%2Fresources%2Fevent_created.png) 
 
 #### Delete events
@@ -263,10 +275,12 @@ used will be the runThisSimulation.xml and config.json files in the
 /network-journey-simulator/src/configs folder, as these are the files that are 
 modified from the HMI.**
 
-Run from the HMI:
+**Run from the HMI:**
+
 ![Run simulation HMI](..%2Fresources%2Frun_simulation_hmi.png) 
 
-The terminal:
+**The terminal:**
+
 ![Run simulation terminal](..%2Fresources%2Frun_simulation_terminal.png)
 
 ### Import/Export system
@@ -283,7 +297,8 @@ by respectively clicking on File > Export and Configuration > Export.
 A file dialog box pointing to the /archives folder will open in order to
 choose where to export the file. Give the file a name.
 
-File dialog box:
+**File dialog box:**
+
 ![File dialog box](..%2Fresources%2Ffile_dialog_box.png)
 
 ### Archiving system
@@ -297,10 +312,12 @@ configuration file by clicking on Archives > Open and Archives > Export at the
 top of the window. The export automatically creates a time-stamped subfolder in 
 the /archives folder containing the XML and JSON.
 
-Archiving at end of the simulation:
+**Archiving at end of the simulation:**
+
 ![Archiving end of simulation](..%2Fresources%2Farchive_simulation_run.png) 
 
-Archiving without running the simulation:
+**Archiving without running the simulation:**
+
 ![Archiving no simulation](..%2Fresources%2Farchive_no_simulation.png)
 
 ### Stop the HMI
