@@ -1,4 +1,4 @@
-# MNJS installation guide
+# MNJS installation manual
 
 ## Introduction
 
@@ -145,7 +145,7 @@ and replace the JMapViewer-master folder in the **/railway-editor** folder.
 ## Others
 
 The installation is done for the project, you can now use the project with the
-help of the [user guide](user_guide_WOO_PFE.md).
+help of the [user guide](user_manual_WOO_PFE).
 
 ### Sonarlint
 
