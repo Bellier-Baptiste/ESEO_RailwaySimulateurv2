@@ -26,6 +26,8 @@ the master branch before merging them into the dev branch.
 Here is the list of the branches to keep:
 - sim_11_ptre (US #11: "end of the simulation enhancement")
 - red_42_mbor (US #42: "I want to be able to create an event for a line closure")
+- sim_9_acha (US #9: "Orient the different types of people to the different
+types of zones")
 - sim_red_15_39_bbel (US #15: "Simulation over multiple days"
 and US #39: "Change the type of day for each day of the simulation in the HMI")
 
