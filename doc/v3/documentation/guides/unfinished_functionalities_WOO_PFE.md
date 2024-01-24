@@ -15,6 +15,17 @@ Then, 2 more elements will need some work to resolve the issues raised by them:
 - Concurrency use
 - Licences
 
+## List of branches to keep
+
+The following branches should be kept because they have some work that is not
+finished (work described in this document) so are not merged into the dev
+branch. Also, these branches have not been actualized with the master branch
+since they have been created. Therefore, do not forget to actualize them with
+the master branch before merging them into the dev branch.
+
+Here is the list of the branches to keep:
+- sim_11_ptre (US #11: "end of the simulation enhancement")
+
 ### 1. Progress status of the train management
 
 #### 1.1. Introduction
