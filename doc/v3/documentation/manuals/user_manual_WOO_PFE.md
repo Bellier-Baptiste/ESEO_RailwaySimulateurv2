@@ -1,4 +1,4 @@
-# MNJS user guide
+# MNJS user manual
 
 ## Introduction 
 
