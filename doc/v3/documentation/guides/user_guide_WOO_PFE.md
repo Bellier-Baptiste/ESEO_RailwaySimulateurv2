@@ -66,8 +66,11 @@ file.
 
 The HMI has a dark mode and a light mode. To change the mode, you need to click
 on the "Dark mode" or "Light mode" button at the top left of the HMI.
+
+Dark mode:
 ![Dark mode](..%2Fresources%2Fdark_mode.png)
 
+Light mode:
 ![Light mode](..%2Fresources%2Flight_mode.png)
 
 ### Destinations
@@ -75,12 +78,39 @@ on the "Dark mode" or "Light mode" button at the top left of the HMI.
 You can 'teleport' to a destination by selecting it in the top right-hand 
 corner. You can enter the destination to find it in the drop-down list.
 
+Destination drop down list:
 ![Destination drop down list](..%2Fresources%2Fdestination_drop_down_list.png)
+
 ### Lines
+You can add, delete and change lines.
+Lines are numbered from 0 upwards.
 
 #### Add lines
+
+To add a line, you need to click on the "Add " button in the "Line" section of
+the toolbar.
+
+![Add line](..%2Fresources%2Fadd_line.png)
+
 #### Delete lines
+
+To delete a line, you need to click on the "Delete" button in the "Line" section
+of the toolbar.
+
+![Delete line](..%2Fresources%2Fdelete_line.png)
+
 #### Change lines
+In order to change lines, you need to create at least two lines.
+
+To change lines, you need to click on the down arrow to decrease the line 
+number and the up arrow to increase it.
+
+Increment line number:
+![Increment line number](..%2Fresources%2Fincrement_line.png)
+
+Decrement line number:
+![Decrement line number](..%2Fresources%2Fdecrement_line.png)
+
 
 ### Stations
 
